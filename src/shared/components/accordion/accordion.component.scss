@@ -1,0 +1,107 @@
+@import "../../../styles/abstracts/_abstracts-dir";
+
+.panel {
+  width: 100%;
+  margin: auto;
+// padding: 0 18px;
+// background-color: white;
+// padding-left:20px;
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.2s ease-out;
+// min-width: 200px;
+// max-width: 450px;
+// .item{
+//     display: flex;
+//         border: 2px solid #e0e0e0;
+//         padding: 10px 5%;
+//         text-align: center;
+//         cursor: pointer;
+//         height: 60px;
+//         border-radius: 5px;
+//         box-sizing: border-box;
+//         align-items: center;
+// }
+ 
+}
+.accordion {
+    // background-color: #eee;
+    // color: #444;
+    cursor: pointer;
+    // padding: 18px;
+    // border: 2px solid #e0e0e0;
+    // padding: 10px 5%;
+    width: 100%;
+    // border: none;
+    // text-align: left;
+    outline: none;
+    // font-size: 15px;
+    transition: 0.4s;
+    display: flex;
+    justify-content: space-between;
+    border-radius: $border-radius;
+    align-items: center;
+    // width: 80%;
+    // min-width: 200px;
+    // max-width: 450px;
+    // margin-top: 40px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    &_main{
+      background: #e0e0e0;
+      padding: 0 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+      &:hover {
+        transform: scale(1.05) !important;
+      }
+    }
+    &_nested{
+      display: flex;
+      border: 2px solid #e0e0e0;
+      padding: 10px 5%;
+      text-align: center;
+      height: 60px;
+      // box-sizing: border-box;
+      align-items: center;
+      &:hover {
+        background-color: $light-grey;
+      }
+      &+.panel{
+        
+        margin-bottom: 5px;
+        .content{
+          border-left: 2px solid #E6AF2A;
+       padding-left: 10px;
+        color: #6B6B6B;
+        font-weight: 400;
+        margin-bottom: 10px;
+        
+ 
+        }
+        
+      }
+    }
+    &:after {
+      content: '\002B';
+      // color: #777;
+      font-weight: bold;
+      float: right;
+      // margin-left: 5px;
+    }
+    
+  }
+
+  
+  // .active, .accordion:hover {
+  //   // background-color: #ccc;
+  //   transform: scale(1.05em) !important;
+  // }
+  
+  
+  .active:after {
+    content: "\2212";
+  }
+  

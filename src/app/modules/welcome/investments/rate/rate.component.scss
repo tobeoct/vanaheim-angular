@@ -1,0 +1,32 @@
+
+.investment_rate *{
+    transition: none !important;
+    }
+    .investment_rate{
+    border: 2px solid transparent;
+    text-align: center; width: 22.5%;
+    padding-top: 10px;
+    padding-bottom: 0 !important;
+    border-radius: 5px;
+    /* height: auto !important; */
+    max-height: 120px;
+    /* transition:background ease-in-out 0.2s !important; */
+    }
+    .investment_rate:hover{
+    
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.05);
+    transform: scale(1.2);
+    cursor: pointer;
+    }
+    .investment_rate:not(.active):hover{
+    border: 2px solid #333333;
+    }
+    
+    .investment_rate.active{
+    background: #E6AF2A;
+    color: #fafafa;
+    transform: scale(1.1);
+    }
+    .form_group{
+        margin: 20px auto;
+        }

@@ -1,0 +1,104 @@
+
+.investment{
+    display: flex;
+    width: 80%;
+    margin: auto;
+    }
+.investment .form_group{
+margin: 20px auto;
+}
+.investment_content{
+    margin-left: 0; padding: 0; top:80px; width: 100vw; overflow-y: auto; height: 100vh;
+// padding-left: 15%; padding-right: 15%;
+position: relative;
+}
+.investment .investment_background{
+position: fixed;
+z-index: 1;
+}
+.investment .investment_background.theme_col-5{
+position: relative;
+z-index: 2;
+margin-left: 58.33%;
+}
+
+.investment .investment_background .copy{
+    margin: 0;
+    margin-bottom: 100px;
+    margin-top: 50px;
+    max-width: 80%;
+    }
+
+
+
+p{
+word-break: normal;
+}
+
+.copy{
+margin :100px auto;
+margin-top: 50px;
+}
+#getstarted{
+/* display: none; */
+color: #E6AF2A !important;
+background: transparent !important;
+}
+.modal{
+display: none;
+}
+
+
+@media all and (max-width: 1233px){
+#scrolldown{
+display: none !important;
+}
+.investment{
+width: 100%;
+padding-top: 5vh;
+padding-bottom: 10vh;
+}
+.investment_content{
+padding-left: 5%; padding-right: 5%;
+}
+
+}
+@media all and (max-width: 900px){
+.investment .investment_background .copy{
+max-width: 100%;
+}
+.investment .investment_background{
+position: relative;
+z-index: 1;
+}
+.investment .investment_background.theme_col-5{
+position: relative;
+z-index: 2;
+margin-left: 0%;
+}
+
+.investment{
+display: block !important;
+width: 100%;
+position: relative;
+}
+#getstarted{
+display: block;
+background: #E6AF2A !important;
+color: #333333 !important;
+}
+.investment_content{
+padding-left: 5%; padding-right: 5%;
+}
+
+.copy,.investment .investment_background .copy{
+margin :0px;
+margin-top: 15vh;
+}
+.investment{
+margin-top: 10vh;
+}
+#scrolldown{
+display: none !important;
+}
+}

@@ -1,0 +1,50 @@
+.widget_button{
+    height:80px;
+    width:100%;
+    border:2px solid #E6AF2A;
+    border-radius:5px;
+    background:transparent;
+    font-family:'Bruum FY',sans-serif;
+    font-size:1.429em;
+    text-transform:uppercase;
+    text-align:center;
+    font-weight:700;
+    margin:30px auto;
+    cursor:pointer;
+    display:flex;
+    align-items:center!important;
+    justify-content:center!important;
+    position:relative
+}
+.widget_button .widget_button--loader{
+    width:20px;margin-left:15px;display:none;transform:translateY(2px)
+}
+.widget_button--fill{
+    background: #E6AF2A !important; color: #333333;
+}
+.file_btn{ font-size: 0.9em; text-transform: none; margin: 0; font-weight: 400; border-color: #6B6B6B; padding: 2%; width: auto; height: auto; }
+.widget_button:hover{transform:scale(1.05)}
+.widget_button:focus{border:2px solid #E6AF2A!important;color:#E6AF2A!important;outline:none!important}
+.main_form .widget_button::after{
+    position:absolute;
+    left:0;
+    content:'<';
+    height:100%;
+    width:40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:700;
+    font-family:"Bruum FY",sans-serif;
+    background:#333;
+    color:#EFE7CB;
+    top:0;
+    display:none
+}
+
+.widget_button--stroke{background:transparent;border:2px solid #E0E0E0;transition:ease-in-out 0.3s}
+.widget_button--stroke:hover,.widget_button--stroke:focus{background:#333;border:2px solid #333;color:#E6AF2A}
+.widget_button--rounded{height:60px;width:60px;border-radius:60px;display:flex;justify-content:center;align-items:center;padding:5px;margin:10px auto;background:transparent;border:2px solid #E0E0E0}
+.tabs .widget_button{display:flex;justify-content:center;align-items:center;min-height:60px}
+.tabs .widget_button.active{background:#333;color:#E6AF2A;font-weight:700!important;outline:none!important;border-color:#333}
+.widget_button--small{height:auto !important;width:auto;font-size:.8em;padding:10px 20px 10px 20px;margin:0;}

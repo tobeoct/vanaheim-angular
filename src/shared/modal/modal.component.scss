@@ -1,0 +1,77 @@
+.modal,.permission{
+    position:fixed;
+    top:0;
+    left:0;
+    height:100vh;
+    width:100vw;
+    background:rgba(0,0,0,.9);
+    z-index:9999999999999999999999999999;
+    align-items:center;
+    justify-content:center;
+    overflow-y:auto;
+    display: flex;
+    padding-top:10vh
+}
+.permission{display:flex}
+.modal_type{
+    width:80%;
+    max-width:550px;
+    flex:0 0 100%;
+    border-radius: 5px;
+    flex-direction:column;
+    background:#FAFAFA;
+    padding-bottom:30px;
+    display:flex}
+.modal_ratings{padding-top:30px!important}
+.modal .modal_content{position:relative}
+.modal .cancel{position:absolute;
+    top:20px;
+    right:5%;
+    cursor:pointer}
+.modal_permission{display:flex;
+    padding:1% 2.5% 2% 2.5%}
+.modal_loan .widget_input[type="number"]{height:45px!important;
+    font-family:'Bruum FY',sans-serif;
+    font-size:1.429em;
+    text-transform:uppercase;
+    font-weight:700}
+.modal_loan .widget_input:hover,.modal_loan .widget_input:focus,.modal_loan .widget_input:active{background:linear-gradient(0deg,rgba(250,250,250,.2),rgba(250,250,250,.2)),rgba(250,250,250,.2)}
+.modal_loan .widget_input[type="number"]::placeholder{color:#E5E5E5!important}
+.modal_loan .modal_content{padding:0!important;
+    margin-top:0}
+.modal_confirmation .form_group{margin-top:10px!important}
+.modal_ratings .form_group:nth-child(3){margin-top:10px}
+.modal_ratings .form_group:nth-child(4){margin-top:20px}
+.modal .icon{width:200px;
+    height:200px;
+    border-radius:200px;
+    margin:auto;
+    margin-top:-100px;
+    text-align:center}
+.modal .icon .icon_image i{font-size:5em}
+.modal .modal_content{padding:20px 6% 10px 6%;
+    text-align:center}
+.modal_loan .requirements.theme_flex{display:flex}
+
+
+@media all and (max-width:900px){
+    .modal_permission{
+        padding:2.5% 5% 5% 5%
+    }
+    .modal{
+        overflow-y:scroll;
+        padding-bottom:10vh;
+        padding-left:5%!important;
+        padding-right:5%!important
+    }
+
+    .modal_type{
+            width:100%;
+        padding-bottom:10px}
+    .modal_loan{margin-top:15vh;
+        padding-bottom:40px!important
+    }
+    .modal .icon{transform:scale(.9)}
+    .modal{overflow: scroll;
+    }.modal_loan{transform: scale(0.9)}
+}

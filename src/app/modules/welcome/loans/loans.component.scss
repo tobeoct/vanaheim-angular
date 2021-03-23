@@ -1,0 +1,160 @@
+
+.investment{
+    display: flex;
+    width: 80%;
+    margin: auto;
+    }
+.investment .form_group{
+margin: 20px auto;
+}
+.investment_rate *{
+transition: none !important;
+}
+.investment_rate{
+border: 2px solid transparent;
+text-align: center; width: 22.5%;
+padding-top: 10px;
+padding-bottom: 0 !important;
+border-radius: 5px;
+/* height: auto !important; */
+max-height: 120px;
+/* transition:background ease-in-out 0.2s !important; */
+}
+.investment_rate:hover{
+
+box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.05);
+transform: scale(1.2);
+cursor: pointer;
+}
+.investment_rate:not(.active):hover{
+border: 2px solid #333333;
+}
+
+.investment_rate.active{
+background: #E6AF2A;
+color: #fafafa;
+transform: scale(1.1);
+}
+.investment_content{
+    margin-left: 0; padding: 0; top:80px; width: 100vw; overflow-y: auto; height: 100vh;
+// padding-left: 15%; padding-right: 15%;
+position: relative;
+
+}
+.investment .investment_background{
+position: fixed;
+z-index: 1;
+}
+.investment .investment_background.theme_col-5{
+position: relative;
+z-index: 2;
+margin-left: 58.33%;
+}
+
+.investment .investment_background .copy{
+    margin: 0;
+    margin-bottom: 100px;
+    margin-top: 50px;
+    max-width: 80%;
+    }
+
+
+
+*{
+    transition: none !important ;
+}
+p{
+word-break: normal;
+}
+.rate{
+padding-top: 0px;
+padding-bottom: 0px;
+margin-top: 10px;
+font-weight: 700;
+
+transition:background ease-in-out 0.2s !important;
+}
+.copy{
+margin :100px auto;
+margin-top: 50px;
+}
+#getstarted{
+display: none;
+}
+.copy{
+margin :100px auto;
+}
+.loans_category{
+width: 90%; margin: 10px auto; border: 1px solid #e0e0e0; padding:2.5% 5%; border-radius: 5px;
+}
+.cta{
+display: none;
+}
+.loans_category .title div{
+opacity: 0;
+transition: ease-in-out 0.2s;
+}
+.loans_category .title{
+display: flex; justify-content: space-between; align-items: center;
+}
+.loans_category .title h2{
+margin-top: 5px;
+margin-bottom: 5px;
+}
+.loans_category:hover {
+background: #f2f2f2;
+cursor: pointer;
+}
+.loans_category:hover .cta {
+display: flex !important;
+}
+.loans_category:hover .title div{
+opacity: 1;
+}
+
+@media all and (max-width: 1233px){
+.investment{
+width: 100%;
+padding-top: 5vh;
+padding-bottom: 10vh;
+}
+.investment_content{
+padding-left: 5%; padding-right: 5%;
+}
+
+}
+@media all and (max-width: 900px){
+.investment .investment_background .copy{
+max-width: 100%;
+}
+.investment .investment_background{
+position: relative;
+z-index: 1;
+}
+.investment .investment_background.theme_col-5{
+position: relative;
+z-index: 2;
+margin-left: 0%;
+}
+
+.investment{
+display: block !important;
+width: 100%;
+position: relative;
+padding-bottom: 0;
+}
+#getstarted{
+display: block;
+}
+.investment_content{
+padding-left: 5%; padding-right: 5%;
+}
+
+.copy,.investment .investment_background .copy{
+margin :0px;
+margin-top: 15vh;
+}
+.investment{
+margin-top: 10vh;
+}
+}

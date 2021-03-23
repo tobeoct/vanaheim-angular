@@ -1,18 +1,37 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ApplicationRef, NgModule, DoBootstrap, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { ContactComponent } from '../shared/layout/contact/contact.component';
+import { CommaseperatedPipe } from 'src/shared/pipes/commaseparated/commaseperated.pipe';
+
+ 
+// Note we need a separate function as it's required
+// by the AOT compiler.
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ContactComponent,
+    CommaseperatedPipe
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    
+    // SharedModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap:[],
+  
 })
-export class AppModule { }
+// bootstrap: [AppComponent],
+export class AppModule implements DoBootstrap { 
+ 
+  ngDoBootstrap(appRef: ApplicationRef) {
+    appRef.bootstrap(AppComponent); // Or some other component
+  }
+}

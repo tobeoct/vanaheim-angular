@@ -1,0 +1,23 @@
+
+    .header_mobi {
+        display: none !important;
+    }
+
+.header{
+    width: 100vw; height: 80px; align-items: center; padding-left: 2.5%;padding-right: 2.5%;
+    display: flex !important;
+    position: fixed; z-index: 999999;
+    top: 0;
+}
+
+    
+@media all and (max-width: 900px){
+
+    .header_mobi {
+    display: flex !important;
+    }
+    .header_mobi .logo{
+    display: block !important;
+    }
+    }
+    

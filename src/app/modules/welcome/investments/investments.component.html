@@ -1,0 +1,73 @@
+
+    <app-modal [show]="showModal" [type]="modalType"></app-modal>
+    <div id="scrolldown" class="theme_color--grey" style="position: absolute; bottom:2.5%; left:40%; font-size: 0.8em; display: flex;"> <div>Scroll Down To Apply</div><div style="font-size:1.1em; transform: rotateZ(90deg); margin-left: 10px;">👆🏾</div></div>
+        <app-header [myclass]="headerclass"></app-header>
+        <div class="investment_content theme_inline-block" >
+            <div class="theme_row" style=" padding-top: 2.5%;">
+                <div class="main_container">
+                    <div>
+                        <app-navigation [type]="mobile"></app-navigation>
+                        <div class="investment theme_row" style="position:relative;">
+                            <app-navigation [type]="desktop"></app-navigation>
+                            <div class="theme_col-7 theme_color investment_background" style="padding-right: 5%; padding-top: 7%;z-index: 1;">
+                                
+                                <div class="copy" style="overflow-x: hidden; margin-top: 0;">
+                                    <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span>Make the </span><span class="theme_color--yellow">wise choice</span><span> today and start investing.</span></p>
+                                <div class="animate__animated animate__zoomIn" style="width: 100%; max-width: 200px; margin-bottom: 30px; display:flex ; justify-content: flex-start;" >
+                                    <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="theme_col-12" style="height: 100%; z-index: 2;">
+                        
+                            <div class="theme_bg--white theme_col-5 investment_background theme_dropshadow--light animate__animated animate__fadeInUp" style="height: 100%;">
+                                <div class=" theme_bg" style=" width: 100%; height: 80px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
+                                    <p class="theme_color--yellow theme_text--heading3" style="text-align: center; margin: auto;">Investment Application</p>
+                                </div>
+                                <form role="form" id="form" #form="ngForm" >
+                                    <app-investment-card></app-investment-card>
+                                    <div class="theme_row" style="padding: 5%; padding-top: 0;"> 
+                                        <app-input [options]='amountOptions' (valueChange)="printValue('amount',$event)"></app-input>
+                                        <app-rate (rateDetailChange)="rateDetailChange($event)" [amount]="amount"></app-rate>
+                                        <app-input [options]='nameOptions' (valueChange)="printValue('name',$event)"></app-input>
+                                        <app-input [options]='emailOptions' (valueChange)="printValue('email',$event)"></app-input>
+                                    </div>
+                                    <div class="theme_row" style="width: 90%; margin:0px auto;">
+                                        <app-button [options]="buttonOptions" (click)="submit($event)"></app-button>
+                                    </div>
+                                </form>
+                                <app-footer></app-footer>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          
+            </div>
+         
+        </div>
+        
+<div class="modal" style="position: fixed; z-index: 9999999999999999999999 !important;">
+        <div class="modal_investment-success theme_dropshadow modal_type">
+            <div class="icon theme_flex theme_flex--middle">
+                <!-- <div class="icon_image">
+                    <i class="fas fa-check theme_color--white"></i>
+                </div> -->
+                <lottie-player src="assets/animations/vanir-capital-badge.json"  background="transparent"  speed="1"  style="width: 100%;"  loop autoplay></lottie-player>
+                                
+            </div>
+            <div class="modal_content">
+                <div class="theme_text--heading1">Investment Indication</div>
+               
+                <div class="form_group">
+                    <p class="theme_color--grey">You have successfully indicated your interest. We would contact you shortly. 😊</p>
+                    <button class="widget_button"  style="margin: 5px auto;" tabindex="0"><div>Continue</div></button>
+                    <!-- <script>
+                        document.querySelector(".modal_investment-success button").addEventListener('click',(e)=>{
+                            $(".modal").fadeOut();
+                        });
+                    </script> -->
+                </div>
+            </div>
+        </div>
+    </div>

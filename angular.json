@@ -31,9 +31,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/styles.scss"
+              
             ],
-            "scripts": []
+            "scripts": ["./node_modules/@lottiefiles/lottie-player/dist/lottie-player.js","./node_modules/jquery/dist/jquery.js","node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           },
           "configurations": {
             "production": {
@@ -53,13 +54,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "30kb",
+                  "maximumError": "50kb"
                 }
               ]
             }
@@ -94,9 +95,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles/styles.scss"
             ],
-            "scripts": []
+            "scripts": ["./node_modules/jquery/dist/jquery.js","node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           }
         },
         "lint": {
@@ -127,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "vanaheim"
+  "defaultProject": "vanaheim",
+  "cli": {
+    "analytics": "bcf9114e-8537-44e2-ae63-0c7a663ddd75"
+  }
 }
