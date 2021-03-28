@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ElementSize, ElementStyle } from 'src/shared/constants/enum';
 import { ButtonOptions } from 'src/shared/constants/variables';
 
@@ -10,6 +11,7 @@ import { ButtonOptions } from 'src/shared/constants/variables';
 export class ButtonComponent implements OnInit, OnChanges {
 
   @Input() options: ButtonOptions;
+  @Input() form: FormGroup;
   myclass:string="";
   constructor() { }
 

@@ -11,6 +11,7 @@ import { FooterComponent } from 'src/shared/layout/footer/footer.component';
 import { HeaderComponent } from 'src/shared/layout/header/header.component';
 import { NavigationComponent } from 'src/shared/layout/navigation/navigation.component';
 import { ModalComponent } from 'src/shared/modal/modal.component';
+import { FocusDirective } from 'src/app/directives/focus.directive';
 
 
 
@@ -22,10 +23,11 @@ import { ModalComponent } from 'src/shared/modal/modal.component';
     RatecardComponent,
     LoansComponent,
     OnboardingComponent,
+    FocusDirective,
     FooterComponent,
     NavigationComponent,
     HeaderComponent,
-    ModalComponent,],
+    ModalComponent],
   imports: [
     SharedModule,
     WelcomeRoutingModule

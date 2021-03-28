@@ -1,3 +1,73 @@
 
 @import "reset";
 @import "typography";
+
+.vc_form-field{
+    &--hidden 
+    {
+        margin: 0 !important;
+        padding: 0 !important;
+    input{
+        // visibility: hidden;
+        height: 0!important;
+        box-sizing: content-box;
+        padding: 0 !important;
+        margin:0 !important;
+        border:none !important;
+    }
+}
+input.is-invalid{
+    // border-color: red !important;
+    position: relative;
+    outline: none;
+   border-bottom-color: rgb(255, 113, 142) !important;
+    // border-bottom-width: 0px !important; 
+    transition: 2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    // animation: AnimateIn 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards !important;
+    // width: 0;
+    // &::after{
+    //     content: "";
+    //     height: 2px;
+    //     width: 100px;
+    //     position: absolute;
+    //     bottom: 0;
+    //     left: 0;
+    //     border-radius: 2px;
+    //     background: red;
+    //     z-index: 9;
+    //     // transition: 0.3s ease-in-out;
+    //     // animation: AnimateIn 3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    // }
+    &+ .invalid-feedback{
+        width: 100%;
+        margin-top: 10px;
+        // box-sizing: border-box;
+        padding: 7px 10px;
+        color:  rgb(252, 78, 113);
+        background: rgb(255, 240, 234);
+        border-radius: 5px;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: FadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+    }
+    // &:hover::after{
+    //     width: 100%;
+    //     cur
+
+    // }
+}
+}
+
+@keyframes AnimateIn{
+    to{
+        // border-bottom-width: 100% !important;
+        border-bottom: solid 2px rgb(245, 30, 73) !important;
+    }
+}
+
+@keyframes FadeIn{
+    to{
+        opacity: 100;
+        transform: translateY(0);
+    }
+}

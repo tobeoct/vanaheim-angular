@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { LottieModule } from 'ngx-lottie';
@@ -41,6 +41,7 @@ export function playerFactory() {
     DragAndDropComponent,
     DropdownComponent,
     FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     DragDropModule,
     ScrollingModule

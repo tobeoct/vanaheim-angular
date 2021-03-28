@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { ContactComponent } from '../shared/layout/contact/contact.component';
 import { CommaseperatedPipe } from 'src/shared/pipes/commaseparated/commaseperated.pipe';
 
+
  
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -16,6 +17,7 @@ import { CommaseperatedPipe } from 'src/shared/pipes/commaseparated/commaseperat
     AppComponent,
     ContactComponent,
     CommaseperatedPipe
+    
   ],
   imports: [
     BrowserModule,

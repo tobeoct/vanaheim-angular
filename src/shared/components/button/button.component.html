@@ -1,4 +1,9 @@
 <div class="form_group" style="margin-top: 0;">
-    <button class="widget_button {{myclass}}" style="margin-top: 10px;" type="submit"><div>{{options.text}}</div><div class="widget_button--loader"><img src="assets/button-loader.gif" /></div></button>
+    <button class="widget_button {{myclass}}" style="margin-top: 10px;" type="submit"
     
+    [title]="form&&form.valid?'Save your entered data':'Disabled until form data is valid'" 
+    [disabled]="form &&!form.valid"><div>{{options.text}}</div><div class="widget_button--loader"><img src="assets/button-loader.gif" /></div></button>
+  
     </div>
+
+ 
