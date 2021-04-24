@@ -1,4 +1,8 @@
 
 <section>
     <app-contact></app-contact>
-<router-outlet></router-outlet></section>
+    <div *ngIf="isLoggedIn">
+    <app-navigation [type]="navType"></app-navigation>
+    </div>
+<router-outlet></router-outlet>
+</section>

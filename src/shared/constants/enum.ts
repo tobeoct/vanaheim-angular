@@ -26,3 +26,8 @@ export enum ValidationType{
     active="active"
   }
   
+
+  export enum UserCategory{
+    customer="Customer",
+    admin="Admin"
+  }

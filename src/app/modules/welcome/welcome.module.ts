@@ -12,6 +12,7 @@ import { HeaderComponent } from 'src/shared/layout/header/header.component';
 import { NavigationComponent } from 'src/shared/layout/navigation/navigation.component';
 import { ModalComponent } from 'src/shared/modal/modal.component';
 import { FocusDirective } from 'src/app/directives/focus.directive';
+import { WelcomeNavigationComponent } from './layout/navigation/navigation.component';
 
 
 
@@ -25,9 +26,9 @@ import { FocusDirective } from 'src/app/directives/focus.directive';
     OnboardingComponent,
     FocusDirective,
     FooterComponent,
-    NavigationComponent,
     HeaderComponent,
-    ModalComponent],
+    ModalComponent,
+    WelcomeNavigationComponent],
   imports: [
     SharedModule,
     WelcomeRoutingModule

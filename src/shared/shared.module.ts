@@ -45,14 +45,9 @@ export function playerFactory() {
     CommonModule,
     DragDropModule,
     ScrollingModule
-   ],
-   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
-   entryComponents:[AccordionComponent]
+   ]
 })
 export class SharedModule { 
 
-  constructor(injector:Injector){
-    const acc = createCustomElement(AccordionComponent,{injector});
-    customElements.define('my-accordion',acc);
-  }
+ 
 }
