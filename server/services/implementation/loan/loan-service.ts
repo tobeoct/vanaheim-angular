@@ -3,7 +3,7 @@ import { LoanRequestLog } from "@models/loan/loan-request-log";
 import { ILoanRequestService } from "@services/interfaces/loan/Iloan-request-service";
 import { ILoanService } from "@services/interfaces/loan/Iloanservice";
 
-const {validateRequest,hasValue,titleCase,currencyFormatter, createResponse}= require("./common/util.ts");
+const {validateRequest,hasValue,titleCase,currencyFormatter, createResponse}= require("../common/util.ts");
 const {SendEmail,ProcessFiles, generatePDF, createPDFJson}= require("../common/email-service");
 const {ProcessRepayment} = require("../repayment-service");
 

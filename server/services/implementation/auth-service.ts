@@ -1,9 +1,6 @@
 import { IAuthService } from "@services/interfaces/Iauth-service";
-
-const {
-  newSessionRoutes,
-  authRoutes
-}  = require("./routes");
+const SECRET_KEY = "SECRET_KEY";;
+import { newSessionRoutes, authRoutes } from "./common/routes";
 const jwt = require('jsonwebtoken');
 class AuthService implements IAuthService{
   

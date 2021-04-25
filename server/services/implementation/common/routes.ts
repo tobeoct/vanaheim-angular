@@ -1,6 +1,6 @@
-const newSessionRoutes = [{ path: '/api/auth/login', method: 'POST' },{ path: '/api/auth/register', method: 'POST' },
+export const newSessionRoutes = [{ path: '/api/auth/login', method: 'POST' },{ path: '/api/auth/register', method: 'POST' },
 { path: '/api/auth/token', method: 'POST' },];
-const authRoutes = [
+export const authRoutes = [
   { path: '/api/auth/password', method: 'PUT' },
   { path: '/api/users/new', method: 'POST' },
   { path: '/api/auth/logout', method: 'GET' },
@@ -13,7 +13,3 @@ const authRoutes = [
   { path: '/api/files/merge_chunks', method: 'POST' }
 ];
 
-module.exports={
-    newSessionRoutes,
-    authRoutes
-}

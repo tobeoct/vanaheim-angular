@@ -1,16 +1,32 @@
-
+import AppConfig from "@config";
+import UtilService from "./util";
+const path = require('path');
 const nodemailer = require('nodemailer');
 const LZString = require('lz-string');
 const pdfGenerator = require('template-pdf-generator');
-const config = require('@config');
-const { port, ADMIN_EMAIL, CC_EMAIL} = config;
-const {hasValue} = require("./util");
+const fs = require('fs');
+const multer = require('multer');
+const fsExtra = require('fs-extra');
+const { mkdirsSync } = require('@utils/dir');
+const uploadPath = path.join("../../../", 'uploads');
+const uploadTempPath = path.join(uploadPath, 'temp');
+const upload = multer({ dest: uploadTempPath });
+let FileAPI = require('file-api')
+, File = FileAPI.File
+, FileList = FileAPI.FileList
+, FileReader = FileAPI.FileReader,reader = new FileReader();
+export default class EmailService{
+bvnList:any[]=[];
+ADMIN_EMAIL:string;
+CC_EMAIL:string;
+constructor(private _utilService:UtilService,private _appConfig:AppConfig){
 
- async function SendEmail({subject,to,attachment,fileNames,html,toCustomer,type}){
+}
+  SendEmail=async({subject,to,attachment,fileNames,html,toCustomer,type}:any)=>{
   return new Promise((resolve,reject)=>{
 //const SendEmail=({subject,to,attachment,fileNames,html,toCustomer,type})=>new Promise((resolve,reject)=>{
   console.log("---------------SENDING EMAIL---------------");
-  let transporterOptions = {
+  let transporterOptions:any = {
     // service: 'gmail',
     host: process.env.HOST,
     port: 465,
@@ -23,8 +39,8 @@ const {hasValue} = require("./util");
   };
 
   if(process.env.SERVICE) transporterOptions["service"] ="gmail";
-  ADMIN_EMAIL = process.env.LOAN_EMAIL;
-  CC_EMAIL = process.env.LOAN_EMAIL;
+  this.ADMIN_EMAIL= process.env.LOAN_EMAIL ||'';
+  this.CC_EMAIL = process.env.LOAN_EMAIL||'';
   try{
   switch(type){
     case "form":
@@ -37,8 +53,8 @@ const {hasValue} = require("./util");
           pass:process.env.SUPPORT_EMAIL_PASS
         };
       
-      ADMIN_EMAIL = process.env.SUPPORT_EMAIL;
-      CC_EMAIL = process.env.SUPPORT_EMAIL;
+      this.ADMIN_EMAIL = process.env.SUPPORT_EMAIL ||'';
+      this.CC_EMAIL = process.env.SUPPORT_EMAIL||'';
       break;
     case "repayment":
       subject = toCustomer?'Vanir Capital: Your Repayment Plan':'A Customer Requested For A Repayment Plan';
@@ -50,16 +66,14 @@ const {hasValue} = require("./util");
           pass:process.env.INVESTMENT_EMAIL_PASS
         };
       
-      ADMIN_EMAIL = process.env.INVESTMENT_EMAIL;
-      CC_EMAIL = process.env.INVESTMENT_EMAIL;
+      this.ADMIN_EMAIL = process.env.INVESTMENT_EMAIL||'';
+      this.CC_EMAIL = process.env.INVESTMENT_EMAIL||'';
       break;
   }
  const transporter = nodemailer.createTransport(transporterOptions);
-  // <img src="cid:myLogo" style=" width:100px;  margin-bottom:10px"/>
-
-  console.log(transporterOptions)
-  let mailOptions = {
-    from:ADMIN_EMAIL,
+  // <img src="cid:myLogo" style=" width:100px;  margin-bottom:10px"
+  let mailOptions:any = {
+    from:this.ADMIN_EMAIL,
     to: to.trim(),
     subject:subject,
     html :`<div style="padding-top:5vh;padding-bottom:0px; font-family:'Roboto','Arial','Helvetica',sans-serif'; width:100% !important;"><div style="width:100% !important;  height:auto; text-align:center; min-width:500px; margin-bottom:0px;">
@@ -70,16 +84,16 @@ const {hasValue} = require("./util");
      
     ]
   };
-  if(hasValue(attachment)){
+  if(this._utilService.hasValue(attachment)){
     console.log(`./uploads/${attachment.trim()}.pdf`)
     mailOptions["attachments"].push({   // file on disk as an attachment 
     filename: `${attachment.split('-')[0].replace("static/",'').trim()}.pdf` ,
     path: `./uploads/${attachment.trim()}.pdf` // stream this file
   });
     }
-    if(hasValue(fileNames)){
+    if(this._utilService.hasValue(fileNames)){
       
-      if(!hasValue(mailOptions["attachments"]))mailOptions["attachments"]=[]
+      if(!this._utilService.hasValue(mailOptions["attachments"]))mailOptions["attachments"]=[]
       console.log("File Names");
       console.log(fileNames);
     for(let i=0;i<fileNames.length;i++){
@@ -90,8 +104,8 @@ const {hasValue} = require("./util");
     }
     }
   if(!toCustomer){
-    mailOptions['cc']= CC_EMAIL;//"tobe.onyema@gmail.com";
-    if(!hasValue(html)){
+    mailOptions['cc']= this.CC_EMAIL;//"tobe.onyema@gmail.com";
+    if(!this._utilService.hasValue(html)){
     mailOptions["html"]+=`<b>You just got a new application</b> <br/> <b>Name:</b> ${attachment.split('-')[0]} <br/> <b>Phone Number:</b> ${attachment.split('-')[1]}`;
     }else{
       mailOptions["html"]+=html;
@@ -100,7 +114,7 @@ const {hasValue} = require("./util");
   }
   else{
    // mailOptions['cc']= CC_EMAIL;
-    if(!hasValue(html)){
+    if(!this._utilService.hasValue(html)){
       mailOptions["html"]+=`Hello, <br/> <h1>Thanks for choosing Vanir Capital</h1> <br/><br/> We would get in touch with you shortly <br/><br/> <p class="theme_color--grey">If you are looking to invest? <span class="theme_color--yellow"><a href="http://vanircapital.org/investment.html" target="_blank"><u>Click here</u></a></span></p>
     `;}
     else{
@@ -127,7 +141,7 @@ const {hasValue} = require("./util");
 </div>`;
 console.log("Attachments")
 console.log(mailOptions["attachments"])
-transporter.sendMail(mailOptions, function(error, info){
+transporter.sendMail(mailOptions, function(error:any, info:any){
     if (error) {
       console.log(error);
       reject(error);
@@ -148,18 +162,18 @@ transporter.sendMail(mailOptions, function(error, info){
 
 
 
- const createPDFJson=(application)=>{
+  createPDFJson=(application:any)=>{
     // console.log(application);
-    if(!hasValue(application)) throw new Error("Invalid Application");
+    if(!this._utilService.hasValue(application)) throw new Error("Invalid Application");
     let docDataSet ={};
     let invalid =0
     let total = Object.keys(application).length;
     for(let item in application){
       const prefix = application[item].pageTitle;
-      if(hasValue(application[item])){
+      if(this._utilService.hasValue(application[item])){
         total+=Object.keys(application[item]).length
       for(let entry in application[item]){
-        if(hasValue(application[item][entry])){
+        if(this._utilService.hasValue(application[item][entry])){
         if(entry.toLowerCase()!=="pagetitle"){
           let record = application[item];
         
@@ -183,9 +197,9 @@ transporter.sendMail(mailOptions, function(error, info){
   }
 
 
-  async function GetFileInBase64(file) {
+ GetFileInBase64=async(file:any)=> {
     let response ;
-    const result = await toBase64(file).then((f)=>response=f).catch(e => Error(e));
+    const result = await this.toBase64(file).then((f)=>response=f).catch(e => Error(e));
     if(result instanceof Error) {
        console.log('Error: ', result.message);
        return null;
@@ -193,7 +207,7 @@ transporter.sendMail(mailOptions, function(error, info){
     return response;
     //...
   }
-  const toBase64 = file => new Promise((resolve, reject) => {
+   toBase64 = (file:any) => new Promise((resolve, reject) => {
    try{
     // const reader = new FileReader();
     reader.readAsDataURL(new File(file));
@@ -202,41 +216,41 @@ transporter.sendMail(mailOptions, function(error, info){
       resolve(reader.result);
       // }
     }
-    reader.onerror = (error) => {
+    reader.onerror = (error:any) => {
       console.log(error);
-      toBase64(file).then((f)=>resolve(f)).catch(err=>reject(err));
+      this.toBase64(file).then((f)=>resolve(f)).catch(err=>reject(err));
       // reject(error);
     }
   }catch(error){
     console.log(error);
-      toBase64(file).then((f)=>resolve(f)).catch(err=>reject(err));
+      this.toBase64(file).then((f)=>resolve(f)).catch(err=>reject(err));
       
   }
   });
-  const createReadStream=(file,bitmap)=>new Promise((resolve,reject)=>{
-    fs.createReadStream(`${file}`, { encoding: 'base64' }).on('data', function (data) {
+   createReadStream=(file:any,bitmap:any)=>new Promise((resolve,reject)=>{
+    fs.createReadStream(`${file}`, { encoding: 'base64' }).on('data', function (data:any) {
       // console.log('got data', data);
       bitmap+=data;
-    }).on('end', function () {
+    }).on('end',  () => {
         console.log('No more data');
-        if(hasValue(bitmap)){
+        if(this._utilService.hasValue(bitmap)){
         resolve(bitmap);
         }else{
-           createReadStream(file,bitmap).then(map=>{
+           fs.createReadStream(file,bitmap).then((map:any)=>{
              bitmap=map;
-             if(hasValue(bitmap)) resolve(bitmap);
+             if(this._utilService.hasValue(bitmap)) resolve(bitmap);
           });
         }
       });
   });
-  const generatePDF=(data,template,css,fileName)=>new Promise((resolve,reject)=>{
+   generatePDF=(data:any,template:any,css:any,fileName:any)=>new Promise((resolve,reject)=>{
     try{
     resolve(pdfGenerator(data, template, css).pipe(fs.createWriteStream(`./uploads/${fileName}.pdf`)));
     }catch(err){
       reject(err);
     }
   });
-  const base64MimeType=(encoded) =>{
+   base64MimeType=(encoded:any) =>{
     let result = null;
   
     if (typeof encoded !== 'string') {
@@ -251,37 +265,37 @@ transporter.sendMail(mailOptions, function(error, info){
   
     return result;
   }
-  const ProcessFiles=(files,bvnVer) => new Promise((resolve, reject) => {
+   ProcessFiles=(files:any,bvnVer:any) => new Promise((resolve, reject) => {
    // console.log(files)
-    let fileNames = [];
+    let fileNames:any[] = [];
     let bvnFile;
-    if(hasValue(files)){
+    if(this._utilService.hasValue(files)){
       for(let item in files){
         fileNames.push(files[item]);
       }
       //Send bvn information to VCAP
       let shouldProceed = false;
-      if(hasValue(bvnVer)){
-        if(hasValue(bvnVer["BVN"])){
-          if(hasValue(bvnList[bvnVer["BVN"]])){
-          if(hasValue(bvnList[bvnVer["BVN"]]["basicDetails"])){
+      if(this._utilService.hasValue(bvnVer)){
+        if(this._utilService.hasValue(bvnVer["BVN"])){
+          if(this._utilService.hasValue(this.bvnList[bvnVer["BVN"]])){
+          if(this._utilService.hasValue(this.bvnList[bvnVer["BVN"]]["basicDetails"])){
             shouldProceed = true;
           }}}}
             if(shouldProceed){
         //console.log(bvnVer["BVN"]);
         let item ="BVN Details To VCAP.jpg";
-      files["BVN Details To VCAP.jpg"] =  LZString.compress( `data:image/jpg;base64,${bvnList[bvnVer["BVN"]]["basicDetails"]}`);
+      files["BVN Details To VCAP.jpg"] =  LZString.compress( `data:image/jpg;base64,${this.bvnList[bvnVer["BVN"]]["basicDetails"]}`);
       let base64String = LZString.decompress(files[item]); // Not a real image
-      let mime = base64MimeType(base64String);
+      let mime:any = this.base64MimeType(base64String);
       // console.log(item);
       // console.log(mime);
-      if(hasValue(mime)){
+      if(this._utilService.hasValue(mime)){
         mime = mime.split('/')[1];
   // Remove header
   let itemName=`${item.split('.')[0]}-${Date.now()}.${mime}`;
       fileNames.push(itemName);
   let base64Image = base64String.split(';base64,').pop();
-  fs.writeFile(`./uploads/${itemName}`, base64Image, {encoding: 'base64'}, function(err) {
+  fs.writeFile(`./uploads/${itemName}`, base64Image, {encoding: 'base64'}, function(err:any) {
     console.log('File created');
     resolve(fileNames);
   });
@@ -299,6 +313,4 @@ transporter.sendMail(mailOptions, function(error, info){
     }
   
   });
-  module.exports={
-   ProcessFiles, generatePDF,GetFileInBase64,createPDFJson,SendEmail
-  }
+}

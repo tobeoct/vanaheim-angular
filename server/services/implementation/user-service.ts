@@ -2,7 +2,7 @@ import { UserCategory } from "src/shared/constants/enum";
 import { User } from "@models/user";
 import { BaseService } from "./base-service";
 import { IUserService } from "@services/interfaces/Iuser-service";
-  class UserService extends BaseService<User> implements IUserService{
+ class UserService extends BaseService<User> implements IUserService{
     constructor(){
       super(null);
     }
@@ -69,5 +69,5 @@ import { IUserService } from "@services/interfaces/Iuser-service";
  }
 }
 
-// export const _UserService = ()=>new UserService();
-export default new UserService();
+
+export default UserService

@@ -1,6 +1,6 @@
 
 import { LoanRequestLog } from "@models/loan/loan-request-log";
-import { BaseService, IBaseService } from "../Ibaseservice";
+import { IBaseService } from "../Ibaseservice";
 
 export interface ILoanRequestLogService extends IBaseService<LoanRequestLog>{
 

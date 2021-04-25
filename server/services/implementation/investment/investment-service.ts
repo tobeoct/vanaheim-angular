@@ -6,8 +6,8 @@ import { IInvestmentService } from "@services/interfaces/investment/Iinvestments
 
 
 const { INVESTMENT_EMAIL } = require('@config');
-const {titleCase,currencyFormatter} = require( "./common/util")
-const {SendEmail} = require( "./common/email-service")
+const {titleCase,currencyFormatter} = require( "../common/util")
+const {SendEmail} = require( "../common/email-service")
 
  const ProcessInvestment=(email:any,payload:any)=>new Promise((resolve,reject)=>{
    let response = {isSuccessful:false, ResponseCode:"06",ResponseDescription:"Processing",Data:null};
