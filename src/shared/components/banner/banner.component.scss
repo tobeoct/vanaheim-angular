@@ -1,0 +1,63 @@
+@import "../../../styles/styles.scss";
+.banner {
+    @include flex(vertical,center);
+    @include flex(horizontal,space-between);
+    @include paddingVertical(true,"px",0.5);
+    @include paddingHorizontal(true,"px",2);
+    visibility: hidden;
+    width: 100%;
+    margin: auto;
+    background-color:map-get($colors,lightYellow);
+    color: map-get($colors,black);
+    text-align: center;
+    border-radius: $border-radius;
+    overflow: hidden;
+    // position: absolute;
+    z-index: 99999;
+    top: 0;
+    transition: ease-in-out 0.3s;
+    height: map-get($sizings, "px" )*2;
+    &_button{
+        // width: 80px;
+        margin-left: 10px;
+        // height: 50px;
+        .widget_button{
+            @include flex(true,center);
+            @include paddingVertical(true,"px",0);
+            @include paddingHorizontal(true,"px",0.5);
+            background: transparent;
+            border:2px solid map-get($colors,yellow);
+            // background: transparent !important;
+            color: map-get($colors,black);
+            height: map-get($sizings, "px" )* (4/3);
+            font-size: map-get($font-sizes, "p" );
+            font-weight: map-get($font-weights, "bold" );
+        }
+    }
+    &.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s;//, expand 0.5s 0.5s;
+        animation: fadein 0.5s;//, expand 0.5s 0.5s;
+        animation-fill-mode: forwards;
+    }
+}
+
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 15vh; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+// @-webkit-keyframes expand {
+//     from {min-width: 50px}
+//     to {min-width: 50%}
+// }
+
+// @keyframes expand {
+//     from {min-width: 50px}
+//     to {min-width: 90%}
+// }

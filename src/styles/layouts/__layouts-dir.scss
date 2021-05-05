@@ -1,0 +1,13 @@
+@import './footer';
+@import './navigation';
+@import './side-navigation';
+.grid-padding-2x{
+   @include paddingHorizontal(true,"%",1)
+}
+
+@media all and (max-width:900px){
+   .grid-padding-2x{
+      @include paddingHorizontal(true,"%",0.5,$important:important)
+   }
+   
+}

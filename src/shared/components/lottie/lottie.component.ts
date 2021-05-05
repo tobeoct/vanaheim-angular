@@ -9,22 +9,30 @@ import { AnimationOptions } from 'ngx-lottie';
 })
 export class LottieComponent implements OnInit, OnChanges {
  @Input() assetPath:string = "";
+ path:string;
+ base:string = "../../../assets/animations"
  options: AnimationOptions={
-  path: `../../assets/animations/${this.assetPath}.json`
+  path: `${this.base}/${this.assetPath}.json`
 }
   constructor() { }
 
   ngOnInit(): void {
     this.options = {
-      path: `../../assets/animations/${this.assetPath}.json`
+      path: `${this.base}/${this.assetPath}.json`
     }
+
+    this.path = `${this.base}/${this.assetPath}.json`;
   }
 
   ngOnChanges():void{
-   
+    this.options = {
+      path: `${this.base}/${this.assetPath}.json`
+    }
+
+    this.path = `${this.base}/${this.assetPath}.json`;
   }
 
   animationCreated(animationItem: AnimationItem): void {
-    // console.log(animationItem);
+    console.log(animationItem);
   }
 }

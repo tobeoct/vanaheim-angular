@@ -18,11 +18,10 @@ export class BasicAuthInterceptor implements HttpInterceptor {
       private async handleAccess(request: HttpRequest<any>, next: HttpHandler):
           Promise<HttpEvent<any>> {
             let token:any;
-            console.log("Interceptor ", request.url)
             const isLoggedIn = this._authenticationService.isLoggedIn()
             let changedRequest = request;
             const isApiUrl = changedRequest.url.startsWith(environment.apiUrl);
-            if ( isApiUrl && !changedRequest.url.includes("users/token")) {
+            if ( isApiUrl && !changedRequest.url.includes("auth/token")) {
 
                 if(isLoggedIn){
                     token = await this._authenticationService.fetchToken();
@@ -35,7 +34,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
                 headerSettings[key] = request.headers.getAll(key)||[];
                 }
                 if (token) {
-                headerSettings['Authorization'] = 'Bearer ' + token.response.response;
+                headerSettings['Authorization'] = 'Bearer ' + token.response.token;
                 }
                 headerSettings['Content-Type'] = 'application/json';
                 headerSettings['api_key'] = this._authenticationService.getApiKey();

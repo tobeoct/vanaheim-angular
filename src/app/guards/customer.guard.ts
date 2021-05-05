@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UserCategory } from 'src/shared/constants/enum';
+import { UserCategory } from '@enums/usercategory';
 import { AuthService } from 'src/shared/services/auth/auth.service';
 
 @Injectable({
@@ -21,18 +21,18 @@ export class CustomerGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const user = this.authenticationService.userValue;
-    console.log("Customer Guard")
+   
     if (this.authenticationService.isLoggedIn()) {
           
 
     // not logged in so redirect to login page with the return url
     // this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-    if(user.category== UserCategory.customer){
-        console.log("Customer Route")
+    if(user.category== UserCategory.Customer){
+       
         return true;
         }
-        else if(user.category==UserCategory.admin){
-            console.log("Admin Route")
+        else if(user.category==UserCategory.Staff){
+            
             this.router.navigate(['/admin']);
             return false;
         }

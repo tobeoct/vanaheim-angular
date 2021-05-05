@@ -28,6 +28,7 @@
     "awilix": "^4.3.3",
     "awilix-express": "^4.0.0",
     "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.6.0",
     "compression": "^1.7.4",
@@ -62,6 +63,7 @@
     "serverless-http": "^2.7.0",
     "template-pdf-generator": "^1.0.2",
     "tslib": "^2.0.0",
+    "web-push": "^3.4.4",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
@@ -71,6 +73,7 @@
     "@babel/plugin-proposal-decorators": "^7.13.15",
     "@babel/plugin-transform-runtime": "^7.13.15",
     "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.10",
     "@types/express-session": "^1.17.3",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",

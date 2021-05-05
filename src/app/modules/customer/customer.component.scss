@@ -1,0 +1,42 @@
+@import '../../../styles/abstracts/_abstracts-dir';
+#main-content{
+    margin-left: map-get($sizings, "vw" ) * 5;
+    width: 85vw;
+    margin-top:  map-get($sizings, "px" ) * 3;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .content{
+        width: 100%;
+    }
+.notifications{
+    &_subscription{
+        background: #ECE9FB;
+        padding: 5%;
+        border-radius:2px;
+        p{
+            color: #999999;
+            margin-bottom: 5px;
+            text-align: center;
+            font-size: 12;
+        }
+        h3{
+            margin-bottom: 20px;
+            text-align: center;   
+            font-size: 14 * 1.05;
+            font-weight: 500;
+        }
+        .button{
+            margin-top: 20px;
+        }
+    }
+}
+}
+
+@media all and (max-width:900px){
+    #main-content{
+        margin-left: 0;
+        width: 100vw;
+    }
+}

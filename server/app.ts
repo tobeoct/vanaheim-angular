@@ -1,6 +1,6 @@
 // import bodyParser from 'body-parser';
 // import compression from 'compression';
-// import cors from 'cors';
+const cors =  require('cors');
 // import express from 'express';
 
 const http = require('http');
@@ -25,9 +25,11 @@ import { inject, loadControllers, scopePerRequest } from 'awilix-express';
 import {authoriseRequest,clientApiKeyValidation,authoriseResponse,sessionRequestAuthorisation,sessionResponseAuthorisation} from './middleware/authorise-middleware';
 import SessionMiddleware from './middleware/session-middleware';
 
+const publicVapidKey = 'BH9z7PCyti1n9ItSnlp_8qoyDHP-RUK-vdZrTCqaoYHKVKIlk2w3XPoZLSndWp23VPVepP7gZ6diOFTbQNLpeBc';
+const privateVapidKey = '_qHAcJ81LwWefymI1DnHmmeF6ZBqEeTmfXPFebOAGrM';
 export default class App {
    
-    constructor(private _appConfig: AppConfig,private _session:SessionMiddleware) {
+    constructor(private _appConfig: AppConfig,private _session:SessionMiddleware, private webPush:any) {
     }
 
     start(container:any, callback:any) {
@@ -60,14 +62,16 @@ export default class App {
         app.use(compression());
         app.use(timeout('120s'));
         app.use(expAutoSan.all)
-
+      app.use(cors())
         app.use(scopePerRequest(container));
         
       
         app.use(cookieParser())
+        
+this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privateVapidKey);
         app.use(this._session.getSession())
         app.use(inject(sessionRequestAuthorisation))
-        app.use("/api",inject(clientApiKeyValidation),inject(authoriseRequest))
+        app.use("/api",inject(clientApiKeyValidation),inject(authoriseRequest),expAutoSan.route)
         app.use(loadControllers('api/controllers/*.controller.ts', {cwd: __dirname}));
         app.use("/api",inject(authoriseResponse))
 

@@ -1,4 +1,4 @@
 export enum BaseStatus{
-    Active,
-    InActive
+    Active="Active",
+    InActive ="Inactive"
 }

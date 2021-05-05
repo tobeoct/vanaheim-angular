@@ -1,0 +1,10 @@
+.auth_container{
+    
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20vh;
+    height: 90vh;
+    .footer{
+        @include marginVertical(false,"vh",3,1);
+    }
+}

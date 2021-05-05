@@ -1,0 +1,6 @@
+<form  role="form" id="form" novalidate class="vc-form {{class}}"  [formGroup]="form" (ngSubmit)="handleSubmit()">
+    <ng-content></ng-content>
+</form> 
+<div *ngIf="errorMessage$|async as errors">
+    <div *ngIf="errors.apiError" class="snackbar snackbar-danger mt-3 mb-0">{{errors?.apiError}}</div>
+</div>

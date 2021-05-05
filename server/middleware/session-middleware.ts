@@ -4,7 +4,7 @@ import RedisMiddleware from "./redis-middleware"
 
 export default class SessionMiddleware{
    constructor(private expressSession:any, private _redis:RedisMiddleware,private _appConfig:AppConfig){
-    console.log("Session Middleware",expressSession)
+    // console.log("Session Middleware",expressSession)
    }
     getSession=()=>{
         return this.expressSession({

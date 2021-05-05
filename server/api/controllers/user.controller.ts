@@ -13,29 +13,28 @@ export default class UserController {
 
     }
     @route('/:id')
-    @before([expAutoSan.route])
     @GET()
     getById =async (req:any, res:any) => {
   
         }
 
     @route('/')
-    @before([expAutoSan.route])
     @GET()
     getAll = async (req:any, res:any,next:any) => {
           console.log("Users Controller", req.session)
+          let users =  await this._userService.getAll();
           res.statusCode = 200;
-          res.data = {
-            status: true,
-            response: "Gotten"
-          }
+          res.data = users;
+          // {
+          //   status: true,
+          //   response: users
+          // }
       
           next()
       
         }
 
     @route('/create')
-    @before([expAutoSan.route])
     @GET()
     new =async (req:any, res:any) => {
 

@@ -9,14 +9,16 @@ import { CommaseperatedPipe } from 'src/shared/pipes/commaseparated/commaseperat
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BasicAuthInterceptor } from './guards/http-interceptor';
 import { ErrorInterceptor } from './guards/error-interceptor';
-import { AccordionComponent } from 'src/shared/components/accordion/accordion.component';
-import { createCustomElement } from '@angular/elements';
 import { NavigationComponent } from 'src/shared/layout/navigation/navigation.component';
 import { CommonModule } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {  SocialAuthServiceConfig } from 'angularx-social-login';
 import {FacebookLoginProvider,GoogleLoginProvider } from 'angularx-social-login';
+import { PageComponent } from '../shared/layout/page/page.component';
+import { createCustomElement } from '@angular/elements';
+import { AccordionComponent } from 'src/shared/components/accordion/accordion.component';
+import { SharedModule } from 'src/shared/shared.module';
 
  
 // Note we need a separate function as it's required
@@ -27,14 +29,15 @@ import {FacebookLoginProvider,GoogleLoginProvider } from 'angularx-social-login'
     AppComponent,
     ContactComponent,
     CommaseperatedPipe,
-    NavigationComponent
+    NavigationComponent,
+    PageComponent
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    CommonModule,
+    CommonModule,SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
@@ -60,15 +63,15 @@ import {FacebookLoginProvider,GoogleLoginProvider } from 'angularx-social-login'
       } as SocialAuthServiceConfig,
     }    
 ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA],
   bootstrap:[],
-  entryComponents:[AccordionComponent]
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA],
+ entryComponents:[AccordionComponent]
 })
 // bootstrap: [AppComponent],
 export class AppModule implements DoBootstrap { 
   constructor(injector:Injector){
     const acc = createCustomElement(AccordionComponent,{injector});
-    customElements.define('my-accordion',acc);
+    customElements.define('vc-accordion',acc);
   }
   ngDoBootstrap(appRef: ApplicationRef) {
     appRef.bootstrap(AppComponent); // Or some other component

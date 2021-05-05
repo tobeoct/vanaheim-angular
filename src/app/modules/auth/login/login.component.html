@@ -1,41 +1,65 @@
-<div class="col-md-6 offset-md-3 mt-5">
-    <div class="alert alert-info">
-        Username: {{socialUser?.firstName}}<br />
-        Password: test
+
+<div class="snackbar_container ">
+    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
     </div>
-   
-     
-   
-    <div class="card">
-        <h4 class="card-header">Angular 10 Basic Authentication Example</h4>
-        <div class="card-body">
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                        <div *ngIf="f.username.errors.required">Username is required</div>
-                    </div>
+    <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0">{{success}}
+    </div>
+    </div>
+<div id="login" class="grid-padding-2x ">
+    <div class="container vc_animated vc_animated--fadeIn">
+      
+        <div class="content box-shadow animate__animated animate__fadeInUp">
+            <div class="container-header text-center">
+                <h3 class="title">Login to your account</h3>
+                <p>Securely log into your account</p>
+                <small>Sign in with</small>
+                <div id="social-login">
+                    <!-- <div > -->
+                        <div class="item" (click)="loginWithFacebook()">
+                            <p><b>f</b></p>
+                        </div>
+                        <div class="item"  (click)="loginWithGoogle()">
+                            <p><b>G</b></p>
+                        </div>
+                    <!-- </div> -->
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                        <div *ngIf="f.password.errors.required">Password is required</div>
+            </div>
+            <!-- <div class="content"> -->
+                <app-form [form]="loginForm" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+                <!-- <form role="form" id="form" novalidate class="vc-form"  [formGroup]="loginForm" (ngSubmit)="onSubmit()"> -->
+                    <div class="vc_form-field form_group" style="margin-top: 0;">
+                        <label for="username">Username</label>
+                        <input [focus]="focus$|async" type="text" [formControl]="username" class="form-control" [ngClass]="{ 'is-invalid': (username.touched || username.dirty) && !username.valid }" />
+                        <div *ngIf="(errorMessage$ | async)?.username as errors" class="invalid-feedback">
+                            <div>{{errors}}</div>
+                        </div>
                     </div>
+                    <div class="vc_form-field form_group">
+                        <label for="password">Password</label>
+                        <input type="password" [formControl]="password" class="form-control" [ngClass]="{ 'is-invalid':(password.touched || password.dirty) && !password.valid  }" />
+                        <div *ngIf="(errorMessage$ | async)?.password as errors" class="invalid-feedback">
+                            <div>{{errors}}</div>
+                        </div>
+                    </div>
+                <div class="form_group" style="margin: 0; display: flex; justify-content: flex-end; padding: 0;">
+                    <button class="widget_button widget_button--small widget_button--underline" (click)="onNavigate('auth/forgot-password')"> Forgot Password</button>
                 </div>
-                <button [disabled]="loading" class="btn btn-primary">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                    Login
-                </button>
-                <div>
-                    <button type="button" (click)="loginWithGoogle()" class="btn btn-danger">Login with Google</button>
-                  </div>
-                  <div>
-                    <button type="button" (click)="loginWithFacebook()" class="btn btn-primary btn-block">Signin with Facebook</button>
-                  </div>
-                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-            </form>
+                    <div class="form_group" style="margin-top: 0;">
+                        <button class="widget_button" type="submit" [ngClass]="{'loading':(loading$|async)==true}"
+                        
+                        [title]="loginForm&&loginForm.valid?'You can log in now':'Please fill the form first'" 
+                        [disabled]="loginForm &&!loginForm.valid"><div>Login</div><div class="widget_button--loader"><img src="assets/button-loader.gif" /></div></button>
+                      
+                        </div>
+                        <div class="form_group" style="margin-top: 0; display: flex; justify-content: center;">
+                            <div style=" display: flex; ">
+                            <p><b>Don't have an account?</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="onNavigate('auth/register')">Register</button>
+                        </div>
+                        </div>
+                    
+                <!-- </form> -->
+                </app-form>
+            <!-- </div> -->
         </div>
     </div>
 </div>

@@ -4,6 +4,7 @@ export class BaseEntity{
     id:number;
     status:BaseStatus;
     isActive:boolean;
-    dateUpdated:Date;
-    dateCreated:Date;
+    updatedAt:Date;
+    createdAt:Date;
+    code:string;
 }

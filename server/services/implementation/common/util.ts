@@ -9,7 +9,24 @@ export default class UtilService{
   return Intl.NumberFormat('yo-NG', {style: 'currency', currency: 'NGN'})
 .format(value)
 }
+ randPassword=(letters:number, numbers:number, either:number) =>{
+  var chars = [
+   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", // letters
+   "0123456789", // numbers
+   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" // either
+  ];
 
+  return [letters, numbers, either].map(function(len, i) {
+    return Array(len).fill(chars[i]).map(function(x) {
+      return x[Math.floor(Math.random() * x.length)];
+    }).join('');
+  }).concat().join('').split('').sort(function(){
+    return 0.5-Math.random();
+  }).join('')
+}
+autogenerate=({prefix}:any)=>{
+ return `${prefix}_`+Math.floor(Math.random() * 10000);
+}
   titleCase=(str:any)=> {
     try{
     if(this.hasValue(str)){

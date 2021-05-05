@@ -1,23 +1,43 @@
+import { BaseEntity } from "@models/base-entity";
 import { IBaseRepository } from "@repository/interface/Ibase-repository";
 
  export class BaseRepository<T> implements IBaseRepository<T>{
-   constructor(){
-
+   constructor(protected _db:any){
+      // console.log(_db)
    }
-   update= (data: T) => {
-    return new Promise<T>((resolve, reject) =>{});
+ 
+   update= (data: BaseEntity) => {
+    return new Promise<T>(async (resolve, reject) =>{
+      resolve(await this._db
+        .update(
+          {...data},
+          { where: { id: data.id } }
+        ))
+    });
   }
-   create= (data: T) => {
-    return new Promise<T>((resolve, reject) =>{});
+   create= (data:  BaseEntity) => {
+    return new Promise<T>(async (resolve, reject) =>{
+      resolve(await this._db
+        .create(data))
+
+    });
   }
    delete= (id: number) => {
     return new Promise<T>((resolve, reject) =>{});
   }
      getAll=()=>{
-        return new Promise<T[]>((resolve, reject) =>{});
+        return new Promise<T[]>((resolve, reject) =>{
+          
+          resolve(this._db
+          .findAll())
+
+        });
       }
-      getById=()=>{
-        return new Promise<T>((resolve, reject) =>{});
+      getById=(id:number)=>{
+        return new Promise<any>(async (resolve, reject) =>{
+          console.log("MyDB",this._db)
+          resolve(await this._db.findByPk(id));
+        });
       }
     search=(parameters:object,pageNumber:number,maxSize:number)=>{
         return new Promise<T>((resolve, reject) =>{});

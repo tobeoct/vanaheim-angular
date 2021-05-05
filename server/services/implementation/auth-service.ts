@@ -1,9 +1,11 @@
 import { IAuthService } from "@services/interfaces/Iauth-service";
 const SECRET_KEY = "SECRET_KEY";;
 import { newSessionRoutes, authRoutes } from "./common/routes";
-const jwt = require('jsonwebtoken');
 class AuthService implements IAuthService{
   
+  constructor(private jwt:any){
+
+  }
   isNewTokenRequired = (httpMethod:any, url:any) => {
     for (let routeObj of newSessionRoutes) {
       if (routeObj.method === httpMethod && routeObj.path === url) {
@@ -21,7 +23,7 @@ class AuthService implements IAuthService{
     return false;
   }
     generateJWTToken = (userData:any) =>{
-     return jwt.sign(userData, SECRET_KEY, {
+     return this.jwt.sign(userData, SECRET_KEY, {
   
       expiresIn: '2m' // expires in 365 days
   
@@ -29,8 +31,8 @@ class AuthService implements IAuthService{
   }
     verifyToken = (jwtToken:any) =>{
      try{
-       console.log("Verifying Token")
-        return jwt.verify(jwtToken, SECRET_KEY);
+       console.log("Verifying Token", jwtToken)
+        return this.jwt.verify(jwtToken, SECRET_KEY);
      }catch(e){
         console.log('e:',e);
         return null;

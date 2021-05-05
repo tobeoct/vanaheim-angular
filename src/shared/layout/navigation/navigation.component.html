@@ -1,41 +1,8 @@
 <!-- <div *ngIf="type=='default'; then default; type=='onboarding'; then onboarding; type=='sm-mobile'; then smmobile; else smdesktop"> -->
 <div [ngSwitch]="true">
     
-    <ul class="sidenav" *ngSwitchCase="type?.toLowerCase()=='customer'" >
-        
-            <li class="sidenav_link" id="personal" data-active data-order="1"><a class="theme_anchor__disabled"><span>Dashboard</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-    <li class="sidenav_link" id="account" data-order="2"><a class="theme_anchor__disabled"><span>Loans</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-    <li class="sidenav_link" id="employment" data-order="3"><a class="theme_anchor__disabled"><span>Investment</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-    <li class="sidenav_link" id="nok" data-order="4"><a class="theme_anchor__disabled"><span>Document</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-    <li class="sidenav_link" id="upload" data-order="5"><a class="theme_anchor__disabled"><span>Account</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-    <li class="sidenav_link" id="logout" data-order="6" data-pointable="true" (click)="logout()"><a><span>Logout</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-    
-    </ul>
-    <div class="sidenav" *ngSwitchCase="type.toLowerCase()=='admin'" >
-        <ul>
-        <li class="sidenav_link" [routerLink]="['/admin/requests']" data-active id="personal" data-order="1"><a class="theme_anchor__disabled"><span>Requests</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-<li class="sidenav_link" [routerLink]="['/admin/notify']" id="account" data-pointable="true" data-order="2"><a class="theme_anchor__disabled"><span>Notify</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-<li class="sidenav_link" id="logout" data-order="6" data-pointable="true" (click)="logout()"><a><span>Logout</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
-    </ul>
-</div>
+   
+   
        <div *ngSwitchDefault></div>
     
     <!-- <ul *ngSwitchDefault>

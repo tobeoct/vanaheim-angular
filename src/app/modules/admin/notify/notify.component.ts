@@ -10,27 +10,18 @@ import { NotifyService } from './notify.service';
   styleUrls: ['./notify.component.scss']
 })
 export class NotifyComponent implements OnInit, OnDestroy {
-sub:Subscription
+allSubscriptions:Subscription[] =[];
   constructor(private _notifyService: NotifyService, private _authenticationService: AuthService) {
 
    }
   ngOnDestroy(): void {
-    if(this.sub){
-  this.sub.unsubscribe();
-    }
+    this.allSubscriptions.forEach(sub=>sub.unsubscribe());
   }
 
   ngOnInit(): void {
-    // this._authenticationService.fetchToken().pipe(take(1)).subscribe(token=>{
-    //   console.log("Token", token.response.response)
-      // request = request.clone({
-      //     setHeaders: { 
-      //         Authorization: `Bearer ${token.response.response}`
-      //     }
-      // });
-      this.sub = this._notifyService.fetchUsers().pipe(take(1)).subscribe();
-  // })
     
+     const sub = this._notifyService.fetchUsers().pipe(take(1)).subscribe();
+     this.allSubscriptions.push(sub);
   }
   
 

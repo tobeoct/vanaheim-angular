@@ -6,7 +6,10 @@
     <!-- <div class="animate__animated animate__zoomIn">
         <button class="widget_button widget_button--small" id="getstarted" >Get Started</button>
     </div> -->
-
-    <app-button [options]="buttonOptions"></app-button>
-    
+    <div style="display: flex; align-items: center; justify-content: space-between;min-width: 20%;">
+        <div class="bordered_anchor widget_button--icon theme_color--white" (click)="toggleSideNav()" ><div class="icon"><img src="../../../../../assets/icons/questions.svg"/></div><span>Questions</span></div>
+        <!-- <div class="bordered_anchor"><a href="/">About Us</a></div> -->
+        <div class="bordered_anchor theme_color--white" ><a [routerLink]="['/auth/account']">Login</a></div>
+        <div style="margin-right: 15px;"><app-button [options]="buttonOptions"></app-button></div>
+    </div>
 </div>

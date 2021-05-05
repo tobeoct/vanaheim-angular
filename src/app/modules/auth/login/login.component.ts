@@ -1,49 +1,83 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, delay, first, map, tap } from 'rxjs/operators';
 
 import { AuthService } from 'src/shared/services/auth/auth.service';
-import { UserCategory } from 'src/shared/constants/enum';
+import { UserCategory } from '@enums/usercategory';
 import { SocialAuthService, GoogleLoginProvider,FacebookLoginProvider, SocialUser } from 'angularx-social-login';
+import { Subject, Observable, Subscription, BehaviorSubject, from } from 'rxjs';
+import { ChangeDetectionStrategy } from '@angular/core';
+import  VCValidators  from '@validators/default.validators';
+import { LoginType } from '@models/helpers/enums/logintype';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     loginForm: FormGroup;
-    loading = false;
-    submitted = false;
     returnUrl: string;
-    error = '';
     socialUser: SocialUser;
-    isLoggedin: boolean; 
+    isLoggedin: boolean;
+    returnUsername:string; 
+  allSubscriptions:Subscription[]=[];
+    get password(){
+        return this.loginForm.get("password") as FormControl|| new FormControl();
+      }
+      get username(){
+        return this.loginForm.get("username") as FormControl|| new FormControl();
+      }
+      // convenience getter for easy access to form fields
+      get f() { return this.loginForm.controls; }
+  
+      focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+      focus$:Observable<boolean> = this.focusSubject.asObservable();
+      delay$ = from([1]).pipe(delay(3000));
+    errorMessageSubject:Subject<any> = new Subject<any>(); 
+    errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
 
+    apiSuccessSubject:Subject<string> = new Subject<string>(); 
+    apiSuccess$:Observable<string> = this.apiSuccessSubject.asObservable();
+
+    apiErrorSubject:Subject<string> = new Subject<string>(); 
+    apiError$:Observable<string> = this.apiErrorSubject.asObservable();
+    
+  loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  loading$:Observable<boolean> = this.loadingSubject.asObservable();
     constructor(
-        private formBuilder: FormBuilder,
+        private _fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthService,
-        private socialAuthService: SocialAuthService
+        private socialAuthService: SocialAuthService,
+        private _router:Router,
+        private _validators:VCValidators
     ) { 
         // redirect to home if already logged in
         const user = this.authenticationService.userValue;
         if (this.authenticationService.isLoggedIn()) { 
-            if(user.category== UserCategory.admin){
+            if(user.category== UserCategory.Staff){
             this.router.navigate(['/admin']);
             }else{
                 this.router.navigate(['/my']);
             }
         }
+        
     }
-
+    ngOnDestroy(): void {
+      this.allSubscriptions.forEach(sub=>sub.unsubscribe());
+    }
     ngOnInit() {
-        this.loginForm = this.formBuilder.group({
-            username: ['', Validators.required],
-            password: ['', Validators.required]
+      this.route.queryParams.subscribe(params => {
+        this.returnUsername = params['username'];
+      });
+        this.loginForm = this._fb.group({
+            username: [this.returnUsername?this.returnUsername:"", [Validators.required,this._validators.username]],
+            password: ['', [Validators.required,this._validators.password]]
         });
 
         // get return url from route parameters or default to '/'
@@ -52,45 +86,67 @@ export class LoginComponent implements OnInit {
             this.socialUser = user;
             this.isLoggedin = (user != null);
             if(this.isLoggedin){
-                this.login(this.socialUser.id,"password","social",user)
+                this.login({type: LoginType.Social,socialUser:user});//this.socialUser.id,"passwordQ","social",user)
             }else{
                 alert("Error logging in")
             }
             console.log(this.socialUser);
           });
+
+          
     }
+    ngAfterViewInit(): void {
+      const sub = this.delay$.subscribe(c=>{
+          this.focus();    
+      })
+      this.allSubscriptions.push(sub);
+  }
 
-    // convenience getter for easy access to form fields
-    get f() { return this.loginForm.controls; }
-
-    onSubmit() {
-        this.submitted = true;
-
+    focus(){
+      this.focusSubject.next(true)
+    }
+    onSubmit(form:FormGroup) {
+        
         // stop here if form is invalid
-        if (this.loginForm.invalid) {
+        if (form.invalid) {
             return;
         }
 
-        this.loading = true;
-       this.login(this.f.username.value, this.f.password.value,"default",null)
+        this.loadingSubject.next(true);
+       this.login({username:form.controls.username.value,password:form.controls.password.value, type:LoginType.Default})
     }
-    login(username:string,password:string, type:string, user:any){
-        this.authenticationService.login(username, password,type,user)
+    login({username,password,type,socialUser}:any){
+       const sub = this.authenticationService.login({username, password,type,socialUser})
         .pipe(first())
         .subscribe(
             data => {
                 console.log("Logged In ", data)
-                this.router.navigate([this.returnUrl]);
+                this.loadingSubject.next(false);
+                this.apiSuccessSubject.next("Welcome back "+data?.firstName);
+              setTimeout(()=> this.onNavigate(this.returnUrl),2000);
             },
             error => {
-                this.error = error;
-                this.loading = false;
+                // this.error = error;
+                // let err = "Small wahala dey with connectivity, abeg retry"
+                // // if(error=="Not Found")
+                // console.log(error)
+                
+          setTimeout(()=>{this.apiErrorSubject.next("Error: "+error);this.loadingSubject.next(false);},1000)
+          setTimeout(()=>{this.apiErrorSubject.next();},5000)
             });
+            this.allSubscriptions.push(sub);
     }
     loginWithGoogle(): void {
         this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
       }
       loginWithFacebook(): void {
         this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+      }
+
+      onNavigate(route:string,params:any={}):void{
+        this._router.navigate([route],{queryParams: params})
+      }
+      onError(value:any):void{
+        this.errorMessageSubject.next(value);
       }
 }

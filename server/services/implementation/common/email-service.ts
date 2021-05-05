@@ -15,6 +15,7 @@ let FileAPI = require('file-api')
 , File = FileAPI.File
 , FileList = FileAPI.FileList
 , FileReader = FileAPI.FileReader,reader = new FileReader();
+
 export default class EmailService{
 bvnList:any[]=[];
 ADMIN_EMAIL:string;
@@ -28,19 +29,18 @@ constructor(private _utilService:UtilService,private _appConfig:AppConfig){
   console.log("---------------SENDING EMAIL---------------");
   let transporterOptions:any = {
     // service: 'gmail',
-    host: process.env.HOST,
+    host: this._appConfig.HOST,
     port: 465,
-    secure: process.env.ISSECURE, // use SSL
+    secure:this._appConfig.ISSECURE === 'true', // use SSL
    
     auth: {
-      user: process.env.LOAN_EMAIL,
-      pass:process.env.LOAN_EMAIL_PASS
+      user: this._appConfig.LOAN_EMAIL,
+      pass:this._appConfig.LOAN_EMAIL_PASS
     }
   };
-
-  if(process.env.SERVICE) transporterOptions["service"] ="gmail";
-  this.ADMIN_EMAIL= process.env.LOAN_EMAIL ||'';
-  this.CC_EMAIL = process.env.LOAN_EMAIL||'';
+  if(this._appConfig.SERVICE) transporterOptions["service"] ="gmail";
+  this.ADMIN_EMAIL= this._appConfig.LOAN_EMAIL ||'';
+  this.CC_EMAIL = this._appConfig.LOAN_EMAIL||'';
   try{
   switch(type){
     case "form":
@@ -49,12 +49,12 @@ constructor(private _utilService:UtilService,private _appConfig:AppConfig){
     case "feedback":
       subject = toCustomer?'Vanir Capital: Thanks For The Feedback':'A Customer Gave A Feedback';
       transporterOptions.auth = {
-          user: process.env.SUPPORT_EMAIL,
-          pass:process.env.SUPPORT_EMAIL_PASS
+          user: this._appConfig.SUPPORT_EMAIL,
+          pass:this._appConfig.SUPPORT_EMAIL_PASS
         };
       
-      this.ADMIN_EMAIL = process.env.SUPPORT_EMAIL ||'';
-      this.CC_EMAIL = process.env.SUPPORT_EMAIL||'';
+      this.ADMIN_EMAIL = this._appConfig.SUPPORT_EMAIL ||'';
+      this.CC_EMAIL = this._appConfig.SUPPORT_EMAIL||'';
       break;
     case "repayment":
       subject = toCustomer?'Vanir Capital: Your Repayment Plan':'A Customer Requested For A Repayment Plan';
@@ -62,12 +62,12 @@ constructor(private _utilService:UtilService,private _appConfig:AppConfig){
       case "investment":
       subject = toCustomer?'Vanir Capital: Investment Indication':'Investment Indication';
       transporterOptions.auth = {
-          user: process.env.INVESTMENT_EMAIL,
-          pass:process.env.INVESTMENT_EMAIL_PASS
+          user: this._appConfig.INVESTMENT_EMAIL,
+          pass:this._appConfig.INVESTMENT_EMAIL_PASS
         };
       
-      this.ADMIN_EMAIL = process.env.INVESTMENT_EMAIL||'';
-      this.CC_EMAIL = process.env.INVESTMENT_EMAIL||'';
+      this.ADMIN_EMAIL = this._appConfig.INVESTMENT_EMAIL||'';
+      this.CC_EMAIL = this._appConfig.INVESTMENT_EMAIL||'';
       break;
   }
  const transporter = nodemailer.createTransport(transporterOptions);
@@ -123,7 +123,6 @@ constructor(private _utilService:UtilService,private _appConfig:AppConfig){
   }
   // <div style="display:inline-block;max-width:100px; background:#333333; width:20%; margin-top:20px; padding:12.5px; margin-right:20px;"><img src="cid:myLogo" style="width:90%; "/></div>
   mailOptions["html"]+=`
- 
 </div>
 <div style="width:100%; margin-top:0px;font-size:0.8em !important; margin-bottom:200px;">
 <div style="width:100%; height:100%;">
@@ -136,8 +135,6 @@ constructor(private _utilService:UtilService,private _appConfig:AppConfig){
 <p><b><a href="https://www.instagram.com/vanircapital/?igshid=16udnitg8jich">Instagram</a></b></p>
     </div>
     </div>
-
-
 </div>`;
 console.log("Attachments")
 console.log(mailOptions["attachments"])
@@ -256,7 +253,6 @@ transporter.sendMail(mailOptions, function(error:any, info:any){
     if (typeof encoded !== 'string') {
       return result;
     }
-  
     let mime = encoded.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
   
     if (mime && mime.length) {

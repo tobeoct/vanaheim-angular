@@ -1,0 +1,31 @@
+<app-side-navigation>
+    <div id="faq"  style=" text-align: left; display: flex; flex-direction: column;">
+        <h2 >Questions?</h2>
+        <div  class="faq" style="margin-top: 5vh;">
+            <!-- <div > -->
+                <!-- <cdk-virtual-scroll-viewport itemSize="100">
+                    <ng-container *cdkVirtualFor="let item of items">
+                
+                     <li> {{item}}</li>
+                
+                    </ng-container>
+                  </cdk-virtual-scroll-viewport> -->
+
+                  <!-- <cdk-virtual-scroll-viewport itemSize="100"> -->
+                <vc-accordion [headerClass]= "main"  *ngFor="let group of faqGroups">
+                    <span slot="header">{{group.title}}</span>
+                        <vc-accordion [headerClass]= "nested" slot="panel"  *ngFor="let faq of group.data">
+                            
+                                <span  slot="header">{{faq.question}}</span>
+                            
+                                <div slot="panel" [innerHTML]="faq.answer">
+                                       
+                                </div>
+                        </vc-accordion>
+                    
+                </vc-accordion>
+              <!-- </cdk-virtual-scroll-viewport> -->
+        </div>
+        <!-- <app-footer></app-footer> -->
+    </div>
+</app-side-navigation>

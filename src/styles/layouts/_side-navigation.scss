@@ -1,0 +1,79 @@
+#sidenav-hidden{
+    @include flex(vertical,center);
+    @include paddingHorizontal(true,"px",1);
+    position: fixed;
+    width: 30vw;
+    height: 100vh;
+    top:0;
+    right: 0;
+    background: map-get($colors, white );
+z-index: 9999999999999;
+overflow: hidden;
+overflow-y: auto;
+transform: translateX(30vw);
+
+&.closed{
+
+    animation: FadeSlideOut 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+    &+.side-overlay{
+        animation: FadeOut 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+    }
+    // display: none;
+}
+
+&.opened{
+    display: flex;
+    animation: FadeSlideIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+    &+.side-overlay{
+        display: block;
+        animation: FadeSlideIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+    }
+}
+}
+.side-overlay{
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    background: rgba(0, 0, 0, 0.6);
+    left: 0;
+    height: 100vh;
+    overflow: hidden;
+    opacity: 0;
+    display: none;
+    z-index: 9;
+}
+.close{
+    position: absolute;
+    top: 5%;
+    cursor: pointer;
+    right: map-get($sizings, "px" );
+    width:map-get($sizings, "px" ) * 1;
+    height:map-get($sizings, "px" ) * 1;
+}
+
+@keyframes FadeIn{
+    to{
+        opacity: 100;
+    }
+}
+
+@keyframes FadeOut{
+    to{
+        opacity: 0;
+        display: none;
+    }
+}
+@keyframes FadeSlideIn{
+    to{
+        opacity: 100;
+        transform: translateX(0);
+    }
+}
+
+@keyframes FadeSlideOut{
+    to{
+        transform: translateX(30vw);
+        opacity: 0;
+        display: none;
+    }
+}

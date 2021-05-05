@@ -3,6 +3,7 @@ import { IInvestmentRequestService } from "@services/interfaces/investment/Iinve
 import { BaseService } from "../base-service";
 
 export class InvestmentRequestService extends BaseService<InvestmentRequest> implements IInvestmentRequestService{
+    convertToModel: (modelInDb: any) => Promise<InvestmentRequest>;
     super():any{
         
     }

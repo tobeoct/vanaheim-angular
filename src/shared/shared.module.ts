@@ -16,6 +16,17 @@ import { HeaderComponent } from './layout/header/header.component';
 import { NavigationComponent } from './layout/navigation/navigation.component';
 import { ModalComponent } from './modal/modal.component';
 import { createCustomElement } from '@angular/elements';
+import { FocusDirective } from 'src/app/directives/focus.directive';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
+import { DropdownSelectOptionComponent } from './components/dropdown/dropdown-select-option.component';
+import { DropdownSelectComponent } from './components/dropdown/dropdown-select.component';
+import { FormComponent } from './components/form/form.component';
+import { SideNavigationComponent } from './layout/side-navigation/side-navigation.component';
+import { FaqComponent } from './components/faq/faq.component';
+import { ToasterComponent } from './components/toaster/toaster.component';
+import { BannerComponent } from './components/banner/banner.component';
+import { NotificationComponent } from './components/notification/notification.component';
 export function playerFactory() {
   return player;
 }
@@ -25,29 +36,57 @@ export function playerFactory() {
     InputComponent,
     ButtonComponent,
     DragAndDropComponent,
-    DropdownComponent, 
-    
+    FocusDirective,
+    AccordionComponent,
+    DropdownSelectComponent,
+    DropdownSelectOptionComponent,
+    DropdownComponent,
+    FormComponent,
+    FooterComponent,
+    SideNavigationComponent,
+    FaqComponent,
+    ToasterComponent,
+    BannerComponent,
+    NotificationComponent
   ],
   imports: [
     CommonModule,
     LottieModule.forRoot({ player: playerFactory }),
     ScrollingModule,
-    DragDropModule
+    DragDropModule,
+    OverlayModule,
+    PortalModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
    exports:[
     LottieComponent,
     InputComponent,
     ButtonComponent,
     DragAndDropComponent,
+    DropdownSelectComponent,
+    DropdownSelectOptionComponent,
     DropdownComponent,
+    FooterComponent,
+    SideNavigationComponent,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
     DragDropModule,
-    ScrollingModule
-   ]
+    ScrollingModule,
+    FocusDirective,
+    AccordionComponent,
+    OverlayModule,
+    PortalModule,
+    FormComponent,
+    FaqComponent,
+    ToasterComponent,
+    BannerComponent,
+    NotificationComponent
+   ],
+   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { 
-
+  
  
 }

@@ -3,6 +3,7 @@ import { ILoanRequestLogService } from "@services/interfaces/loan/Iloan-log-requ
 import { BaseService } from "../base-service";
 
 export class LoanRequestLogService extends BaseService<LoanRequestLog> implements ILoanRequestLogService{
+    convertToModel: (modelInDb: any) => Promise<LoanRequestLog>;
     super():any{
         
     }

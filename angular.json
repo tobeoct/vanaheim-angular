@@ -102,7 +102,7 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles/styles.scss"
             ],
-            "scripts": ["./node_modules/jquery/dist/jquery.js","node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+            "scripts": ["./node_modules/@lottiefiles/lottie-player/dist/lottie-player.js","./node_modules/jquery/dist/jquery.js","node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           }
         },
         "lint": {

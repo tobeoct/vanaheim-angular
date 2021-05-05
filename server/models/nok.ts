@@ -12,7 +12,6 @@ export class NOK extends BaseEntity implements ContactDetails{
     othernames:string;
     address:string;
     email:string;
-    phonenumber:string;
     dateOfBirth:string;
      gender:Gender;
      relationship:Relationship;

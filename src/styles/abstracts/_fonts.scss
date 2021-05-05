@@ -1,0 +1,12 @@
+$font-weights: ("light": 200,"semi-light": 400,  "regular": 400, "medium": 500, "semi-bold": 600, "bold": 700, "black": 700);
+$font-families: ("primary": 'Manrope' ,"secondary": 'Bruum FY',"default":sans-serif);
+$font-sizes: ("h0": 32px,"h1": 24px,"h2": 18px,"p":14px, "small":12px);
+
+$fonts: (
+  title: map-get($font-weights, "regular" ) map-get($font-sizes,"h0")  map-get($font-families,"secondary"),
+  button:map-get($font-weights, "medium" ) map-get($font-sizes,"h2")  map-get($font-families,"primary"),
+  text:map-get($font-weights, "regular" ) map-get($font-sizes,"p")  map-get($font-families,"primary"),
+  heading: map-get($font-weights, "bold" ) map-get($font-sizes,"h2")  map-get($font-families,"primary"),
+  heading-alt: map-get($font-weights, "semi-bold" ) map-get($font-sizes,"h2")  map-get($font-families,"secondary"),
+  small: map-get($font-weights, "regular" ) map-get($font-sizes,"small")  map-get($font-families,"primary"),
+);

@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserCategory } from '@enums/usercategory';
 import { Subscription } from 'rxjs';
 import { ElementSize, ElementStyle, ElementState } from 'src/shared/constants/enum';
 import { ButtonOptions } from 'src/shared/constants/variables';
@@ -18,7 +19,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if(this.logoutSub)this.logoutSub.unsubscribe()
   }
-  @Input() type:string;
+  @Input() type:UserCategory;
   ngOnInit(): void {
   }
 

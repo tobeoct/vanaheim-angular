@@ -1,8 +1,39 @@
-import { ValidationType } from '../constants/enum';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { SideNavigationList, ValidationType } from '../constants/enum';
 import { ValidationResponse } from '../constants/variables';
-
+const $browser = ()=>{
+  const $window = window;
+  const $navigator = navigator;
+  return ()=>({navigator:$navigator,window:$window})
+}
+@Injectable({
+  providedIn: 'root'
+})
 export class Utility{
- public RemoveRougeChar=(convertString:any)=>{
+  activeNavigationSubject:BehaviorSubject<SideNavigationList> = new BehaviorSubject<SideNavigationList>(SideNavigationList.faq);
+  activeNavigation$:Observable<SideNavigationList> = this.activeNavigationSubject.asObservable();
+  isSideNavOpenedSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isSideNavOpened$:Observable<boolean> = this.isSideNavOpenedSubject.asObservable();
+  
+  constructor(private _router:Router){
+    
+  }
+  
+  
+  get $browser() { return $browser()(); }
+  get $browserID() { return this.getBrowserID() }
+  toggleSideNav=(type:SideNavigationList)=>{
+    this.isSideNavOpenedSubject.next(!this.isSideNavOpenedSubject.value);
+    if(type!= SideNavigationList.close){
+    this.activeNavigationSubject.next(type);
+    }
+  }
+  onNavigate(route:string,params:any={}):void{
+    this._router.navigate([route],{queryParams: params})
+  }
+  RemoveRougeChar=(convertString:any)=>{
     
     if(convertString.toString().substring(0,1) === ","){
         
@@ -12,8 +43,27 @@ export class Utility{
     return convertString;
     
 }
+private getBrowserID=()=>{
+  let browserID="";
+  let Sys:any = {};
+  
+        let ua = this.$browser.navigator.userAgent.toLowerCase();
+        let s;
+        (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
+        (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+        (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+        (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
 
-public validateNumberOnly=(event:any)=>{
+   
+        if (Sys.ie)browserID = 'IE: ' + Sys.ie;
+        if (Sys.firefox)browserID = 'Firefox: ' + Sys.firefox;
+        if (Sys.chrome)browserID = 'Chrome: ' + Sys.chrome;
+        if (Sys.opera)browserID = 'Opera: ' + Sys.opera;
+        if (Sys.safari)browserID = 'Safari: ' + Sys.safari;
+        return browserID;
+}
+ validateNumberOnly=(event:any)=>{
   if(event.which >= 37 && event.which <= 40){
     event.preventDefault();
 }
@@ -26,19 +76,19 @@ let val =isNaN(this.convertToPlainNumber(num2) )?'': this.RemoveRougeChar(num2);
 value =val;
 // console.log(event)
 }
-public replaceAll = (string:any, search:any, replace:any) => {
+ replaceAll = (string:any, search:any, replace:any) => {
   return string.split(search).join(replace);
 }
-public convertToPlainNumber =(num:any)=>{
+ convertToPlainNumber =(num:any)=>{
   const value = parseInt(this.replaceAll(num.toString(),",","").replace('NGN','').trim());
   return value;
 }
-public  pad=(n:any, width:any, z:any)=> {
+  pad=(n:any, width:any, z:any)=> {
     z = z || '0';
     n = n + '';
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
   }
-  public filterInput =(event:any,type:ValidationType, eventType:string='press'): ValidationResponse =>{
+   filterInput =(event:any,type:ValidationType, eventType:string='press'): ValidationResponse =>{
     let isNumeric:boolean;
     let modifiers:boolean;
     let response: ValidationResponse = new ValidationResponse;
@@ -76,7 +126,7 @@ public  pad=(n:any, width:any, z:any)=> {
   return response;
 
 }
-public currencyFormatter=(num:any,showSign:boolean = false)=>{
+ currencyFormatter=(num:any,showSign:boolean = false)=>{
   if(!this.hasValue(num)) return num;
   const intNum =parseInt(num.toString().replace(/\D/g,''));
   const val = isNaN(intNum)?"": intNum.toLocaleString();
@@ -84,10 +134,17 @@ public currencyFormatter=(num:any,showSign:boolean = false)=>{
   // console.log(val)
   return val.trim();
 }
-public hasValue = (obj:any) => {
+ hasValue = (obj:any) => {
    
   if (obj !== ""&&obj !== null && obj !== undefined && obj !== "undefined" && obj !== "null"&&obj !== " ") return true;
   return false;
 }
+
+ isPhoneNumber=(value:string):boolean=>{
+   if(isNaN(+value))return false; 
+    if(!value.includes("+234") && value.length!=11 ) return false;
+    if(value.includes("+234")  && value.length!=14) return false;
+    return true
+ }
 
 }

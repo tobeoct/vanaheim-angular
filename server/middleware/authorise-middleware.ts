@@ -1,6 +1,7 @@
 
 
 
+import { authRoutes } from '@services/implementation/common/routes';
 import { IAuthService } from '@services/interfaces/Iauth-service';
 import { IClientService } from '@services/interfaces/Iclient-service';
 import moment = require('moment');
@@ -157,11 +158,11 @@ export function clientApiKeyValidation (_clientService:IClientService){
          }
   }
   
-   export const authoriseResponse=()=>{
+   export const authoriseResponse=(_authService:IAuthService)=>{
   
       return async (req:any, res:any, next:any) => {
         console.log("Authorise Response")
-          if (!res.data) {
+          if (res.data==undefined) {
             return res.status(404).send({
               status: false,
               error: {
@@ -175,8 +176,8 @@ export function clientApiKeyValidation (_clientService:IClientService){
         
           var apiUrl = req.originalUrl;
           var httpMethod = req.method;
-          console.log("SESSION RESPONSE",apiUrl,req.session)
-          if(req.session && req.session.cookie){
+          console.log("AUTH RESPONSE",apiUrl,req.session)
+          if(req.session && req.session.cookie && _authService.isNewTokenRequired(httpMethod, apiUrl)){
             const tokenExpirationDate = req.session.cookie.originalMaxAge;
             res.setHeader('expires-in',tokenExpirationDate);
                   res.data['expires-in'] = tokenExpirationDate;
@@ -185,8 +186,13 @@ export function clientApiKeyValidation (_clientService:IClientService){
           }
       
           // console.log(req.cookies, req.signedCookies)
+          if(res.statusCode ==200){
           res.status(res.statusCode || 200)
-          .send({ status: true, response:res.data });
+          .send({ status: true, response:res.data});
+          }else{
+            res.status(res.statusCode || 400)
+            .send(res.data);
+          }
         
         }
   }

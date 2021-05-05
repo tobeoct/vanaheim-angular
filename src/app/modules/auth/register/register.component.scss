@@ -1,0 +1,65 @@
+@import '../../../../styles/styles.scss';
+#login{
+    // @include flex(vertical,center);
+    
+    .container{
+        @include flex(both,center);
+        @include paddingVertical(true,"px",0);
+        transform: translateY(-5vh);
+        small{
+            color: map-get($colors, grey )
+        }
+        &-header{
+            @include flex(both,center);
+            flex-direction: column;
+            #social-login{
+                @include marginVertical(false,"px",0.25,0.5);
+                @include flex(horizontal,space-between);
+                width:map-get($sizings,"px" )* 4;
+                .item{
+                    border-radius: map-get($sizings,"px" ) * 1.2;
+                    width: map-get($sizings,"px" ) * 1.2;
+                    height: map-get($sizings,"px" ) * 1.2;
+                    color: map-get($colors, white );
+                    @include flex(both,center);
+                    cursor: pointer;
+                    transition: 0.3s ease-in-out;
+                }
+                .item:hover{
+                    transform: scale(1.05);
+                }
+                .item:first-child{
+                    background: map-get($colors, facebook );
+                } 
+                .item:nth-child(2){
+                    background: map-get($colors, google );
+                }
+                .item p{
+                    @include font(heading);
+                    font-weight: map-get($font-weights,"bold");
+                }
+              
+            }
+        }
+        .widget_button--small{
+            background: map-get($colors, lightGrey);
+            color: map-get($colors, black);
+            border: none;
+        }
+    .content{
+        width: 480px;
+        box-sizing: border-box;
+    }
+    .theme_row{
+        .theme_col-6:first-child{
+            @include paddingHorizontal(false,"px",0,0.5)
+        }
+        .theme_col-6:nth-child(2){
+            @include paddingHorizontal(false,"px",0.5,0)
+        }
+    }
+    .grid-2x1{
+
+    }
+}
+}

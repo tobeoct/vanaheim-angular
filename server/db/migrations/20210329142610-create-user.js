@@ -8,20 +8,41 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
-        type: Sequelize.STRING
-      },
-      lastName: {
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
       username: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
-      category: {
-        type: Sequelize.STRING
+      category:{
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      passwordHash:{
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      passwordRetries:{
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+       token:{
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+       tokenExpirationDate:{
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+       phoneNumber:{
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+       email:{
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+       code:{
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

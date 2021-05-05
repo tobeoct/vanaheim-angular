@@ -9,6 +9,16 @@ export enum ValidationType{
     custom="CUSTOM"
   }
 
+  export enum SideNavigationList{
+    faq="faq",
+    notification="notification",
+    bvn="bvn",
+    account="account",
+    personal="personal",
+    password="password",
+    close="close"
+  }
+
   export enum ElementStyle{
     stroke,
     fill,
@@ -26,8 +36,3 @@ export enum ValidationType{
     active="active"
   }
   
-
-  export enum UserCategory{
-    customer="Customer",
-    admin="Admin"
-  }

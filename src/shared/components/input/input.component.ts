@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output,EventEmitter, OnChanges } from '@angular/core';
 import { ValidationType,ElementSize } from 'src/shared/constants/enum';
 import { InputOptions } from 'src/shared/constants/variables';
-import { Utility } from 'src/shared/helpers/utility';
+import { Utility } from 'src/shared/helpers/utility.service';
 
 @Component({
   selector: 'app-input',
@@ -11,13 +11,12 @@ import { Utility } from 'src/shared/helpers/utility';
 export class InputComponent implements OnInit,OnChanges {
   @Input() options:InputOptions;
   @Output() valueChange = new EventEmitter();
-  utility:any
   errorMessage:string="";
   myClass:string="";
   isRequired:boolean= true;
   value:string;
-  constructor() { 
-    this.utility = new Utility();
+  constructor(private utility:Utility) { 
+   
   }
 
   ngOnInit(): void {

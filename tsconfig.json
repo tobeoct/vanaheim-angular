@@ -24,6 +24,9 @@
     ],
     "paths": {
       "@repository/*": ["server/repository/*"],
+      "@styles/*": ["src/app/styles/*"],
+      "@assets/*": ["src/app/assets/*"],
+      "@validators/*": ["src/app/validators/*"],
       "@models/*": ["server/models/*"],
       "@services/*": ["server/services/*"],
       "@db/*": ["server/db/*"],

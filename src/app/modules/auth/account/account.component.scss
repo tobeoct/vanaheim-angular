@@ -1,0 +1,53 @@
+@import '../../../../styles/styles.scss';
+
+#account{
+    &.grid-padding-2x{
+    flex-direction: row;
+    @include flex(horizontal,space-between);
+    @include flex(vertical,center);
+    }
+    #thumbnail .image{
+        max-width: 200px;
+    }
+    .container{
+        width: 50%;
+        min-height: 200px;
+        &:first-child{
+            text-align: left !important;
+  @include paddingHorizontal(true,"px",2);
+        }
+       &:nth-child(2){
+           
+      @include paddingVertical(true,"px",0);
+      @include paddingHorizontal(true,"px",1, $important:important);
+       }
+        // @include theme(background-color,backgroundLight);
+        // background-color: map-get($light,backgroundLight);
+        .title{
+            @include font(title);
+            line-height: 120%;
+        }
+
+        .content{
+              
+    // height: 329px;
+            
+        }
+    }
+}
+
+@media all and (max-width:900px) {
+    #account{
+        flex-direction: column;
+        justify-content:unset;
+    }
+    .container{
+        &:first-child{
+        @include paddingHorizontal(true,"px",0.5,$important:important);
+        }
+        @include paddingVertical(true,"%",0.5,$important:important);
+        width: 100% !important;
+
+       
+    }
+}

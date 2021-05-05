@@ -1,0 +1,22 @@
+<app-customer-navigation></app-customer-navigation>
+<div id="main-content">
+  <div class="notifications" *ngIf="!isGranted">
+    <div class="notifications_subscription" *ngIf="isEnabled" >
+        <h3 *ngIf="!isGranted">Get notified on your device whenever there are updates</h3>
+        <p *ngIf="isGranted" class="success">
+            Push Notifications are active
+          </p>
+          <p *ngIf="!isEnabled" class="error">
+            Notifications are not available in the browser or enabled in the application
+          </p>
+        <button *ngIf="!isGranted" class="button" data-type="stroke" (click)="submitNotification()">Notify Me</button>
+    </div>
+</div>
+<app-toaster [show]="updateAvailable"></app-toaster> 
+<app-customer-header></app-customer-header>
+<app-banner></app-banner>
+<div style="display: flex; flex-direction: column; justify-content: center; height: 100%;" class="grid-padding-2x">
+<router-outlet></router-outlet>
+</div>
+</div>
+

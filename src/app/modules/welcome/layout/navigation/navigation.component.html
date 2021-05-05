@@ -12,11 +12,11 @@
     
      
         <div class="header_intro" *ngSwitchCase="type=='onboarding'">
+            <div class="bordered_anchor widget_button--icon" (click)="toggleSideNav()"><div class="icon"><img src="../../../../../assets/icons/questions.svg"/></div><span>Questions</span></div>
             <div class="bordered_anchor"><a [routerLink]="['/welcome/loans']">Loans</a></div>
             <div class="bordered_anchor"><a [routerLink]="['/welcome/investments']">Investments</a></div>
-            <!-- <div class="bordered_anchor"><a href="/">About Us</a></div> -->
-            <div class="bordered_anchor" ><a href="#faq">FAQs</a></div>
-            <div class="bordered_anchor" ><a [routerLink]="['/auth/login']">Login</a></div>
+           
+            <div class="bordered_anchor" ><a [routerLink]="['/auth/account']">Login</a></div>
         </div>
 
         <div *ngSwitchCase="type=='sm-mobile'" class="tabs tabs_mobi animate__animated animate__zoomIn" style=" padding-top:10px; padding-bottom: 10px; justify-content: center; align-items: center;">
@@ -24,57 +24,8 @@
             <div> | </div>
             <a  [routerLink]="['/welcome/investments']"><div class="tabs_item ">Investments</div></a>
     </div>
-    <ul *ngSwitchCase="type=='customer'" >
-        
-            <li class="sidenav_link" id="personal" data-order="1"><a class="theme_anchor__disabled"><span>Dashboard</span></a><i class="fas fa-check"></i></li>
-    <li class="sidenav_link" id="account" data-order="2"><a class="theme_anchor__disabled"><span>Loans</span></a><i class="fas fa-check"></i></li>
-    <li class="sidenav_link" id="employment" data-order="3"><a class="theme_anchor__disabled"><span>Investment</span></a><i class="fas fa-check"></i></li>
-    <li class="sidenav_link" id="nok" data-order="4"><a class="theme_anchor__disabled"><span>Document</span></a><i class="fas fa-check"></i></li>
-    <li class="sidenav_link" id="upload" data-order="5"><a class="theme_anchor__disabled"><span>Account</span></a><i class="fas fa-check"></i></li>
     
-    </ul>
        <div *ngSwitchDefault></div>
     
-    <!-- <ul *ngSwitchDefault>
-        <li class="sidenav_link" id="personal" data-order="1"><a class="theme_anchor__disabled"><span>Personal Information</span></a><i class="fas fa-check"></i></li>
-        <li class="sidenav_link" id="account" data-order="2"><a class="theme_anchor__disabled"><span>Account Information</span></a><i class="fas fa-check"></i></li>
-        <li class="sidenav_link" id="employment" data-order="3"><a class="theme_anchor__disabled"><span>Employment Information</span></a><i class="fas fa-check"></i></li>
-        <li class="sidenav_link" id="nok" data-order="4"><a class="theme_anchor__disabled"><span>Next Of Kin Information</span></a><i class="fas fa-check"></i></li>
-        <li class="sidenav_link" id="upload" data-order="5"><a class="theme_anchor__disabled"><span>Document Upload</span></a><i class="fas fa-check"></i></li>
-    </ul> -->
+    
 </div>
-<ng-template #default>
-    <ul>
-        <li class="sidenav_link" id="personal" data-order="1"><a class="theme_anchor__disabled"><span>Personal Information</span></a><i class="fas fa-check"></i></li>
-<li class="sidenav_link" id="account" data-order="2"><a class="theme_anchor__disabled"><span>Account Information</span></a><i class="fas fa-check"></i></li>
-<li class="sidenav_link" id="employment" data-order="3"><a class="theme_anchor__disabled"><span>Employment Information</span></a><i class="fas fa-check"></i></li>
-<li class="sidenav_link" id="nok" data-order="4"><a class="theme_anchor__disabled"><span>Next Of Kin Information</span></a><i class="fas fa-check"></i></li>
-<li class="sidenav_link" id="upload" data-order="5"><a class="theme_anchor__disabled"><span>Document Upload</span></a><i class="fas fa-check"></i></li>
-
-    </ul>
-</ng-template>
-<ng-template #onboarding> 
-    <div class="header_intro" style="z-index: 2; display: flex; cursor: pointer; align-items: center; max-height: 80px; position: fixed; right: 5%;top:5%">
-    <div class="bordered_anchor"><a [routerLink]="['/welcome/loans']">Loans</a></div>
-    <div class="bordered_anchor"><a [routerLink]="['/welcome/investments']">Investments</a></div>
-    <!-- <div class="bordered_anchor"><a href="/">About Us</a></div> -->
-    <div class="bordered_anchor" ><a href="#faq">FAQs</a></div>
-    <div class="bordered_anchor" ><a [routerLink]="['/auth/login']">Login</a></div>
-</div>
-</ng-template> 
-
-<ng-template #smmobile>
-    <div id="tab-lg" class="tabs theme_color animate__animated animate__zoomIn">
-        <a [routerLink]="['/welcome/loans']"> <div class="tabs_item active">Loans</div></a>
-                <div> | </div>
-                <a  [routerLink]="['/welcome/investments']"><div class="tabs_item">Investments</div></a>
-</div>
-</ng-template>
-
-<ng-template #smdesktop>
-    <div class="tabs tabs_mobi animate__animated animate__zoomIn" style=" padding-top:10px; padding-bottom: 10px; justify-content: center; align-items: center;">
-        <a [routerLink]="['/welcome/loans']"> <div class="tabs_item active">Loans</div></a>
-        <div> | </div>
-        <a  [routerLink]="['/welcome/investments']"><div class="tabs_item ">Investments</div></a>
-</div>
-</ng-template>

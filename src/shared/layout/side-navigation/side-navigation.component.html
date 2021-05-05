@@ -1,0 +1,7 @@
+<div id="sidenav-hidden" [ngClass]="(isOpen$|async)?'opened':'closed'">
+    <div class="close" (click)="toggleSideNav()">
+        <img src="../../../assets/icons/cancel.svg" alt="close modal" aria-labelledby="close modal"/>
+    </div>
+<ng-content></ng-content>
+</div>
+<div class="side-overlay"></div>

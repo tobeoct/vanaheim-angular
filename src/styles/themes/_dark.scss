@@ -1,0 +1,10 @@
+@import './functions';
+
+$dark: (
+  borderDark:      color(yellow),
+  borderLight:     color(lightYellow),
+  textDark:        color(black),
+  textLight:       color(white),
+  backgroundDark:  color(white),
+  backgroundLight: color(black)
+);

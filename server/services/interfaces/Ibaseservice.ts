@@ -6,4 +6,5 @@ export interface IBaseService<T>{
     delete: (id:number) => Promise<T>
   enable:(id:number)=>Promise<T>
   disable:(id:number)=>Promise<T>
+  convertToModel:(modelInDb:any)=>Promise<T>
 }

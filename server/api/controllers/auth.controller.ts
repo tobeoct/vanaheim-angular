@@ -4,8 +4,10 @@ import axios from 'axios';
 import { IAuthService } from '@services/interfaces/Iauth-service';
 import { IUserService } from '@services/interfaces/Iuser-service';
 import  UtilService from '@services/implementation/common/util';
-// const jsonParser = bodyParser.json({limit: '100mb'})
-const expAutoSan = require('express-autosanitizer');
+import Encryption from '@services/implementation/common/encryption-service';
+import { LoginType } from '@models/helpers/enums/logintype';
+import { UserCategory } from '@models/helpers/enums/usercategory';
+import NotificationService from '@services/implementation/notification-service';
 @route('/api/auth')
 export default class AuthController {
 
@@ -25,57 +27,89 @@ export default class AuthController {
    bvnList:any={
   };
    bankList:any={};
-    constructor(private _userService:IUserService, private _authService:IAuthService, private _utilService:UtilService) {
+    constructor(private _userService:IUserService,private _notificationService:NotificationService, private _authService:IAuthService, private _encryption:Encryption) {
 
     }
     @route('/login')
-    @before([ expAutoSan.route])
     @POST()
     login=async(req:any, res:any,next:any) => {
-      // console.log("Login User", req.body, req.data,req.db,req.session);
-      let uname= req.body.username;
-      let pwd = req.body.password;
-      let type = req.body.type;
-      // let socialUser = req.body.socialUser;
-      // if(type=="social"){
-      //   res.data = {uname, password:undefined};
-      //   req.session.userData
-      // }
-    
-      let userDetails = await this._userService.getByUserName(uname);
-      if (userDetails) {
-        let { passwordHash } = userDetails;
-        // console.log(req.session)
-        const password = passwordHash;
-        if (pwd === password) {
-          res.data = {...userDetails, password:undefined};
-          req.session.userData = userDetails;
-        } else {
-          res.statusCode = 400;
-          res.data = {
-            status: false,
-            error: 'Invalid Password'
-          };
-        }
-      } else {
+      const response = await this._userService.login(req.body);
+      if(response.status==true){
+        
+        try{
+          console.log("Registering Device after login");
+          await this._notificationService.registerDevice({browserID:req.body.browserID,customerID: response.userData.customer.id});
+          }catch(err){
+            console.log("Error Registering device",err,req.body.browserID);
+          }
+        res.statusCode = 200;
+        res.data = response.data
+       req.session.userData = response.userData;
+       }else{
         res.statusCode = 400;
-        res.data = {
-          status: false,
-          error: 'Invalid Username'
-        };
+        res.data = response;
       }
+     
       next();
     }
 
     @route('/register')
-    @before([ expAutoSan.route])
     @POST()
-    register=async(req:any, res:any) => {
-    
+    register=async(req:any, res:any, next:any) => {
+ const response = await this._userService.register(req.body);
+ if(response.status==true){
+  try{
+    console.log("Registering Device after registration");
+    await this._notificationService.registerDevice({browserID:req.body.browserID,customerID: response.userData.customer.id});
+    }catch(err){
+      console.log("Error Registering device",err,req.body.browserID);
     }
-  
+    
+   res.statusCode = 200;
+   res.data = response.data;
+  req.session.userData = response.userData;
+  }else{
+   res.statusCode = 400;
+   res.data = response;
+ }
+
+    next();
+    }
+
+    @route('/resetpassword')
+    @POST()
+    resetPassword=async(req:any, res:any, next:any) => {
+      console.log("Reset Password Controller")
+ const response = await this._userService.resetPassword(req.body);
+ if(response.status==true){
+ 
+   res.statusCode = 200;
+   res.data = {...response.data, passwordHash:undefined,passwordSalt:undefined,token:undefined};
+  req.session.userData = response.userData;
+  }else{
+   res.statusCode = 400;
+   res.data = response;
+ }
+    next();
+    }
+
+    @route('/verify')
+    @POST()
+    verify=async(req:any, res:any, next:any) => {
+      console.log("Verify Controller")
+    let uname= req.body.username;
+    let userDetails = await this._userService.getByUserName(uname);
+    res.statusCode =200;
+    if (userDetails && Object.keys(userDetails).length>0) {
+     
+        res.data = {verified:true};
+      
+    } else {
+      res.data ={verified: false};
+    }
+    next();
+    }
     @route('/logout')
-    @before([ expAutoSan.route])
     @GET()
     logOut= async (req:any, res:any,next:any) => {
       req.session.destroy((err:any) => {
@@ -100,10 +134,7 @@ export default class AuthController {
       delete(req.session.userData.exp);
       const token =this._authService.generateJWTToken(req.session.userData);
       res.statusCode = 200;
-      res.data = {
-        status: true,
-        response: token
-      }
+      res.data ={token}
     }else{
       res.statusCode = 401;
           res.data = {

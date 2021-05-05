@@ -1,5 +1,5 @@
 import { Component, Input,Output, EventEmitter, OnInit } from '@angular/core';
-import { Utility } from 'src/shared/helpers/utility';
+import { Utility } from 'src/shared/helpers/utility.service';
 
 @Component({
   selector: 'app-rate',
@@ -12,9 +12,8 @@ export class RateComponent implements OnInit {
   rate:number;
   payout:number;
   durations:any[] = [{value:12,active:false},{value:9,active:false},{value:6,active:false},{value:3,active:false}];
-  utility = new Utility();
   
-  constructor() { }
+  constructor(private utility:Utility) { }
 
   ngOnInit(): void {
   }

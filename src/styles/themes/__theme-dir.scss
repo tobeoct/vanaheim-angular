@@ -1,0 +1,13 @@
+
+@import './mixins';
+
+/** this section generates a theme map for each theme **/
+$themes: ();
+$themeValues: ();
+
+@import './_light';
+@include generateThemeMappings(light, $light);
+
+@import './_dark';
+@include generateThemeMappings(dark, $dark);
+/** end theme generation **/

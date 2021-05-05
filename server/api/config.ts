@@ -15,7 +15,14 @@ export default class AppConfig {
   ADMIN_EMAIL:string;
 CC_EMAIL:string;
 INVESTMENT_EMAIL:string;
+INVESTMENT_EMAIL_PASS:string;
 SUPPORT_EMAIL:string;
+SUPPORT_EMAIL_PASS:string;
+HOST:string;
+SERVICE:string;
+LOAN_EMAIL:string;
+LOAN_EMAIL_PASS:string;
+ISSECURE:string;
 SECRET_KEY = "SECRET_KEY";
     constructor() {
 
@@ -25,6 +32,13 @@ SECRET_KEY = "SECRET_KEY";
   this.CC_EMAIL=process.env.LOAN_EMAIL|| ''
   this.INVESTMENT_EMAIL= process.env.INVESTMENT_EMAIL|| ''
   this.SUPPORT_EMAIL= process.env.SUPPORT_EMAIL|| ''
+  this.INVESTMENT_EMAIL_PASS= process.env.INVESTMENT_EMAIL_PASS|| ''
+  this.HOST = process.env.HOST || ''
+  this.SERVICE=process.env.SERVICE||''
+  this.LOAN_EMAIL=process.env.LOAN_EMAIL||''
+  this.LOAN_EMAIL_PASS=process.env.LOAN_EMAIL_PASS||''
+  this.ISSECURE = process.env.ISSECURE||''
+  this.SUPPORT_EMAIL_PASS = process.env.SUPPORT_EMAIL_PASS||''
     }
 }
 

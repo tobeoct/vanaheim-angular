@@ -4,16 +4,17 @@ import { BaseEntity } from "./base-entity";
 import { NOK } from "./nok";
 
 export class Customer extends BaseEntity{
-    firstname:string;
-    othernames:string;
-    surname:string;
+    firstName:string;
+    otherNames:string;
+    lastName:string;
     address:string;
     email:string;
-    phonenumber:string;
+    phoneNumber:string;
     dateOfBirth:string;
      gender:Gender;
      maritalStatus:MaritalStatus;
      BVN:string;
      NOK:NOK;
     customerid:string;
+    userID:number;
 }

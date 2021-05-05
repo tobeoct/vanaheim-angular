@@ -1,4 +1,4 @@
-import { UserCategory } from "src/shared/constants/enum";
+import { UserCategory } from "@enums/usercategory";
 import { BaseEntity } from "@models/base-entity";
 import { Customer } from "@models/customer";
 import { Staff } from "@models/staff";

@@ -6,6 +6,8 @@
 // const {verifyRequest,hasValue,spamChecker,createResponse,validateResponse,readResponseAsJSON} = require("@services/implementation/common/util")
 // const commonRouter = require('express').Router();
 
+import { route, POST } from "awilix-express";
+
 // const instance = axios.create({
 //   method: 'post',
 //   baseURL: 'https://app.verified.ng',
@@ -107,3 +109,10 @@
   
   
 // module.exports = commonRouter;
+
+
+@route('/api/common')
+export default class CommonController {
+   
+
+}
