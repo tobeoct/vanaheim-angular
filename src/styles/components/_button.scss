@@ -66,7 +66,7 @@
 .widget_button--rounded{height:60px;width:60px;border-radius:60px;display:flex;justify-content:center;align-items:center;padding:5px;margin:10px auto;background:transparent;border:2px solid #E0E0E0}
 .tabs .widget_button{display:flex;justify-content:center;align-items:center;min-height:60px}
 .tabs .widget_button.active{background:map-get($colors,  black);color:map-get($colors,  yellow);font-weight:700!important;outline:none!important;border-color:map-get($colors,  black)}
-.widget_button--small{@include flex(true,center); @include paddingHorizontal(true,"px",0.25, $important: important); @include font(small); font-weight: map-get($font-weights, "bold" ); height:map-get($sizings, "px") !important;width:auto;margin:0;}
+.widget_button--small{@include flex(true,center); @include paddingHorizontal(true,"px",0.25, $important: important); @include font(text); font-weight: map-get($font-weights, "bold" ); height:map-get($sizings, "px") !important;width:auto;margin:0;}
 .widget_button:disabled{
     border-color: map-get($colors, lightGrey );
     background: map-get($colors, lightGrey ); 

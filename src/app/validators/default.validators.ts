@@ -10,11 +10,11 @@ export default class VCValidators{
 constructor(private _utility:Utility){
 
 }
-  numberRange(min:number,max:number):ValidatorFn{
+  numberRange(min:number,max:number,type:string='currency'):ValidatorFn{
   
-    return(c:AbstractControl): {[key:string]:boolean}|null=>{
+    return(c:AbstractControl): {[key:string]:any}|null=>{
         let value = this._utility.convertToPlainNumber(c.value);
-    if(value!=null && (isNaN(value)||value<min||value>max)) return {'range':true}
+    if(value!=null && (isNaN(value)||value<min||value>max)) return {'range':true, minValue:min,maxValue:max,type}
     return null;
   }
   }
@@ -67,18 +67,20 @@ validationMessages:any = {
   maxlength: (obj:any,key:string)=>{return "Maximum length for this field is "+obj[key]?.requiredLength},
   password:(obj:any,key:string)=>{return "Password is too weak, (six digits or more ,include an upper case letter or a number)"},
   username:(obj:any,key:string)=>{return "Username must be a phone number or email"},
+  range:(obj:any,key:string)=>{return obj.type =='currency'?`The ${key} is between ${this._utility.currencyFormatter(obj.minValue)} and ${this._utility.currencyFormatter(obj.maxValue)}`:`The ${key} is between ${obj.minValue} and ${obj.maxValue}`},
+  
 }
 
 setMessage =(errorList:any,errorMessageSubject:Subject<any> )=>{
   return (c:AbstractControl,key:string):void=>{
-      console.log(key)
+      // console.log(key)
     if(errorList[key]) errorList[key]=undefined;
     // this.errorMessageSubject.next();
     if((c.dirty||c.touched)&&c.errors){
       Object.assign(errorList, {[key]: Object.keys(c.errors).map(key=>{
         if(!this.validationMessages[key]) return undefined;
         return this.validationMessages[key](c.errors,key)
-      }).join(' ')});
+      }).join(' ').trim()});
       // console.log(c.errors)
       errorMessageSubject.next(errorList);
     }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { Subject, Observable, BehaviorSubject, from } from 'rxjs';
 import { delay, debounceTime } from 'rxjs/operators';
 import VCValidators from '@validators/default.validators';
@@ -24,23 +24,6 @@ export class InvestmentFormComponent implements OnInit,AfterViewInit {
   }
   investment:InvestmentIndication= new InvestmentIndication;
   form:FormGroup;
-  emailMessageSubject:Subject<string> = new Subject<string>(); 
-  emailMessage$:Observable<string> = this.emailMessageSubject.asObservable();
-
-  focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
-  focus$:Observable<boolean> = this.focusSubject.asObservable();
-  // //Amount Input Config
-  // amountValOpt:ValidationOptions =new ValidationOptions([new ValidationOption(ValidationType.currency),new ValidationOption(ValidationType.custom,"Minimum Amount is 250000")]);
-  // amountOptions: InputOptions =new InputOptions("How much are you looking to invest?","250,000","widget_input--sm theme_text--alt","amount","text","amount","Enter amount","small",this.amountValOpt,{min:"250000",max:"50000000"})
-  
-  // //Name Input Config
-  // nameValOpt:ValidationOptions =new ValidationOptions([new ValidationOption(ValidationType.name)]);
-  // nameOptions: InputOptions =new InputOptions("Preferred Name","","widget_input--sm","preferred-name","text","preferred-name","Enter Preferred Name","small",this.nameValOpt)
-  
-  // //Email Input Config
-  // emailValOpt:ValidationOptions =new ValidationOptions([new ValidationOption(ValidationType.email)]);
-  // emailOptions: InputOptions =new InputOptions("Email Address","","widget_input--sm","email","text","email","Enter your email address","small",this.emailValOpt)
-  
   buttonOptions:ButtonOptions= new ButtonOptions("I Am Interested",ElementStyle.default,"",ElementSize.default,true,ElementState.default);
   
   assetPaths:IAssetPath = new AssetPath;
@@ -50,11 +33,52 @@ export class InvestmentFormComponent implements OnInit,AfterViewInit {
   showModal:boolean=false;
   modalType:string = 'investment-indication';
   rateDetail:RateDetail;
-  amount:number;
 minAmount:number = 50000;
 maxAmount:number = 50000000;
+
+get duration(){
+    return this.form.get("duration") as FormControl|| new FormControl();
+  }
+  get amount(){
+    return this.form.get("amount") as FormControl|| new FormControl();
+  }
+  get email(){
+    return this.form.get("emailAddress") as FormControl|| new FormControl();
+  }
+  get name(){
+    return this.form.get("name") as FormControl|| new FormControl();
+  }
+  get rate(){
+    return this.form.get("rate") as FormControl|| new FormControl();
+  }
+  get payout(){
+    return this.form.get("payout") as FormControl|| new FormControl();
+  }
+  get maturity(){
+    return this.form.get("maturity") as FormControl|| new FormControl();
+  }
 delay$ = from([1]).pipe(delay(1000));
-  constructor( private _fb:FormBuilder, private _zone: NgZone,private utility:Utility, private _validators:VCValidators) {
+
+
+errorMessageSubject:Subject<any> = new Subject<any>(); 
+errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
+
+apiSuccessSubject:Subject<string> = new Subject<string>(); 
+apiSuccess$:Observable<string> = this.apiSuccessSubject.asObservable();
+
+apiErrorSubject:Subject<string> = new Subject<string>(); 
+apiError$:Observable<string> = this.apiErrorSubject.asObservable();
+
+loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+loading$:Observable<boolean> = this.loadingSubject.asObservable();
+
+focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+focus$:Observable<boolean> = this.focusSubject.asObservable();
+
+amountSubject:BehaviorSubject<number> = new BehaviorSubject<number>(250000); 
+amount$:Observable<number> = this.amountSubject.asObservable();
+
+  constructor( private _fb:FormBuilder, private _zone: NgZone,private _utility:Utility, private _validators:VCValidators) {
    }
   ngAfterViewInit(): void {
       this.delay$.subscribe(c=>{
@@ -65,57 +89,40 @@ delay$ = from([1]).pipe(delay(1000));
    ngOnInit(): void {
     this.form = this._fb.group({
       amount: ["250,000",[Validators.required,Validators.minLength(6),Validators.maxLength(10), this._validators.numberRange(this.minAmount,this.maxAmount)]],
-      duration: ['',[Validators.required]],
+      duration: [0,[Validators.required]],
       maturity:['',[Validators.required]],
       rate:[0,[Validators.required]],
       payout:[0,[Validators.required]],
-      emailAddress:['',[Validators.required]],
-      name:['',[Validators.required]]
+      emailAddress:['',[Validators.required,Validators.email]],
+      name:['',[Validators.required,Validators.minLength(3)]]
     })
    
-    // this.customerForm.get("notification").valueChanges.subscribe(c=>this.setNotification(c));
-    const amountCtrl = this.form.get("amount");
-    amountCtrl?.valueChanges.pipe(debounceTime(200)).subscribe(value=>{
-      amountCtrl.patchValue(this.utility.currencyFormatter(this.utility.convertToPlainNumber(value)))
-      this.setMessage(amountCtrl)
-    
-    })
   }
 
-  setMessage(c:AbstractControl):void{
-    this.emailMessageSubject.next('');
-    if((c.dirty||c.touched)&&c.errors){
-      this.emailMessageSubject.next(Object.keys(c.errors).map(key=>this.validationMessages[key]).join(' '));
-    }
-  }
 
 focus(){
-  console.log("Delay")
   this.focusSubject.next(true)
 }
 
-  // printValue(key:string,value:any):void{
-  //   // console.log("Printing Value",value)
-  //   switch(key){
-  //     case 'amount':
-  //       this.amount = this.utility.convertToPlainNumber(value);
-        
-  //       break;
-  //     case 'name':
-  //       this.name = value;
-  //       break;
-  //     case 'email':
-  //       this.emailAddress = value;
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
 rateDetailChange(value:any){
-  // console.log("Rate Detail", value);
+  console.log("Rate Detail", value);
   this.rateDetail =  value;
+  const {rate,payout,maturity,duration} = value;
+  this.maturity.patchValue(maturity);
+  this.duration.patchValue(duration);
+  this.rate.patchValue(rate);
+  this.payout.patchValue(payout);
 }
-  save(){
+onError(value:any){
+  this.errorMessageSubject.next(value);
+}
+onChange(obj:any){
+  if(Object.keys(obj).includes("amount") && this._utility.convertToPlainNumber(obj.amount)!=this.amountSubject.value){
+
+  this.amountSubject.next(this._utility.convertToPlainNumber(obj.amount));
+  }
+}
+  onSubmit(event:any){
     // console.log(event)
     // event.preventDefault();
     
@@ -127,7 +134,7 @@ rateDetailChange(value:any){
     // form.payout= this.rateDetail.payout;
     // form.emailAddress =this.emailAddress;
     // form.preferredName = this.name;
-    // // console.log(form)
+    console.log(this.form.value)
     // const payload = {email:form.emailAddress, payload:{amount : form.amount, duration:form.duration, payout:form.payout, name:form.preferredName,rate:form.rate, maturity: form.maturity}};
     //   new APIHelper().post("sendinvestment", payload,undefined).then(res=>{
     //     console.log("Investment",res)

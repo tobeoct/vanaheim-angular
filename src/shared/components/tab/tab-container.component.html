@@ -1,0 +1,28 @@
+<div class="tabs-header">
+    <div
+      class="tab-label"
+      (click)="selectTab(item)"
+      [class.active]="activeTab === item"
+      *ngFor="let item of tabItems$ | async"
+    >
+      <ng-container *ngIf="item.headerComponent">
+        <ng-container *ngTemplateOutlet="item.headerComponent.headerContent">
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!item.headerComponent">
+        {{ item.label }}
+      </ng-container>
+    </div>
+  </div>
+
+
+  <div class="tabs-body">
+    <ng-container *ngIf="activeTab  && activeTab.bodyComponent">
+      <ng-container *ngTemplateOutlet="activeTab.bodyComponent.bodyContent">
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div class="page-container" style="width:100%">
+    <div class="page" [class.active]="activeTab === item" *ngFor="let item of tabItems$ | async"></div>
+  </div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { SideNavigationList, ValidationType } from '../constants/enum';
 import { ValidationResponse } from '../constants/variables';
 const $browser = ()=>{
@@ -18,9 +19,28 @@ export class Utility{
   isSideNavOpened$:Observable<boolean> = this.isSideNavOpenedSubject.asObservable();
   
   constructor(private _router:Router){
-    
+    _router.events.pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe((route:any) => {
+        if(route.url.includes("loan")){
+          this.activeSolutionSubject.next("loan")
+        }
+        if(route.url.includes('investment')){
+          this.activeSolutionSubject.next("investment")
+        }
+
+        if(route.url.includes('dashboard')){
+          this.activeSolutionSubject.next("dashboard")
+        }
+        if(route.url.includes('document')){
+          this.activeSolutionSubject.next("document")
+        }
+        if(route.url.includes('account')){
+          this.activeSolutionSubject.next("account")
+        }
+    });
   }
-  
+   activeSolutionSubject:BehaviorSubject<string> = new BehaviorSubject<string>("investment");
+   activeSolution$:Observable<string> = this.activeSolutionSubject.asObservable();
   
   get $browser() { return $browser()(); }
   get $browserID() { return this.getBrowserID() }

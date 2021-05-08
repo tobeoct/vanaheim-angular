@@ -86,6 +86,11 @@ input.is-invalid{
         height: auto;
         top: 30%;
         right: 110%;
+        &--default{
+            position: relative;
+            right: 0;
+            
+        }
         // animation: FadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
         &--right{
             right: unset;
@@ -112,4 +117,14 @@ input.is-invalid{
         opacity: 100;
         transform: translateY(0);
     }
+}
+
+@media all and (max-width:900px){
+    .vc_form-field{
+        input.is-invalid{
+    &+.invalid-feedback{
+        position: relative;
+    }
+}
+}
 }

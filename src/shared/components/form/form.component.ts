@@ -4,6 +4,7 @@ import { Subject, Observable, Subscription } from 'rxjs';
 import { debounceTime, map, tap } from 'rxjs/operators';
 import  VCValidators  from '@validators/default.validators';
 import { Output } from '@angular/core';
+import { Utility } from 'src/shared/helpers/utility.service';
 
 @Component({
   selector: 'app-form',
@@ -24,21 +25,25 @@ export class FormComponent implements OnInit, OnDestroy,AfterViewInit {
   errorList:any={exists:true};
   allSubs:Subscription[]=[];
   setMessage:(c:AbstractControl,key:string)=>void;
- 
+ values:any={};
   errorMessageSubject:Subject<any> = new Subject<any>();
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable(); 
   @Output() 
   errorMessageChange = new EventEmitter<any>();
+
+  @Output() 
+  valueChange = new EventEmitter<any>();
   constructor(
      
-      private _validators:VCValidators
+      private _validators:VCValidators,
+      private _utility:Utility
   ) { 
       // redirect to home if already logged in
       this.setMessage = this._validators.setMessage(this.errorList,this.errorMessageSubject);
   }
   ngAfterViewInit(): void {
     this.addValidation(this.f)
-   const sub = this.errorMessage$.pipe(map(r=>{this.errorList=r; return r;}), tap(console.log)).subscribe(r=> this.errorMessageChange.emit(r))
+   const sub = this.errorMessage$.pipe(map(r=>{this.errorList=r; return r;})).subscribe(r=> this.errorMessageChange.emit(r))
     this.allSubs.push(sub);
     
   }
@@ -65,7 +70,17 @@ addValidation(group:any){
     let ctrl = group[key];
     if(ctrl){
       if(!key.toLowerCase().includes("group")){
-      this.allSubs.push(ctrl.valueChanges.pipe(debounceTime(500)).subscribe(()=>this.setMessage(ctrl||new FormControl(),key)))
+       
+      this.allSubs.push(ctrl.valueChanges.pipe(debounceTime(500)).subscribe(()=>{
+
+        this.valueChange.emit({[key]:ctrl.value});
+        if(key.toLowerCase().includes("amount")) {
+          ctrl.patchValue(this._utility.currencyFormatter(this._utility.convertToPlainNumber(ctrl.value)));
+        }
+        this.setMessage(ctrl||new FormControl(),key)
+      }
+        
+        ))
       }
       else{
         let g = group[key] as FormGroup;

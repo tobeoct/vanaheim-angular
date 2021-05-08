@@ -1,9 +1,10 @@
 @import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
 #customer-header{
     @include flex(horizontal,space-between);
     @include flex(vertical,center);
     @include paddingHorizontal(true,"px",2);
-    background: map-get($sizings, white);
+    background: map-get($colors, white);
     height: map-get($sizings, "px" )*3;
     width: 85vw;
     position: fixed;
@@ -38,5 +39,13 @@
             }
 
         }
+    }
+}
+
+@media all and (max-width:900px){
+    #customer-header{
+        @include paddingHorizontal(true,"px",0.5);
+        margin-left:0;
+        width: 100vw;
     }
 }

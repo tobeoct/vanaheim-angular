@@ -1,0 +1,45 @@
+@import '../../../styles/abstracts/_abstracts-dir';
+@import '../../../styles/themes/_theme-dir';
+.card{
+    @include marginVertical(false,"px",1,1);
+    @include paddingVertical(false,"px",0.25,0.05, $important:important);
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    width: 100%;
+    height: auto !important;
+    &-cta{
+        min-height: 150px;
+        border-radius: $border-radius;
+        border-color: map-get($colors, yellow );
+        button{
+            background: map-get($colors, lightGrey );
+        color: map-get($colors, black );
+            border-color: transparent;
+    @include marginVertical(false,"px",0,0.5, $important:important);
+        }
+        &--active{
+            
+    background: map-get($colors, midYellow );
+    border-color:transparent;
+    button{
+        
+        border-color: map-get($colors,black );
+        background: transparent;
+    }
+        }
+    }
+    
+
+    .thumbnail{
+        @include flex(horizontal,space-evenly);
+        @include paddingVertical(false,"px",0.5,0);
+        @include paddingHorizontal(true,"px",0.5);
+        .image{
+        width: map-get($sizings , "%") * 2 ;
+        @include paddingVertical(true,"px",0);
+        @include paddingHorizontal(true,"%",0.05);
+        transform: translateY(-10px);
+        }
+    }
+}

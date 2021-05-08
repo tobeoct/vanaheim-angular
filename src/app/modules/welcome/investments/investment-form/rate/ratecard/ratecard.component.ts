@@ -9,18 +9,18 @@ export class RatecardComponent implements OnInit,OnChanges {
   @Input() duration:number;
   rate:number;
   @Input() active:boolean=false;
-  @Input() amount:number=250000;
+  @Input() amount:number|null=250000;
   @Output() rateChange = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {
-    this.rate  = this.getRate(this.amount,this.duration);
+    this.rate  = this.getRate(this.amount||0,this.duration);
     if(this.active){
         this.rateChange.emit(this.rate.toString());
         }
   }
   ngOnChanges():void{
-    this.rate  = this.getRate(this.amount,this.duration);
+    this.rate  = this.getRate(this.amount||0,this.duration);
     if(this.active){
     this.rateChange.emit(this.rate.toString());
     }

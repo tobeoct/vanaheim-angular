@@ -77,6 +77,9 @@ transition:background ease-in-out 0.2s !important;
 .copy{
 margin :100px auto;
 margin-top: 50px;
+p{
+    max-width: 500px;
+    }
 }
 #getstarted{
 display: none;

@@ -38,6 +38,9 @@ word-break: normal;
 .copy{
 margin :100px auto;
 margin-top: 50px;
+p{
+max-width: 500px;
+}
 }
 #getstarted{
 /* display: none; */
@@ -56,14 +59,14 @@ display: none !important;
 .investment{
 width: 100%;
 padding-top: 5vh;
-padding-bottom: 10vh;
+padding-bottom: 2vh;
 }
-.investment_content{
-padding-left: 5%; padding-right: 5%;
-}
+// .investment_content{
+// padding-left: 5%; padding-right: 5%;
+// }
 
 }
-@media all and (max-width: 900px){
+@media all and (max-width: 768px){
 .investment .investment_background .copy{
 max-width: 100%;
 }

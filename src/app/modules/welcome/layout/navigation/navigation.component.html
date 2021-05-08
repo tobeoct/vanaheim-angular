@@ -4,10 +4,10 @@
         <div id="tab-lg" *ngSwitchCase="type=='sm-desktop'" class="tabs theme_color animate__animated animate__zoomIn">
             <a [routerLink]="['/welcome/loans']">
                 <!-- <app-button [options]="loanButtonOptions"></app-button> -->
-            <div class="tabs_item active">Loans</div>
+            <div class="tabs_item" [ngClass]="{'active':(active$|async)=='loan'}">Loans</div>
         </a>
                     <div> | </div>
-                    <a  [routerLink]="['/welcome/investments']"><div class="tabs_item">Investments</div></a>
+                    <a  [routerLink]="['/welcome/investments']"><div class="tabs_item" [ngClass]="{'active':(active$|async)=='investment'}">Investments</div></a>
         </div>
     
      
@@ -20,9 +20,9 @@
         </div>
 
         <div *ngSwitchCase="type=='sm-mobile'" class="tabs tabs_mobi animate__animated animate__zoomIn" style=" padding-top:10px; padding-bottom: 10px; justify-content: center; align-items: center;">
-            <a [routerLink]="['/welcome/loans']"> <div class="tabs_item active">Loans</div></a>
+            <a [routerLink]="['/welcome/loans']"> <div class="tabs_item" [ngClass]="{'active':(utility.activeSolution$|async)=='loan'}">Loans</div></a>
             <div> | </div>
-            <a  [routerLink]="['/welcome/investments']"><div class="tabs_item ">Investments</div></a>
+            <a  [routerLink]="['/welcome/investments']"><div class="tabs_item " [ngClass]="{'active':(utility.activeSolution$|async)=='investment'}">Investments</div></a>
     </div>
     
        <div *ngSwitchDefault></div>

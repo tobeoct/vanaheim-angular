@@ -2,16 +2,20 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { UserCategory } from '@models/helpers/enums/usercategory';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ElementStyle, ElementSize, ElementState } from 'src/shared/constants/enum';
 import { ButtonOptions } from 'src/shared/constants/variables';
+import { Utility } from 'src/shared/helpers/utility.service';
 import { AuthService } from 'src/shared/services/auth/auth.service';
 import { WebNotificationService } from 'src/shared/services/web-notification/webnotification.service';
 
 @Component({
   selector: 'app-customer-navigation',
   templateUrl: './navigation.component.html',
-  styles: [
+  styles: [`
+  
+
+  `
   ]
 })
 export class NavigationComponent implements OnInit {
@@ -19,9 +23,12 @@ export class NavigationComponent implements OnInit {
   logoutSub:Subscription;
   loanButtonOptions:ButtonOptions= new ButtonOptions("Loans",ElementStyle.stroke,"",ElementSize.small,true,ElementState.active);
   invButtonOptions:ButtonOptions= new ButtonOptions("Investment",ElementStyle.stroke,"",ElementSize.small,true,ElementState.default);
+active$:Observable<string>;
 
-
-  constructor(private router: Router, private authenticationService: AuthService) { }
+  constructor(private router: Router, private authenticationService: AuthService, private _utility:Utility) {
+    
+    this.active$ = this._utility.activeSolution$;
+   }
   ngOnDestroy(): void {
     if(this.logoutSub)this.logoutSub.unsubscribe()
   }

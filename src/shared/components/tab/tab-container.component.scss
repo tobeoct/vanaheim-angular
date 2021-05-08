@@ -1,0 +1,44 @@
+@import "../../../styles/abstracts/_abstracts-dir";
+@import "../../../styles/themes/_theme-dir";
+.tabs-header {
+  @include flex(horizontal,center);
+  }
+  .active {
+    background:map-get($colors, lightGrey );
+    font-weight: map-get($font-weights, "bold" );
+  }
+  .tab-label {
+    @include flex(true,center);
+    @include paddingHorizontal(true,"px",0.75);
+    border: 1px solid map-get($colors, lightGrey );
+    border-radius: $border-radius;
+    height: 40px;
+    cursor: pointer;
+  }
+.tabs-body{
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+  .page{
+    
+    width: map-get($sizings, "px" )/3;
+    height: map-get($sizings, "px" )/3;
+    border-radius: map-get($sizings, "px" )/3;
+    background: map-get($colors,lightGrey);
+    margin-right: 10px;
+    
+  
+    &-container{
+      @include flex(true,center);
+    }
+  &:last-child{
+    margin-right: 0;
+  }
+  &.active{
+    background: map-get($colors,black);
+  }
+}

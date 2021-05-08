@@ -3,8 +3,8 @@
     <div class="theme_row theme_flex theme_flex--spacebetween form_group" id="duration">
        
 
-        <div class=" theme_bg--lightgrey investment_rate {{dur.active?'active':''}}" *ngFor="let dur of durations;  trackBy: trackByFn" (click)="activate(dur.value)">
-            <app-ratecard [duration]="dur.value" [amount]="amount" [active]="dur.active" (rateChange)="onChange($event)"></app-ratecard>
+        <div class=" theme_bg--lightgrey investment_rate {{dur.active?'active':''}}" *ngFor="let dur of durations$|async as durations;  trackBy: trackByFn" (click)="activate(dur.value)">
+            <app-ratecard [duration]="dur.value" [amount]="(amount$|async)" [active]="dur.active" (rateChange)="onChange($event)"></app-ratecard>
         </div>
         
     </div>

@@ -1,0 +1,18 @@
+@import "../../../../../styles/abstracts/_abstracts-dir";
+#main-content{
+
+@include flex(false,center,space-between);
+flex-direction: column;
+text-align: center;
+width: 80%;
+margin: auto;
+.image{
+    width: 30px;
+}
+*{
+    margin-bottom: 10px;
+}
+button{
+    margin-top: 30px; border:0 !important;
+}
+}

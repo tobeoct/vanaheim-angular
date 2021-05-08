@@ -1,0 +1,9 @@
+.progress{
+    box-sizing: border-box;
+    padding: 5px;
+    &--stroke{
+        
+        border:5px solid map-get($colors, lightGrey);
+        border-radius: 500px;
+    }
+}

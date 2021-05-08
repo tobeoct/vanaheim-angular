@@ -27,6 +27,11 @@ import { FaqComponent } from './components/faq/faq.component';
 import { ToasterComponent } from './components/toaster/toaster.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { TabContainerComponent } from './components/tab/tab-container.component';
+import { TabComponent } from './components/tab/tab/tab.component';
+import { TabHeaderComponent } from './components/tab/tab-header/tab-header.component';
+import { TabBodyComponent } from './components/tab/tab-body/tab-body.component';
+import { TemplateComponent } from './components/template/template.component';
 export function playerFactory() {
   return player;
 }
@@ -47,7 +52,12 @@ export function playerFactory() {
     FaqComponent,
     ToasterComponent,
     BannerComponent,
-    NotificationComponent
+    NotificationComponent,
+    TabContainerComponent,
+    TabComponent,
+    TabHeaderComponent,
+    TabBodyComponent,
+    TemplateComponent
   ],
   imports: [
     CommonModule,
@@ -82,7 +92,12 @@ export function playerFactory() {
     FaqComponent,
     ToasterComponent,
     BannerComponent,
-    NotificationComponent
+    NotificationComponent,
+    TabContainerComponent,
+    TabComponent,
+    TabHeaderComponent,
+    TabBodyComponent,
+    TemplateComponent
    ],
    schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })

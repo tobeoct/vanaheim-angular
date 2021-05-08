@@ -15,12 +15,15 @@
             #social-login{
                 @include marginVertical(false,"px",0.25,0.5);
                 @include flex(horizontal,space-between);
-                width:map-get($sizings,"px" )* 4;
+                // width:map-get($sizings,"px" )* 4;
                 .item{
-                    border-radius: map-get($sizings,"px" ) * 1.2;
-                    width: map-get($sizings,"px" ) * 1.2;
-                    height: map-get($sizings,"px" ) * 1.2;
-                    color: map-get($colors, white );
+                    // border-radius: map-get($sizings,"px" ) * 1.2;
+                    // width: map-get($sizings,"px" ) * 1.2;
+                    // height: map-get($sizings,"px" ) * 1.2;
+                    // color: map-get($colors, white );
+                    @include paddingVertical(true,"px",0.1);
+                    @include paddingHorizontal(true,"px",0.5);
+                    border:1px solid black;
                     @include flex(both,center);
                     cursor: pointer;
                     transition: 0.3s ease-in-out;
@@ -29,13 +32,16 @@
                     transform: scale(1.05);
                 }
                 .item:first-child{
-                    background: map-get($colors, facebook );
+                    border-color: map-get($colors, facebook );
+                    color: map-get($colors, facebook );
                 } 
                 .item:nth-child(2){
-                    background: map-get($colors, google );
+                    border-color: map-get($colors, google );
+                    color: map-get($colors, google );
+                    margin-left: 10px;
                 }
                 .item p{
-                    @include font(heading);
+                    @include font(p);
                     font-weight: map-get($font-weights,"bold");
                 }
               

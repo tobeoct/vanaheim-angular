@@ -1,6 +1,39 @@
-<div id="dashboard-content" >
+
+
+<div id="dashboard-content" class="grid-padding-2x" >
     <div id="main-content">
-        <div class="item"></div>
-        <div class="item"></div>
+        <div class="item content">
+     
+        <app-tabs>
+            <app-tab>
+                <app-tab-header>Loans</app-tab-header>
+                <app-tab-body>
+                    <app-loan-summary></app-loan-summary>
+                </app-tab-body>
+              </app-tab>
+            <app-tab>
+              <app-tab-header>Investment</app-tab-header>
+              <app-tab-body>
+                <app-investment-summary></app-investment-summary>
+              </app-tab-body>
+            </app-tab>
+           
+          </app-tabs>
+        </div>
+        <div class="item box-shadow">
+          <div class="heading" style="text-align: center;">
+            <h3>Let's get you started</h3>
+          </div>
+              <ng-container *ngTemplateOutlet="templates.LoanCard">
+              <!-- [appTemplatePortalOutlet]="'LoanCard'"> -->
+
+              </ng-container>
+              <ng-container *ngTemplateOutlet="templates.InvestmentCard">
+                <!-- [appTemplatePortalOutlet]="'LoanCard'"> -->
+  
+                </ng-container>
+            </div>
     </div>
 </div>
+
+<app-template #templates></app-template>
