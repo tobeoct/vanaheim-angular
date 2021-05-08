@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { UserCategory } from '@enums/usercategory';
 import { AuthService } from 'src/shared/services/auth/auth.service';
@@ -17,6 +17,7 @@ export class AppComponent implements OnChanges, OnInit {
   title = 'vanaheim';
   isLoggedIn:Boolean = false;
   navType:UserCategory = UserCategory.Customer;
+  @ViewChild('templates') templates:any; 
   constructor(private authenticationService: AuthService, private _utility:Utility){
   
 
