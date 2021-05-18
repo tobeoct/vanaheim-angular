@@ -36,7 +36,8 @@
       "@poco/*": ["server/services/poco/*"],
       "@environments/*":["src/environments/*"],
       "@utils/*":["server/models/helpers/utils/*"],
-      "@config": ["server/api/config.ts"],
+      "@api/*": ["server/api/*"],
+      "@config": ["server/api/config"],
     }
   },
   "include": [
