@@ -72,7 +72,11 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
         app.use(this._session.getSession())
         app.use(inject(sessionRequestAuthorisation))
         app.use("/api",inject(clientApiKeyValidation),inject(authoriseRequest),expAutoSan.route)
-        app.use(loadControllers('api/controllers/*.controller.ts', {cwd: __dirname}));
+        if(process.env.NODE_ENV =="production"){
+        app.use(loadControllers('api/controllers/*.controller.js', {cwd: __dirname}));
+        }else{
+          app.use(loadControllers('api/controllers/*.controller.ts', {cwd: __dirname}));
+        }
         app.use("/api",inject(authoriseResponse))
 
         app.get('*', function(req:any, res:any) {
