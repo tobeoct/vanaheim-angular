@@ -26,7 +26,14 @@ const configuration:any = {
     "database": "vanaheim",
     "host": "127.0.0.1",
     "dialect": "postgres",
-    "use_env_variable": "DATABASE_URL"
+    "use_env_variable": "DATABASE_URL",
+    "ssl":true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true, // This will help you. But you will see nwe error
+        "rejectUnauthorized": false // This line will fix new error
+      }
+    },
   }
 };
 //require(`${__dirname}/../config/config.json`)[env];

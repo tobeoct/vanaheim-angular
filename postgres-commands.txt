@@ -5,3 +5,5 @@ pg_restore -U $user -d $new_db "$db_dump_file"
 
 #Create Dump
 PGPASSWORD=mypassword pg_dump -Fc --no-acl --no-owner -h localhost -U myuser mydb > mydb.dump
+
+heroku pg:backups:restore '<SIGNED URL>' DATABASE_URL
