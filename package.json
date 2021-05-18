@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "heroku-postbuild": "ng build --prod"
+    "heroku-postbuild": "tsc"
   },
   "private": true,
   "dependencies": {
@@ -67,6 +67,10 @@
     "tslib": "^2.0.0",
     "web-push": "^3.4.4",
     "zone.js": "~0.10.2"
+  },
+  "engines": {
+    "node": "12.19.0",
+    "yarn": "1.x"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1100.7",
