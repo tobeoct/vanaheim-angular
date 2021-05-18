@@ -12,7 +12,7 @@ import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DropdownService } from './dropdown.service';
 import { DropdownSelectOptionComponent } from './dropdown-select-option.component';
-import { DropdownComponent } from './dropdown.component';
+import { DropdownOldComponent } from './dropdown.component';
 
 @Component({
   selector: 'custom-select',
@@ -50,8 +50,8 @@ export class DropdownSelectComponent implements AfterViewInit, ControlValueAcces
   @ViewChild('input')
   public input: ElementRef;
 
-  @ViewChild(DropdownComponent)
-  public dropdown: DropdownComponent;
+  @ViewChild(DropdownOldComponent)
+  public dropdown: DropdownOldComponent;
 
   @ContentChildren(DropdownSelectOptionComponent)
   public options: QueryList<DropdownSelectOptionComponent>;

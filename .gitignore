@@ -46,3 +46,7 @@ testem.log
 Thumbs.db
 
 .env
+
+
+#components
+#\src\app\shared\components\dropdown-old
