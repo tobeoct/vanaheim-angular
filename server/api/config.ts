@@ -23,7 +23,8 @@ SERVICE:string;
 LOAN_EMAIL:string;
 LOAN_EMAIL_PASS:string;
 ISSECURE:string;
-SECRET_KEY = "SECRET_KEY";
+SESSION_SECRET_KEY:string ;
+JWT_SECRET_KEY:string ;
     constructor() {
 
       this.environment= process.env.NODE_ENV || ''
@@ -39,6 +40,8 @@ SECRET_KEY = "SECRET_KEY";
   this.LOAN_EMAIL_PASS=process.env.LOAN_EMAIL_PASS||''
   this.ISSECURE = process.env.ISSECURE||''
   this.SUPPORT_EMAIL_PASS = process.env.SUPPORT_EMAIL_PASS||''
+  this.SESSION_SECRET_KEY  =process.env.SESSION_SECRET_KEY||'',
+  this.JWT_SECRET_KEY = process.env.JWT_SECRET_KEY||''
     }
 }
 

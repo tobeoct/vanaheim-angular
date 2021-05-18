@@ -47,13 +47,13 @@ import { FeaturesModule } from './shared/features/features.module';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '500550636813-p4laejnae3rk9shj2ca8d073entooqe4.apps.googleusercontent.com'
+              environment.googleLoginProviderID
             )
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,
             provider: new FacebookLoginProvider(
-              '1117567112081596'
+              environment.facebookLoginProviderID
             )
           }
         ]

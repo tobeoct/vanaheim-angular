@@ -11,6 +11,9 @@
         width: 100%;
     }
 .notifications{
+    max-height: 150px;
+    @include flex(true,center);
+    flex-direction: column;
     &_subscription{
         background: #ECE9FB;
         padding: 5%;

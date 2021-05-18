@@ -5,8 +5,9 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:4200/api',
-  googleClientId:"500550636813-p4laejnae3rk9shj2ca8d073entooqe4.apps.googleusercontent.com",
-  googleSecretKey:"ACM2dg4phWjcjtCg2bGaFvRP"
+  googleLoginProviderID:'500550636813-p4laejnae3rk9shj2ca8d073entooqe4.apps.googleusercontent.com',
+  facebookLoginProviderID: '1117567112081596',
+  vapidPublicKey:'BH9z7PCyti1n9ItSnlp_8qoyDHP-RUK-vdZrTCqaoYHKVKIlk2w3XPoZLSndWp23VPVepP7gZ6diOFTbQNLpeBc'
 };
 
 /*

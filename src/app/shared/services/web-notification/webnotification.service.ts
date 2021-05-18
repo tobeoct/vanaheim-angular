@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { SwPush } from '@angular/service-worker';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { take, tap } from 'rxjs/operators';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class WebNotificationService {
     ) {
         
     }
-    readonly VAPID_PUBLIC_KEY = 'BH9z7PCyti1n9ItSnlp_8qoyDHP-RUK-vdZrTCqaoYHKVKIlk2w3XPoZLSndWp23VPVepP7gZ6diOFTbQNLpeBc';
+    readonly VAPID_PUBLIC_KEY = environment.vapidPublicKey;
     private baseUrl = 'http://localhost:4200/api/notification/subscribe';
     subscribeToNotification() {
       console.log("subscribing")

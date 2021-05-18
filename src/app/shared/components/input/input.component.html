@@ -6,8 +6,10 @@
             <ng-content select="[slot=button]"></ng-content>
         </div>
     </div>
-        <div *ngIf="error" class="invalid-feedback invalid-feedback--{{errorType}}">
+    <ng-container  *ngIf="error">
+        <div class="invalid-feedback invalid-feedback--{{errorType}} animate__animated animate__fadeInUp animate__faster">
             <div>{{error}}</div>
         </div>
+    </ng-container>
        
 </div>

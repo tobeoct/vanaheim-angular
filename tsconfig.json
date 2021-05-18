@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "rootDir": "./",
     "outDir": "./dist",
+    "types": ["node"],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,

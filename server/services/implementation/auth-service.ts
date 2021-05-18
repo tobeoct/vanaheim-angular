@@ -1,9 +1,9 @@
+import AppConfig from "@api/config";
 import { IAuthService } from "@services/interfaces/Iauth-service";
-const SECRET_KEY = "SECRET_KEY";;
 import { newSessionRoutes, authRoutes } from "./common/routes";
 class AuthService implements IAuthService{
   
-  constructor(private jwt:any){
+  constructor(private jwt:any,private _appConfig:AppConfig){
 
   }
   isNewTokenRequired = (httpMethod:any, url:any) => {
@@ -23,7 +23,7 @@ class AuthService implements IAuthService{
     return false;
   }
     generateJWTToken = (userData:any) =>{
-     return this.jwt.sign(userData, SECRET_KEY, {
+     return this.jwt.sign(userData, this._appConfig.JWT_SECRET_KEY, {
   
       expiresIn: '2m' // expires in 365 days
   
@@ -32,7 +32,7 @@ class AuthService implements IAuthService{
     verifyToken = (jwtToken:any) =>{
      try{
        console.log("Verifying Token", jwtToken)
-        return this.jwt.verify(jwtToken, SECRET_KEY);
+        return this.jwt.verify(jwtToken, this._appConfig.JWT_SECRET_KEY);
      }catch(e){
         console.log('e:',e);
         return null;

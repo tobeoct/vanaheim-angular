@@ -9,7 +9,7 @@ export default class SessionMiddleware{
     getSession=()=>{
         return this.expressSession({
                 store: this._redis.getRedisStore(),
-                secret: this._appConfig.SECRET_KEY,
+                secret: this._appConfig.SESSION_SECRET_KEY,
                 resave: false,
                 saveUninitialized: false,
                 cookie: {

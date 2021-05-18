@@ -1,12 +1,9 @@
 
 
 
-import { authRoutes } from '@services/implementation/common/routes';
 import { IAuthService } from '@services/interfaces/Iauth-service';
 import { IClientService } from '@services/interfaces/Iclient-service';
-import moment = require('moment');
 
-const SECRET_KEY = "JWT_SECRET";
 
 // class AuthoriseMiddleware {
 
@@ -84,10 +81,9 @@ export function clientApiKeyValidation (_clientService:IClientService){
     }
   }
   export function sessionResponseAuthorisation(){
-    return async (req:any, res:any, next:any) => {
+    return async (req:any, res:any) => {
       
       var apiUrl = req.originalUrl;
-      var httpMethod = req.method;
       console.log("SESSION RESPONSE",apiUrl,req.session)
       if(req.session && req.session.cookie){
         const tokenExpirationDate = req.session.cookie.originalMaxAge;
@@ -160,7 +156,7 @@ export function clientApiKeyValidation (_clientService:IClientService){
   
    export const authoriseResponse=(_authService:IAuthService)=>{
   
-      return async (req:any, res:any, next:any) => {
+      return async (req:any, res:any) => {
         console.log("Authorise Response")
           if (res.data==undefined) {
             return res.status(404).send({
