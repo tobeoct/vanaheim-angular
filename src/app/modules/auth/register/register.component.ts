@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserCategory } from '@models/helpers/enums/usercategory';
 import { SocialUser, SocialAuthService, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { Subject, Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { debounceTime, first, map, tap } from 'rxjs/operators';
-import  VCValidators  from '@validators/default.validators';
-import { AuthService } from 'src/shared/services/auth/auth.service';
+import { first } from 'rxjs/operators';
+import  {VCValidators}  from 'src/app/shared/validators/default.validators';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LoginType } from '@models/helpers/enums/logintype';
 
 @Component({
@@ -43,6 +43,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
   get passwordGroup(){
     return this.form.get("passwordGroup")as FormGroup|| new FormControl();
+  }
+  get channel(){
+    return this.form.get("channel")as FormControl|| new FormControl();
   }
   
   errorMessageSubject:Subject<any> = new Subject<any>(); 

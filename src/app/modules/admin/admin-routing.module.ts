@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthenticationGuard } from 'src/app/guards/authentication.guard';
+import { AuthenticationGuard } from 'src/app/shared/guards/authentication.guard';
 import { NotifyComponent } from './notify/notify.component';
 import { RequestComponent } from './request/request.component';
 

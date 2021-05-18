@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ElementSize, ElementState, ElementStyle } from 'src/shared/constants/enum';
-import { AssetPath, ButtonOptions } from 'src/shared/constants/variables';
-import {IAssetPath} from "../../../../shared/interfaces/assetpath";
+import { Observable } from 'rxjs';
+import { AssetPath } from 'src/app/shared/constants/variables';
+import { Store } from 'src/app/shared/helpers/store';
+import {IAssetPath} from "src/app/shared/interfaces/assetpath";
 @Component({
   selector: 'app-loans',
   templateUrl: './loans.component.html',
@@ -16,11 +17,13 @@ export class LoansComponent implements OnInit {
   mobile:string = "sm-mobile";
   desktop:string="sm-desktop";
   headerclass:string ="header";
-  buttonOptions:ButtonOptions= new ButtonOptions("Get Started",ElementStyle.default,"",ElementSize.small,true,ElementState.default);
-  
-  constructor() { }
+  page$:Observable<string>;
+  constructor(private _store:Store) {
+
+   }
 
   ngOnInit(): void {
+    this.page$ = this._store.page$;
   }
 
   submit(event:any, type:string){

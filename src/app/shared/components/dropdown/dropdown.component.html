@@ -1,0 +1,37 @@
+
+<div class="vc_form-field form_group {{fieldClass}}">
+  <ng-content  select="[slot=label]"></ng-content>
+<div class="dropdown {{class}}">
+    <button 
+    [attr.aria-label]="current$|async" aria-roledescription="dropdown" role="group" type="button" class="current animate-action--scale" (click)="toggle()">
+        <ng-container *ngIf="type!='icon'">{{current$|async}}</ng-container>
+        <ng-container *ngIf="type=='icon'"><div class="image"><img src="{{basePath}}/{{current$|async}}"/></div></ng-container>
+        <span class="material-icons material-icons-round">
+            arrow_right
+            </span>
+            
+    </button>
+<div class="dropdown-options box-shadow animate__animated animate__fadeInUp animate__faster" *ngIf="show$|async">
+    
+    <button
+      class="option {{item.class}}"
+      (click)="selectOption(item)"
+      type="button"
+      [attr.aria-label]="item.value"
+      *ngFor="let item of dropdownItems$ | async"
+      role="option"
+    >
+      <ng-container *ngIf="item.content">
+          
+            <ng-container *ngTemplateOutlet="item.content">
+            </ng-container>
+      </ng-container>
+      
+    </button>
+  </div>
+</div>
+</div>
+<ng-container *ngIf="control">
+<app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="{{id}}" [control]="control" class="form-control"  >
+</app-input></ng-container>
+<!-- [class.active]="activeTab === item" -->

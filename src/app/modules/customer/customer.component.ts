@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SwPush, SwUpdate } from '@angular/service-worker';
-import { WebNotificationService } from 'src/shared/services/web-notification/webnotification.service';
-import { UpdatesService } from 'src/shared/services/web-notification/update.service';
-import { Utility } from 'src/shared/helpers/utility.service';
+import { WebNotificationService } from 'src/app/shared/services/web-notification/webnotification.service';
+import { UpdatesService } from 'src/app/shared/services/web-notification/update.service';
+import { Utility } from 'src/app/shared/helpers/utility.service';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-customer',
@@ -15,7 +16,7 @@ export class CustomerComponent implements OnInit {
   updateAvailable = false;
   constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private checkForUpdateService: UpdatesService) {
 
-    
+    if(environment.production){
     this.swPush.notificationClicks.subscribe( event => {
       console.log('Received notification: ', event);
       const url = event.notification.data.url;
@@ -25,6 +26,7 @@ export class CustomerComponent implements OnInit {
       this.updateAvailable = true;
     });
     if(this.isGranted) this.submitNotification();
+  }
     // this.webNotificationService.requestSubscription().then(sub => {
     //   console.log(sub);});
   }

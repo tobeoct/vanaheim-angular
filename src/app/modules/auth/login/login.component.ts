@@ -1,15 +1,15 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, delay, first, map, tap } from 'rxjs/operators';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { delay, first } from 'rxjs/operators';
 
-import { AuthService } from 'src/shared/services/auth/auth.service';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { UserCategory } from '@enums/usercategory';
 import { SocialAuthService, GoogleLoginProvider,FacebookLoginProvider, SocialUser } from 'angularx-social-login';
 import { Subject, Observable, Subscription, BehaviorSubject, from } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
-import  VCValidators  from '@validators/default.validators';
+import  {VCValidators}  from 'src/app/shared/validators/default.validators';
 import { LoginType } from '@models/helpers/enums/logintype';
 
 @Component({

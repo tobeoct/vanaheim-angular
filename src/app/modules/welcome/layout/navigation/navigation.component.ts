@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ElementStyle, ElementSize, ElementState, SideNavigationList } from 'src/shared/constants/enum';
-import { ButtonOptions } from 'src/shared/constants/variables';
-import { Utility } from 'src/shared/helpers/utility.service';
+import { ElementStyle, ElementSize, ElementState, SideNavigationList } from 'src/app/shared/constants/enum';
+import { ButtonOptions } from 'src/app/shared/constants/variables';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Component({
   selector: 'app-navigation',

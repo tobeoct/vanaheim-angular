@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AdminGuard } from './guards/admin.guard';
-import { AuthenticationGuard } from './guards/authentication.guard';
-import { CustomerGuard } from './guards/customer.guard';
-import { WelcomeGuard } from './guards/welcome.guard';
+import { AdminGuard } from './shared/guards/admin.guard';
+import { AuthenticationGuard } from './shared/guards/authentication.guard';
+import { CustomerGuard } from './shared/guards/customer.guard';
+import { WelcomeGuard } from './shared/guards/welcome.guard';
 import { AdminComponent } from './modules/admin/admin.component';
 import { AuthComponent } from './modules/auth/auth.component';
 import { CustomerComponent } from './modules/customer/customer.component';

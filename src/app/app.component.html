@@ -1,12 +1,7 @@
 
 <app-page>
     <app-contact></app-contact>
-    <!-- <div *ngIf="isLoggedIn">
-    <app-navigation [type]="navType"></app-navigation>
-    </div> -->
 <router-outlet></router-outlet>
 </app-page>
 <app-faq *ngIf="(show$|async)=='faq'"></app-faq>
 <app-notification *ngIf="(show$|async)=='notification'"></app-notification>
-
-<!-- <app-template #templates></app-template> -->

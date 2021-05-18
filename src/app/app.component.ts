@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { UserCategory } from '@enums/usercategory';
-import { AuthService } from 'src/shared/services/auth/auth.service';
-import { User } from 'src/shared/interfaces/user';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { User } from 'src/app/shared/interfaces/user';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { Utility } from 'src/shared/helpers/utility.service';
-import { SideNavigationList } from 'src/shared/constants/enum';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Component({
   selector: 'app-root',

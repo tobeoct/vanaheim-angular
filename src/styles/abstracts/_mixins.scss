@@ -1,131 +1,215 @@
 @mixin font( $property:null,$family:"primary", $size:"p", $weight:"regular") {
-     @if ($property==null){
-        font-family: map-get($font-families,$family);
-        font-size: map-get($font-sizes,$size);
-        font-weight: map-get($font-weights,$weight);
-       
-    }
-    @else{
-        font: map-get($fonts,$property)
-    }
-  }
-  @mixin dropshadow($x,$y,$blur, $clr,$alpha:0.05) {
-    box-shadow: $x $y $blur rgba($color: $clr, $alpha: $alpha);
-  }
-  
-  @mixin flex( $type:null,$property1:"center",$property2:"center") {
-    display: flex;
-    @if ($type==null){
-        align-items: $property1;
-        justify-content: $property2;
-    }
-    @else if ($type==vertical){
-        align-items: $property1;
-    }
-    @else if ($type==horizontal){
-      justify-content: $property1;
-    }
-    @else{
-        align-items: $property1;
-        justify-content: $property1;
-    }
+  @if ($property==null){
+     font-family: map-get($font-families,$family);
+     font-size: map-get($font-sizes,$size);
+     font-weight: map-get($font-weights,$weight);
+    
  }
+ @else{
+     font: map-get($fonts,$property)
+ }
+}
+@mixin dropshadow($x,$y,$blur, $clr,$alpha:0.05) {
+ box-shadow: $x $y $blur rgba($color: $clr, $alpha: $alpha);
+}
 
-  @mixin rtl($property, $ltr-value, $rtl-value) {
-    #{$property}: $ltr-value;
-  
-    [dir=rtl] & {
-      #{$property}: $rtl-value;
-    }
+@mixin flex( $type:null,$property1:"center",$property2:"center") {
+ display: flex;
+ @if ($type==null){
+     align-items: $property1;
+     justify-content: $property2;
+ }
+ @else if ($type==vertical){
+     align-items: $property1;
+ }
+ @else if ($type==horizontal){
+   justify-content: $property1;
+ }
+ @else{
+     align-items: $property1;
+     justify-content: $property1;
+ }
+}
+
+@mixin rtl($property, $ltr-value, $rtl-value) {
+ #{$property}: $ltr-value;
+
+ [dir=rtl] & {
+   #{$property}: $rtl-value;
+ }
+}
+@mixin backgroundImage($url){
+@if($url!=null){
+background: url($url);
+}
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+box-sizing: border-box;
+}
+@mixin background($color){
+background: map-get($colors, $color );
+}
+@mixin color($color, $important: no){
+  @if($important==no){
+color: map-get($colors, $color );
+  }@else{
+    color: map-get($colors, $color ) !important;
+
   }
-
-  @mixin paddingHorizontal($unified:true,$indicator:"px",$left:2,$right:2, $important: no){
-      @if($important==no){
-      @if ($unified==true){
-        padding-left: map-get($sizings, $indicator ) * $left;
-        padding-right: map-get($sizings, $indicator ) * $left;
-      }
-      @else{
-        padding-left: map-get($sizings, $indicator ) * $left;
-        padding-right: map-get($sizings, $indicator ) * $right;
-      }
-    }
-    @else{
-        @if ($unified==true){
-            padding-left: map-get($sizings, $indicator ) * $left !important;
-            padding-right: map-get($sizings, $indicator ) * $left !important;
-          }
-          @else{
-            padding-left: map-get($sizings, $indicator ) * $left !important;
-            padding-right: map-get($sizings, $indicator ) * $right !important;
-          }
-    }
-  }
-
-  
-  @mixin paddingVertical($unified:true,$indicator:"px",$top:2,$bottom:2, $important: no){
-    @if($important==no) { @if ($unified==true){
-      padding-top: map-get($sizings, $indicator ) *$top;
-      padding-bottom: map-get($sizings, $indicator )*$top;
-    }
-    @else{
-      padding-top: map-get($sizings, $indicator ) *$top;
-      padding-bottom: map-get($sizings, $indicator ) *$bottom;
-    }}
-    @else{
-        @if ($unified==true){
-            padding-top: map-get($sizings, $indicator ) *$top !important;
-            padding-bottom: map-get($sizings, $indicator )*$top !important;
-          }
-          @else{
-            padding-top: map-get($sizings, $indicator ) *$top !important;
-            padding-bottom: map-get($sizings, $indicator ) *$bottom !important; 
-          }
-    }
+}
+@mixin border-color($color){
+border-color: map-get($colors, $color);
+}
+@mixin border($thickness,$style,$color){
+border: $thickness $style map-get($colors, $color);
+}
+@mixin padding($unified:true,$denominator:"px",$top:2,$bottom:2,$left:2,$right:2, $important: no){
+@if($important==no){
+ @if ($unified==true){
+   padding-left: map-get($sizings, $denominator ) * $top;
+   padding-right: map-get($sizings, $denominator ) * $top;
+   padding-top: map-get($sizings, $denominator ) * $top;
+   padding-bottom: map-get($sizings, $denominator ) * $top;
+ }
+ @else{
+   padding-left: map-get($sizings, $denominator ) * $left;
+   padding-right: map-get($sizings, $denominator ) * $right;
+   padding-top: map-get($sizings, $denominator ) * $top;
+   padding-bottom: map-get($sizings, $denominator ) * $bottom;
+ }
+}
+@else{
+   @if ($unified==true){
+       padding-left: map-get($sizings, $denominator ) * $top !important;
+       padding-right: map-get($sizings, $denominator ) * $top !important;
+       padding-top: map-get($sizings, $denominator ) * $top !important;
+       padding-bottom: map-get($sizings, $denominator ) * $top !important;
+     }
+     @else{
+       padding-left: map-get($sizings, $denominator ) * $left !important;
+       padding-right: map-get($sizings, $denominator ) * $right !important;
+       padding-top: map-get($sizings, $denominator ) * $top !important;
+       padding-bottom: map-get($sizings, $denominator ) * $bottom !important;
+     }
+}
+}
+@mixin paddingHorizontal($unified:true,$denominator:"px",$left:2,$right:2, $important: no){
+   @if($important==no){
+   @if ($unified==true){
+     padding-left: map-get($sizings, $denominator ) * $left;
+     padding-right: map-get($sizings, $denominator ) * $left;
+   }
+   @else{
+     padding-left: map-get($sizings, $denominator ) * $left;
+     padding-right: map-get($sizings, $denominator ) * $right;
+   }
+ }
+ @else{
+     @if ($unified==true){
+         padding-left: map-get($sizings, $denominator ) * $left !important;
+         padding-right: map-get($sizings, $denominator ) * $left !important;
+       }
+       @else{
+         padding-left: map-get($sizings, $denominator ) * $left !important;
+         padding-right: map-get($sizings, $denominator ) * $right !important;
+       }
+ }
 }
 
 
-@mixin marginHorizontal($unified:true,$indicator:"px",$left:2,$right:2, $important: no){
-    @if($important==no){
-    @if ($unified==true){
-      margin-left: map-get($sizings, $indicator ) * $left;
-      margin-right: map-get($sizings, $indicator ) * $left;
-    }
-    @else{
-      margin-left: map-get($sizings, $indicator ) * $left;
-      margin-right: map-get($sizings, $indicator ) * $right;
-    }
-  }
-  @else{
-      @if ($unified==true){
-          margin-left: map-get($sizings, $indicator ) * $left !important;
-          margin-right: map-get($sizings, $indicator ) * $left !important;
-        }
-        @else{
-          margin-left: map-get($sizings, $indicator ) * $left !important;
-          margin-right: map-get($sizings, $indicator ) * $right !important;
-        }
-  }
+@mixin paddingVertical($unified:true,$denominator:"px",$top:2,$bottom:2, $important: no){
+ @if($important==no) { @if ($unified==true){
+   padding-top: map-get($sizings, $denominator ) *$top;
+   padding-bottom: map-get($sizings, $denominator )*$top;
+ }
+ @else{
+   padding-top: map-get($sizings, $denominator ) *$top;
+   padding-bottom: map-get($sizings, $denominator ) *$bottom;
+ }}
+ @else{
+     @if ($unified==true){
+         padding-top: map-get($sizings, $denominator ) *$top !important;
+         padding-bottom: map-get($sizings, $denominator )*$top !important;
+       }
+       @else{
+         padding-top: map-get($sizings, $denominator ) *$top !important;
+         padding-bottom: map-get($sizings, $denominator ) *$bottom !important; 
+       }
+ }
+}
+
+@mixin margin($unified:true,$denominator:"px",$top:2,$bottom:2,$left:2,$right:2, $important: no){
+@if($important==no){
+ @if ($unified==true){
+   margin-left: map-get($sizings, $denominator ) * $top;
+   margin-right: map-get($sizings, $denominator ) * $top;
+   margin-top: map-get($sizings, $denominator ) * $top;
+   margin-bottom: map-get($sizings, $denominator ) * $top;
+ }
+ @else{
+   margin-left: map-get($sizings, $denominator ) * $left;
+   margin-right: map-get($sizings, $denominator ) * $right;
+   margin-top: map-get($sizings, $denominator ) * $top;
+   margin-bottom: map-get($sizings, $denominator ) * $bottom;
+ }
+}
+@else{
+   @if ($unified==true){
+       margin-left: map-get($sizings, $denominator ) * $top !important;
+       margin-right: map-get($sizings, $denominator ) * $top !important;
+       margin-top: map-get($sizings, $denominator ) * $top !important;
+       margin-bottom: map-get($sizings, $denominator ) * $top !important;
+     }
+     @else{
+       margin-left: map-get($sizings, $denominator ) * $left !important;
+       margin-right: map-get($sizings, $denominator ) * $right !important;
+       margin-top: map-get($sizings, $denominator ) * $top !important;
+       margin-bottom: map-get($sizings, $denominator ) * $bottom !important;
+     }
+}
+}
+@mixin marginHorizontal($unified:true,$denominator:"px",$left:2,$right:2, $important: no){
+ @if($important==no){
+ @if ($unified==true){
+   margin-left: map-get($sizings, $denominator ) * $left;
+   margin-right: map-get($sizings, $denominator ) * $left;
+ }
+ @else{
+   margin-left: map-get($sizings, $denominator ) * $left;
+   margin-right: map-get($sizings, $denominator ) * $right;
+ }
+}
+@else{
+   @if ($unified==true){
+       margin-left: map-get($sizings, $denominator ) * $left !important;
+       margin-right: map-get($sizings, $denominator ) * $left !important;
+     }
+     @else{
+       margin-left: map-get($sizings, $denominator ) * $left !important;
+       margin-right: map-get($sizings, $denominator ) * $right !important;
+     }
+}
 }
 
 
-@mixin marginVertical($unified:true,$indicator:"px",$top:2,$bottom:2, $important: no){
-  @if($important==no) { @if ($unified==true){
-    margin-top: map-get($sizings, $indicator ) *$top;
-    margin-bottom: map-get($sizings, $indicator )*$top;
-  }
-  @else{
-    margin-top: map-get($sizings, $indicator ) *$top;
-    margin-bottom: map-get($sizings, $indicator ) *$bottom;
-  }}
-  @else{
-      @if ($unified==true){
-          margin-top: map-get($sizings, $indicator ) *$top !important;
-          margin-bottom: map-get($sizings, $indicator )*$top !important;
-        }
-        @else{
-          margin-top: map-get($sizings, $indicator ) *$top !important;
-          margin-bottom: map-get($sizings, $indicator ) *$bottom !important; 
-        }
-  }
+@mixin marginVertical($unified:true,$denominator:"px",$top:2,$bottom:2, $important: no){
+@if($important==no) { @if ($unified==true){
+ margin-top: map-get($sizings, $denominator ) *$top;
+ margin-bottom: map-get($sizings, $denominator )*$top;
+}
+@else{
+ margin-top: map-get($sizings, $denominator ) *$top;
+ margin-bottom: map-get($sizings, $denominator ) *$bottom;
+}}
+@else{
+   @if ($unified==true){
+       margin-top: map-get($sizings, $denominator ) *$top !important;
+       margin-bottom: map-get($sizings, $denominator )*$top !important;
+     }
+     @else{
+       margin-top: map-get($sizings, $denominator ) *$top !important;
+       margin-bottom: map-get($sizings, $denominator ) *$bottom !important; 
+     }
+}
 }

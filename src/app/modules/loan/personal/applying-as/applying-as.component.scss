@@ -1,0 +1,64 @@
+@import '../../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../../styles/themes/_theme-dir';
+
+    .theme_row{
+        // @include flex(horizontal,space-between);
+        @include marginVertical(false,"px",1,0);
+    }
+.applyingAs{
+    @include paddingVertical(true,"px",0.5);
+    @include paddingHorizontal(true,"px",1);
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    height: 190px;
+    box-sizing: border-box;
+    // display: flex;
+    // flex-direction: column;
+    text-align: left;
+    width: 47.5%;
+    background: transparent;
+    border: 1px solid map-get($colors, lightGrey);
+    border-radius: $border-radius;
+    transition: 0.3s ease-in-out;
+    &:hover{
+        cursor: pointer;
+        border-color: map-get($colors, black);
+    }
+    &:nth-child(2n){
+        margin-left: 5%;
+        @include marginVertical(false,"px",0,1);
+    }
+    &:last-child{
+        
+    @include marginVertical(false,"px",0,0);
+    }
+    &.active{
+    background: map-get($colors, midYellow );
+    border: 0;
+    }
+    .heading{
+        @include flex(horizontal,space-between);
+        @include flex(vertical,center);
+        @include marginVertical(true,"px",0.5);
+        div{
+            background: map-get($colors, lightYellow);
+            @include paddingVertical(true,"px",0.05);
+            @include paddingHorizontal(true,"px",0.25);
+            border-radius: $border-radius;
+        }
+    }
+    &-content{
+        @include flex(horizontal,space-between);
+        width: 100%;
+    }
+    .image{
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+

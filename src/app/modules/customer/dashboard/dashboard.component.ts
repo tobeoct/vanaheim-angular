@@ -1,6 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewContainerRef } from '@angular/core';
-import { AppComponent } from 'src/app/app.component';
-import { TemplatePortalService } from 'src/shared/components/template/template.component';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +7,7 @@ import { TemplatePortalService } from 'src/shared/components/template/template.c
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
 templates:any
-  constructor(private _templateService:TemplatePortalService,private viewContainerRef: ViewContainerRef) { 
+  constructor() { 
     
   }
   ngAfterViewInit(): void {

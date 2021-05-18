@@ -1,0 +1,5 @@
+#loan-flow.no-nav{
+    #loan-content #loan-header{
+        @include marginVertical(false,"px",0,1,$important:important);
+    }
+}

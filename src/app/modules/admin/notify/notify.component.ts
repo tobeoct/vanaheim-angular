@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AuthService } from 'src/shared/services/auth/auth.service';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { NotifyService } from './notify.service';
 
 @Component({

@@ -15,126 +15,63 @@
                 <p>Become a member and access greater wealth</p>
                 <small>Sign up with</small>
                 <div id="social-login">
-                    <!-- <div > -->
                         <div class="item" (click)="loginWithFacebook()">
                             <p><b>Facebook</b></p>
                         </div>
                         <div class="item"  (click)="loginWithGoogle()">
                             <p><b>Google</b></p>
                         </div>
-                    <!-- </div> -->
                 </div>
             </div>
-            <!-- <div class="content"> -->
                 <app-form [form]="form" (onSubmit)="onSubmit($event)"  (errorMessageChange) = "onError($event)">
                     <div class="theme_row grid-2x1">
                         <div class="theme_col-6">
-                            <!-- <div *ngIf="(errorMessage$ | async) as errors"></div> -->
-                            <div class="vc_form-field form_group" style="margin-top: 0;">
+                            <app-input fieldClass="no-margin--top" id="firstName"  errorType="left" placeholder="Enter your first name"  [control]="firstName" class="form-control" [error]="(errorMessage$ | async)?.firstName" autocomplete="name"  >
                                 <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" [formControl]="firstName" class="form-control" [ngClass]="{ 'is-invalid':(firstName.touched || firstName.dirty) && !firstName.valid }" autocomplete="name" />
-                                <div *ngIf="(errorMessage$ | async)?.firstName as errors" class="invalid-feedback">
-                                    <div >{{errors}}</div>
-                                </div>
-                            </div>
+                            </app-input>
                         </div>
                         <div class="theme_col-6">
-                            <div class="vc_form-field form_group" style="margin-top: 0;">
+                            <app-input fieldClass="no-margin--top" id="lastName" errorType="right" placeholder="Enter your surname"  [control]="lastName" class="form-control" [error]="(errorMessage$ | async)?.lastName" autocomplete="family-name" >
                                 <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" [formControl]="lastName" class="form-control" [ngClass]="{ 'is-invalid': (lastName.touched || lastName.dirty) && !lastName.valid}" autocomplete="family-name" />
-                                <div *ngIf="(errorMessage$ | async)?.email as errors"class="invalid-feedback invalid-feedback--right">
-                                    <div>{{errors}}</div>
-                                </div>
-                            </div>
+                            </app-input>
                         </div>
                     </div>
 
                     <div class="theme_row grid-2x1">
                         <div class="theme_col-6">
-                            <div class="vc_form-field form_group" >
+                            <app-input type="email" id="email" errorType="left" placeholder="Enter your email"  [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" autocomplete="email" >
                                 <label for="email">Email Address</label>
-                                <input type="text"  id="email"  [formControl]="email" class="form-control" [ngClass]="{ 'is-invalid':(email.touched || email.dirty) && !email.valid}" autocomplete="email" />
-                                <div *ngIf="(errorMessage$ | async)?.email as errors" class="invalid-feedback">
-                                    <div>{{errors}}</div>
-                                </div>
-                            </div>
+                            </app-input>
                         </div>
                         <div class="theme_col-6">
-                            <div class="vc_form-field form_group" >
+                            <app-input id="phone" type="tel" errorType="right" placeholder="Enter your phone number"  [control]="phone" class="form-control" [error]="(errorMessage$ | async)?.phone" autocomplete="tel" >
                                 <label for="phone">Phone Number</label>
-                                <input type="text" id="phone" [formControl]="phone" class="form-control" [ngClass]="{ 'is-invalid': (phone.touched || phone.dirty) && !phone.valid}" autocomplete="tel" />
-                                <div *ngIf="(errorMessage$ | async)?.phone as errors" class="invalid-feedback invalid-feedback--right">
-                                    <div>{{errors}}</div>
-                                </div>
-                            </div>
+                            </app-input>
                         </div>
                     </div>
 
                     <div class="theme_row grid-2x1"  [formGroup]="passwordGroup">
                         <div class="theme_col-6">
-                            <div class="vc_form-field form_group" >
+                            <app-input id="password" type="password" errorType="left" placeholder="Enter your password"  [control]="password" class="form-control" [error]="(errorMessage$ | async)?.password" autocomplete="tel" >
                                 <label for="password">Password</label>
-                                <input type="password" id="password" [formControl]="password" class="form-control" [ngClass]="{ 'is-invalid': (password.touched || password.dirty) && !password.valid }" />
-                                <div *ngIf="(errorMessage$ | async)?.password as errors" class="invalid-feedback">
-                                    <div>{{errors}}</div>
-                                </div>
-                            </div>
+                            </app-input>
                         </div>
                         <div class="theme_col-6">
-                            <div class="vc_form-field form_group" >
+                            <app-input id="confirmPassword" type="confirmPassword" errorType="right" placeholder="Enter your password again"  [control]="confirmPassword" class="form-control" [error]="(errorMessage$ | async)?.confirmPassword" autocomplete="tel" >
                                 <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" id="confirmPassword" [formControl]="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': (confirmPassword.touched || confirmPassword.dirty) && !confirmPassword.valid }" />
-                                <div *ngIf="(errorMessage$ | async)?.confirmPassword as errors" class="invalid-feedback invalid-feedback--right">
-                                    <div>{{errors}}</div>
-                                </div>
-                            </div>
+                            </app-input>
                         </div>
                         <div *ngIf="passwordGroup.errors">
                             <div *ngIf="passwordGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
                         </div>
                     </div>
-                    <div class="vc_form-field form_group">
-                        <label for="password">How did you get to know about us?</label>
-                        <!-- <input type="password" [formControl]="password" class="form-control" [ngClass]="{ 'is-invalid': f.password.errors }" />
-                        <div *ngIf="f.password.errors" class="invalid-feedback">
-                            <div *ngIf="f.password.errors.required">Password is required</div>
-                        </div> -->
-                        <!-- <custom-select [required]="true"
-                        label="How did you get to know about us?"
-                        placeholder="Select a channel"
-                        controlName="channel"
-                        >
-           <custom-select-option key="1" value="Paris"></custom-select-option>
-           <custom-select-option key="2" value="Mauritius"></custom-select-option>
-           <custom-select-option key="3" value="Singapore"></custom-select-option>
-           <custom-select-option key="4" value="Malaysia"></custom-select-option>
-           <custom-select-option key="5" value="Goa"></custom-select-option>
-           <custom-select-option key="6" value="Thailand"></custom-select-option>
-         </custom-select> -->
-                            <select id="month" required>
-                              <option value="January" data-display-text="January" aria-label="January">January</option>
-                              <option value="February" aria-label="February">February</option>
-                              <option value="March" aria-label="March">March</option>
-                              <option value="April" aria-label="April">April</option>
-                              <option value="May" aria-label="May">May</option>
-                              <option value="June" aria-label="June">June</option>
-                              <option value="July" aria-label="July">July</option>
-                              <option value="August" aria-label="August">August</option>
-                              <option value="September" aria-label="September">September</option>
-                              <option value="October" aria-label="October">October</option>
-                                <option value="November" aria-label="November">November</option>
-                                  <option value="December" aria-label="December">December</option>
-                              
-                            </select>
-                    </div>
-                
-                    <div class="form_group" style="margin-top: 0;">
-                        <button class="widget_button" type="submit" [ngClass]="{'loading':(loading$|async)==true}"
-                        
-                        [title]="form&&form.valid?'You can register now':'Please fill the form first'" 
-                        [disabled]="form &&!form.valid"><div>Register</div><div class="widget_button--loader"><img src="assets/button-loader.gif" /></div></button>
-                      
-                        </div>
+                    <app-dropdown [current]="channel.value" [fieldClass]="'no-margin--top'" [id]="'channel'" [control]="channel"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                        <ng-container slot="label"><label for="channel">How did you get to know about us?</label></ng-container>
+                        <app-option [value]="'Instagram'">Instagram</app-option>
+                        <app-option [value]="'Friend'">Friend</app-option>
+                        <app-option [value]="'Twitter'">Twitter</app-option>
+                    </app-dropdown>
+                        <app-button [form]="form" fieldClass="no-margin--top" [loading$]="loading$">Register</app-button>
                         <div class="form_group" style="margin-top: 0; display: flex; justify-content: center;">
                             <div style=" display: flex; ">
                             <p><b>Already have an account?</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="onNavigate('auth/login')">Login</button>
@@ -142,7 +79,6 @@
                         </div>
                     
                 </app-form>
-            <!-- </div> -->
         </div>
     </div>
 </div>

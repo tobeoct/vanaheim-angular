@@ -38,8 +38,15 @@
 .widget_button .widget_button--loader{
     width:20px;margin-left:15px;display:none;transform:translateY(2px)
 }
-.widget_button--fill{
-    background: map-get($colors,  yellow) !important; color: map-get($colors,  black);
+.widget_button.widget_button--fill{
+    background: map-get($colors,  yellow) !important; color: map-get($colors,  black) !important;
+    &:hover{
+        background: map-get($colors,  white) !important;
+    }
+    &:focus{
+        
+        color: map-get($colors,  black) !important;
+    }
 }
 .file_btn{ font-size: 0.9em; text-transform: none; margin: 0; font-weight: 400; border-color: #6B6B6B; padding: 2%; width: auto; height: auto; }
 .widget_button:hover{transform:scale(1.05)}
@@ -60,7 +67,13 @@
     top:0;
     display:none
 }
-
+.widget_button--info{
+    @include flex(true,center);
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    border:0.5px solid map-get($colors, grey );
+}
 .widget_button--stroke{background:transparent;border:2px solid #E0E0E0;transition:ease-in-out 0.3s}
 .widget_button--stroke:hover,.widget_button--stroke:focus{background:map-get($colors,  black);border:2px solid map-get($colors,  black);color:map-get($colors,  yellow)}
 .widget_button--rounded{height:60px;width:60px;border-radius:60px;display:flex;justify-content:center;align-items:center;padding:5px;margin:10px auto;background:transparent;border:2px solid #E0E0E0}
@@ -71,4 +84,7 @@
     border-color: map-get($colors, lightGrey );
     background: map-get($colors, lightGrey ); 
     color: map-get($colors, grey );
+}
+.widget_button--medium{
+    height: map-get($sizings, "px") * 1.5;
 }

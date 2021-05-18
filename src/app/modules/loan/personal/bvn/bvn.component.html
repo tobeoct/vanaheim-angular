@@ -1,0 +1,23 @@
+ <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
+        <div class=" content box-shadow" style="box-sizing: border-box; ">
+    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+   
+        <app-input fieldClass="no-margin--top" id="bvn" [placeholder]="'Enter your bank verification number'" [control]="bvn" class="form-control" [error]="(errorMessage$ | async)?.bvn" >
+            <label for="bvn">BVN</label>
+        </app-input>
+        <p>Can't remember your BVN? <b>Dial *565*0#</b></p>
+
+        
+        <div style="margin-top: 30px;">
+<app-checkbox [outline]="true" [active]="tc.value!=''" [control]="tc" [value]="'I accept'"><span class="theme_color--grey">I accept the </span><a href="./assets/documents/Vanir Capital Terms & Conditions.pdf" target="_blank" class="theme_color--yellow theme_text--anchor">Terms & Conditions</a></app-checkbox>
+<app-checkbox [outline]="true" [active]="privacy.value!=''" [control]="privacy" [value]="'I accept'"><span class="theme_color--grey">I have read the </span><a href="./assets/documents/Vanir Capital Privacy Policy.pdf" class="theme_color--yellow theme_text--anchor">Privacy Policy</a></app-checkbox>
+</div>
+        <div style="margin-top: 60px;">
+            <small>I have read, understood and accept all the terms and conditions & privacy policy for Vanir Capital LLC.</small>
+            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+        </div>
+    </app-form>
+    </div>
+</div>
+                            

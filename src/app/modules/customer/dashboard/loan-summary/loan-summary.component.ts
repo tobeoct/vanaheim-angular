@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-loan-summary',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoanSummaryComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _router:Router) { }
 
   ngOnInit(): void {
   }
-
+  onNavigate(route:string,params:any={}):void{
+    this._router.navigate([route],{queryParams: params})
+  }
 }

@@ -1,0 +1,34 @@
+<div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
+        <div class=" content box-shadow" style="box-sizing: border-box;">
+    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+        <div id="accounts" class="theme_row no-margin--top animate__animated animate__fadeInUp animate__fast" *ngFor="let accountGroup of accountArrayGroups;let i =index">
+<p *ngIf="i==0"><b>Salary Account Details</b></p>
+<p *ngIf="i!=0"><b>Loan Disbursement Account Details</b></p>
+<ng-container  [formGroup]="accountGroup">
+                <app-dropdown [current]="(accountGroup.get('bank')|toControl).value" [fieldClass]="'no-margin--top'" [id]="'bank'" [control]="accountGroup.get('bank')|toControl"  aria-placeholder="Select your bank">
+                    <ng-container slot="label"><label for="bank">Bank</label></ng-container>
+                    <app-option *ngFor="let t of banks; let i =index" [value]="t.title">{{t.title}}</app-option>
+                </app-dropdown>
+           
+           <app-input id="accountNumber" [placeholder]="'Enter your account number'" [control]="accountGroup.get('accountNumber')|toControl" class="form-control" [error]="(errorMessage$ | async)?.accountNumber" >
+            <label for="accountNumber">Account Number</label>
+        </app-input>
+                <app-input id="accountName" [placeholder]="'Enter your account name'" [control]="accountGroup.get('accountName')|toControl" class="form-control" [error]="(errorMessage$ | async)?.accountName" >
+                    <label for="accountName">Account Name</label>
+                </app-input>
+            </ng-container>    
+        </div>
+           
+        <div class="form_group">
+          <app-checkbox [outline]="true" [active]="pay.value" [control]="pay" [value]="'true'">Pay loan into my salary account</app-checkbox>
+        </div>
+               
+               
+        <div style="margin-top: 60px;">
+            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+        </div>
+    </app-form>
+    </div>
+</div>
+                            

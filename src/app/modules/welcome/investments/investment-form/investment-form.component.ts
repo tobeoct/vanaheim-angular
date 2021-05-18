@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { Subject, Observable, BehaviorSubject, from } from 'rxjs';
-import { delay, debounceTime } from 'rxjs/operators';
-import VCValidators from '@validators/default.validators';
-import { ElementStyle, ElementSize, ElementState } from 'src/shared/constants/enum';
-import { ButtonOptions, AssetPath } from 'src/shared/constants/variables';
-import { Utility } from 'src/shared/helpers/utility.service';
-import { IAssetPath } from 'src/shared/interfaces/assetpath';
+import { delay } from 'rxjs/operators';
+import { ElementStyle, ElementSize, ElementState } from 'src/app/shared/constants/enum';
+import { ButtonOptions, AssetPath } from 'src/app/shared/constants/variables';
+import { Utility } from 'src/app/shared/helpers/utility.service';
+import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
 import { InvestmentIndication, RateDetail } from '../investment';
 
 @Component({
@@ -78,6 +78,9 @@ focus$:Observable<boolean> = this.focusSubject.asObservable();
 amountSubject:BehaviorSubject<number> = new BehaviorSubject<number>(250000); 
 amount$:Observable<number> = this.amountSubject.asObservable();
 
+changedSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+changed$:Observable<boolean> = this.changedSubject.asObservable();
+
   constructor( private _fb:FormBuilder, private _zone: NgZone,private _utility:Utility, private _validators:VCValidators) {
    }
   ngAfterViewInit(): void {
@@ -105,7 +108,6 @@ focus(){
 }
 
 rateDetailChange(value:any){
-  console.log("Rate Detail", value);
   this.rateDetail =  value;
   const {rate,payout,maturity,duration} = value;
   this.maturity.patchValue(maturity);
@@ -120,6 +122,9 @@ onChange(obj:any){
   if(Object.keys(obj).includes("amount") && this._utility.convertToPlainNumber(obj.amount)!=this.amountSubject.value){
 
   this.amountSubject.next(this._utility.convertToPlainNumber(obj.amount));
+  }else{
+    this.changedSubject.next(true);
+
   }
 }
   onSubmit(event:any){

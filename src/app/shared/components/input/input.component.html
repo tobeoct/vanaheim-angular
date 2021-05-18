@@ -1,0 +1,13 @@
+<div class="vc_form-field form_group {{fieldClass}}">
+    <ng-content></ng-content>
+    <div style="position: relative;" *ngIf="control"  [ngClass]="{ 'is-invalid':(control.touched || control.dirty) && !control.valid  }">
+        <input [focus]="focus$|async" hidden={{hidden}} [min]="min" max="max" type="{{type}}" id="{{id}}" placeholder="{{placeholder}}" [formControl]="control" class="form-control {{class}}" [ngClass]="{ 'is-invalid':(control.touched || control.dirty) && !control.valid  }" />
+        <div style="position: absolute; right: 0; width: 30%; max-width: 100px; bottom: 0; z-index: 9999999999999999999;"  >
+            <ng-content select="[slot=button]"></ng-content>
+        </div>
+    </div>
+        <div *ngIf="error" class="invalid-feedback invalid-feedback--{{errorType}}">
+            <div>{{error}}</div>
+        </div>
+       
+</div>

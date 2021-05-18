@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { AssetPath } from 'src/shared/constants/variables';
-import { IAssetPath } from 'src/shared/interfaces/assetpath';
+import { AssetPath } from 'src/app/shared/constants/variables';
+import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
 
 @Component({
   selector: 'app-investments',

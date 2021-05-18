@@ -1,0 +1,77 @@
+
+    <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
+        <div class=" content box-shadow" style="box-sizing: border-box;">
+    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+        <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <div class="theme_col-4">
+                <app-dropdown [current]="title.value" [fieldClass]="'no-margin--top'" [id]="'title'" [control]="title"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                    <ng-container slot="label"><label for="title">Title</label></ng-container>
+                    <app-option *ngFor="let t of titles; let i =index" [value]="t">{{t}}</app-option>
+                </app-dropdown>
+            </div>
+            <div class="theme_col-7">
+                <app-input fieldClass="no-margin--top" id="surname" [placeholder]="'Enter your surname'" [control]="surname" class="form-control" [error]="(errorMessage$ | async)?.surname" >
+                    <label for="surname">Surname</label>
+                </app-input>
+            </div>
+        </div>
+
+            
+                  
+                <app-input id="otherNames" [placeholder]="'Enter your other names'" [control]="otherNames" class="form-control" [error]="(errorMessage$ | async)?.otherNames" >
+                    <label for="otherNames">Other Names</label>
+                </app-input>
+           
+            
+               
+                <div id="dob" class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end"  [formGroup]="dobGroup">
+                   
+                    <div class="theme_col-4">
+                        <app-dropdown [current]="month.value"  [id]="'month'" [control]="month"  aria-placeholder="What is your month of birth">
+                            <ng-container slot="label"><label for="month">Date of Birth(18+)</label></ng-container>
+                            <app-option *ngFor="let month of months; let i =index" [value]="month">{{month}}</app-option>
+                        </app-dropdown>
+                    </div>
+                    <div class="theme_col-2">
+                        <app-input id="day" type="number" errorType="left"  [control]="day" class="form-control" [error]="(errorMessage$ | async)?.day" >
+                            
+                        </app-input>
+                    </div>
+                   
+                    <div class="theme_col-4">
+                        <app-input id="year" type="number" errorType="right" [control]="year" class="form-control" [error]="(errorMessage$ | async)?.year" >
+                            
+                        </app-input>
+                    </div>
+                    <div *ngIf="dobGroup.errors">
+                        <div *ngIf="dobGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+                    </div>
+                </div>
+
+                <app-input id="relationship" [placeholder]="'How are you related?'" [control]="relationship" class="form-control" [error]="(errorMessage$ | async)?.relationship" >
+                    <label for="relationship">Relationship</label>
+                </app-input>
+                <div id="contact" class="theme_row no-margin--top"  [formGroup]="contactGroup">
+                    <app-input id="email" [placeholder]="'Enter your email'" [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
+                        <label for="email">Email</label>
+                    </app-input>
+                    
+                    <app-input id="phone" [placeholder]="'Enter your phone number'" [control]="phone" class="form-control" [error]="(errorMessage$ | async)?.phone" >
+                        <label for="phone">Phone Number</label>
+                    </app-input>
+
+                    
+                   
+                    <div *ngIf="contactGroup.errors">
+                        <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+                    </div>
+                </div>
+    
+        <div style="margin-top: 60px;">
+            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+        </div>
+    </app-form>
+    </div>
+</div>
+                            

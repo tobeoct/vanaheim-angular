@@ -1,0 +1,176 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+.dropdown{
+    display: block;
+    position: relative;
+    width: 100%;
+    .current{
+        @include flex(horizontal,space-between);
+        @include flex(vertical,center);
+        @include border(2px,solid,lightGrey);
+        @include font(text);
+        height: map-get($sizings, "px" )*1.5;
+        background: transparent;
+        // font-weight: map-get($font-weights, "semi-bold");
+        width: 100%;
+        border-radius: $border-radius;
+        cursor: pointer;
+        @include paddingHorizontal(true,"px",0.5);
+            @include marginHorizontal(false,"px",0,0.25);
+        &:focus{
+            span{
+            transform: rotateZ(90deg);
+            }
+        }
+        &:hover{
+            @include border(2px,solid,lightYellow);
+            // border:2px solid map-get($colors,  lightYellow)!important
+            background:rgb(245,244,240);
+        }
+    }
+    &--icon{
+        .current{
+            position: relative;
+            @include flex(true,center);
+        width: 40px;
+        height: 40px;
+        border-radius: 40px;
+        border:0 !important;
+        // @include background(lightGrey);
+        padding: 0;
+        cursor: pointer;
+        .image{
+           width: 100%;
+           height: 100%;
+        }
+        span{
+            position: absolute;
+            left: 100%;
+            top: 20%;
+        }
+        }
+    }
+
+    &-options{
+        position: absolute;
+        top:120%;
+        // left: 10%;
+        @include background(white);
+        // @include padding(true,"px",0.25);
+        max-height: 150px;
+        overflow-y: auto;
+        // min-width: 150px;
+        border-radius: $border-radius;
+        // height: 100px;
+        z-index: 4;
+        min-width: 100%;
+       .option{
+           width: 100%;
+        border: 0;
+        text-align: left;
+        @include font(text);
+        @include padding(true,"px",0.5);
+        cursor: pointer;
+           &:hover{
+            @include background(lightGrey);
+           }
+       }
+        .option.dropdown--icon{
+            
+            @include flex(true,center);
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        border:0 !important;
+        }
+    }
+}
+
+
+// $primary: #117a8b;
+// $font-weight-bold: 700;
+// $white: white;
+// $danger: #ef2929;
+// $dimension: 0.4em;
+
+// button {
+//   border-radius: 0;
+// }
+
+// h3 {
+//   font-size: 1rem;
+// }
+
+// .cp {
+//     padding: 0;
+//     border-radius: 0;
+//     @include border(2px,solid,black);
+//     &-dropdown {
+//       display: flex;
+//       flex-direction: column;
+//       &__label {
+//         padding: 0.75em 1em;
+//         @include color(black);
+//         font-weight: map-get($font-weights, "bold");
+//       }
+//       &__select {
+//         display: block;
+//         background-color: rgb(241, 249, 255);
+//         max-height: 10em;
+//         min-height: 5em;
+//         width: 100%;
+//         overflow-y: scroll;
+//         cursor: pointer;
+//         &-option {
+//           padding: 0.75em 1em;
+//           margin-bottom: 0;
+//           @include color(black);
+//           background-color: transparent;
+//           transition: all 0.05s ease-in-out;
+//           &:hover {
+//             font-size: 1.1em;
+//             @include background(white);
+//             box-shadow: 0 0 20px -5px black;
+//           }
+//         }
+//       }
+//       &__footer {
+//         display: flex;
+//         position: relative;
+//         flex-direction: column;
+//         justify-content: space-between;
+//         padding: 0.5em;
+//         @include color(black);
+//         &-label {
+//             @include color(white);
+//           margin-bottom: 0.5em;
+//         }
+//         &-input {
+//           margin-bottom: 0.5em;
+//           border: none;
+//           padding: 0.5em;
+//         }
+//         input::placeholder {
+//           color: #cccccc !important;
+//           font-style: italic;
+//         }
+//         &-actions {
+//           display: flex;
+//           justify-content: space-between;
+//           font-size: 0.8em;
+//           &-cancel,
+//           &-save {
+//             font-size: 0.8em;
+//             width: 48%;
+//           }
+//           &-cancel {
+//             color: $danger;
+//           }
+//           &-save {
+//             color: $primary;
+//           }
+//         }
+//       }
+//     }
+//   }
+

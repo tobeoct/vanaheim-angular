@@ -1,15 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import VCValidators from '@validators/default.validators';
+import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { Subscription } from 'rxjs';
 import { Subject, Observable, BehaviorSubject, from } from 'rxjs';
-import { delay, debounceTime, first } from 'rxjs/operators';
-import { ElementStyle, ElementSize, ElementState } from 'src/shared/constants/enum';
-import { AssetPath, ButtonOptions } from 'src/shared/constants/variables';
-import { Utility } from 'src/shared/helpers/utility.service';
-import { IAssetPath } from 'src/shared/interfaces/assetpath';
-import { AuthService } from 'src/shared/services/auth/auth.service';
+import { delay, first } from 'rxjs/operators';
+import { AssetPath } from 'src/app/shared/constants/variables';
+import { Utility } from 'src/app/shared/helpers/utility.service';
+import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-account',

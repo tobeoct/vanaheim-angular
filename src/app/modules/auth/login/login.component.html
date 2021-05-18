@@ -24,33 +24,22 @@
                     <!-- </div> -->
                 </div>
             </div>
-            <!-- <div class="content"> -->
                 <app-form [form]="loginForm" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-                <!-- <form role="form" id="form" novalidate class="vc-form"  [formGroup]="loginForm" (ngSubmit)="onSubmit()"> -->
-                    <div class="vc_form-field form_group" style="margin-top: 0;">
-                        <label for="username">Username</label>
-                        <input [focus]="focus$|async" type="text" [formControl]="username" class="form-control" [ngClass]="{ 'is-invalid': (username.touched || username.dirty) && !username.valid }" />
-                        <div *ngIf="(errorMessage$ | async)?.username as errors" class="invalid-feedback">
-                            <div>{{errors}}</div>
-                        </div>
-                    </div>
-                    <div class="vc_form-field form_group">
-                        <label for="password">Password</label>
-                        <input type="password" [formControl]="password" class="form-control" [ngClass]="{ 'is-invalid':(password.touched || password.dirty) && !password.valid  }" />
-                        <div *ngIf="(errorMessage$ | async)?.password as errors" class="invalid-feedback">
-                            <div>{{errors}}</div>
-                        </div>
-                    </div>
+                    
+                <app-input fieldClass="no-margin--top" [focus$]="focus$" id="username" placeholder="Enter your email or phone number"  [control]="username" class="form-control" [error]="(errorMessage$ | async)?.username" >
+                    <label for="username">Username</label>
+                </app-input>
+                    
+                <app-input id="password" type="password" placeholder="Enter your email or phone number"  [control]="password" class="form-control" [error]="(errorMessage$ | async)?.password" >
+                    <label for="password">Password</label>
+                </app-input>
                 <div class="form_group" style="margin: 0; display: flex; justify-content: flex-end; padding: 0;">
-                    <button class="widget_button widget_button--small widget_button--underline" (click)="onNavigate('auth/forgot-password')"> Forgot Password</button>
+                    <button class="widget_button widget_button--small widget_button--underline" (click)="onNavigate('auth/forgot-password',{username:username.value})"> Forgot Password</button>
                 </div>
-                    <div class="form_group" style="margin-top: 0;">
-                        <button class="widget_button" type="submit" [ngClass]="{'loading':(loading$|async)==true}"
-                        
-                        [title]="loginForm&&loginForm.valid?'You can log in now':'Please fill the form first'" 
-                        [disabled]="loginForm &&!loginForm.valid"><div>Login</div><div class="widget_button--loader"><img src="assets/button-loader.gif" /></div></button>
-                      
-                        </div>
+
+            
+              <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="loginForm" >Login</app-button>
+
                         <div class="form_group" style="margin-top: 0; display: flex; justify-content: center;">
                             <div style=" display: flex; ">
                             <p><b>Don't have an account?</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="onNavigate('auth/register')">Register</button>

@@ -4,74 +4,36 @@
     </div>
     <!-- <form role="form" id="form" novalidate (ngSubmit)="save()" class="example-form" [formGroup]="form"> -->
         <app-form [form]="form" (onSubmit)="onSubmit($event)" (valueChange) = "onChange($event)" (errorMessageChange) = "onError($event)">
-        <app-investment-card></app-investment-card>
+        <app-investment-card [maturity]="maturity.value" [amount]="amount.value" [payout]="payout.value" *ngIf="changed$|async"></app-investment-card>
         <div class="theme_row" style="padding: 5%; padding-top: 0;"> 
-            <!-- <app-input [options]='amountOptions' (valueChange)="printValue('amount',$event)"></app-input> -->
-            <div class="vc_form-field form_group">
-                <label>How much do you want to invest</label>
-                <input [focus]="focus$|async" id="amountId" type="text" [formControl]="amount"  placeholder="Enter investment amount" 
-                [ngClass]="{ 'is-invalid': (amount.touched || amount.dirty) && !amount.valid }" 
-                >
-                <div *ngIf="(errorMessage$ | async)?.amount as errors" class="invalid-feedback invalid-feedback--default">
-                    <div>{{errors}}</div>
-                </div>
-                
-                  <div *ngIf="!(errorMessage$ | async)?.amount" class="flex" style="display: flex; justify-content: space-between; font-size: 0.8em; align-items: center;">
-                    <div class="flex-item"><p>50,000</p></div>
-                    <div class="flex-item"><p> 50,000,000</p></div>
-                   </div>
-              </div>
-              <div class="vc_form-field vc_form-field--hidden form_group">
-                <input  id="durationId" type="text" [formControl]="duration" hidden >
-               
-              </div>
-            <app-rate (rateDetailChange)="rateDetailChange($event)" [amount$]="amount$"></app-rate>
-            <div *ngIf="(errorMessage$ | async)?.duration as errors" class="invalid-feedback invalid-feedback--default">
-                <div>{{errors}}</div>
-            </div>
-            <div class="vc_form-field vc_form-field--hidden form_group">
-                <input  id="rateId" type="text" [formControl]="rate" hidden >
-               
-              </div>
-            <div class="vc_form-field form_group">
-                <label>Preferred Name</label>
-                <input id="nameId" type="text" [formControl]="name"  placeholder="Enter your preferred name" 
-                [ngClass]="{ 'is-invalid': (name.touched || name.dirty) && !name.valid }" 
-                >
-                <div *ngIf="(errorMessage$ | async)?.name as errors" class="invalid-feedback invalid-feedback--default">
-                    <div>{{errors}}</div>
-                </div>
-              </div>
-              <div class="vc_form-field vc_form-field--hidden form_group">
-                <input  id="payoutId" type="text" [formControl]="payout" hidden >
-               
-              </div>
-              <div class="vc_form-field form_group">
-                <label>Email</label>
-                <input id="emailId" type="text" [formControl]="email"  placeholder="Enter your preferred email" 
-                [ngClass]="{ 'is-invalid': (email.touched || email.dirty) && !email.valid }" 
-                >
-                <div *ngIf="(errorMessage$ | async)?.email as errors" class="invalid-feedback invalid-feedback--default">
-                    <div>{{errors}}</div>
-                </div>
-              </div>
+              <app-input [focus$]="focus$" id="amountId" placeholder="Enter investment amount"  [control]="amount" class="form-control" [error]="(errorMessage$ | async)?.amount" >
+                <label for="amountId">How much do you want to invest (50K - 50M)</label>
+            </app-input>
 
-              <div class="vc_form-field vc_form-field--hidden form_group">
-                <input  id="maturityId" type="text" [formControl]="maturity" hidden >
-               
-              </div>
-            <!-- <app-input [options]='nameOptions' (valueChange)="printValue('name',$event)"></app-input> -->
-            <!-- <app-input [options]='emailOptions' (valueChange)="printValue('email',$event)"></app-input> -->
+              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="durationId" [control]="duration" class="form-control"  >
+              </app-input>
+
+            <app-rate (rateDetailChange)="rateDetailChange($event)" [amount$]="amount$"></app-rate>
+            
+              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="rateId" [control]="rate" class="form-control"  >
+              </app-input>
+           
+              <app-input id="nameId" placeholder="Enter your preferred name"  [control]="name" class="form-control" [error]="(errorMessage$ | async)?.name" >
+                <label for="nameId">Preferred Name</label>
+            </app-input>
+            
+              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="payoutId" [control]="payout" class="form-control"  >
+              </app-input>
+
+              <app-input type="email" id="emailId" placeholder="Enter your preferred email"  [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
+                <label for="emailId">Email</label>
+            </app-input>
+
+              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="maturityId" [control]="maturity" class="form-control"  >
+              </app-input>
         </div>
         <div class="theme_row" style="width: 90%; margin:0px auto;">
-            <app-button [options]="buttonOptions" [form]="form" ></app-button>
-            <!-- <div class="form_group" style="margin-top: 0;">
-                <button class="widget_button widget_button--stroke widget_button--large" style="margin-top: 10px;" type="submit"
-                
-                [title]="form.valid?'Save your entered data':'Disabled until form data is valid'" 
-                [disabled]="!form.valid"><div>I Am Interested</div><div class="widget_button--loader"><img src="../../../../assets/button-loader.gif" /></div></button>
-                
-                </div> -->
+            <app-button [form]="form" [loading$]="loading$">I Am Interested</app-button>
         </div>
     </app-form>
     <app-footer></app-footer>

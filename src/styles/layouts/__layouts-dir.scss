@@ -1,11 +1,77 @@
 @import './footer';
 @import './navigation';
 @import './side-navigation';
-.grid-padding-2x{
-   @include paddingHorizontal(true,"%",1)
+.grid-padding
+{
+   &-2x{
+      @include paddingHorizontal(true,"%",1);
+   }
+   &-3x{
+      @include paddingHorizontal(true,"%",0.5,$important:important);
+   }
 }
-.grid-padding-3x{
-   @include paddingHorizontal(true,"%",0.5,$important:important)
+.no-margin{
+   &--top{
+       margin-top: 0 !important;
+   }
+   &--bottom{
+       margin-bottom: 0 !important;
+   }
+   &--left{
+       margin-left: 0 !important;
+   }
+   &--right{
+       margin-right: 0 !important;
+   }
+   &--all{
+      margin: 0 !important;
+   }
+}
+.d-flex{ 
+   display: flex;
+   &_horizontal{
+      &--space-between{
+         justify-content: space-between;
+      }
+      &--center{
+         justify-content: center;
+      }
+   }
+
+   &_vertical{
+     
+      &--center{
+         align-items: center;
+      }
+      &--flex-end{
+         align-items: flex-end;
+      }
+      &--flex-start{
+         align-items: flex-start;
+      }
+   }
+}
+.content{
+   // max-width: 480px;
+   box-sizing: content-box;
+   
+ @include paddingVertical(false,"px",1,1);
+ @include paddingHorizontal(true,"px",2);
+   &--small{
+      
+ @include paddingVertical(false,"px",0.5,0.5);
+ @include paddingHorizontal(true,"px",1);
+   }
+   &--smaller{
+      
+      @include paddingVertical(false,"px",0.5,0.5);
+      @include paddingHorizontal(true,"px",0.5);
+        }
+ }
+.margin{
+   &--large{
+      @include marginVertical(false,"px",2,0, $important:important);
+   }
 }
 @media all and (max-width:1233px){
    .grid-padding-2x{

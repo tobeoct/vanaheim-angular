@@ -1,0 +1,18 @@
+
+<div class="theme_row">
+    <div class="applyingAs animate__animated animate__fadeIn" *ngFor="let d of dataSelection$|async as data" (click)="activate(d.title)" [ngClass]="{'active':(activeTab$|async)==d.title}">
+        <div class="heading">
+            <h2>{{d.title}}</h2>
+            <!-- <div><small  style="font-weight: 800;">Monthly</small></div> -->
+        </div>
+        <div class="subtitle">{{d.description}}</div>
+    </div>
+    
+</div>
+<app-form [form]="form" (onSubmit)="next($event)" >
+<app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="applyingAsId" [control]="applyingAs" class="form-control"  >
+</app-input>
+<app-button [form]="form" fieldClass="theme_col-3 no-margin--top">Next</app-button>
+</app-form>
+                        
+                            

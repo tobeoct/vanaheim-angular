@@ -1,0 +1,13 @@
+<div id="loan-flow" [ngClass]="{'no-nav':!(show$|async)}">
+<app-loan-navigation *ngIf="!isLoggedIn"></app-loan-navigation>
+<div id="loan-content" class="content" style="box-sizing:border-box;" [ngClass]="{'loggedIn':isLoggedIn}" >
+    
+<app-loan-navigation theme="light" *ngIf="isLoggedIn"></app-loan-navigation>
+    <app-loan-header></app-loan-header>
+    <div id="main-content">
+        <div id="loan-calculator" >
+<router-outlet></router-outlet></div>
+</div>
+</div>
+</div>
+

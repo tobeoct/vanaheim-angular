@@ -1,0 +1,10 @@
+<div class="vc_form-field form_group {{fieldClass}}">
+    <ng-content></ng-content>
+    <div class="range-wrap">
+        <input type="range" #range name="{{id}}" [formControl]="control" min="{{min}}" max="{{max}}" step="{{step}}" class="form-control {{class}}" id="{{id}}" [ngClass]="{ 'is-invalid':(control.touched || control.dirty) && !control.valid  }" />
+         <div class="range-value" #rangeV></div>
+    </div>
+    <div *ngIf="error" class="invalid-feedback invalid-feedback--default">
+        <div>{{error}}</div>
+    </div>
+</div>

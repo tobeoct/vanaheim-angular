@@ -1,28 +1,54 @@
 
-    <!-- <div class="animate__animated animate__fadeInDown theme_bg theme_flex theme_flex--spacebetween" style="width: 100vw; height: 80px; align-items: center; padding-left: 2.5%;padding-right: 2.5%;">
-        <div class="logo animate__animated animate__zoomIn" style="transform: translateY(-5px);">
-            <a href="/"><img src="assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
-        </div>
-       
-        <div class="animate__animated animate__zoomIn">
-            <button class="widget_button widget_button--small" style="background: #E6AF2A !important; color: #333333;" id="getstarted" >Get Started</button>
-        </div>
-        
-    </div> -->
+  
     <app-header [myclass]="headerclass"></app-header>
-    <div class="investment_content theme_inline-block  grid-padding-3x" >
+
+    <div class="loan_content theme_inline-block" >
+        <div class="theme_row" style=" padding-top: 2.5%;">
+            <div class="main_container grid-padding-3x" style="padding-bottom: 0 !important;">
+                <app-navigation [type]="mobile"></app-navigation>
+                <div class=" theme_row" style="position: relative; display: flex;">
+                    <app-navigation [type]="desktop"></app-navigation>
+                    <div class="theme_col-5 theme_color" style="padding-right: 5%;padding-top: 7%; z-index: 1;" >
+                    
+                        <div class="copy" style="overflow-x: hidden; margin-top: 0;">
+                            <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span>Low rates, Flexible Payments, </span><span class="theme_color--yellow">Peace of mind</span></p>
+                            <div class="animate__animated animate__fadeIn" style="width: 90%; max-width: 200px; margin-bottom: 30px;">
+                            <app-lottie [assetPath]="assetPaths.loan"></app-lottie>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="theme_col-7" style=" padding-top: 2%; padding-bottom: 5%;" > 
+                        
+    <app-loan-header></app-loan-header>
+                        <ng-container *ngIf="(page$|async)=='loan-type'||(page$|async)==''">
+                            <app-loantype></app-loantype>
+                        </ng-container>
+                        <ng-container *ngIf="(page$|async)=='applying-as'">
+                            <app-applying-as></app-applying-as>
+                        </ng-container>
+                        <ng-container *ngIf="(page$|async)!='applying-as' && (page$|async)!='loan-type'">
+                            <app-loan-product></app-loan-product>
+                        </ng-container>
+                    </div>
+                </div>
+                <app-footer></app-footer>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <div class="investment_content theme_inline-block  grid-padding-3x" >
         <div class="theme_row" style=" padding-top: 2.5%;">
             <div class="main_container" style="padding-bottom: 0 !important;">
                 <div>
                     <app-navigation [type]="mobile"></app-navigation>
-                    <div class="investment theme_row" style="position: relative;">
+                    <div class="investment theme_row" style="position: relative; display: flex;">
                         <app-navigation [type]="desktop"></app-navigation>
-                        <div class="theme_col-7 theme_color investment_background " style="padding-right: 5%;padding-top: 5%; z-index: 1;" >
+                        <div class="theme_col-7 theme_color investment_background " style="padding-right: 5%;padding-top: 7%; z-index: 1;" >
                         
                             <div class="copy" style="overflow-x: hidden; margin-top: 0;">
                                 <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span>Low rates, Flexible Payments, </span><span class="theme_color--yellow">Peace of mind</span></p>
-                                <!-- <p class="animate__animated animate__fadeInUp" style="max-width: 80%;"><span><b>Get a personal or business loan.</b></span><span> Start your application today.</span></p> -->
-                                <div class="animate__animated animate__zoomIn" style="width: 90%; max-width: 200px; margin-bottom: 30px;">
+                                <div class="animate__animated animate__fadeIn" style="width: 90%; max-width: 200px; margin-bottom: 30px;">
                                 <app-lottie [assetPath]="assetPaths.loan"></app-lottie>
                             </div>
                         </div>
@@ -39,25 +65,22 @@
                                         <p class="theme_color--grey">Are you a vendor or contractor?</p>
                                         <p class="theme_color--grey"> Get up to NGN 10 Million for your local purchase orders. Payback <b>monthly</b>.</p>
                                         <div class="cta" style="justify-content: flex-end; width: 100%;">
-                                            <!-- <button class="widget_button widget_button--small" style="background: transparent; color:#333333;">Get Started</button> -->
-                                            <app-button [options]="buttonOptions" (click)="submit($event,'LPO Financing')"></app-button>
+                                            <app-button fieldClass="no-margin--top no-margin--bottom" [class]="'widget_button--small'" (click)="submit($event,'LPO Financing')">Get Started</app-button>
                                         </div>
                                     </div>
                                     <div class="loans_category">
                                         <div  class="title"><h2>Float Me</h2></div>
                                         <p class="theme_color--grey">Need to Fund emergencies with an option to payback in less than one month? Access up to NGN 10Million. Payback <b>Daily</b>. </p>
                                         <div class="cta" style="justify-content: flex-end; width: 100%;">
-                                            <!-- <button class="widget_button widget_button--small" style="background: transparent; color:#333333;">Get Started</button> -->
-                                            <app-button [options]="buttonOptions" (click)="submit($event,'Float Me')"></app-button>
+                                            <app-button fieldClass="no-margin--top no-margin--bottom" [class]="'widget_button--small'" (click)="submit($event,'Float Me')">Get Started</app-button>
                                         </div>
                                     </div>
                                     <div class="loans_category">
                                         <div class="title"><h2>Personal Loans</h2></div>
                                         <p class="theme_color--grey">Get loans between NGN 25,000 and NGN 5 Million. Pay back <b>monthly</b> </p>
                                         <div class="cta" style="justify-content: flex-end; width: 100%;">
-                                        <!-- <button class="widget_button widget_button--small" style="background: transparent; color:#333333;">Get Started</button> -->
-                                        <app-button [options]="buttonOptions" (click)="submit($event,'Personal Loans')"></app-button>
-                                    </div>
+                                            <app-button fieldClass="no-margin--top no-margin--bottom" [class]="'widget_button--small'" (click)="submit($event,'Personal Loans')">Get Started</app-button>
+                                        </div>
                                     </div>
                                     <div class="loans_category">
                                         <div  class="title"><h2>Business Loans</h2></div>
@@ -65,8 +88,7 @@
                                             Get up to NGN 10 Million in funding. Payback
                                             <b>monthly</b>.</p>
                                         <div class="cta" style="justify-content: flex-end; width: 100%;">
-                                            <!-- <button class="widget_button widget_button--small" style="background: transparent; color:#333333;">Get Started</button> -->
-                                            <app-button [options]="buttonOptions" (click)="submit($event,'Business Loans')"></app-button>
+                                            <app-button fieldClass="no-margin--top no-margin--bottom" [class]="'widget_button--small'" (click)="submit($event,'Business Loans')">Get Started</app-button>
                                         </div>
                                     </div>
                                     
@@ -74,11 +96,10 @@
                                 <app-footer></app-footer>
                             </div>
                         </div>
+                       
                     </div>
                 </div>
             </div>
         </div>
-    <!-- <footer style="width: 100vw; transform: translateY(20vh) translateX(-5%);">
-        <div class="theme_row" style=" display: flex; justify-content: center; align-items: center; position: relative; bottom: 0;" ><p>All rights reserved by Vanir Capital Ltd</p></div>
-    </footer> -->
-    </div>
+  
+    </div> -->

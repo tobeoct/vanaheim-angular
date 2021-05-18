@@ -1,0 +1,10 @@
+#title{
+    font-size: 1.6em;
+}
+
+#loan-header{
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 5vh; cursor: pointer;
+    &.loggedIn{
+        margin-bottom: 2vh;
+    }
+}

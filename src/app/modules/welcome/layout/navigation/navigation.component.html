@@ -1,7 +1,7 @@
 <!-- <div *ngIf="type=='default'; then default; type=='onboarding'; then onboarding; type=='sm-mobile'; then smmobile; else smdesktop"> -->
     <div [ngSwitch]="true">
     
-        <div id="tab-lg" *ngSwitchCase="type=='sm-desktop'" class="tabs theme_color animate__animated animate__zoomIn">
+        <div id="tab-lg" *ngSwitchCase="type=='sm-desktop'" class="tabs theme_color">
             <a [routerLink]="['/welcome/loans']">
                 <!-- <app-button [options]="loanButtonOptions"></app-button> -->
             <div class="tabs_item" [ngClass]="{'active':(active$|async)=='loan'}">Loans</div>
@@ -13,13 +13,13 @@
      
         <div class="header_intro" *ngSwitchCase="type=='onboarding'">
             <div class="bordered_anchor widget_button--icon" (click)="toggleSideNav()"><div class="icon"><img src="../../../../../assets/icons/questions.svg"/></div><span>Questions</span></div>
-            <div class="bordered_anchor"><a [routerLink]="['/welcome/loans']">Loans</a></div>
-            <div class="bordered_anchor"><a [routerLink]="['/welcome/investments']">Investments</a></div>
+            <div class="bordered_anchor" style="cursor: pointer;" [routerLink]="['/welcome/loans']">Loans</div>
+            <div class="bordered_anchor" style="cursor: pointer;" [routerLink]="['/welcome/investments']">Investments</div>
            
-            <div class="bordered_anchor" ><a [routerLink]="['/auth/account']">Login</a></div>
+            <div class="bordered_anchor" style="cursor: pointer;" [routerLink]="['/auth/account']">Login</div>
         </div>
 
-        <div *ngSwitchCase="type=='sm-mobile'" class="tabs tabs_mobi animate__animated animate__zoomIn" style=" padding-top:10px; padding-bottom: 10px; justify-content: center; align-items: center;">
+        <div *ngSwitchCase="type=='sm-mobile'" class="tabs tabs_mobi" style=" padding-top:10px; padding-bottom: 10px; justify-content: center; align-items: center;">
             <a [routerLink]="['/welcome/loans']"> <div class="tabs_item" [ngClass]="{'active':(utility.activeSolution$|async)=='loan'}">Loans</div></a>
             <div> | </div>
             <a  [routerLink]="['/welcome/investments']"><div class="tabs_item " [ngClass]="{'active':(utility.activeSolution$|async)=='investment'}">Investments</div></a>

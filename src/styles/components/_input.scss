@@ -1,17 +1,3 @@
-// .widget_input{
-//     @include font(text);
-//     width:100%;
-//     height:45px;
-//     display:block;
-//     border:2px solid #E0E0E0;
-//     border-radius:5px;
-//     box-sizing:border-box;
-//     padding-left:7%;
-//     padding-right:2.5%;
-//     background:transparent;
-//     transition:ease-in-out 0.3s;
-//     line-height:1.5em
-// }
 .vc_form-field{
     position: relative;
     .invalid-feedback{
@@ -19,7 +5,8 @@
     }
     label{
         @include font(small);
-        font-weight: map-get($font-weights, "medium" )
+        @include flex(horizontal,space-between);
+        font-weight: map-get($font-weights, "semi-bold" );
     }
     input{
         @include font(text);
@@ -32,8 +19,97 @@
         box-sizing:border-box;
         background:transparent;
         transition:ease-in-out 0.3s;
-        line-height:1.5em
-    }
+        line-height:1.5em;
+        // &:[type="checkbox"]{
+
+        // }
+   }
+    input[type="range"] {
+        -webkit-appearance: none;  /* Override default CSS styles */
+        appearance: none;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+        margin: auto; /* Full-width */
+        height: 10px; /* Specified height */
+        background: map-get($colors, lightGrey); /* Grey background */
+        outline: none; /* Remove outline */
+        opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+        -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+        transition: opacity .2s;
+        border: none;
+        position: relative;
+            /* Mouse-over effects */
+        &:hover {
+            opacity: 1; /* Fully shown on mouse-over */
+        }
+        
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        &::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Override default look */
+            appearance: none;
+            width: 20px; /* Set a specific slider handle width */
+            height: 20px; /* Slider handle height */
+            background: map-get($colors, black); /* Green background */
+            cursor: pointer; /* Cursor on hover */
+            position: relative;
+           
+           
+        }
+
+          &+.range-value{
+            position: absolute;
+            bottom: -50%;
+            z-index: 4;
+            span{
+                width: 60px;
+                height: 24px;
+                line-height: 24px;
+                text-align: center;
+                background: map-get($colors, lightGrey);
+                color: map-get($colors, black);
+                font-size: 12px;
+                display: block;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%, 0);
+                border-radius: 6px;
+              }
+              span:before{
+                content: "";
+                position: absolute;
+                width: 0;
+                height: 0;
+                border-bottom: 10px solid map-get($colors, lightGrey);
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -5px;
+                margin-top: -1px;
+              }
+          }
+         
+        // &::after{
+        //     @include paddingVertical(true,"px",0.25);
+        //     content: attr(value);
+        //     position: absolute;
+        //     width: 50px;
+        //     height: auto;
+        //     border-radius: $border-radius;
+        //     background: map-get($colors, lightGrey);
+        //     top: 120%;
+        // }
+        // &::-moz-range-thumb {
+        //     width: 20px; /* Set a specific slider handle width */
+        //     height: 20px; /* Slider handle height */
+        //     background: map-get($colors, black); /* Green background */
+        //     cursor: pointer; /* Cursor on hover */
+           
+        // }
+      }
+      
+  
     &--hidden 
     {
         margin: 0 !important;
@@ -54,56 +130,40 @@ input.is-invalid{
    border-bottom-color: rgb(255, 113, 142) !important;
     // border-bottom-width: 0px !important; 
     transition: 2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-    // animation: AnimateIn 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards !important;
-    // width: 0;
-    // &::after{
-    //     content: "";
-    //     height: 2px;
-    //     width: 100px;
-    //     position: absolute;
-    //     bottom: 0;
-    //     left: 0;
-    //     border-radius: 2px;
-    //     background: red;
-    //     z-index: 9;
-    //     // transition: 0.3s ease-in-out;
-    //     // animation: AnimateIn 3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-    // }
-    &+.invalid-feedback{
-        @include font(small);
-        display: block;
-        width: 100%;
-        margin-top: 5px;
-        // box-sizing: border-box;
-        padding: 7px 10px;
-        color:  rgb(252, 78, 113);
-        background: rgb(255, 240, 234);
-        border-radius: 2px;
-        // opacity: 0;
-        // transform: translateY(10px);
-        position: absolute;
-        word-wrap: break-word;
-        height: auto;
-        top: 30%;
-        right: 110%;
-        &--default{
-            position: relative;
-            right: 0;
-            
-        }
-        // animation: FadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
-        &--right{
-            right: unset;
-            left: 110%;
-        }
+}
+div.is-invalid{
+&+.invalid-feedback{
+    @include font(small);
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    // box-sizing: border-box;
+    padding: 7px 10px;
+    color:  rgb(252, 78, 113);
+    background: rgb(255, 240, 234);
+    border-radius: 2px;
+    // opacity: 0;
+    // transform: translateY(10px);
+    position: absolute;
+    word-wrap: break-word;
+    height: auto;
+    top: 30%;
+    right: 110%;
+    &--default{
+        position: relative;
+        right: 0;
+        
     }
-    // &:hover::after{
-    //     width: 100%;
-    //     cur
-
-    // }
+    // animation: FadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+    &--right{
+        right: unset;
+        left: 110%;
+    }
 }
 }
+}
+input:hover,.widget_input:hover{background:rgb(245,244,240);border:2px solid map-get($colors,  lightYellow)!important}
+input::placeholder,.widget_input::placeholder{color:rgb(211,211,211);font-family:'Manrope','Open Sans',sans-serif;font-style:normal;font-weight:400;font-size:14px;line-height:1.5em;text-transform:capitalize}
 
 @keyframes AnimateIn{
     to{

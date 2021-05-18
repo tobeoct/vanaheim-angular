@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserCategory } from '@models/helpers/enums/usercategory';
 import { Subscription } from 'rxjs';
-import { ElementStyle, ElementSize, ElementState } from 'src/shared/constants/enum';
-import { ButtonOptions } from 'src/shared/constants/variables';
-import { AuthService } from 'src/shared/services/auth/auth.service';
+import { ElementStyle, ElementSize, ElementState } from 'src/app/shared/constants/enum';
+import { ButtonOptions } from 'src/app/shared/constants/variables';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-admin-navigation',

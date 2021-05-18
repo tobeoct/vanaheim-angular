@@ -1,0 +1,39 @@
+<div id="table">
+
+    <div id="filters">
+        <div class="item item--active">All</div>
+        <div class="item">Processing</div>
+        <div class="item">Defaulting</div>
+        <div class="item">Declined</div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Loan ID</th>
+                <th>Amount</th>
+                <th>Tenure</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="data.length>0">
+            <tr>
+                <td>Date</td>
+                <td>Loan ID</td>
+                <td>Amount</td>
+                <td>Tenure</td>
+                <td>Status</td>
+                <td>Action</td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="data.length==0">
+            <div class="no-data">
+                <span class="material-icons material-icons-outlined">
+                    info
+                    </span>
+                <h3>No data available</h3>
+            </div>
+        </tbody>
+    </table>
+</div>

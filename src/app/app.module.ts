@@ -4,21 +4,20 @@ import { ApplicationRef, NgModule, DoBootstrap, CUSTOM_ELEMENTS_SCHEMA, Injector
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { ContactComponent } from '../shared/layout/contact/contact.component';
-import { CommaseperatedPipe } from 'src/shared/pipes/commaseparated/commaseperated.pipe';
+import { ContactComponent } from './shared/layout/contact/contact.component';
+import { CommaseperatedPipe } from './shared/pipes/commaseparated/commaseperated.pipe';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BasicAuthInterceptor } from './guards/http-interceptor';
-import { ErrorInterceptor } from './guards/error-interceptor';
-import { NavigationComponent } from 'src/shared/layout/navigation/navigation.component';
-import { CommonModule } from '@angular/common';
+import { BasicAuthInterceptor } from './shared/guards/http-interceptor';
+import { ErrorInterceptor } from './shared/guards/error-interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {  SocialAuthServiceConfig } from 'angularx-social-login';
 import {FacebookLoginProvider,GoogleLoginProvider } from 'angularx-social-login';
-import { PageComponent } from '../shared/layout/page/page.component';
+import { PageComponent } from './shared/layout/page/page.component';
 import { createCustomElement } from '@angular/elements';
-import { AccordionComponent } from 'src/shared/components/accordion/accordion.component';
-import { SharedModule } from 'src/shared/shared.module';
+import { AccordionComponent } from './shared/components/accordion/accordion.component';
+import { BaseModule } from './shared/base.module';
+import { FeaturesModule } from './shared/features/features.module';
 
  
 // Note we need a separate function as it's required
@@ -29,15 +28,13 @@ import { SharedModule } from 'src/shared/shared.module';
     AppComponent,
     ContactComponent,
     CommaseperatedPipe,
-    NavigationComponent,
     PageComponent
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    CommonModule,SharedModule,
+    HttpClientModule,BaseModule,FeaturesModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

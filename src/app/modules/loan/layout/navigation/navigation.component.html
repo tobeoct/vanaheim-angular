@@ -1,0 +1,24 @@
+
+
+<ul class="sidenav animate__animated animate__fadeInLeft" *ngIf="!isLoggedIn">
+    <ng-container *ngIf="!isLoggedIn">
+        <div class="logo">
+            <a href="http://vanircapital.org" target="_blank"><img src="../../assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
+        </div>
+    </ng-container>
+    <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [attr.data-pointable]="true"  [routerLinkActive]="'sidenav_link--active'" class="sidenav_link" id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a><span class="material-icons material-icons-round">
+fiber_manual_record
+</span></li>
+
+</ul>
+
+
+<ul class="sidenav sidenav-mini animate__animated animate__fadeInLeft" *ngIf="isLoggedIn && (show$|async)" >
+    
+    <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [attr.data-pointable]="true"  [routerLinkActive]="'sidenav_link--active'" class="sidenav_link" id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
+        <b><span class="material-icons material-icons-round">
+check
+</span></b></li>
+
+</ul>
+<!-- [ngClass]="{'sidenav_link--active':(active$|async)==nav.id}" data-order="1" (click)="onNavigate(nav.url)" -->

@@ -1,0 +1,40 @@
+@import '../../../styles/abstracts/_abstracts-dir';
+#loan-flow.no-nav #loan-content #main-content{
+    margin-left: 0 !important;
+    width: 100% !important;
+    #loan-calculator.grid-padding-3x{
+        padding-left: 0 !important;
+    }
+}
+#loan-content{
+    width: 85vw;
+    margin-left: 15vw;
+    position: relative;
+   &.loggedIn{
+    width: 100%;
+    margin-left: 0;
+    padding-top: 0 !important;
+    #main-content{
+        margin-left: 15%;
+        width: 85%;
+        #loan-calculator{
+            display: flex;
+            flex-direction: column;
+            &.grid-padding-3x{@include paddingHorizontal(false,"%",0.5,0,$important:important);}
+        }
+    }
+   }
+}
+
+@media all and (max-width:900px){
+    #loan-content{
+        width: 100%;
+    margin-left: 0;
+    position: relative;
+        #main-content{
+        width: 100%;
+        margin-left: 0 !important;
+        }
+    }
+    
+}

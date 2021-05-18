@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   template: `
     <div id="auth-navigation">
     <div class="logo animate__animated animate__zoomIn" style="transform: translateY(-5px);">
-    <a href="http://vanircapital.org" target="_blank"><img src="../../assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
+    <a href="/"><img src="../../assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
 </div>
     </div>
   `,

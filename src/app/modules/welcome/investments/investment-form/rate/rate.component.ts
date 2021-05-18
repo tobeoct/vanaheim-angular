@@ -1,8 +1,6 @@
 import { Component, Input,Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { AbstractControl, FormControl } from '@angular/forms';
 import { BehaviorSubject, from, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Utility } from 'src/shared/helpers/utility.service';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Component({
   selector: 'app-rate',
@@ -26,7 +24,7 @@ durationsSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>( [{value:12
 
   ngOnInit(): void {
     // this
-   this.amount$.pipe(tap(console.log)).subscribe(v=>this.amount=v);
+   this.amount$.subscribe(v=>this.amount=v);
   }
   trackByFn(index:any, item:any) {
     return index; // or item.id
@@ -54,7 +52,8 @@ durationsSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>( [{value:12
   calculateTotalPayout(){
     const tax =(this.getInterest()*0.1);
     const mgtFee = this.utility.convertToPlainNumber(this.amount)*0.005;
-    return this.calculatePayout() - (tax+mgtFee);
+    const total= this.calculatePayout() - (tax+mgtFee);
+    return total;
 
   }
   onChange(r:any){

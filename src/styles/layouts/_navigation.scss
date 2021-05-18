@@ -10,6 +10,7 @@
      color: white;
      box-sizing: border-box;
      flex-direction: column;
+    
 ul{
     width: 100%;
     display: flex;
@@ -34,13 +35,13 @@ ul{
      padding-right:5%;
     font-weight:300;
     opacity:.6;
-    cursor:not-allowed;
+    // cursor:not-allowed;
     transition:ease-in-out 0.3s;
-    pointer-events:none;
+    // pointer-events:none;
     font-size:1em;
     width: 100%;
     &:last-child{
-        margin-top: 25vh;
+        margin-top: 20vh;
     }
 .material-icons{
     font-size: 1em;
@@ -77,6 +78,36 @@ ul{
     color:map-get($colors,yellow)!important;
 }
 }
+
+&-mini{
+    position: absolute;
+    left: 2.5%;
+    width: 15%;
+    // @include background(lightGrey);
+    background: transparent;
+    @include color(grey);
+    .sidenav_link{
+        height: auto !important;
+        &:last-child{
+            display: none;
+        }
+        @include marginVertical(false,"px",0,0.5);
+    }
+    .sidenav_link--active{
+      
+    @include color(black);
+    @include background(greyWhite);
+    @include paddingVertical(true,"px",0.25);
+    .material-icons{
+        display: block;
+    }
+    }
+    .material-icons{
+        display: none;
+    }
+        
+    
+  }
 &_submit{
     width:90%;
     position:absolute;
@@ -108,8 +139,8 @@ ul{
     background:map-get($colors,yellow);
     transition:ease-in-out 0.3s;
     color:#828282;
-    pointer-events:none;
-    cursor:not-allowed;
+    // pointer-events:none;
+    // cursor:not-allowed;
     position:relative;
     border:0!important;}
 .sidenav_mobi .theme_scrolling--wrapper .sidenav_link:not(.sidenav_link[data-active]):hover{

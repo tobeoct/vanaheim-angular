@@ -1,0 +1,27 @@
+
+  @import '../../../../../styles/abstracts/_abstracts-dir';
+  .header_mobi {
+        display: none !important;
+    }
+
+.header{
+    width: 100vw; height:map-get($sizings, "vh")*10; align-items: center; padding-left: 2.5%;padding-right: 2.5%;
+    display: flex !important;
+    position: fixed; z-index: 999999;
+    top: 0;
+}
+
+    #header{
+        box-sizing: border-box;
+        width: 100vw;height:map-get($sizings, "vh")*3.33333; align-items: center; padding-left: 2.5%;padding-right: 2.5%;
+    }
+@media all and (max-width: 768px){
+
+    .header_mobi {
+    display: flex !important;
+    }
+    .header_mobi .logo{
+    display: block !important;
+    }
+    }
+    

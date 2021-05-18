@@ -1,5 +1,4 @@
 
-import { async } from "@angular/core/testing";
 import { Device } from "@models/device";
 import { BaseStatus } from "@models/helpers/enums/status";
 import { PushNotification } from "@models/pushnotification";
@@ -8,10 +7,9 @@ import { IBaseRepository } from "@repository/interface/Ibase-repository";
 import { IDeviceRepository } from "@repository/interface/Idevice-repository";
 import { IPushNotificationRepository } from "@repository/interface/Ipushnotification-repository";
 import { ISubscriptionRepository } from "@repository/interface/Isubscription-repository";
-import { IUserRepository } from "@repository/interface/Iuser-repository";
 import { INotificationService } from "@services/interfaces/Inotification-service";
 import { IUserService } from "@services/interfaces/Iuser-service";
-import { WebNotData, WebNotification } from "src/shared/interfaces/webnotification";
+import { WebNotData, WebNotification } from "src/app/shared/interfaces/webnotification";
 import { BaseService } from "./base-service";
 
  class NotificationService extends BaseService<any> implements INotificationService{

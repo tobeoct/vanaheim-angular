@@ -18,25 +18,13 @@
             <div class="content box-shadow  animate__animated animate__fadeInUp">
             <h3 class="text-center"><b>Welcome to Vanaheim</b></h3>
             <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)" >
-                <div class="vc_form-field form_group">
-                    <label>Email or Phone Number</label>
-                    <input [focus]="focus$|async" id="usernameId" type="text" [formControl]="username"  placeholder="Email or Phone Number" 
-                    [ngClass]="{ 'is-invalid': (username.touched || username.dirty) && !username.valid }" 
-                    >
-                   
-                    <div *ngIf="(errorMessage$ | async)?.username as errors" class="invalid-feedback">
-                        <div>{{errors}}</div>
-                    </div>
-                      
-                  </div>
-                  <!-- <app-button [options]="buttonOptions" [form]="form" ></app-button> -->
-                  <div class="form_group" style="margin-top: 0;">
-                    <button class="widget_button" type="submit" [ngClass]="{'loading':(loading$|async)==true}"
-                    
-                    [title]="form&&form.valid?'You can proceed':'Disabled until form data is valid'" 
-                    [disabled]="form &&!form.valid"><div>Log into your account</div><div class="widget_button--loader"><img src="assets/button-loader.gif" /></div></button>
-                  
-                    </div>
+               
+                    <app-input [focus$]="focus$" fieldClass="no-margin--top" id="username" placeholder="Enter your email or phone number"  [control]="username" class="form-control" [error]="(errorMessage$ | async)?.username" >
+                        <label for="username">Email or Phone number</label>
+                    </app-input>
+                
+                  <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form" >Log into your account</app-button>
+                 
                 </app-form>
             </div>
         </div>

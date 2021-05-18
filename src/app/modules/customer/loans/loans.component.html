@@ -1,0 +1,160 @@
+
+<div id="loan-content" class="grid-padding-3x">
+<div class="left layout">
+    <div id="loan-summary">
+        <ng-container *ngIf="totalLoans.length>0">
+            <div class="heading"><h3>Loan Summary</h3> <select id="month" required>
+                <option value="January" data-display-text="January" aria-label="January">This week</option>
+                <option value="February" aria-label="February">February</option>
+                <option value="March" aria-label="March">March</option>
+                <option value="April" aria-label="April">April</option>
+                <option value="May" aria-label="May">May</option>
+                <option value="June" aria-label="June">June</option>
+                <option value="July" aria-label="July">July</option>
+                <option value="August" aria-label="August">August</option>
+                <option value="September" aria-label="September">September</option>
+                <option value="October" aria-label="October">October</option>
+                <option value="November" aria-label="November">November</option>
+                    <option value="December" aria-label="December">December</option>
+                
+            </select></div>
+    
+            <div id="summary-card">
+                <div>
+                    <p>You have applied for  10 Loans worth </p>
+                    <h2>₦200,000,000</h2>
+                </div>
+                <div>
+                    <p>Total repayment of</p>
+                    <h2>₦199,950,000</h2>
+                </div>
+            </div>
+        </ng-container>
+    <div id="loan-history" [ngClass]="{'no-margin--top':totalLoans.length==0}">
+        <div class="heading"><h3>Loan History</h3></div>
+        <app-table></app-table>
+    </div>
+</div>
+</div>
+<div class="right layout">
+    <ng-container *ngIf="activeLoan">
+        <ng-container >
+            <div class="heading"><h3>Active Loan</h3> <select id="month" required>
+                <option value="January" data-display-text="January" aria-label="January">This week</option>
+                <option value="February" aria-label="February">February</option>
+                <option value="March" aria-label="March">March</option>
+                <option value="April" aria-label="April">April</option>
+                <option value="May" aria-label="May">May</option>
+                <option value="June" aria-label="June">June</option>
+                <option value="July" aria-label="July">July</option>
+                <option value="August" aria-label="August">August</option>
+                <option value="September" aria-label="September">September</option>
+                <option value="October" aria-label="October">October</option>
+                <option value="November" aria-label="November">November</option>
+                    <option value="December" aria-label="December">December</option>
+                
+            </select></div>
+            <div class="card card-stroke card-stroke--black" id="current-loan-status">
+                <ng-container *ngIf="activeLoan">
+                        <div id="active-loans">
+                    <div>
+                        <small>Next Payment</small>
+                        <h2>₦250,000</h2>
+                        <p style="margin-bottom: 0;">Due on the 8th Jun, 2021</p>
+                    </div>
+                    <div class="progress progress--stroke">
+                        <h1 style="margin-bottom: 0;">9</h1>
+                        <p>Months</p>
+                    </div>
+                </div>
+                </ng-container>
+                <ng-container *ngIf="!activeLoan">
+                    <div id="no-active-loans" class="no-data">
+                        <span class="material-icons material-icons-outlined">
+                            info
+                            </span>
+                        <h3>You have no active loans</h3>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+
+        <ng-container >
+            <div class="card card-cta card-cta--active">
+                <div class="thumbnail">
+                    <div class="image">
+                        <app-lottie [assetPath]="assetPaths.loan"></app-lottie>
+                    </div>
+                    <div>
+                        <h3>Get a loan</h3>
+                        <p>Quick and easy loans at your fingertips</p>
+                    </div>
+                </div>
+                <div class="actions" style="display: flex; justify-content: flex-end;">
+                    <button type="button" class="widget_button widget_button--small " (click)="onNavigate('apply')">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+    <div id="calculator">
+        <div class="heading"><h3>Explore Our Rates</h3> <button type="button" (click)="moveToApply()" class="widget_button widget_button--small widget_button--fill" >Apply Now</button></div>
+        <div id="form" class="box-shadow">
+            <div id="heading">Loan Calculator</div>
+            <div id="content">
+                <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+                    <app-dropdown fieldClass="no-margin--top" [current]="loanType.value" [fieldClass]="'no-margin--top'" [id]="'loanType'" [control]="loanType"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                        <ng-container slot="label"><label for="loanType">Loan Type</label></ng-container>
+                        <app-option [value]="'Personal Loans'">Personal Loans</app-option>
+                        <app-option [value]="'Business Loans'">Business Loans</app-option>
+                        <app-option [value]="'LPO Financing'">LPO Financing</app-option>
+                        <app-option [value]="'Float Me'">Float Me</app-option>
+                    </app-dropdown>
+                        <app-input id="loanAmount" [control]="loanAmount" class="form-control" [error]="(errorMessage$ | async)?.loanAmount" >
+                            <label for="loanAmount">Loan Amount (25k-1M)</label>
+                        </app-input>
+
+                        <app-slider id="tenure" [denominator$]="tenureDenominator$" [control]="tenure" [min]="minTenure" [max]="maxTenure" class="form-control" [error]="(errorMessage$|async)?.tenure" >
+                            <label for="tenure">Tenure</label>
+                        </app-slider>
+
+                        <div style="margin-top: 60px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div id="loan-details-summary" class="content--smaller animate__animated animate__fadeIn" >
+                                <div class="details">
+                                    <p>Monthly Payment</p>
+                                    <h2>{{monthlyRepayment$|async|currency:'₦':'symbol':'1.0-2'}}</h2>
+                                </div>
+                                <div class="details">
+                                    <div class="item">
+                                        <small>Total Repayment</small>
+                                        <p>{{totalRepayment$|async|currency:'₦':'symbol':'1.0-2'}}</p>
+                                    </div>
+                                    <div class="item">
+                                        <small>Tenure</small>
+                                        <p>{{tenure.value}} {{tenureDenominator$|async|replace:'Mo':'Month'}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div id="repayment-plan">
+                                <app-form [form]="repaymentForm" (onSubmit)="onSubmit2($event)" (errorMessageChange) = "onError2($event)">
+                                    <app-input [placeholder]="'Enter email address'" id="email" [control]="email" class="form-control" [error]="(errorMessage2$|async)?.email" >
+                                        <label for="email">Send Repayment Plan To Email</label>
+                                        <ng-container slot="button"><app-button [form]="repaymentForm" [class]="'no-margin--all widget_button--medium'" [loading$]="planLoading$">Send</app-button></ng-container>
+                                    </app-input>
+                                </app-form>
+                            </div> -->
+                        </div>
+
+                        <div style="margin-top: 60px;" #applyNow>
+                            <app-button [form]="form" [loading$]="loading$">Apply</app-button>
+                         </div>
+                    </app-form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-template #templates></app-template>
+
+</div>

@@ -9,6 +9,7 @@ const routes: Routes = [
   {path:"", component: AccountComponent},
   {path:"account", component: AccountComponent},
   {path:"forgot-password", component: ForgotpasswordComponent},
+  {path:"forgot-password/:username", component: ForgotpasswordComponent},
     {path:"login", component: LoginComponent},
     {path:"login/:username", component: LoginComponent},
     {path:"register",component:RegisterComponent},
