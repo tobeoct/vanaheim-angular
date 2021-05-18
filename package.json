@@ -39,6 +39,7 @@
     "cors": "^2.8.5",
     "dir": "^0.1.2",
     "document-register-element": "^1.7.2",
+    "express": "^4.17.1",
     "express-autosanitizer": "^1.0.2",
     "express-https-redirect": "^1.0.0",
     "express-session": "^1.17.1",
