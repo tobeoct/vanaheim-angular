@@ -12,10 +12,11 @@ export default class RedisMiddleware{
 private connect=()=>{
     const connector = connectRedis(this.expressSession)
     //Configure redis client
-     this.RedisClient = redis.createClient({
+    let config = process.env.NODE_ENV=="production"?{url:process.env.REDIS_URL}:{
         host: 'localhost',
         port: 6379
-    })
+    }
+     this.RedisClient = redis.createClient(config);
     this.RedisStore = new connector({ client: this.RedisClient })
 }
 
