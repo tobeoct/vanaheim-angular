@@ -37,7 +37,7 @@
       "@environments/*":["src/environments/*"],
       "@utils/*":["server/models/helpers/utils/*"],
       "@api/*": ["server/api/*"],
-      "@config": ["server/api/config"],
+      "@config": ["server/api/config"]
     }
   },
   "include": [
