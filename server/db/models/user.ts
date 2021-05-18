@@ -1,6 +1,6 @@
 
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize:any, DataTypes:any) => {
   const User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   
   });
-  User.associate = (models) => {
+  User.associate = (models:any) => {
     User.hasOne(models.Customer, {
       foreignKey: 'userID',
       as: 'customer',

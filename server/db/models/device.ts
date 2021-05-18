@@ -1,6 +1,6 @@
 
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize:any, DataTypes:any) => {
   const Device = sequelize.define('Device', {
     browserID: {
       type: DataTypes.STRING,
@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   
   });
-  Device.associate = (models) => {
+  Device.associate = (models:any) => {
     
     Device.hasOne(models.Subscription, {
       foreignKey: 'deviceID',

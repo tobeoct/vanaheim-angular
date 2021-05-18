@@ -1,12 +1,12 @@
 
 
-module.exports = (sequelize, DataTypes) => {
-  const CustomerDevice = sequelize.define('CustomerDevice', {
+module.exports = (sequelize:any, DataTypes:any) => {
+  const StaffRole = sequelize.define('StaffRole', {
     
    
   });
  
-  return CustomerDevice;
+  return StaffRole;
 };
 
 //   firstname:string;

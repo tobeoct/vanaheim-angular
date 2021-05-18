@@ -3,10 +3,37 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(`${__dirname}/../config/config.json`)[env];
-const db = {};
+const configuration:any = {
+  "development": {
+    "username": "postgres",
+    "password": null,
+    "database": "vanaheim-dev",
+    "host": "127.0.0.1",
+    "port":5432,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": null,
+    "database": "vanaheim-dev",
+    "host": "127.0.0.1",
+    "port":5432,
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+};
+//require(`${__dirname}/../config/config.json`)[env];
 
-let sequelize;
+const config = configuration[env];
+const db:any = {};
+
+let sequelize:any;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
@@ -17,11 +44,11 @@ if (config.use_env_variable) {
 
 fs
   .readdirSync(__dirname)
-  .filter(file =>
+  .filter((file:any) =>
     (file.indexOf('.') !== 0) &&
     (file !== basename) &&
     (file.slice(-3) === '.js'))
-  .forEach(file => {
+  .forEach((file:any) => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);//sequelize.import(path.join(__dirname, file));
     db[model.name] = model;
   });

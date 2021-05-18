@@ -21,7 +21,7 @@ import { DeviceRepository } from '@repository/implementation/device-repository';
 import { PushNotificationRepository } from '@repository/implementation/pushnotification-repository';
 import { SubscriptionRepository } from '@repository/implementation/subscription-repository';
 import NotificationService from '@services/implementation/notification-service';
-const db = require('@db/models');
+const db = require('server/db/models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');

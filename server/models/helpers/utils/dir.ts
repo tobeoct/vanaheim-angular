@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const mkdirsSync = (dirname) => {
+const mkdirsSync = (dirname:any) => {
   if(fs.existsSync(dirname)) {
     return true;
   } else {
@@ -9,7 +9,9 @@ const mkdirsSync = (dirname) => {
       return true;
     }
   }
+  return;
 }
-module.exports = {
-  mkdirsSync
-};
+// module.exports = {
+//   mkdirsSync
+// };
+export default mkdirsSync;

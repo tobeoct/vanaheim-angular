@@ -1,6 +1,6 @@
 
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize:any, DataTypes:any) => {
   const Subscription = sequelize.define('Subscription', {
     token: {
       type: DataTypes.STRING,
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   
   });
-  Subscription.associate = (models) => {
+  Subscription.associate = (models:any) => {
     
     Subscription.hasMany(models.PushNotification, {
       foreignKey: 'subscriptionID',

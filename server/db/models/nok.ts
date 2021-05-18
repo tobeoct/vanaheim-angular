@@ -1,7 +1,7 @@
 
 
-module.exports = (sequelize, DataTypes) => {
-    const Customer = sequelize.define('Customer', {
+module.exports = (sequelize:any, DataTypes:any) => {
+    const NOK = sequelize.define('NOK', {
       firstName:{
         type: DataTypes.STRING,
         allowNull: false,
@@ -16,15 +16,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       address: {
         type: DataTypes.STRING,
-        allowNull: true,
-      },
-      BVN:{
-        type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
        dateOfBirth:{
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: false,
       },
        code:{
         type: DataTypes.STRING,
@@ -38,37 +34,26 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      maritalStatus: {
+      relationship: {
         type: DataTypes.STRING,
-        allowNull: true,
-      }
+        allowNull: false,
+      },
+     
     });
-    Customer.associate = (models) => {
-      Customer.hasOne(models.NOK, {
-        foreignKey: 'customerID',
-        as: 'NOK',
-      });
-      Customer.hasMany(models.Device, {
-        foreignKey: 'customerID',
-        as: 'devices',
-      });
-      Customer.belongsTo(models.User, {
-        foreignKey: 'userID',
-        onDelete: 'CASCADE',
+    NOK.associate = (models:any) => {
+      
+      NOK.belongsTo(models.Customer, {
+        foreignKey: 'customerID'
       });
     };
-    return Customer;
+    return NOK;
   };
   
 //   firstname:string;
 //   othernames:string;
-//   surname:string;
 //   address:string;
 //   email:string;
 //   phonenumber:string;
 //   dateOfBirth:string;
 //    gender:Gender;
-//    maritalStatus:MaritalStatus;
-//    BVN:string;
-//    NOK:NOK;
-//   customerid:string;
+//    relationship:Relationship;

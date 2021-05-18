@@ -1,6 +1,6 @@
 
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize:any, DataTypes:any) => {
   const PushNotification = sequelize.define('PushNotification', {
     title: {
       type: DataTypes.STRING,
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   
   });
-  PushNotification.associate = (models) => {
+  PushNotification.associate = (models:any) => {
     
     PushNotification.belongsTo(models.Subscription, {
       foreignKey: 'subscriptionID'

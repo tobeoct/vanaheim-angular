@@ -1,6 +1,6 @@
 
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize:any, DataTypes:any) => {
     const UserRole = sequelize.define('UserRole', {
       name:{
         type: DataTypes.STRING,
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     
     });
-    UserRole.associate = (models) => {
+    UserRole.associate = (models:any) => {
      
       models.UserRole.belongsToMany(models.Staff, {
           through:"staffrole",
