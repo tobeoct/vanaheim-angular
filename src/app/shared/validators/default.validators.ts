@@ -35,7 +35,7 @@ username=(usernameCtrl:AbstractControl): {[key:string]:boolean}|null=>{
     if(usernameCtrl!=null){
     if(usernameCtrl.pristine) return null;
     let res:any = Validators.email(usernameCtrl);
-    console.log(res)
+    // console.log(res)
     if(!res) return res;
     if(this._utility.isPhoneNumber(usernameCtrl.value))  return null;
     }

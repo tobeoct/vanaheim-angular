@@ -18,9 +18,9 @@ export class WebNotificationService {
         
     }
     readonly VAPID_PUBLIC_KEY = environment.vapidPublicKey;
-    private baseUrl = 'http://localhost:4200/api/notification/subscribe';
+    // private baseUrl = `${environment.apiUrl}/notification/subscribe`;
     subscribeToNotification() {
-      console.log("subscribing")
+      // console.log("subscribing")
       this.requestSubscription()
       .then(sub => {
         console.log(sub);
@@ -29,7 +29,7 @@ export class WebNotificationService {
       .catch(err => console.error('Could not subscribe to notifications', err));
     }
     sendToServer(params: any) {
-      this.http.post(this.baseUrl, { token : params, browserID: this._utility.$browserID }).pipe(tap(console.log),take(1)).subscribe();
+      this.http.post(`${environment.apiUrl}/notification/subscribe`, { token : params, browserID: this._utility.$browserID }).pipe(take(1)).subscribe();
     }
  private requestSubscription=()=>{
    return this._swPush.requestSubscription({
