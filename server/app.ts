@@ -78,7 +78,8 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
         app.get('*', function(req:any, res:any) {
           // console.log( req.session);
           let p = process.env.NODE_ENV=="production"?"": "dist/";
-          let b = process.env.NODE_ENV=="production"?"/dist": "../";
+          let b = process.env.NODE_ENV=="production"?"./dist": "../";
+          console.log(__dirname);
           console.log( path.resolve(__dirname, b) )
           res.sendFile(p+'vanaheim/index.html',{ root: path.resolve(__dirname, b)  })
         })
