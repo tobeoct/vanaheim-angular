@@ -65,7 +65,7 @@
                             <div *ngIf="passwordGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
                         </div>
                     </div>
-                    <app-dropdown [current]="channel.value" [fieldClass]="'no-margin--top'" [id]="'channel'" [control]="channel"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                    <app-dropdown [current]="channel.value" [id]="'channel'" [control]="channel"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
                         <ng-container slot="label"><label for="channel">How did you get to know about us?</label></ng-container>
                         <app-option [value]="'Instagram'">Instagram</app-option>
                         <app-option [value]="'Friend'">Friend</app-option>
