@@ -3,14 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node dist/server/server.js",
-    "ts-start": "ts-node -r dotenv/config -r tsconfig-paths/register server/server.ts",
+    "start": "ts-node -r dotenv/config -r tsconfig-paths/register server/server.ts",
+    "start:dev": "nodemon",
+    "prestart:prod": "rm -rf dist && tsc",
+    "start:prod": "node -r ./tsconfig-paths-bootstrap.js dist/server/server.js",
+    "start:hmr": "node dist/server",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "tsc",
-    "heroku-postbuild": "ng build --prod"
+    "heroku-postbuild": "tsc"
   },
   "private": true,
   "dependencies": {
@@ -102,6 +105,7 @@
     "ts-node": "~8.3.0",
     "tsconfig-paths": "^3.9.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.0.2",
+    "nodemon": "^2.0.7"
   }
 }
