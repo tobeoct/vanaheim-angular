@@ -1,0 +1,7 @@
+#Dump from development db to production db
+createdb -U test -T template0 zeus_production
+pg_restore -U $user -d $new_db "$db_dump_file"
+
+
+#Create Dump
+PGPASSWORD=mypassword pg_dump -Fc --no-acl --no-owner -h localhost -U myuser mydb > mydb.dump

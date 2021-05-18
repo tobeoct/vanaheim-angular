@@ -23,9 +23,10 @@ const configuration:any = {
   "production": {
     "username": "root",
     "password": null,
-    "database": "database_production",
+    "database": "vanaheim",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "use_env_variable": "DATABASE_URL"
   }
 };
 //require(`${__dirname}/../config/config.json`)[env];

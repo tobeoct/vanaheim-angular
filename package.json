@@ -13,7 +13,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "tsc",
-    "heroku-postbuild": "tsc"
+    "heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {
