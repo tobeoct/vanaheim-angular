@@ -9,7 +9,7 @@ import { IPushNotificationRepository } from "@repository/interface/Ipushnotifica
 import { ISubscriptionRepository } from "@repository/interface/Isubscription-repository";
 import { INotificationService } from "@services/interfaces/Inotification-service";
 import { IUserService } from "@services/interfaces/Iuser-service";
-import { WebNotData, WebNotification } from "src/app/shared/interfaces/webnotification";
+import { WebNotData, WebNotification } from "@models/webnotification";
 import { BaseService } from "./base-service";
 
  class NotificationService extends BaseService<any> implements INotificationService{
