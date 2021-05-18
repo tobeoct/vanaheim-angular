@@ -81,7 +81,8 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
           let b = process.env.NODE_ENV=="production"?"../": "../";
           console.log(__dirname);
           console.log( path.resolve(__dirname, b) )
-          res.sendFile(p+'vanaheim/index.html',{ root: path.resolve(__dirname, b)  })
+          // ,{ root: path.resolve(__dirname, b)  }p+
+          res.sendFile('../vanaheim/index.html');
         })
         
         app.use(inject(sessionResponseAuthorisation))
