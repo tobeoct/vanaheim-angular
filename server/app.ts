@@ -82,7 +82,7 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
           console.log(__dirname);
           console.log( path.resolve(__dirname, b) )
           // ,{ root: path.resolve(__dirname, b)  }p+
-          res.sendFile('index.html',{root:path.resolve("app/dist/vanaheim")});
+          res.sendFile('index.html',{root:path.resolve("dist/vanaheim")});
         })
         
         app.use(inject(sessionResponseAuthorisation))
