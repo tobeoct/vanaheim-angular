@@ -41,6 +41,19 @@ module.exports = (sequelize:any, DataTypes:any) => {
       maritalStatus: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      gender: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      status:{
+        type: DataTypes.ENUM('Active', 'Inactive'),
+        allowNull: false,
+        defaultValue: 'Active'
       }
     });
     Customer.associate = (models:any) => {
@@ -51,6 +64,26 @@ module.exports = (sequelize:any, DataTypes:any) => {
       Customer.hasMany(models.Device, {
         foreignKey: 'customerID',
         as: 'devices',
+      });
+      Customer.hasMany(models.Employment, {
+        foreignKey: 'customerID',
+        as: 'employments',
+      });
+      Customer.hasMany(models.Account, {
+        foreignKey: 'customerID',
+        as: 'accounts',
+      });
+      Customer.hasMany(models.Collateral, {
+        foreignKey: 'customerID',
+        as: 'collaterals',
+      });
+      Customer.hasMany(models.Company, {
+        foreignKey: 'customerID',
+        as: 'companies',
+      });
+      Customer.hasMany(models.Document, {
+        foreignKey: 'customerID',
+        as: 'documents',
       });
       Customer.belongsTo(models.User, {
         foreignKey: 'userID',

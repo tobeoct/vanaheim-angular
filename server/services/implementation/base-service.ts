@@ -12,7 +12,9 @@ export class BaseService<T> implements IBaseService<T>{
         resolve(this._baseRepository.getAll());
     });
     getById= (id:number) =>new Promise<T>((resolve, reject) =>{
-        resolve(this._baseRepository.getById(id));
+        let response:any =this._baseRepository.getById(id);
+        if(response && Object.keys(response).length>0) response = response.dataValues as T
+        resolve(response);
     });
     update: (data: T) => Promise<T>;
     create: (data: T) => Promise<T>;

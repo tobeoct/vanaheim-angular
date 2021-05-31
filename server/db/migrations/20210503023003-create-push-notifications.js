@@ -23,6 +23,10 @@ module.exports = {
       url: {
         type: Sequelize.STRING,
         allowNull:true
+      },
+      status: {
+        type: Sequelize.ENUM('Active','Inactive'),
+        allowNull:false
       }, 
       isSent: {
         type: Sequelize.BOOLEAN,

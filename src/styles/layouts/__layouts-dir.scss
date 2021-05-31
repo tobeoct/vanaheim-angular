@@ -9,6 +9,9 @@
    &-3x{
       @include paddingHorizontal(true,"%",0.5,$important:important);
    }
+   &-4x{
+      @include paddingHorizontal(true,"%",0.16667,$important:important);
+   }
 }
 .no-margin{
    &--top{
@@ -35,6 +38,9 @@
       }
       &--center{
          justify-content: center;
+      }
+      &--space-evenly{
+         justify-content: space-evenly;
       }
    }
 

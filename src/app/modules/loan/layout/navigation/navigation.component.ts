@@ -1,12 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subscription } from '@models/subscription';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { Store } from 'src/app/shared/helpers/store';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-const data = {
-  business:[],
+const data:any = {
+  business:[{title:"Loan Details", id:"loan-calculator",url:"loan-calculator"},
+  {title:"Additional", id:"additional-info",url:"additional-info"},
+  {title:"Company", id:"company-info",url:"company-info"},
+  {title:"Shareholder", id:"shareholder-info",url:"shareholder-info"},
+  {title:"Collateral", id:"collateral-info",url:"collateral-info"},
+  {title:"Account", id:"account-info",url:"account-info"},
+  {title:"Documents", id:"upload",url:"upload"},
+  {title:"Preview", id:"preview",url:"preview"},
+  {title:"Home", id:"home",url:""}],
   personal:[
     {title:"Loan Details", id:"loan-calculator",url:"loan-calculator"},
     {title:"BVN", id:"bvn-info",url:"bvn-info"},
@@ -25,25 +33,28 @@ const data = {
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit,OnDestroy {
 
  
   logoutSub:Subscription;
   theme:string;
+  allSubscriptions:Subscription[]=[];
 active$:Observable<string>;
 isLoggedIn:boolean=false;
 dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
-
 showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 show$:Observable<boolean> = this.showSubject.asObservable();
-  constructor(private _router: Router, private _utility:Utility, private _route: ActivatedRoute, private _authService:AuthService) {
+  constructor(private _router: Router, private _utility:Utility,private _store:Store, private _route: ActivatedRoute, private _authService:AuthService) {
     this.toggleNav(this._router.url);
     this.active$ = this._utility.activeSolution$;
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.toggleNav(x.url);
      });
    }
+  ngOnDestroy(): void {
+    this.allSubscriptions.forEach(sub=>sub.unsubscribe());
+  }
 
    toggleNav(url:string){
     if(url.includes("loan-type")||url.includes("applying-as")||url.includes("loan-product")){
@@ -53,7 +64,8 @@ show$:Observable<boolean> = this.showSubject.asObservable();
     }
    }
   ngOnInit(): void {
-    this.dataSelectionSubject.next(data.personal);
+    let sub = this._store.loanCategory$.subscribe((c:string)=>this.dataSelectionSubject.next(data[c]));
+    this.allSubscriptions.push(sub);
     this.isLoggedIn = this._authService.isLoggedIn();
   }
 

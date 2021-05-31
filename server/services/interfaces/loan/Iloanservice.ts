@@ -9,5 +9,7 @@ export interface ILoanService{
     getLoanRequestById:()=>Promise<LoanRequest>
     getLoanRequestLogById:()=>Promise<LoanRequestLog>
     updateLoanRequest:(loanRequest:LoanRequest)=> Promise<LoanRequest>
+    processLoanRequest:(request:any,userData:any)=> Promise<LoanRequest>
+    updateStatus:({requestStatus,id}:any)=>Promise<any>
 
 }

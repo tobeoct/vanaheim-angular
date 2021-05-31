@@ -1,0 +1,33 @@
+<div id="loanProduct">
+   
+    <div class="theme_row">
+        <div class="loanProduct animate__animated animate__fadeIn" *ngFor="let d of dataSelection$|async as data" (click)="activate(d.title)" [ngClass]="{'active':(activeTab$|async)==d.title}">
+            <div class="heading">
+                <h2>{{d.title}}</h2>
+            </div>
+            <div class="subtitle">{{d.description}}</div>
+            <div class="widget_button widget_button--small" (click)="toggle(d.title)">View Requirements</div>
+        </div>
+        
+    </div>
+    <app-form [form]="form" (onSubmit)="next($event)" >
+    <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="loanProductId" [control]="loanProduct" class="form-control"  >
+    </app-input>
+    <app-button [form]="form" fieldClass="theme_col-3 no-margin--top">{{loanProduct.value?'Next':'Start'}}</app-button>
+    </app-form>
+</div>
+
+<app-modal *ngIf="(show$|async)" (onChange)="close()">
+    <app-modal-header slot="header"><h1 id="req-icon"><span class="material-icons">
+        info
+        </span>
+        </h1><h3>Requirements for {{loanProduct.value}}</h3></app-modal-header>
+    <app-modal-body slot="body">
+       <div *ngFor="let req of requirements$|async;let i =index">
+          <div class="req"><span class="material-icons">
+            source
+            </span>
+            <p>{{req.title}} {{req.description}}</p></div>
+       </div>
+    </app-modal-body>
+</app-modal>

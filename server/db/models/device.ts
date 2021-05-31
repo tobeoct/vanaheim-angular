@@ -5,6 +5,11 @@ module.exports = (sequelize:any, DataTypes:any) => {
     browserID: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    status:{
+      type: DataTypes.ENUM('Active', 'Inactive'),
+      allowNull: false,
+      defaultValue: 'Active'
     }
   
   });

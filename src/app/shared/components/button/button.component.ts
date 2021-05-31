@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -13,10 +14,13 @@ export class ButtonComponent implements OnInit {
   @Input() class:string;
   @Input() fieldClass:string;
   @Input() loading$:Observable<boolean>
+  @Output() onClick = new EventEmitter<any>();
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  
+  handleClick=(event:any)=>{
+    this.onClick.next('');
+  }
 }

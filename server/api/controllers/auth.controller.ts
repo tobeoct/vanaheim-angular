@@ -1,12 +1,8 @@
-import { GET, POST, route,before, PUT } from 'awilix-express'; 
+import { GET, POST, route,PUT } from 'awilix-express'; 
 import axios from 'axios';
-// import bodyParser = require('body-parser');
 import { IAuthService } from '@services/interfaces/Iauth-service';
 import { IUserService } from '@services/interfaces/Iuser-service';
-import  UtilService from '@services/implementation/common/util';
 import Encryption from '@services/implementation/common/encryption-service';
-import { LoginType } from '@models/helpers/enums/logintype';
-import { UserCategory } from '@models/helpers/enums/usercategory';
 import NotificationService from '@services/implementation/notification-service';
 @route('/api/auth')
 export default class AuthController {
@@ -27,7 +23,7 @@ export default class AuthController {
    bvnList:any={
   };
    bankList:any={};
-    constructor(private _userService:IUserService,private _notificationService:NotificationService, private _authService:IAuthService, private _encryption:Encryption) {
+    constructor(private _userService:IUserService,private _notificationService:NotificationService, private _authService:IAuthService) {
 
     }
     @route('/login')
@@ -43,7 +39,7 @@ export default class AuthController {
             console.log("Error Registering device",err,req.body.browserID);
           }
         res.statusCode = 200;
-        res.data = response.data
+        res.data = response.data;
        req.session.userData = response.userData;
        }else{
         res.statusCode = 400;

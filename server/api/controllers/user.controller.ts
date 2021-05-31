@@ -1,15 +1,13 @@
 
-import UtilService  from '@services/implementation/common/util';
 import { IUserService } from '@services/interfaces/Iuser-service';
-import { GET, POST, route,before } from 'awilix-express'; 
-const expAutoSan = require('express-autosanitizer');
+import { GET, route } from 'awilix-express'; 
 @route('/api/users')
 export default class UserController {
 
    bvnList:any={
   };
    bankList:any={};
-    constructor(private _utilService:UtilService, private _userService:IUserService) {
+    constructor(private _userService:IUserService) {
 
     }
     @route('/:id')

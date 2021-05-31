@@ -4,6 +4,7 @@ import { WebNotificationService } from 'src/app/shared/services/web-notification
 import { UpdatesService } from 'src/app/shared/services/web-notification/update.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { environment } from '@environments/environment';
+import { Observable, timer } from 'rxjs';
 
 @Component({
   selector: 'app-customer',
@@ -14,6 +15,7 @@ export class CustomerComponent implements OnInit {
   isEnabled:boolean = this.swPush.isEnabled;
   isGranted:boolean = Notification.permission === 'granted';
   updateAvailable = false;
+  timer$:Observable<any>;
   constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private checkForUpdateService: UpdatesService) {
 
     if(environment.production){
@@ -25,10 +27,14 @@ export class CustomerComponent implements OnInit {
     this.swUpdate.available.subscribe((event) => {
       this.updateAvailable = true;
     });
-    if(this.isGranted) this.submitNotification();
   }
+  this.timer$= timer(0,100000);
+  this.timer$.subscribe(c=>{
+    if(this.isGranted) this.submitNotification();
+  })
     // this.webNotificationService.requestSubscription().then(sub => {
     //   console.log(sub);});
+
   }
 
   ngOnInit(): void {
@@ -40,4 +46,7 @@ export class CustomerComponent implements OnInit {
     this.webNotificationService.subscribeToNotification();
   }
   
+  reload() {
+    document.location.reload();
+  }
 }

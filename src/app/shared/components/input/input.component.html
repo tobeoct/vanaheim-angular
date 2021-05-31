@@ -1,5 +1,8 @@
 <div class="vc_form-field form_group {{fieldClass}}">
-    <ng-content></ng-content>
+    <div class="d-flex d-flex_horizontal--space-between">
+        <ng-content></ng-content>
+        <ng-container *ngIf="loading$|async"><div class="label_loader" ><div class="theme_color--lightgrey" style="margin-right: 10px; font-size: 0.9em;">Validating ...</div><div  style="max-width: 20px;"><img src="../../../../assets/button-loader.gif" alt="validating BVN" /></div></div></ng-container>
+    </div>
     <div style="position: relative;" *ngIf="control"  [ngClass]="{ 'is-invalid':(control.touched || control.dirty) && !control.valid  }">
         <input [focus]="focus$|async" hidden={{hidden}} [min]="min" max="max" type="{{type}}" id="{{id}}" placeholder="{{placeholder}}" [formControl]="control" class="form-control {{class}}" [ngClass]="{ 'is-invalid':(control.touched || control.dirty) && !control.valid  }" />
         <div style="position: absolute; right: 0; width: 30%; max-width: 100px; bottom: 0; z-index: 9999999999999999999;"  >

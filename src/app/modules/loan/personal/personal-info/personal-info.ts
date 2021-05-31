@@ -11,4 +11,6 @@ export interface PersonalInfo{
     phoneNumber:string;
     dob:DOB;
    address:Address;
+   gender:string;
+   maritalStatus:string;
 }

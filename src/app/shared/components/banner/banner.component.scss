@@ -8,8 +8,7 @@
     visibility: hidden;
     width: 100%;
     margin: auto;
-    background-color:map-get($colors,lightYellow);
-    color: map-get($colors,black);
+    @include color(black);
     text-align: left;
     border-radius: $border-radius;
     overflow: hidden;
@@ -34,6 +33,13 @@
             font-size: map-get($font-sizes, "p" );
             font-weight: map-get($font-weights, "bold" );
         }
+    }
+    &--tertiary{
+        @include background(lightYellow);
+    }
+    &--info{
+        @include background(info);
+        @include color(white);
     }
     &.show {
         visibility: visible;

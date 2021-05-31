@@ -1,10 +1,10 @@
 <div id="table">
 
     <div id="filters">
-        <div class="item item--active">All</div>
-        <div class="item">Processing</div>
-        <div class="item">Defaulting</div>
-        <div class="item">Declined</div>
+        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}" (click)="changeFilter('')">All</div>
+        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Processing'}" (click)="changeFilter('Processing')">Processing</div>
+        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Defaulting'}" (click)="changeFilter('Defaulting')">Defaulting</div>
+        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='NotQualified'}" (click)="changeFilter('NotQualified')">Declined</div>
     </div>
     <table>
         <thead>
@@ -12,22 +12,34 @@
                 <th>Date</th>
                 <th>Loan ID</th>
                 <th>Amount</th>
+                <th>Loan Product</th>
                 <th>Tenure</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody *ngIf="data.length>0">
-            <tr>
-                <td>Date</td>
-                <td>Loan ID</td>
-                <td>Amount</td>
-                <td>Tenure</td>
-                <td>Status</td>
-                <td>Action</td>
-            </tr>
+        <tbody *ngIf="data$|async as data">
+            <ng-container *ngIf="data.rows.length==0">
+                    <div class="no-data">
+                    <span class="material-icons material-icons-outlined">
+                        info
+                        </span>
+                    <h3>No data available</h3>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="data.rows.length>0">
+                <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                    <td>{{row.requestDate | date :'MMMM d, y'}}</td>
+                    <td>{{row.requestId}}</td>
+                    <td>{{row.amount|currency:'₦'}}</td>
+                    <td>{{row.loanProduct}}</td>
+                    <td>{{row.tenure}} {{row.denominator}}</td>
+                    <td>{{row.requestStatus}}</td>
+                    <td><app-button [class]="'widget_button--small'" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td>
+                </tr>
+            </ng-container>
         </tbody>
-        <tbody *ngIf="data.length==0">
+        <tbody *ngIf="!(data$|async)">
             <div class="no-data">
                 <span class="material-icons material-icons-outlined">
                     info
@@ -37,3 +49,5 @@
         </tbody>
     </table>
 </div>
+
+<ng-content select="'[slot=pagination]'"></ng-content>

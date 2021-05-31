@@ -17,10 +17,12 @@
             &:first-child{
                 // background: map-get($colors, lightYellow );
                 border: 0.5px solid map-get($colors, lightGrey );
+                @include paddingVertical(true,"px",1)
             }
             &:nth-child(2){
                 @include paddingHorizontal(true,"px",1);
                 @include paddingVertical(true,"px",1);
+                max-height: 500px;
             }
         }
     }

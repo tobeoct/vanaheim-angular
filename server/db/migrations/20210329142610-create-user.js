@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.ENUM('Active','Inactive'),
+        allowNull:false
+      },
       username: {
         type: Sequelize.STRING,
         allowNull: false,

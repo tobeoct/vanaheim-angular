@@ -1,0 +1,18 @@
+@import '../../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../../styles/themes/_theme-dir';
+#document-upload{
+    @include paddingVertical(false,"vh",1.5,0);
+    #disclaimer{
+        @include color(midGrey);
+        @include marginVertical(false,"px",0,2);
+        font-size: 1.2em;
+    }
+
+    // &.disabled{
+    //     *{
+    //         pointer-events: none !important;
+    //     }
+    //     opacity: 0.5;
+    // }
+   
+}

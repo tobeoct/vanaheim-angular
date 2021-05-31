@@ -1,0 +1,40 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+.progress{
+    position: relative;
+    width: 100%;
+    height: map-get($sizings,"px")*0.5;
+    margin-bottom: 10px;
+    border-radius: $border-radius;
+    overflow: hidden;
+    .base{
+        position: absolute;
+        z-index: 1;
+        @include background(lightGrey);
+        width: 100%;
+        height: 100%;
+        border-radius: $border-radius;
+    }
+    .slide{
+        position: absolute;
+        z-index: 2;
+        @include background(midYellow);
+        &#Pending{
+            @include background(midGrey);
+        }
+        &#Approved{
+            @include background(green);
+        }
+        &#UpdateRequired{
+            @include background(facebook);
+        }
+        &#NotQualified{
+            @include background(google);
+        }
+        &#Error{
+            @include background(google);
+        }
+        height: 100%;
+        border-radius: $border-radius;
+    }
+}

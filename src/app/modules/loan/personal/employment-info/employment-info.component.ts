@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
-import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { EmploymentInfo } from './employment-info';
@@ -72,7 +72,7 @@ export class EmploymentInfoComponent implements OnInit {
    
   focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   focus$:Observable<boolean> = this.focusSubject.asObservable();
-  delay$ = from([1]).pipe(delay(3000));
+  delay$ = from([1]).pipe(delay(1000));
   loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
   errorMessageSubject:Subject<any> = new Subject<any>(); 
@@ -102,10 +102,24 @@ export class EmploymentInfoComponent implements OnInit {
     this.states = this._store.states;
   }
 
+  allSubscriptions:Subscription[]=[];
+  focus(){
+    this.focusSubject.next(true)
+  }
+
+ngAfterViewInit(): void {
+    const sub = this.delay$.subscribe(c=>{
+        this.focus();    
+    })
+    this.allSubscriptions.push(sub);
+}
+ngOnDestroy(): void {
+  this.allSubscriptions.forEach(sub=>sub.unsubscribe());
+}
 
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
-    const employmentInfo:EmploymentInfo ={payDay:this.payDay.value, businessSector: this.businessSector.value, netMonthlySalary: this.netMonthlySalary.value, employer: this.employer.value, email: this.email.value, phoneNumber:this.phone.value,address:{street:this.street.value, city:this.city.value, state:this.state.value}};
+    const employmentInfo:EmploymentInfo ={id:0,payDay:this.payDay.value, businessSector: this.businessSector.value, netMonthlySalary: this.netMonthlySalary.value, employer: this.employer.value, email: this.email.value, phoneNumber:this.phone.value,address:{street:this.street.value, city:this.city.value, state:this.state.value}};
      this._store.setEmploymentInfo(employmentInfo);
     this.onNavigate("nok-info");
   }

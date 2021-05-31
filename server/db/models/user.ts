@@ -26,6 +26,11 @@ module.exports = (sequelize:any, DataTypes:any) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
+    status:{
+      type: DataTypes.ENUM('Active', 'Inactive'),
+      allowNull: false,
+      defaultValue: 'Active'
+    },
      phoneNumber:{
       type: DataTypes.STRING,
       allowNull: false,

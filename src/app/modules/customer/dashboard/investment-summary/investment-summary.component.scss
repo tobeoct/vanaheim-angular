@@ -1,7 +1,14 @@
 @import "../../../../../styles/abstracts/_abstracts-dir";
 #main-content{
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  @include paddingHorizontal(true,"px",1);
+#no-data{
+    width: 100%;
 
-@include flex(false,center,space-between);
+
+@include flex(true,center);
 flex-direction: column;
 text-align: center;
 width: 80%;
@@ -14,5 +21,6 @@ margin: auto;
 }
 button{
     margin-top: 30px; border:0 !important;
+}
 }
 }

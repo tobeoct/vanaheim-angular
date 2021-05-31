@@ -1,0 +1,32 @@
+
+    <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
+        <div class=" content box-shadow" style="box-sizing: border-box;">
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+            <app-dropdown [current]="type.value" [fieldClass]="'no-margin--top'" [id]="'type'" [control]="type"  aria-placeholder="What type of collateral is this?">
+                    <ng-container slot="label"><label for="type">Collateral Type</label></ng-container>
+                    <app-option *ngFor="let t of types; let i =index" [value]="t">{{t}}</app-option>
+                </app-dropdown>
+                <app-input [focus$]="focus$" id="description" [placeholder]="'Enter your description'" [control]="description" class="form-control" [error]="(errorMessage$ | async)?.description" >
+                    <label for="description">Collateral Description</label>
+                </app-input>
+                
+                <app-input id="valuation" [placeholder]="'Enter the valuation'" [control]="valuation" class="form-control" [error]="(errorMessage$ | async)?.valuation" >
+                    <label for="valuation">Collateral Valuation</label>
+                </app-input>
+           
+                <app-input id="owner" [placeholder]="'Who owns the Collateral'" [control]="owner" class="form-control" [error]="(errorMessage$ | async)?.owner" >
+                    <label for="owner">Owner</label>
+                </app-input>
+                <ng-container *ngIf="hasDocument.value=='true'">
+                  <app-document [control]="document"><label>Collateral Document</label></app-document>
+              </ng-container>
+              <div style="margin-top: 30px;">
+                  <app-checkbox [outline]="true" [active]="hasDocument.value!=''" [control]="hasDocument" [value]="'true'">Do you have your collateral document?</app-checkbox>
+              </div>
+        <div style="margin-top: 60px;">
+            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+        </div>
+    </app-form>
+    </div>
+</div>
+                            

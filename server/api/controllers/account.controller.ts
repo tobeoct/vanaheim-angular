@@ -1,87 +1,75 @@
 import UtilService  from '@services/implementation/common/util';
 import { GET, POST, route,before } from 'awilix-express'; 
 import axios from 'axios';
+import RedisMiddleware from 'server/middleware/redis-middleware';
 const expAutoSan = require('express-autosanitizer');
+
+// const accountList:any={};
 @route('/api/account')
 export default class AccountController {
 
-  instance = axios.create({
-    method: 'post',
-    baseURL: 'https://app.verified.ng',
-    timeout: 20000,
-    headers: {'Content-Type': 'application/json','apiKey': "zeb'V8U*-h*e-jO'",'userid':'1543318849803','mode': 'no-cors'},
-  });
    accountEnquiryInstance = axios.create({
     method: 'post',
     baseURL: 'https://app.verified.ng',
     timeout: 20000,
     headers: {'Content-Type': 'application/json','api-key': "7UBUKPMxF8i99DgB",'userid':'1543318849803'}, //,'accountNumber':body.accountNumber,'bankcode':key},
   });
-  
-   bvnList:any={
-  };
-   bankList:any={};
-    constructor(private _utilService:UtilService) {
+ 
+    constructor(private _utilService:UtilService,private _redis:RedisMiddleware) {
 
     }
+
+    getAccountName(data:any){
+      //"inquiry":{"status":"00","accountNumber":"0801850608","otherNames":"TOBECHUKWU","surname":"ONYEMA","bvn":null,"bankCode":"044"}
+      return data["surname"]+" "+data["otherNames"];
+    }
     @route('/enquiry')
-    @before([ expAutoSan.route])
     @POST()
-     enquiry=(req:any, res:any) => {
-      let response = this._utilService.createResponse();
+     enquiry=async (req:any, res:any,next:any) => {
       let accountNumber;
+      let cacheKey = "accountList";
+      let accountList:any = await this._redis.get(cacheKey,{});
       if(this._utilService.verifyRequest(req,"accountenquiry")&&this._utilService.spamChecker(req.ip,"accountenquiry")){
         try{
        let url='/inquiry/api/sacctinq/bvn/wrapper';
       let body ={bankCode:req.body.bankcode,accountNumber:req.body.accountnumber};
       accountNumber = body.accountNumber;
       const key = `${body.bankCode}-${body.accountNumber}`;
-      console.log(key);
-      if(!this._utilService.hasValue(this.bankList[key]) ){
-        this.accountEnquiryInstance.post(url,body).then(this._utilService.validateResponse).then((response:any)=>this._utilService.readResponseAsJSON(response))
-        .then((result:any)=>{
+      if(!this._utilService.hasValue(accountList[key]) ){
+       let result = await this.accountEnquiryInstance.post(url,body);
+       
           console.log("Fetch Result");
-          // console.log(result);
-          if(this._utilService.hasValue(result["inquiry"])){
+          if(this._utilService.hasValue(result.data["inquiry"]) && result.data["inquiry"]["status"]=="00"){
           
-          this.bankList[key] = result;
+          accountList[key] = result.data["inquiry"];
           }
-          response.isSuccessful=true;
-        response.ResponseCode ="00";
-        response.ResponseDescription="Account Enquiry was successful";
-        response.Data= result;
+
+          if(result.data["inquiry"]["status"]=="00"){
+          
+        res.data={message:"Account Enquiry was successful",data:this.getAccountName(result.data["inquiry"])};
+        res.statusCode = 200;
+          }else{
+            res.statusCode = 400;
+            res.data = {message:"Account Enquiry was not successful"};
+          }
         
-      res.send(response);
-        }).catch((err:any)=>{console.log(err);
-          response.ResponseCode="06"
-          response.Data = err;
-          response.ResponseDescription ="Account Enquiry was not successful"
-          console.log(err);
-          res.send(response);});
       }
       else{
         console.log("Cached Result");
-        response.isSuccessful=true;
-        response.ResponseCode ="00";
-        response.ResponseDescription="Account Enquiry was successful";
-        
-        response.Data = this.bankList[key];
-        
-        res.send(response);
+        res.data={message:"Account Enquiry was successful",data:this.getAccountName(accountList[key])};
+        res.statusCode = 200;
       }
       }
       catch(err){
-        response.ResponseCode="06"
-        response.Data = err;
-        response.ResponseDescription ="Account Enquiry was not successful"
+        res.data={message:"Account Enquiry was not successful"};
+          res.statusCode = 500;
         console.log(err);
-        res.send(response);
       }
       }else{
-        response.ResponseCode="06"
-        response.Data = "Spam Alert";
-        response.ResponseDescription ="Sorry we can not process your request at the moment. Kindly contact our support team."
-        res.send(response);
+        res.data={message:"Sorry we can not process your request at the moment. Kindly contact our support team."};
+        res.statusCode = 400;
       }
+      await this._redis.save(cacheKey,accountList);
+      next();
     }
 }

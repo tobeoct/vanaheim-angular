@@ -50,6 +50,7 @@ import { BaseService } from "./base-service";
   convertToDevice= (modelInDb:any) => {
     return new Promise<Device>(async (resolve, reject) =>{
     let device:any;
+    console.log(modelInDb);
     if(modelInDb && Object.keys(modelInDb).length>0){
       device = new Device();
       device = modelInDb.dataValues as Device;
@@ -70,6 +71,7 @@ import { BaseService } from "./base-service";
     private sendToDevice=(payload:any)=>{
        
         return new Promise<PushNotification>(async (resolve, reject) => {
+            try{
             let {device,notification}= payload;
             const sub = await this.convertToSubscription(await this._subscriptionRepository.getByDeviceID(device.id))
             if(!sub) {reject("Failed to get subscription");}
@@ -79,12 +81,14 @@ import { BaseService } from "./base-service";
            await this.sendNotification({notification,token:JSON.parse(sub.token),pushNotification:pushNot});
         resolve(pushNot);
             }
-
+        }catch(err){
+            resolve(new PushNotification())
+        }
     });
     }
-    sendNotificationToMany= async (payload:any)=>{
+    sendNotificationToMany= async ({customerIds,notification,type="single"}:any)=>{
         console.log("Send notification to Many");
-        const {customerIds,notification,type} = payload;
+        // const {customerIds,notification,type} = payload;
         return new Promise<PushNotification[]>(async (resolve, reject) => {
             try{
         let devices:any[]=[];
@@ -99,8 +103,12 @@ import { BaseService } from "./base-service";
             });
         }else{
             customerIds.forEach(async(id:number)=>{
-               const device= await this.convertToDevice(await this._deviceRepository.getByCustomerID(id));
-               pushNots.push(await this.sendToDevice({device,notification}))
+               const devices= await this._deviceRepository.getByCustomerID(id);
+               if(devices){
+               devices.forEach(async device=>{
+                pushNots.push(await this.sendToDevice({device,notification}))
+               })
+            }
             })
         }
 
@@ -112,10 +120,12 @@ resolve(pushNots);
 
     }
 
-     sendNotification= (payload: any)  => {
-        const {userID,notification,browserID,token,pushNotification} = payload;
+     sendNotification= ({userID,notification,browserID,token,pushNotification}:any)  => {
+         
+        // const {userID,notification,browserID,token,pushNotification} = payload;
         const request = JSON.stringify({notification});
         return new Promise<any>(async (resolve, reject) => {
+            
         console.log(`Subscription received`);
         let pushNot = new PushNotification();
         if(pushNotification) pushNot = pushNotification;
@@ -142,9 +152,10 @@ resolve(pushNots);
         }catch(err){
             await this.updatePushNotification(pushNot);
             console.log(err);
-            reject(err);
+            reject("Notification failed to send"+err);
         }
         });
+    
     }
      registerDevice=(payload: any)  => {
          const {browserID,customerID} = payload;
@@ -152,6 +163,7 @@ resolve(pushNots);
             let device = await this.convertToDevice(await this._deviceRepository.getByBrowser(browserID,customerID));
             if(device){resolve(device);return;}
             device = new Device();
+            device.id=0;
             device.customerID = customerID;
             device.browserID = browserID;
             device.createdAt = new Date();
@@ -162,6 +174,7 @@ resolve(pushNots);
      subscribe= (payload: any) => {
          const {browserID,token,userID} = payload;
         return new Promise<Subscription>(async (resolve, reject) => {
+            try{
             let user = await this._userService.convertToModel(await this._userService.getById(userID));
             console.log("UserID",userID)
            const device =await this.registerDevice({browserID,customerID:user.customer.id})
@@ -180,7 +193,7 @@ resolve(pushNots);
                 notification.title = "Welcome to Vanaheim";
                 notification.body = "Thanks for subscribing to our notifications. We would be sure to keep you posted";
                 notification.vibrate = [100, 50, 100]
-                notification.icon= 'https://www.shareicon.net/data/256x256/2015/10/02/110808_blog_512x512.png';
+                notification.icon= 'https://i.tracxn.com/logo/company/Capture_6b9f9292-b7c5-405a-93ff-3081c395624c.PNG?height=120&width=120',//'https://www.shareicon.net/data/256x256/2015/10/02/110808_blog_512x512.png';
                 notification.data = new WebNotData();
                 notification.data.url = "http://localhost:4200/my/dashboard";
                 if(subscriptionInDb && Object.keys(subscriptionInDb).length>0){
@@ -205,6 +218,10 @@ resolve(pushNots);
            }else{
                reject("Device Registration Failed")
            }
+        }catch(err){
+            console.log("Error while subscribing",err);
+            reject("Subscription Failed");
+        }
         });
     }
 
@@ -219,11 +236,12 @@ resolve(pushNots);
         pushNot.createdAt = new Date();
         pushNot.isSent = false;
         console.log("Logging push notification")
-       return await this.convertToPushNotification(await this._pushNotificationRepository.create(pushNot));
+        let saved = await this._pushNotificationRepository.create(pushNot);
+       return await this.convertToPushNotification(saved);
     }
 
     updatePushNotification=async(pushNot:PushNotification)=>{
-        pushNot.createdAt = new Date();
+        pushNot.updatedAt = new Date();
         await this._pushNotificationRepository.update(pushNot);
     }
 

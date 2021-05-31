@@ -53,7 +53,7 @@ export default class App {
       }
       
     _create(container:any) {
-
+        let _this = this;
         const app = express();
         app.use(express.static('dist/vanaheim'));
         app.use(morgan("combined"))
@@ -72,7 +72,8 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
         app.use(this._session.getSession())
         app.use(inject(sessionRequestAuthorisation))
         app.use("/api",inject(clientApiKeyValidation),inject(authoriseRequest),expAutoSan.route)
-        if(process.env.NODE_ENV =="production"){
+        if(this._appConfig.environment =="production"){
+          console.log("Production");
         app.use(loadControllers('api/controllers/*.controller.js', {cwd: __dirname}));
         }else{
           app.use(loadControllers('api/controllers/*.controller.ts', {cwd: __dirname}));
@@ -81,8 +82,8 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
 
         app.get('*', function(req:any, res:any) {
           // console.log( req.session);
-          let p = process.env.NODE_ENV=="production"?"": "dist/";
-          let b = process.env.NODE_ENV=="production"?"../": "../";
+          let p = _this._appConfig.environment=="production"?"": "dist/";
+          let b = _this._appConfig.environment=="production"?"../": "../";
           console.log(__dirname);
           console.log( path.resolve(__dirname, b) )
           // ,{ root: path.resolve(__dirname, b)  }p+

@@ -12,6 +12,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull:false
       },
+      status: {
+        type: Sequelize.ENUM('Active','Inactive'),
+        allowNull:false
+      },
       customerID: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

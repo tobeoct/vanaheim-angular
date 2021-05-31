@@ -22,6 +22,11 @@ module.exports = (sequelize:any, DataTypes:any) => {
       type: DataTypes.BOOLEAN,
       allowNull:false
     },
+    status:{
+      type: DataTypes.ENUM('Active', 'Inactive'),
+      allowNull: false,
+      defaultValue: 'Active'
+    }
   
   });
   PushNotification.associate = (models:any) => {

@@ -124,7 +124,6 @@ else{
   user.createdAt = new Date();
   user.email = email;
   user.phoneNumber = phoneNumber;
-  user.isActive = true;
   user.username = email;
   user.status = BaseStatus.Active;
   user.code = this._utilService.autogenerate({prefix:"USER"});

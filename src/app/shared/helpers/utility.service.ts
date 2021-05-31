@@ -69,6 +69,11 @@ export class Utility{
     return convertString;
     
 }
+
+getFileExtension=(filename:string)=>{
+  let ext = filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
+  return ext;//filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);//filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename
+}
 private getBrowserID=()=>{
   let browserID="";
   let Sys:any = {};
@@ -159,6 +164,20 @@ value =val;
   //const val = currencyFormatter(num).toString().replace(/[NGN]+/g,"").replace(/[₦]+/g,"").split('.')[0].replace(/\D/g,'');
   // console.log(val)
   return val.trim();
+}
+
+formatCurrency=(value:number)=>{
+  // Create our number formatter.
+var formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'NGN',
+
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+});
+
+formatter.format(value); 
 }
  hasValue = (obj:any) => {
    

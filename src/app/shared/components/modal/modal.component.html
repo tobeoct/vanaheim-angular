@@ -1,21 +1,28 @@
-    
-<div *ngIf="show" class="modal" style="position: fixed; z-index: 99999999999999 !important;">
-    <div *ngIf="type=='investment-indication'" class="modal_investment-success theme_dropshadow modal_type">
-        <div class="icon theme_flex theme_flex--middle">
-            <!-- <div class="icon_image">
-                <i class="fas fa-check theme_color--white"></i>
-            </div> -->
-            <app-lottie assetPath="vanir-capital-badge.json"></app-lottie>
-            <!-- <app-lottie [assetPath]="assetPaths.badge"></app-lottie>              -->
-        </div>
-        <div class="modal_content">
-            <div class="theme_text--heading1">Investment Indication</div>
-           
-            <div class="form_group">
-                <p class="theme_color--grey">You have successfully indicated your interest. We would contact you shortly. 😊</p>
-                <!-- <button class="widget_button"  style="margin: 5px auto;" tabindex="0"><div>Continue</div></button> -->
-                <app-button [options]="buttonOptions" (click)="close()"></app-button>
+<div class="modal animate__animated animate__fadeIn">
+    <!-- card card--primary -->
+    <div class="modal-content card card--primary animate__animated animate__fadeInUp" #modalContent>
+
+        <div class="modal-header">
+            <!-- <ng-container *ngIf="header">
+                <ng-container *ngTemplateOutlet="header.headerContent">
+                </ng-container>
+            </ng-container> -->
+<ng-content select="[slot=header]"></ng-content>
+            <div class="close" (click)="close()">
+                <span class="material-icons">
+                    close
+                    </span>
             </div>
         </div>
+        <div class="modal-body">
+            <!-- <ng-container #body></ng-container>
+            <ng-container *ngIf="modalBody$|async as mBody">
+                <ng-container  *ngTemplateOutlet="mBody" >
+                </ng-container>
+            </ng-container> -->
+<ng-content select="[slot=body]"></ng-content>
+        </div>
+
     </div>
+
 </div>

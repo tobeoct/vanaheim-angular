@@ -1,13 +1,37 @@
 
+
+const ipChecks:any = {};
 export default class UtilService{
- ipChecks:any = {};
- retryCount:number =0;
+ 
+ retryCount:number =10;
+ constructor(private moment:any){
+
+ }
+
+ 
+  toDate(day:number,month:string,year:number):Date{
+  return new Date(day+'-'+ month + '-' + year);
+}
+ toAddress(street:string,city:string,state:string):string{
+  return street+', '+ city + ', ' + state;
+}
   createResponse=():any=> {
    return {isSuccessful:false, ResponseCode:"06",ResponseDescription:"Processing",Data:null};
   }
    currencyFormatter=(value:any)=>{
   return Intl.NumberFormat('yo-NG', {style: 'currency', currency: 'NGN'})
 .format(value)
+}
+replaceAll = (string:any, search:any, replace:any) => {
+  return string.split(search).join(replace);
+}
+getFileExtension=(filename:string)=>{
+  let ext = filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
+  return ext;//filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);//filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename
+}
+convertToPlainNumber =(num:any)=>{
+  const value = parseInt(this.replaceAll(num.toString(),",","").replace('NGN','').replace('₦','').trim());
+  return value;
 }
  randPassword=(letters:number, numbers:number, either:number) =>{
   var chars = [
@@ -25,7 +49,7 @@ export default class UtilService{
   }).join('')
 }
 autogenerate=({prefix}:any)=>{
- return `${prefix}_`+Math.floor(Math.random() * 10000);
+ return `${prefix}_`+ this.moment().format("DDmmyyyyhhmmss");
 }
   titleCase=(str:any)=> {
     try{
@@ -59,25 +83,25 @@ autogenerate=({prefix}:any)=>{
   spamChecker=(ip:any,controller:any)=>{
     try{
       if(!this.hasValue(ip)||!this.hasValue(controller)) return false;
-    if(this.hasValue(this.ipChecks[controller])){
-      let value = this.ipChecks[controller][ip];
+    if(this.hasValue(ipChecks[controller])){
+      let value = ipChecks[controller][ip];
       if(this.hasValue(value)){
       if(parseInt(value.count)>=this.retryCount && (value.datetime.getHours())==new Date().getHours()){
-        this.ipChecks[controller][ip].count +=1;
-        this.ipChecks[controller][ip].datetime = new Date();
+        ipChecks[controller][ip].count +=1;
+        ipChecks[controller][ip].datetime = new Date();
         return false;
       }else{
-        this.ipChecks[controller][ip].count +=1;
-        this.ipChecks[controller][ip].datetime = new Date();
+        ipChecks[controller][ip].count +=1;
+        ipChecks[controller][ip].datetime = new Date();
       }
     }else{
-      this.ipChecks[controller][ip]={count:1,datetime:new Date()};
+      ipChecks[controller][ip]={count:1,datetime:new Date()};
     }
     }else{
-      this.ipChecks[controller]={};
-      this.ipChecks[controller][ip]={count:1,datetime:new Date()}
+      ipChecks[controller]={};
+      ipChecks[controller][ip]={count:1,datetime:new Date()}
     }
-    console.log("SPAM CHECKER:" +JSON.stringify(this.ipChecks));
+    console.log("SPAM CHECKER:" +JSON.stringify(ipChecks));
     return true;
   }catch(err){
     console.log("SPAM CHECKER: ERROR -" +err);

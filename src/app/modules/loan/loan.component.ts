@@ -12,7 +12,6 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 export class LoanComponent implements OnInit {
 
-  
 showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 show$:Observable<boolean> = this.showSubject.asObservable();
 isLoggedIn:boolean=false;

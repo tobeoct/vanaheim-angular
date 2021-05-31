@@ -1,0 +1,21 @@
+<div id="date" class="theme_row {{class}} d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end"  [formGroup]="dateGroup">
+                   
+    <div class="theme_col-4">
+        <app-dropdown [current]="month.value"  [id]="'month'" [control]="month"  aria-placeholder="What is your month of {{placeholder}}">
+            <ng-container slot="label"><label for="month"><ng-content></ng-content></label></ng-container>
+            <app-option *ngFor="let month of months; let i =index" [value]="month">{{month}}</app-option>
+        </app-dropdown>
+    </div> <div class="theme_col-2">
+        <app-input id="day" type="number" errorType="right" [control]="day" class="form-control" [error]="(errorMessage$ | async)?.day" >
+            
+        </app-input>
+    </div>
+    <div class="theme_col-4">
+        <app-input id="year" type="number" errorType="right" [control]="year" class="form-control" [error]="(errorMessage$ | async)?.year" >
+            
+        </app-input>
+    </div>
+    <div *ngIf="dateGroup.errors">
+        <div *ngIf="dateGroup.errors?.match" class="snackbar snackbar-danger">Enter all fields</div>
+    </div>
+</div>

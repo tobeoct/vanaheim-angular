@@ -1,0 +1,17 @@
+    
+<div *ngIf="show" class="modal" style="position: fixed; z-index: 99999999999999 !important;">
+    <div *ngIf="type=='investment-indication'" class="modal_investment-success theme_dropshadow modal_type">
+        <div class="icon theme_flex theme_flex--middle">
+           
+            <app-lottie assetPath="vanir-capital-badge.json"></app-lottie>
+        </div>
+        <div class="modal_content">
+            <div class="theme_text--heading1">Investment Indication</div>
+           
+            <div class="form_group">
+                <p class="theme_color--grey">You have successfully indicated your interest. We would contact you shortly. 😊</p>
+                <app-button (click)="close()">Continue</app-button>
+            </div>
+        </div>
+    </div>
+</div>

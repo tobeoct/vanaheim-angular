@@ -14,7 +14,8 @@
 </div>
 <app-toaster [show]="updateAvailable"></app-toaster> 
 <app-customer-header></app-customer-header>
-<app-banner></app-banner>
+<app-banner><ng-container slot="content"><p><b style="font-weight: 700;">Welcome to Vanaheim</b>, There’s something missing. Tap the button to finish setting up</p></ng-container><ng-container slot="action">
+  <button (click)="reload()" class="widget_button widget_button--small">Complete your profile</button></ng-container></app-banner>
 <div style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
 <router-outlet></router-outlet>
 </div>

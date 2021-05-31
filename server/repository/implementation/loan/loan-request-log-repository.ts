@@ -4,7 +4,22 @@ import { BaseRepository } from "../base-repository";
 
 
  export class LoanRequestLogRepository extends BaseRepository<LoanRequestLog> implements ILoanRequestLogRepository{
-   super(){
-
-   }
+  constructor(_db:any){
+    super(_db.LoanRequestLog)
+  }
+  getByCustomerID=(customerID:number)=>  new Promise<LoanRequestLog>(async (resolve,reject)=>{
+    return new Promise<LoanRequestLog>(async (resolve, reject) =>{
+      try{
+      let response = await this._db.findOne({
+        where: {
+          customerID: customerID
+        }
+      });
+      let dataValues = response?.dataValues as LoanRequestLog;
+      resolve(dataValues);
+    }catch(err){
+      reject(err);
+    }
+    });
+  });
 }

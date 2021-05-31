@@ -3,10 +3,10 @@ import { FaqComponent } from './faq/faq.component';
 import { NotificationComponent } from './notification/notification.component';
 import { BaseModule } from '../base.module';
 import { LoanHeaderComponent } from 'src/app/modules/loan/layout/header/header.component';
-import { ApplyingAsComponent } from 'src/app/modules/loan/personal/applying-as/applying-as.component';
-import { LoanProductComponent } from 'src/app/modules/loan/personal/loan-product/loan-product.component';
-import { LoantypeComponent } from 'src/app/modules/loan/personal/loantype/loantype.component';
+import { ApplyingAsComponent } from 'src/app/modules/loan/shared/applying-as/applying-as.component';
+import { LoanProductComponent } from 'src/app/modules/loan/shared/loan-product/loan-product.component';
 import { ComponentsModule } from '../components/components.module';
+import { LoantypeComponent } from 'src/app/modules/loan/shared/loantype/loantype.component';
 
 
 

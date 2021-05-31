@@ -1,0 +1,27 @@
+<div class="content content--small">
+    <ng-container *ngFor="let doc of (documents$|async)">
+       <div class="doc">
+           <div  class="d-flex">
+            <span style="margin-right: 10px;" class="material-icons material-icons-two-tone">
+                perm_media
+                </span><h3>{{doc.requirement}}</h3>
+            </div>
+        <div class="d-flex d-flex_vertical--center d-flex_horizontal--space-between">
+            <p>{{doc.name}}</p> <small>{{doc.createdAt| date :'MMMM d, y'}}</small>
+        </div>
+        <div class="action animate__animated animate__zoomIn">
+            <div class="download theme_dropshadow theme_dropshadow--tint"  (click)="download(doc.url,doc.name,doc.requirement)">
+                    <span class="material-icons">
+                        cloud_download
+                        </span>
+            </div>
+            <div class="delete theme_dropshadow theme_dropshadow--tint">
+                <span class="material-icons">
+                    delete
+                    </span>
+        </div>
+
+        </div>
+       </div>
+    </ng-container>
+</div>

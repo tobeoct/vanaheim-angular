@@ -1,5 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '@environments/environment';
+import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
+import { catchError, concatMap, filter, map, mergeMap, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Utility } from '../../helpers/utility.service';
+import { LoanResponse } from '../../poco/loan/loan-response';
+// import { LoanResponse } from '../../poco/loan/loan-response';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +18,19 @@ export class LoanService {
     lpo:["Finance Supply orders","Take on a new Supply Contract","Mobilize for a service contract","Stock Inventory"]
 }
 
-  constructor(private _utility:Utility) { }
+filterSubject:BehaviorSubject<string> = new BehaviorSubject<string>(''); 
+filter$:Observable<string> = this.filterSubject.asObservable();
+searchSubject:BehaviorSubject<string> = new BehaviorSubject<string>(''); 
+search$:Observable<string> = this.searchSubject.asObservable();
+pagingSubject:BehaviorSubject<any> = new BehaviorSubject<any>({pageNumber:1,maxSize:10}); 
+paging$:Observable<any> = this.pagingSubject.asObservable();
+
+
+  constructor(
+    private _http: HttpClient,
+    private _utility:Utility) { 
+
+    }
   getRate=(type:string,loanAmount:number,min:number,max:number)=>{
     let interestRate = 0;
     switch(type){
@@ -101,5 +119,72 @@ else if(loanAmount>=100000 && loanAmount<200000)
                     }
       getTotalRepayment=(monthlyRepayment:number,tenure:number)=>{
         return monthlyRepayment * tenure;
-      }          
+      }    
+      
+      apply=(payload:LoanResponse)=>{
+        // console.log(payload)
+        return this._http.post<any>(`${environment.apiUrl}/loans/create`, payload)
+        .pipe(map(response => {
+            // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
+            if(response && response.status==true){
+               return response.response;
+            }
+            return response;
+        }));
+
+    }
+
+    
+    search=(payload:any)=>{
+      return this._http.post<any>(`${environment.apiUrl}/loans/search`, {...payload})
+      .pipe(map(response => {
+          if(response && response.status==true){
+             return response.response;
+          }
+          return {};
+      }));
+    }
+
+    getLatest=()=>{
+      
+      return timer(0, 30000)
+    .pipe(concatMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
+      .pipe(map(response => {
+        if(response && response.status==true){
+           return Object.keys(response.response).length>0?response.response:null;
+        }
+        return null;
+    }),shareReplay(1)))
+    )
+    }
+
+    timer$:Observable<any> = timer(0, 1000);
+
+    loans$:Observable<any>= this.search({pageNumber:1,maxSize:10});
+    latestLoan$:Observable<any> =  this.getLatest();//combineLatest([this.getLatest(),this.timer$]).pipe(map(([loans,timer])=>loans),shareReplay(1));
+loanWithFilter$= combineLatest([
+  this.loans$,
+  this.filter$,
+  this.search$,
+  this.paging$
+])
+  .pipe(mergeMap(([loans,filter,search,paging]) =>  this.search({...paging,status:filter,search})),shareReplay(1),
+  map(value=>value), 
+  catchError(err => {
+      console.error(err);
+      return EMPTY;
+    })
+    );
+
+    filteredLoans$ = this.loanWithFilter$
+    .pipe(
+      filter(filteredLoan => Boolean(filteredLoan)),
+      switchMap((loans:any) =>
+        from(loans.rows)
+          .pipe(
+            mergeMap(loans =>  this.search({pageNumber:1,maxSize:10})),
+            tap(suppliers => console.log('product suppliers', JSON.stringify(suppliers)))
+          )
+      )
+    );
 }

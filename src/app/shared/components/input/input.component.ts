@@ -19,11 +19,13 @@ export class InputComponent implements OnInit {
   @Input() placeholder:string;
   @Input() control:FormControl;
   @Input() class:string;
+  @Input() disabled:boolean;
   @Input() required:boolean;
   @Input() id:string;
   @Input() hidden:boolean;
   @Input() errorType:string = "default";
   @Input() focus$:Observable<boolean>;
+  @Input() loading$:Observable<boolean>;
   @Output() valueChange = new EventEmitter();
   isRequired:boolean= true;
   constructor(private utility:Utility) { 

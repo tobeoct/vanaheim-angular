@@ -23,9 +23,12 @@ CC_EMAIL:string;
 constructor(private _utilService:UtilService,private _appConfig:AppConfig){
 
 }
-  SendEmail=async({subject,to,attachment,fileNames,html,toCustomer,type}:any)=>{
+getFileName=(path:string)=>{
+  return  `${path.split('/')[path.split('/').length-1].trim()}`
+}
+  SendEmail=async({subject,to,attachment,filePaths,html,toCustomer,type}:any)=>{
   return new Promise((resolve,reject)=>{
-//const SendEmail=({subject,to,attachment,fileNames,html,toCustomer,type})=>new Promise((resolve,reject)=>{
+//const SendEmail=({subject,to,attachment,filePaths,html,toCustomer,type})=>new Promise((resolve,reject)=>{
   console.log("---------------SENDING EMAIL---------------");
   let transporterOptions:any = {
     // service: 'gmail',
@@ -85,21 +88,19 @@ constructor(private _utilService:UtilService,private _appConfig:AppConfig){
     ]
   };
   if(this._utilService.hasValue(attachment)){
-    console.log(`./uploads/${attachment.trim()}.pdf`)
     mailOptions["attachments"].push({   // file on disk as an attachment 
-    filename: `${attachment.split('-')[0].replace("static/",'').trim()}.pdf` ,
-    path: `./uploads/${attachment.trim()}.pdf` // stream this file
+    filename: this.getFileName(attachment) ,
+    path: `${attachment.trim()}` // stream this file
   });
     }
-    if(this._utilService.hasValue(fileNames)){
+    if(this._utilService.hasValue(filePaths)){
       
       if(!this._utilService.hasValue(mailOptions["attachments"]))mailOptions["attachments"]=[]
-      console.log("File Names");
-      console.log(fileNames);
-    for(let i=0;i<fileNames.length;i++){
+    
+    for(let i=0;i<filePaths.length;i++){
       mailOptions["attachments"].push({   // file on disk as an attachment
-        filename: `${fileNames[i].replace("static/",'').trim()}` ,
-        path: `./uploads/${fileNames[i]}` // stream this file
+        filename:  this.getFileName(filePaths[i]) ,
+        path: `${filePaths[i]}` // stream this file
       });
     }
     }
@@ -137,13 +138,13 @@ constructor(private _utilService:UtilService,private _appConfig:AppConfig){
     </div>
 </div>`;
 console.log("Attachments")
-console.log(mailOptions["attachments"])
+console.log(mailOptions)
 transporter.sendMail(mailOptions, function(error:any, info:any){
     if (error) {
       console.log(error);
       reject(error);
     } else {
-      resolve("Email sent");
+      resolve(true);
       console.log('Email sent: ' + info.response);
       console.log(`${to.trim()} ${attachment} ${new Date()}`);
     }
@@ -152,46 +153,10 @@ transporter.sendMail(mailOptions, function(error:any, info:any){
   }
   catch(err){
     console.log(err);
-    throw new Error(err);
+    throw new Error("Error Sending Email");
   }
 });
 }
-
-
-
-  createPDFJson=(application:any)=>{
-    // console.log(application);
-    if(!this._utilService.hasValue(application)) throw new Error("Invalid Application");
-    let docDataSet ={};
-    let invalid =0
-    let total = Object.keys(application).length;
-    for(let item in application){
-      const prefix = application[item].pageTitle;
-      if(this._utilService.hasValue(application[item])){
-        total+=Object.keys(application[item]).length
-      for(let entry in application[item]){
-        if(this._utilService.hasValue(application[item][entry])){
-        if(entry.toLowerCase()!=="pagetitle"){
-          let record = application[item];
-        
-        }
-      }else{
-        invalid+=1
-      }
-      }
-    }else{
-      invalid+=1
-    }
-    }
-    // console.log(docDataSet);
-    const correctnessPercentage =((total-invalid)/total)*100;
-    console.log(correctnessPercentage);
-    if(correctnessPercentage>=80){
-    return application;
-    }else{
-      return null;
-    }
-  }
 
 
  GetFileInBase64=async(file:any)=> {
@@ -240,13 +205,7 @@ transporter.sendMail(mailOptions, function(error:any, info:any){
         }
       });
   });
-   generatePDF=(data:any,template:any,css:any,fileName:any)=>new Promise((resolve,reject)=>{
-    try{
-    resolve(pdfGenerator(data, template, css).pipe(fs.createWriteStream(`./uploads/${fileName}.pdf`)));
-    }catch(err){
-      reject(err);
-    }
-  });
+   
    base64MimeType=(encoded:any) =>{
     let result = null;
   
@@ -263,11 +222,11 @@ transporter.sendMail(mailOptions, function(error:any, info:any){
   }
    ProcessFiles=(files:any,bvnVer:any) => new Promise((resolve, reject) => {
    // console.log(files)
-    let fileNames:any[] = [];
+    let filePaths:any[] = [];
     let bvnFile;
     if(this._utilService.hasValue(files)){
       for(let item in files){
-        fileNames.push(files[item]);
+        filePaths.push(files[item]);
       }
       //Send bvn information to VCAP
       let shouldProceed = false;
@@ -289,15 +248,15 @@ transporter.sendMail(mailOptions, function(error:any, info:any){
         mime = mime.split('/')[1];
   // Remove header
   let itemName=`${item.split('.')[0]}-${Date.now()}.${mime}`;
-      fileNames.push(itemName);
+      filePaths.push(itemName);
   let base64Image = base64String.split(';base64,').pop();
   fs.writeFile(`./uploads/${itemName}`, base64Image, {encoding: 'base64'}, function(err:any) {
     console.log('File created');
-    resolve(fileNames);
+    resolve(filePaths);
   });
       }
       } else{
-        resolve(fileNames);
+        resolve(filePaths);
       }
       // console.log(Object.keys(files));
      

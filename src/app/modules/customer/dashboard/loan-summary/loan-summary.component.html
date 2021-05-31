@@ -1,11 +1,25 @@
 <div id="main-content">
-    <div class="image">
-        <img src="../../../../../assets/icons/bell-spark.svg"/>
-        </div>
-        <h3>You are yet to get the money 
-            you need </h3>
+    <ng-container *ngIf="!(latestLoan$|async)">
+        <div id="no-data">
+            <div class="image">
+             <img src="../../../../../assets/icons/bell-spark.svg"/>
+            </div>
+            <h3>You are yet to get the money 
+                you need </h3>
             <p>We are here to provide you with the funds you need quickly and easily</p>
-        
+            
             <button class="widget_button widget_button--small theme_bg--lightgrey"  (click)="onNavigate('my/loans')">Explore our rates</button>
-        
+        </div> 
+    </ng-container>
+        <ng-container *ngIf="latestLoan$|async as loan">
+              <div id="in-progress">
+                    <app-loan-status [loan$]="latestLoan$"></app-loan-status>
+                   <div id="details">
+                        <div class="item"><p>Total Loan Amount</p><p>{{loan.totalRepayment|currency:"₦":'symbol':'1.0-2' }}</p></div>
+                        <div class="item"><p>Account Number</p><p>{{loan.accountNumber}}</p></div>
+                        <div class="item"><p>Monthly Payment</p><p>{{loan.monthlyPayment|currency:"₦":'symbol':'1.0-2'}}</p></div>
+                        <div class="item"><p>Expected Close Date</p><p>{{loan.maturityDate}}</p></div>
+                   </div>
+              </div>
+        </ng-container>
 </div>

@@ -1,5 +1,5 @@
 
-<div id="loan-content" class="grid-padding-3x">
+<div id="loan-content" class="grid-padding-4x">
 <div class="left layout">
     <div id="loan-summary">
         <ng-container *ngIf="totalLoans.length>0">
@@ -32,13 +32,17 @@
         </ng-container>
     <div id="loan-history" [ngClass]="{'no-margin--top':totalLoans.length==0}">
         <div class="heading"><h3>Loan History</h3></div>
-        <app-table></app-table>
+        <app-table (filterChange)="changeFilter($event)" [data$]="loans$">
+            <ng-container slot="pagination">
+                <app-pagination [totalCount]="(loans$|async)?.count||0" [maxSize]="10" [pagingChangeSubject]="pagingSubject"></app-pagination>
+            </ng-container>
+        </app-table>
     </div>
 </div>
 </div>
 <div class="right layout">
-    <ng-container *ngIf="activeLoan">
-        <ng-container >
+    <ng-container *ngIf="(latestLoan$|async) as loan">
+        <ng-container *ngIf="loan.requestStatus=='Funded'">
             <div class="heading"><h3>Active Loan</h3> <select id="month" required>
                 <option value="January" data-display-text="January" aria-label="January">This week</option>
                 <option value="February" aria-label="February">February</option>
@@ -78,8 +82,15 @@
                 </ng-container>
             </div>
         </ng-container>
-
-        <ng-container >
+        <ng-container *ngIf="loan.requestStatus!='Funded'">
+            <div class="heading"><h3>Most Recent</h3> 
+        </div>
+            
+            <div class="card card-stroke card-stroke--black grid-padding-3x" style="margin-bottom: 30px;">
+                <app-loan-status [loan$]="latestLoan$"></app-loan-status>
+            </div>
+        </ng-container>
+        <!-- <ng-container>
             <div class="card card-cta card-cta--active">
                 <div class="thumbnail">
                     <div class="image">
@@ -96,7 +107,7 @@
                     </button>
                 </div>
             </div>
-        </ng-container>
+        </ng-container> -->
     </ng-container>
     <div id="calculator">
         <div class="heading"><h3>Explore Our Rates</h3> <button type="button" (click)="moveToApply()" class="widget_button widget_button--small widget_button--fill" >Apply Now</button></div>
@@ -147,7 +158,7 @@
                         </div>
 
                         <div style="margin-top: 60px;" #applyNow>
-                            <app-button [form]="form" [loading$]="loading$">Apply</app-button>
+                            <app-button [form]="form" [loading$]="loading$"><span *ngIf="loanCalculator">Continue</span><span *ngIf="!loanCalculator">Apply</span></app-button>
                          </div>
                     </app-form>
             </div>

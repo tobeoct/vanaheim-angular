@@ -9,7 +9,7 @@ import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
 import { Store } from 'src/app/shared/helpers/store';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
-import { LoanDetails } from '../../loan/personal/loan-calculator/loan-details';
+import { LoanDetails } from '../../loan/shared/loan-calculator/loan-details';
 
 @Component({
   selector: 'app-loans',
@@ -23,8 +23,12 @@ export class LoansComponent implements OnInit {
   assetPaths: IAssetPath = new AssetPath;
   activeLoan:boolean=false;
   totalLoans:any[]=[];
+  loanCalculator:any;
   get loanType(){
     return this.form.get("loanType") as FormControl|| new FormControl();
+  }
+  get purpose(){
+    return this.form.get("purpose") as FormControl|| new FormControl();
   }
   get loanAmount(){
     return this.form.get("loanAmount") as FormControl|| new FormControl();
@@ -53,7 +57,7 @@ loading$:Observable<boolean> = this.loadingSubject.asObservable();
 
 dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
-
+rate:number;
 minTenure:number=1;
 maxTenure:number=12;
 range:any;
@@ -61,13 +65,16 @@ tenureDenominator:string = "Mos";
 loanDetails:LoanDetails;
 monthlyRepaymentSubject:BehaviorSubject<number> = new BehaviorSubject<number>(0); 
 monthlyRepayment$:Observable<number> = this.monthlyRepaymentSubject.asObservable();
-
+loans$:Observable<any>;
 
 totalRepaymentSubject:BehaviorSubject<number> = new BehaviorSubject<number>(0); 
 totalRepayment$:Observable<number> = this.totalRepaymentSubject.asObservable();
 
+
 base:string;
 
+pagingSubject:BehaviorSubject<any>;
+latestLoan$:Observable<any>;
 tenureDenominatorSubject:BehaviorSubject<string> = new BehaviorSubject<string>("Mos"); 
 tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservable();
   constructor(private _fb: FormBuilder, private _store:Store, private _utility:Utility,
@@ -79,13 +86,20 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
        });
      }
  
-
   ngOnInit(): void {
-    this.range = this._loanService.getMinMax('Personal Loans');
+  this.loanDetails = this._store.loanCalculator as LoanDetails;
+  this.loanCalculator = this._store.loanCalculator;
+  
+  this.latestLoan$ = this._loanService.latestLoan$;
+  this.search()
+  let lType =this._store.loanType||"Personal Loans";
+    this._store.titleSubject.next("Loan Calculator");
+    this.range = this._loanService.getMinMax(lType);
     this.form = this._fb.group({
-      loanAmount: [this._utility.currencyFormatter(this.range.min),[Validators.required,Validators.minLength(6),Validators.maxLength(10), this._validators.numberRange(this.range.min,this.range.max)]],
-      loanType: ['Personal Loans', [Validators.required]],
-      tenure: [1,[Validators.required,this._validators.numberRange(this.minTenure,this.maxTenure)]],
+      loanAmount: [this.loanDetails.loanAmount?this.loanDetails.loanAmount:this._utility.currencyFormatter(this.range.min),[Validators.required,Validators.minLength(6),Validators.maxLength(10), this._validators.numberRange(this.range.min,this.range.max)]],
+      purpose: [this.loanDetails.purpose?this.loanDetails.purpose:''],
+      tenure: [this.loanDetails.tenure?this.loanDetails.tenure:1,[Validators.required,this._validators.numberRange(this.minTenure,this.maxTenure)]],
+      loanType: [lType, [Validators.required]],
   });
   this.tenureDenominatorSubject.next(this._loanService.getDenominator(this.tenure.value,this.loanType.value));
     // let d = data.filter(d=>d.allowedTypes.includes(this.loanType)&&d.allowedApplicant.includes(this.applyingAs));
@@ -97,19 +111,26 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
       
     this.monthlyRepaymentSubject.next(this._loanService.calculateMonthlyRepayment(this._utility.convertToPlainNumber(v),this.tenure.value,this.loanType.value));
     this.totalRepaymentSubject.next(this._loanService.getTotalRepayment(this.monthlyRepaymentSubject.value,this.tenure.value));
-    })
+    this.rate = this._loanService.getRate(lType,this._utility.convertToPlainNumber(this.loanAmount.value),this.range.min,this.range.max);  
+  })
 
     this.tenure.valueChanges.subscribe(v=>{
       
       this.monthlyRepaymentSubject.next(this._loanService.calculateMonthlyRepayment(this._utility.convertToPlainNumber(this.loanAmount.value),v,this.loanType.value));
       this.totalRepaymentSubject.next(this._loanService.getTotalRepayment(this.monthlyRepaymentSubject.value,v));
-      this.tenureDenominatorSubject.next(this._loanService.getDenominator(v,this.loanType.value));  
+      this.tenureDenominatorSubject.next(this._loanService.getDenominator(v,this.loanType.value)); 
+      this.rate = this._loanService.getRate(lType,this._utility.convertToPlainNumber(this.loanAmount.value),this.range.min,this.range.max); 
     })
+
+    this.pagingSubject = this._loanService.pagingSubject;
   }
  moveToApply():void {
     this.applyNow.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
 }
-  
+  search(){
+    this.loans$ = this._loanService.loanWithFilter$;// this._loanService.search({pageNumber:0,maxSize:10,status:"Processing"});
+    // this._loanService.search({}).subscribe();
+  }
   onSubmit(form:FormGroup) {
         
     // stop here if form is invalid
@@ -120,7 +141,11 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
     this.loadingSubject.next(true);
 
     this._store.setLoanType(this.loanType.value);
-    const loanDetails:LoanDetails = {monthlyRepayment:this.monthlyRepaymentSubject.value,loanAmount: this.loanAmount.value, tenure:this.tenure.value, denominator: this.tenureDenominatorSubject.value,purpose:"", totalRepayment: this.totalRepaymentSubject.value};
+    const loanDetails:LoanDetails = {rate:this.rate,monthlyRepayment:this.monthlyRepaymentSubject.value.toLocaleString('en-NG', {
+      style: 'currency',
+      currency: 'NGN'}),loanAmount: this.loanAmount.value, tenure:this.tenure.value, denominator: this.tenureDenominatorSubject.value,purpose:this.purpose.value, totalRepayment: this.totalRepaymentSubject.value.toLocaleString('en-NG', {
+        style: 'currency',
+        currency: 'NGN'})};
     this._store.setLoanCalculator(loanDetails);
     this.onNavigate('apply/applying-as');
 }
@@ -132,5 +157,7 @@ onNavigate(route:string,params:any={}):void{
   onError(value:any):void{
     this.errorMessageSubject.next(value);
   }
-
+  changeFilter(event:any){
+    this._loanService.filterSubject.next(event);
+  }
 }

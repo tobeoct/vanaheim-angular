@@ -1,5 +1,12 @@
 @import "../../../../../styles/abstracts/_abstracts-dir";
+@import "../../../../../styles/themes/_theme-dir";
 #main-content{
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  @include padding(true,"px",1);
+#no-data{
+    width: 100%;
 
 @include flex(true,center);
 flex-direction: column;
@@ -14,5 +21,37 @@ margin: auto;
 }
 button{
     margin-top: 30px; border:0 !important;
+}
+}
+#in-progress{
+    width: 100%;
+    #statuses{
+        small{
+            @include color(midGrey);
+        }
+        small.active{
+            font-weight: map-get($font-weights, "bold");
+            @include color(black);
+        }
+    }
+#details{
+    width: 100%;
+    margin-top: map-get($sizings, "px");
+    .item{
+        @include flex(vertical,center);
+        @include flex(horizontal,space-between);
+        @include paddingHorizontal(true,"px",1);
+        width: 100%;
+        height: map-get($sizings, "px")*1.5;
+        @include border(2px,solid,black);
+        @include color(black);
+        border-radius: $border-radius *2;
+        margin-bottom: map-get($sizings, "px")*0.6667;
+        &:nth-child(1){
+            @include background(black);
+            @include color(lightYellow);
+        }
+    }
+}
 }
 }

@@ -3,7 +3,7 @@
     <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
    
-        <app-input fieldClass="no-margin--top" id="bvn" [placeholder]="'Enter your bank verification number'" [control]="bvn" class="form-control" [error]="(errorMessage$ | async)?.bvn" >
+        <app-input  [loading$]="loading$" [focus$]="focus$" fieldClass="no-margin--top" id="bvn" [placeholder]="'Enter your bank verification number'" [control]="bvn" class="form-control" [error]="(errorMessage$ | async)?.bvn" >
             <label for="bvn">BVN</label>
         </app-input>
         <p>Can't remember your BVN? <b>Dial *565*0#</b></p>
@@ -15,9 +15,19 @@
 </div>
         <div style="margin-top: 60px;">
             <small>I have read, understood and accept all the terms and conditions & privacy policy for Vanir Capital LLC.</small>
-            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+            <app-button [form]="form">Next</app-button>
         </div>
     </app-form>
     </div>
 </div>
+
+
+
+<div class="snackbar_container ">
+    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0 animate__animated animate__fadeInUp">{{error}}
+    </div>
+    <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0 animate__animated animate__fadeInUp">{{success}}
+    </div>
+    
+    </div>
                             

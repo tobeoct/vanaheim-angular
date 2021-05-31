@@ -31,6 +31,12 @@ constructor(private _utility:Utility){
   
   }
 }
+filterFile=(regex:any):ValidatorFn=>{
+  return(c:AbstractControl): {[key:string]:boolean}|null=>{
+    if(!regex.exec(c.value.toLowerCase())) return {"fileNotAllowed":true};
+    return null;
+  }
+}
 username=(usernameCtrl:AbstractControl): {[key:string]:boolean}|null=>{
     if(usernameCtrl!=null){
     if(usernameCtrl.pristine) return null;
@@ -71,7 +77,7 @@ validationMessages:any = {
   password:(obj:any,key:string)=>{return "Password is too weak, (six digits or more ,include an upper case letter or a number)"},
   username:(obj:any,key:string)=>{return "Username must be a phone number or email"},
   range:(obj:any,key:string)=>{return obj.type =='currency'?`The ${key} is between ${this._utility.currencyFormatter(obj.minValue)} and ${this._utility.currencyFormatter(obj.maxValue)}`:`The ${key} is between ${obj.minValue} and ${obj.maxValue}`},
-  
+  fileNotAllowed:(obj:any,key:string)=>{return "Only image and text files are allowed"}
 }
 
 setMessage =(errorList:any,errorMessageSubject:Subject<any> )=>{

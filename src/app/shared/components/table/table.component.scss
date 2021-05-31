@@ -15,6 +15,7 @@
                 color: map-get($colors, black);
                 font-weight: map-get($font-weights, "bold" );
             }
+            cursor: pointer;
         }
     }
     table{
@@ -46,7 +47,12 @@
         tbody{
             min-height: 200px;
 
-        
+            td{
+                font-weight: map-get($font-weights, "bold");
+            }
+            tr{
+                @include flex(vertical,center);
+            }
         }
     }
 }

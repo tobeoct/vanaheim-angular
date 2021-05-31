@@ -1,9 +1,10 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from 'src/app/shared/helpers/store';
 import { Location } from '@angular/common';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-loan-header',
   templateUrl: './header.component.html',
@@ -17,7 +18,9 @@ applyingAs$:Observable<string>;
 isLoggedIn:boolean;
 base="welcome/loans/apply/";
   constructor(private _store:Store, private _router:Router, private _route:ActivatedRoute,private _location: Location, private _authService:AuthService) {
-    
+    this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
+      this.base = x.url.replace(/\/[^\/]*$/, '/');
+     });
    }
 
   ngOnInit(): void {

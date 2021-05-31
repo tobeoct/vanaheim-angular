@@ -1,0 +1,26 @@
+@import '../../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../../styles/themes/_theme-dir';
+.preview{
+    &-container{
+        @include padding(true,"px",0.5);
+        // margin-top: map-get($sizings, "px")* 0.5;
+    }
+    &-item{
+        @include paddingVertical(true,"px",0.15);
+        @include paddingHorizontal(true,"px",0.5);
+        @include background(lightGrey);
+        border-radius: $border-radius;
+        box-sizing: border-box;
+        margin-bottom: map-get($sizings, "px")* 0.5;
+    }
+    &-title{
+        margin-bottom: map-get($sizings, "px")* 0.5;
+    }
+    
+}
+.widget_button--small{
+    background: map-get($colors, lightGrey);
+    color: map-get($colors, black);
+    border: none;
+}
+

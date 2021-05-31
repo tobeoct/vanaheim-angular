@@ -61,8 +61,12 @@ color: map-get($colors, $color );
 @mixin border-color($color){
 border-color: map-get($colors, $color);
 }
-@mixin border($thickness,$style,$color){
+@mixin border($thickness,$style,$color, $important:no){
+  @if($important==no){
 border: $thickness $style map-get($colors, $color);
+}@else{
+  border: $thickness $style map-get($colors, $color) !important;
+}
 }
 @mixin padding($unified:true,$denominator:"px",$top:2,$bottom:2,$left:2,$right:2, $important: no){
 @if($important==no){

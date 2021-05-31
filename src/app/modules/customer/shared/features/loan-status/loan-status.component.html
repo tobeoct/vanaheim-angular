@@ -1,0 +1,14 @@
+<div style="text-align: left; width: 100%;" *ngIf="(loan$|async) as loan">
+    <small><b>Status of your loan request</b></small>
+    <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+        <h2 style="font-size: 2em;">{{loan.amount|currency:"₦":'symbol':'1.0-2' }}</h2>
+        <p><b>{{loan.tenure}} {{loan.denominator}}</b></p>
+    </div>
+    <div style="width: 100%; margin-top: 10px;">
+        <app-progress  [width]="(width$|async)||0" id="{{loan.requestStatus}}"></app-progress>
+        <div id="statuses" class="d-flex d-flex_horizontal--space-evenly"><small [ngClass]="{'active':loan.requestStatus=='Pending'}">Pending</small><small [ngClass]="{'active':loan.requestStatus=='Processing'}">In Review</small><small [ngClass]="{'active':loan.requestStatus=='Approved'||loan.requestStatus=='UpdateRequired'}"><ng-container *ngIf="loan.requestStatus=='NotQualified'">Not Qualified</ng-container><ng-container *ngIf="loan.requestStatus=='UpdateRequired'">Update Required</ng-container><ng-container *ngIf="loan.requestStatus!='NotQualified'&&loan.requestStatus!='UpdateRequired'">Approved</ng-container></small><small [ngClass]="{'active':loan.requestStatus=='Funded'||loan.requestStatus=='NotQualified'}"><ng-container *ngIf="loan.requestStatus=='NotQualified'">Declined</ng-container><ng-container *ngIf="loan.requestStatus!='NotQualified'">Funded</ng-container></small></div>
+    </div>
+    <!-- <div class="d-flex d-flex_horizontal--space-between">
+        <small><b><u>View History</u></b></small> <small><b><u>View Repayments</u></b></small>
+    </div> -->
+   </div>

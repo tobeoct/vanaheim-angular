@@ -26,7 +26,7 @@
                         <ng-container *ngIf="(page$|async)=='applying-as'">
                             <app-applying-as></app-applying-as>
                         </ng-container>
-                        <ng-container *ngIf="(page$|async)!='applying-as' && (page$|async)!='loan-type' && (page$|async)!=''">
+                        <ng-container *ngIf="(page$|async)=='loan-product'||((page$|async)!='applying-as' && (page$|async)!='loan-type' && (page$|async)!='')">
                             <app-loan-product></app-loan-product>
                         </ng-container>
                     </div>

@@ -38,6 +38,11 @@ module.exports = (sequelize:any, DataTypes:any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      status:{
+        type: DataTypes.ENUM('Active', 'Inactive'),
+        allowNull: false,
+        defaultValue: 'Active'
+      }
      
     });
     NOK.associate = (models:any) => {
@@ -49,11 +54,3 @@ module.exports = (sequelize:any, DataTypes:any) => {
     return NOK;
   };
   
-//   firstname:string;
-//   othernames:string;
-//   address:string;
-//   email:string;
-//   phonenumber:string;
-//   dateOfBirth:string;
-//    gender:Gender;
-//    relationship:Relationship;

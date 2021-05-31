@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
-import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { PersonalInfo } from './personal-info';
@@ -24,6 +24,8 @@ export class PersonalInfoComponent implements OnInit {
   titles:string[];
   months:string[];
   states:string[];
+  maritalStatuses:string[];
+  genders:string[];
   activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -32,6 +34,12 @@ export class PersonalInfoComponent implements OnInit {
 
   get surname(){
     return this.form.get("surname") as FormControl|| new FormControl();
+  }
+  get gender(){
+    return this.form.get("gender") as FormControl|| new FormControl();
+  }
+  get maritalStatus(){
+    return this.form.get("maritalStatus") as FormControl|| new FormControl();
   }
   get firstName(){
     return this.form.get("firstName") as FormControl|| new FormControl();
@@ -88,29 +96,29 @@ export class PersonalInfoComponent implements OnInit {
        });
     }
 
-  minAmount:number=25000;
-  maxAmount:number=1000000;
-  minTenure:number=1;
-  maxTenure:number=12;
-  tenureDenominator:string = "Mos";
   focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   focus$:Observable<boolean> = this.focusSubject.asObservable();
-  delay$ = from([1]).pipe(delay(3000));
+  delay$ = from([1]).pipe(delay(1000));
   loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
+    
+    let year = new Date().getFullYear();
+    let max = year-18;
     const personalInfo = this._store.personalInfo as PersonalInfo;
     this.form = this._fb.group({
       surname: [personalInfo.surname?personalInfo.surname:"",[Validators.required,Validators.minLength(3),Validators.maxLength(20)]],
       firstName: [personalInfo.firstName?personalInfo.firstName:"",[Validators.required,Validators.minLength(3),Validators.maxLength(25)]],
       otherNames: [personalInfo.otherNames?personalInfo.otherNames:""],
       title: [personalInfo.title?personalInfo.title:"",[Validators.required]],
+      gender: [personalInfo.gender?personalInfo.gender:"",[Validators.required]],
+      maritalStatus: [personalInfo.maritalStatus?personalInfo.maritalStatus:"",[Validators.required]],
       dobGroup: this._fb.group({
         day: [personalInfo.dob?.day?personalInfo.dob.day:1, [Validators.required, Validators.min(1), Validators.max(31)]],
         month: [personalInfo.dob?.month?personalInfo.dob.month:'January', [Validators.required]],
-        year: [personalInfo.dob?.year?personalInfo.dob.year:2002, [Validators.required, Validators.min(1900), Validators.max(2002)]]},
+        year: [personalInfo.dob?.year?personalInfo.dob.year:max, [Validators.required, Validators.min(1900), Validators.max(2002)]]},
         {}),
         contactGroup: this._fb.group({
           email: [personalInfo.email?personalInfo.email:"",[Validators.required,Validators.email]],
@@ -127,12 +135,28 @@ export class PersonalInfoComponent implements OnInit {
     this.titles = this._store.titles;
     this.states =this._store.states;
     this.months= this._store.months;
+    this.genders = this._store.genders;
+    this.maritalStatuses=this._store.maritalStatuses;
   }
 
+  allSubscriptions:Subscription[]=[];
+  focus(){
+    this.focusSubject.next(true)
+  }
+
+ngAfterViewInit(): void {
+    const sub = this.delay$.subscribe(c=>{
+        this.focus();    
+    })
+    this.allSubscriptions.push(sub);
+}
+ngOnDestroy(): void {
+  this.allSubscriptions.forEach(sub=>sub.unsubscribe());
+}
 
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
-    const personalInfo:PersonalInfo ={title:this.title.value, surname: this.surname.value, firstName: this.firstName.value, otherNames: this.otherNames.value, email: this.email.value, phoneNumber:this.phone.value, dob:{day:this.day.value, month: this.month.value, year:this.year.value},address:{street:this.street.value, city:this.city.value, state:this.state.value}};
+    const personalInfo:PersonalInfo ={title:this.title.value, surname: this.surname.value, gender: this.gender.value, maritalStatus: this.maritalStatus.value, firstName: this.firstName.value, otherNames: this.otherNames.value, email: this.email.value, phoneNumber:this.phone.value, dob:{day:this.day.value, month: this.month.value, year:this.year.value},address:{street:this.street.value, city:this.city.value, state:this.state.value}};
      this._store.setPersonalInfo(personalInfo);
     this.onNavigate("account-info");
   }

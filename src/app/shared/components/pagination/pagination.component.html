@@ -1,0 +1,11 @@
+<div id="pagination">
+    <div id="prev" class="item" (click)="prev()" [ngClass]="{'no-event':currentPage==1}"><span class="material-icons">arrow_left</span></div>
+    <div id="pages" *ngIf="pages$|async">
+        <div class="page item" (click)="onPageChange(page)" [ngClass]="{'active':(activeFilter$|async)==page}"  *ngFor="let page of pages$|async">
+            {{page}}
+        </div>
+    </div>
+    <div id="next" class="item"  (click)="next()" [ngClass]="{'no-event':currentPage==this.pageSubject.value.length}"><span class="material-icons">arrow_right</span></div>
+
+    <p>Total Count: <b>{{totalCount}}</b></p>
+</div>

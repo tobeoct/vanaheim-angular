@@ -2,7 +2,8 @@
 import { Address } from "src/app/shared/interfaces/address";
 import { DOB } from "src/app/shared/interfaces/dob";
 
-export interface NOKInfo{
+export class NOKInfo{
+    id:number=0;
     surname:string;
     title:string;
     otherNames:string;

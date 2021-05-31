@@ -8,7 +8,6 @@ import { OnboardingComponent } from './onboarding/onboarding.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { WelcomeRoutingModule } from './welcome-routing.module';
 import { HeaderComponent } from 'src/app/modules/welcome/layout/header/header.component';
-import { ModalComponent } from 'src/app/shared/components/modal/modal.component';
 import { WelcomeNavigationComponent } from './layout/navigation/navigation.component';
 import { InvestmentFormComponent } from './investments/investment-form/investment-form.component';
 
@@ -21,7 +20,6 @@ import { InvestmentFormComponent } from './investments/investment-form/investmen
     LoansComponent,
     OnboardingComponent,
     HeaderComponent,
-    ModalComponent,
     WelcomeNavigationComponent,
     InvestmentFormComponent],
   

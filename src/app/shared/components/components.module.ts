@@ -23,6 +23,12 @@ import player from 'lottie-web';
 import { LottieComponent } from './lottie/lottie.component';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { ButtonComponent } from './button/button.component';
+import { ModalComponent } from './modal/modal.component';
+import { ModalHeaderComponent } from './modal/modal-header/modal-header.component';
+import { ModalBodyComponent } from './modal/modal-body/modal-body.component';
+import { DateComponent } from './date/date.component';
+import { PaginationComponent } from './pagination/pagination.component';
+import { ProgressComponent } from './progress/progress.component';
 
 export function playerFactory() {
   return player;
@@ -48,7 +54,13 @@ export function playerFactory() {
     TableComponent,
     SliderComponent,
     DropdownComponent,
-    DropdownOptionComponent
+    DropdownOptionComponent,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    DateComponent,
+    PaginationComponent,
+    ProgressComponent
   ],
   imports: [
     BaseModule, 
@@ -76,6 +88,12 @@ export function playerFactory() {
     DropdownComponent,
     DropdownOptionComponent,
     ButtonComponent,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    DateComponent,
+    PaginationComponent,
+    ProgressComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })

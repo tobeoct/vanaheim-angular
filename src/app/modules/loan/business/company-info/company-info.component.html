@@ -1,0 +1,69 @@
+ 
+    <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
+        <div class=" content box-shadow" style="box-sizing: border-box;">
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+        <app-input [focus$]="focus$" fieldClass="no-margin--top" id="companyName" [placeholder]="'Enter your company name'" [control]="companyName" class="form-control" [error]="(errorMessage$ | async)?.companyName" >
+            <label for="companyName">Company Name</label>
+        </app-input>
+
+        <app-input id="companyRCNo" [placeholder]="'Enter your company RC. NO'" [control]="companyRCNo" class="form-control" [error]="(errorMessage$ | async)?.companyRCNo" >
+            <label for="companyRCNo">Company RC.No</label>
+        </app-input>
+
+        <app-dropdown [current]="natureOfBusiness.value" [id]="'natureOfBusiness'" [control]="natureOfBusiness"  aria-placeholder="Choose a nature of business">
+            <ng-container slot="label"><label for="natureOfBusiness">Nature Of Business</label></ng-container>
+            <app-option *ngFor="let t of natureOfBusinessList; let i =index" [value]="t">{{t}}</app-option>
+        </app-dropdown>
+        
+        <app-date [class]="'no-margin--top'" [dateGroup]="doiGroup" [month]="month" [day]="day" [year]="year">Date of Incorporation</app-date>
+
+        <app-dropdown [current]="timeInBusiness.value"  [id]="'timeInBusiness'" [control]="timeInBusiness"  aria-placeholder="How long have you been in business">
+            <ng-container slot="label"><label for="timeInBusiness">Time In Business</label></ng-container>
+            <app-option *ngFor="let timeInBusiness of timeInBusinessList; let i =index" [value]="timeInBusiness">{{timeInBusiness}}</app-option>
+        </app-dropdown>
+
+        <p style="margin-top: 60px;"><b>Contact Details</b></p>
+        <div id="contact" class="theme_row no-margin--top"  [formGroup]="contactGroup">
+            <app-input id="email" [placeholder]="'Enter your email'" [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
+                <label for="email">Email</label>
+            </app-input>
+            
+            <app-input id="phone" [placeholder]="'Enter your phone number'" [control]="phone" class="form-control" [error]="(errorMessage$ | async)?.phone" >
+                <label for="phone">Phone Number</label>
+            </app-input>
+
+            <div id="address"  [formGroup]="addressGroup">
+           
+                <app-input id="street" [placeholder]="'Enter your street address'" [control]="street" class="form-control" [error]="(errorMessage$ | async)?.street" >
+                    <label for="street">Street</label>
+                </app-input>
+                <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end" >
+                    <div class="theme_col-5">
+                        <app-input id="city" type="text" errorType="left"  [control]="city" class="form-control" [error]="(errorMessage$ | async)?.city" >
+                            <label for="city">City</label>
+                        </app-input>
+                    </div>
+                
+                    <div class="theme_col-5">
+                        <app-dropdown [current]="state.value"  [id]="'state'" [control]="state"  aria-placeholder="What is your state of birth">
+                            <ng-container slot="label"><label for="state">State</label></ng-container>
+                            <app-option *ngFor="let state of states; let i =index" [value]="state">{{state}}</app-option>
+                        </app-dropdown>
+                    </div>
+                </div>
+                <div *ngIf="addressGroup.errors">
+                    <div *ngIf="addressGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+                </div>
+            </div>
+           
+            <div *ngIf="contactGroup.errors">
+                <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+            </div>
+        </div>
+         <div style="margin-top: 60px;">
+            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+        </div>
+    </app-form>
+    </div>
+</div>
+                            

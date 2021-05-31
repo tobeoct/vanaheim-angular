@@ -7,12 +7,14 @@ import { PortalModule } from '@angular/cdk/portal';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ReplacePipe } from './pipes/replace/replace.pipe';
 import { ConvertToFormControlPipe } from './pipes/form/convert-to-formcontrol.pipe';
+import { SplitCamelCasePipe } from './pipes/split/split-camel-case.pipe';
+import { ConvertToFormGroupPipe } from './pipes/form/convert-to-formgroup.pipe copy';
 
 
 
 @NgModule({
   declarations: [
-    ReplacePipe,ConvertToFormControlPipe],
+    ReplacePipe,ConvertToFormControlPipe,ConvertToFormGroupPipe,SplitCamelCasePipe],
   imports: [ ScrollingModule,
     DragDropModule,
     OverlayModule,
@@ -30,7 +32,9 @@ import { ConvertToFormControlPipe } from './pipes/form/convert-to-formcontrol.pi
     ReactiveFormsModule,
     FormsModule,
     ReplacePipe,
-    ConvertToFormControlPipe
+    ConvertToFormControlPipe,
+    ConvertToFormGroupPipe,
+    SplitCamelCasePipe
   ]
 })
 export class BaseModule { }

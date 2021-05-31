@@ -97,7 +97,11 @@ resetPassword=({username}:any)=>{
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.clear();
+       // localStorage.clear();
+       
+                localStorage.removeItem('user');
+        localStorage.removeItem('session_token');
+        localStorage.removeItem("expires_at");
         this.userSubject.next(new User());
         this._router.navigate(['/login']);
        return this._http.get<any>(`${environment.apiUrl}/auth/logout`)

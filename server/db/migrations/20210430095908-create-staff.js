@@ -17,6 +17,10 @@ module.exports = {
           as: 'userID',
         },
       },
+      status: {
+        type: Sequelize.ENUM('Active','Inactive'),
+        allowNull:false
+      },
       firstName:{
         type: Sequelize.STRING,
         allowNull: false,

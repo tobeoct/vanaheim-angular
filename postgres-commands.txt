@@ -3,6 +3,9 @@ createdb -U test -T template0 zeus_production
 pg_restore -U $user -d $new_db "$db_dump_file"
 
 
+#load dump file into another db
+psql -U myuser -d second_db</tmp/table_dump
+
 #Create Dump
 PGPASSWORD=mypassword pg_dump -Fc --no-acl --no-owner -h localhost -U myuser mydb > mydb.dump
 

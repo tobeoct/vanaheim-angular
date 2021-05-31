@@ -1,0 +1,23 @@
+ <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
+        <div class=" content box-shadow" style="box-sizing: border-box; ">
+    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+   
+        <app-input [focus$]="focus$" fieldClass="no-margin--top" id="name" [placeholder]="'Enter your preferred name'" [control]="name" class="form-control" [error]="(errorMessage$ | async)?.name" >
+            <label for="name">Preferred Name</label>
+        </app-input>
+        
+        <app-input id="email" [placeholder]="'Enter your preferred email'" [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
+            <label for="email">Preferred Email</label>
+        </app-input>
+
+        <app-input id="phoneNumber" [placeholder]="'Enter your preferred phone number'" [control]="phoneNumber" class="form-control" [error]="(errorMessage$ | async)?.phoneNumber" >
+            <label for="phoneNumber">Preferred Phone Number</label>
+        </app-input>
+     
+            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+       
+    </app-form>
+    </div>
+</div>
+                            

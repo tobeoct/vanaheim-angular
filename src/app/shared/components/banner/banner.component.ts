@@ -8,13 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 export class BannerComponent implements OnInit {
 
   @Input() show = true;
+  @Input() color="tertiary";
   constructor() { }
 
   ngOnInit(): void {
   }
   
 
-  reload() {
-    document.location.reload();
-  }
 }

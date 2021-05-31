@@ -8,11 +8,13 @@ import { HeaderComponent } from './layout/header/header.component';
 import { LoanSummaryComponent } from './dashboard/loan-summary/loan-summary.component';
 import { InvestmentSummaryComponent } from './dashboard/investment-summary/investment-summary.component';
 import { LoansComponent } from './loans/loans.component';
+import { LoanStatusComponent } from './shared/features/loan-status/loan-status.component';
+import { DocumentComponent } from './document/document.component';
 
 
 
 @NgModule({
-  declarations: [DashboardComponent, NavigationComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent],
+  declarations: [DashboardComponent, NavigationComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent, LoanStatusComponent, DocumentComponent],
   imports: [
     SharedModule,
     CustomerRoutingModule

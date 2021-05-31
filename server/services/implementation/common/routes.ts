@@ -1,5 +1,5 @@
 export const newSessionRoutes = [{ path: '/api/auth/login', method: 'POST' },{ path: '/api/auth/register', method: 'POST' },
-{ path: '/api/auth/token', method: 'POST' },{ path: '/api/auth/verify', method: 'POST' },{ path: '/api/auth/resetpassword', method: 'POST' }];
+{ path: '/api/auth/token', method: 'POST' },{ path: '/api/account/enquiry', method: 'POST'},{ path: '/api/common/validatebvn', method: 'POST'},{ path: '/api/auth/verify', method: 'POST' },{ path: '/api/auth/resetpassword', method: 'POST' }];
 export const authRoutes = [
   { path: '/api/auth/password', method: 'PUT' },
   { path: '/api/notification/send', method: 'POST' },
@@ -10,9 +10,13 @@ export const authRoutes = [
   { path: '/api/users', method: 'GET' },
   { path: '/api/investments', method: 'GET' },
   { path: '/api/investments/new', method: 'POST' },
+  { path: '/api/loans/getLatestLoan', method: 'GET' },
+  { path: '/api/loans/search', method: 'POST' },
+  { path: '/api/loans/create', method: 'POST' },
   { path: '/api/loans', method: 'GET' },
-  { path: '/api/loans/new', method: 'POST' },
-  { path: '/api/files/upload', method: 'POST' },
+  { path: '/api/document/upload', method: 'POST' },
+  { path: '/api/document/download', method: 'POST' },
+  { path: '/api/document/getAll', method: 'GET' },
   { path: '/api/files/merge_chunks', method: 'POST' }
 ];
 

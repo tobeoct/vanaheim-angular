@@ -3,7 +3,7 @@
     <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
        
-        <app-input fieldClass="no-margin--top" id="employer" [placeholder]="'Enter name of employer'" [control]="employer" class="form-control" [error]="(errorMessage$ | async)?.employer" >
+        <app-input [focus$]="focus$" fieldClass="no-margin--top" id="employer" [placeholder]="'Enter name of employer'" [control]="employer" class="form-control" [error]="(errorMessage$ | async)?.employer" >
             <label for="employer">Employer</label>
         </app-input>     
         <app-dropdown [current]="businessSector.value"  [id]="'businessSector'" [control]="businessSector"  aria-placeholder="What sector of business are you in">
