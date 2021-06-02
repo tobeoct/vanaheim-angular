@@ -38,16 +38,17 @@
 
 @media all and (max-width:900px) {
     #account{
-        flex-direction: column;
-        justify-content:unset;
-    }
-    .container{
-        &:first-child{
-        @include paddingHorizontal(true,"px",0.5,$important:important);
+        display: block !important;
+        .container{
+             &:first-child,&:nth-child(2){
+               
+            @include paddingHorizontal(true,"px",0,$important:important);
+            }
+            @include paddingVertical(true,"%",0.5,$important:important);
+            width: 100% !important;
+    
+           
         }
-        @include paddingVertical(true,"%",0.5,$important:important);
-        width: 100% !important;
-
-       
     }
+   
 }

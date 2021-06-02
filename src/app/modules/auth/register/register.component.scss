@@ -53,7 +53,8 @@
             border: none;
         }
     .content{
-        width: 480px;
+        width: 100%;
+        max-width: 480px;
         box-sizing: border-box;
     }
     .theme_row{
@@ -75,6 +76,15 @@
         // @include flex(vertical,center);
         
         .container{
+            &:first-child,&:nth-child(2){
+               
+                @include paddingHorizontal(true,"px",0,$important:important);
+                }
+                @include paddingVertical(true,"%",0.5,$important:important);
+                width: 100% !important;
+        
+               
+            }
     .theme_row{
         .theme_col-6:nth-child(2){
            padding:0 !important;
@@ -82,4 +92,3 @@
     }
 }
     }
-}
