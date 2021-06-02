@@ -72,8 +72,8 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
         app.use(this._session.getSession())
         app.use(inject(sessionRequestAuthorisation))
         app.use("/api",inject(clientApiKeyValidation),inject(authoriseRequest),expAutoSan.route)
+        console.log("App.TS",this._appConfig.environment)
         if(this._appConfig.environment =="production"){
-          console.log("Production");
         app.use(loadControllers('api/controllers/*.controller.js', {cwd: __dirname}));
         }else{
           app.use(loadControllers('api/controllers/*.controller.ts', {cwd: __dirname}));
@@ -84,9 +84,9 @@ this.webPush.setVapidDetails('mailto:sender@example.com', publicVapidKey, privat
           // console.log( req.session);
           let p = _this._appConfig.environment=="production"?"": "dist/";
           let b = _this._appConfig.environment=="production"?"../": "../";
-          console.log(__dirname);
-          console.log( path.resolve(__dirname, b) )
-          // ,{ root: path.resolve(__dirname, b)  }p+
+          // console.log("App.TS",__dirname);
+          // console.log( path.resolve(__dirname, b) )
+          // // ,{ root: path.resolve(__dirname, b)  }p+
           res.sendFile('index.html',{root:path.resolve("dist/vanaheim")});
         })
         

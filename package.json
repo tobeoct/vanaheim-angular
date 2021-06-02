@@ -8,12 +8,12 @@
     "prestart:prod": "rm -rf dist && ng build --prod && tsc && rm -rf dist/src",
     "start": "node -r ./tsconfig-paths-bootstrap.js dist/server/server.js",
     "start:hmr": "node dist/server",
-    "build": "ng build",
+    "no-build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "tsc",
-    "heroku-postbuild": "tsc"
+    "no-heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {
