@@ -22,16 +22,16 @@ export class CustomerComponent implements OnInit {
   show$:Observable<string> =this.showSubject.asObservable();
   constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private _authenticationService:AuthService) {
 
-    if(environment.production){
-    this.swPush.notificationClicks.subscribe( event => {
-      console.log('Received notification: ', event);
-      const url = event.notification.data.url;
-      this._utility.$browser.window.open(url, '_blank');
-    });
-    this.swUpdate.available.subscribe((event) => {
-      this.updateAvailable = true;
-    });
-  }
+  //   if(environment.production){
+  //   this.swPush.notificationClicks.subscribe( event => {
+  //     console.log('Received notification: ', event);
+  //     const url = event.notification.data.url;
+  //     this._utility.$browser.window.open(url, '_blank');
+  //   });
+  //   this.swUpdate.available.subscribe((event) => {
+  //     this.updateAvailable = true;
+  //   });
+  // }
   this.timer$= timer(0,100000);
   this.timer$.subscribe(c=>{
     if(this.isGranted) this.submitNotification();
@@ -48,7 +48,7 @@ export class CustomerComponent implements OnInit {
     this.isLoggedIn = this._authenticationService.isLoggedIn();
   }
   ngOnChanges(): void {
-    this.isGranted = Notification.permission === 'granted';
+    // this.isGranted = Notification.permission === 'granted';
   }
   submitNotification(): void {
     this.webNotificationService.subscribeToNotification();
