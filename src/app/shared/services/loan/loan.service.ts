@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
 import { catchError, concatMap, filter, map, mergeMap, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
+import { Store } from '../../helpers/store';
 import { Utility } from '../../helpers/utility.service';
 import { LoanResponse } from '../../poco/loan/loan-response';
 // import { LoanResponse } from '../../poco/loan/loan-response';
@@ -28,13 +29,19 @@ paging$:Observable<any> = this.pagingSubject.asObservable();
 
   constructor(
     private _http: HttpClient,
-    private _utility:Utility) { 
+    private _utility:Utility,
+    private _store:Store) { 
 
+    }
+    getTenureRange=(type:string)=>{
+      if(type.toLowerCase().includes("float")){
+        return {min:1,max:30};
+      }
+     return {min:1,max:12};
     }
   getRate=(type:string,loanAmount:number,min:number,max:number)=>{
     let interestRate = 0;
-    switch(type){
-      case 'float me':
+      if(type.toLowerCase().includes('float me')){
         if(loanAmount>=min && loanAmount<100000){
           interestRate =0.005;
       }
@@ -51,7 +58,8 @@ else if(loanAmount>=100000 && loanAmount<200000){
           interestRate=0;
       }
       return interestRate;
-      default :
+    }
+      else{
       if(loanAmount>=min && loanAmount<100000){
         interestRate =0.1;
     }
@@ -67,7 +75,7 @@ else if(loanAmount>=100000 && loanAmount<200000)
         interestRate=0;
     }
     return interestRate;
-    }
+  }
   }
   getLoanPurposes=(loanType:string)=>{
       if(loanType.toLowerCase().includes("lpo")) return this.loanPurpose.lpo;
@@ -134,6 +142,19 @@ else if(loanAmount>=100000 && loanAmount<200000)
 
     }
 
+    repaymentPlan=(payload:any)=>{
+      // console.log(payload)
+      return this._http.post<any>(`${environment.apiUrl}/repayment/plan`, payload)
+      .pipe(map(response => {
+          // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
+          if(response && response.status==true){
+             return response.response;
+          }
+          return response;
+      }));
+
+  }
+
     
     search=(payload:any)=>{
       return this._http.post<any>(`${environment.apiUrl}/loans/search`, {...payload})
@@ -144,7 +165,14 @@ else if(loanAmount>=100000 && loanAmount<200000)
           return {};
       }));
     }
-
+    validateLoanApplication(){
+       let application = this._store.loanApplication;
+       let category = this._store.loanCategory;
+       if(!application["loanType"]||!application["loanProduct"]||!application["applyingAs"]||!application["account"]||!application["loanCalculator"]) return false;
+       if(category=='personal' && (!application["bvnInfo"]||!application["personalInfo"]||!application["employmentInfo"]||!application["nokInfo"])) return false;
+       if(category=='business' && (!application["collateralInfo"]||!application["companyInfo"]||!application["shareholderInfo"])) return false;
+      return true;
+    }
     getLatest=()=>{
       
       return timer(0, 30000)

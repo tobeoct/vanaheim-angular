@@ -68,3 +68,135 @@
 //   module.exports = {
 //     ProcessRepayment
 //     }
+
+
+import AppConfig from "@api/config";
+import { IRepaymentService } from "@services/interfaces/Irepayment-service";
+import moment = require("moment");
+import EmailService from "./common/email-service";
+import { TemplateService } from "./common/template-service";
+import UtilService from "./common/util";
+
+export class RepaymentService implements IRepaymentService{
+    constructor(private _templateService: TemplateService, private _emailService:EmailService, private _appConfig:AppConfig, private _utilService:UtilService){
+
+    }
+    processRepaymentPlan= ({ email,tenure,denominator,loanType,purpose, rate, loanAmount, monthlyRepayment }: any) =>new Promise<any>(async(resolve, reject) =>{
+        
+        try{
+      
+                  const fileName =`Repayment Plan - ${Date.now()}`;
+                  let t = this.getRepaymentTemplate({ tenure: tenure+' '+denominator,loanType,purpose, rate, loanAmount, monthlyRepayment });
+                  let {path}:any = await this._templateService.generatePDF("Repayment Plan",[],"repayments/"+fileName,t);
+
+                  let sent = await this._emailService.SendEmail({type:'repayment',to:this._appConfig.ADMIN_EMAIL,attachment:path,filePaths:null,html:t,toCustomer:false})
+                  await this._emailService.SendEmail({type:'repayment',to:email,attachment:path,filePaths:null,html:this._templateService.LOAN_CUSTOMER_TEMPLATE,toCustomer:true})
+                  resolve({status:true,data:{message:"Sent successfully"}})
+   
+        }catch(err){
+            console.log(err)
+            resolve({status:false,message:"Failed"})
+        }
+                 
+    });
+
+
+private getRepaymentTemplate({ tenure,loanType,purpose, rate, loanAmount, monthlyRepayment }: any):string{
+    let template="";
+          //<img src="cid:unique@kreata.ee" style="object-fit:cover;width:100% !important; margin-bottom:50px"/> 
+          //<img src="${mailHeader}" style="object-fit:cover;width:80%; margin:auto; margin-left:10%;margin-bottom:50px"/>
+       template+=`<div style="width:100% !important;  text-align:center;"><div style="background: #E6AF2A; margin-bottom:20px; padding-top:20px ;padding-bottom:20px;"> <h2>Your Repayment Plan</h2></div></div>`
+        let p = Number(loanAmount.replace(/[^0-9.-]+/g,""));
+        let n = tenure;
+        let m =monthlyRepayment.toString();
+        let i =rate;
+        let tp ="Monthly";
+        let period="month";
+        if(n.toLowerCase().includes("day")){
+        //   m =  dataSet["Daily Repayment"];
+          period ="day";
+          tp="Daily"
+        } 
+        console.log(n.toLowerCase());
+        if(n){ n = parseInt(n.split(' ')[0].trim());}
+        template+=`
+        <div style="width:100%;">
+        <div style="color:#333333;padding-top:10px; padding-bottom:10px; width:100%; justify-content:space-between;">
+                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; justify-content:space-between; color:#E6AF2A;">Purpose</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(purpose)}</p>
+                    </div>
+                    <div style="color:#333333;padding-top:10px; padding-bottom:10px; width:100%;  justify-content:space-between;">
+                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; color:#E6AF2A;">Category</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(loanType)}</p>
+                    </div>  
+                    </div>
+                    <div style="width:100%;position:relative;">
+                    <br/><br/>
+                    <h3>Loan Information</h3>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100% !important; margin-bottom:60px;  border:1px solid #e0e0e0; font-size:12px !important;">
+                    <tbody style="width:100%">
+                    
+                    <tr style="color:#333333;padding-top:10px; padding-bottom:10px;">
+                      <td style="padding-left:10px;padding-top:10px; border-bottom:1px solid #e0e0e0; padding-bottom:10px;background: #333333; color:#E6AF2A;">Loan Amount <b>(NGN)</b></td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${loanAmount.replace("NGN",'').trim()}</td>
+                    </tr> 
+                    <tr style="color:#333333">
+                      <td style="border-bottom:1px solid #e0e0e0;padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333;color:#E6AF2A;">Chosen Tenure</td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(tenure)}</td>
+                    </tr>
+                    
+                    <tr>
+                      <td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333; font-weight:bold;">${this._utilService.titleCase(tp)}  Installment <b>(NGN)</b></td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333;background:#e0e0e0;"><b>${m.replace("NGN",'').trim()}</b></td> 
+                    </tr>
+                    </tbody>
+        </table>
+        </div>
+        <div style="width:100%; position:relative;">
+        <h3>Repayment Schedule</h3>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100% !important; font-size:12px !important; border:1px solid #e0e0e0;">
+                    <thead style="width:100%;">
+                      <tr style="text-align:center; width:100%; color:#E6AF2A; background:#333333; padding-top:10px; padding-bottom:10px;">
+                        <th style="padding-top:10px; padding-bottom:10px;">Payment Date</th>
+                        <th style="padding-top:10px; padding-bottom:10px;">Loan Balance <b>(NGN)</b></th>
+                        <th style="padding-top:10px; padding-bottom:10px;">Principal Repayment <b>(NGN)</b></th>
+                        <th style="padding-top:10px; padding-bottom:10px;">Interest Repayment <b>(NGN)</b></th>
+                        <th style="padding-top:10px; padding-bottom:10px;">Loan Repayment <b>(NGN)</b></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                   `;
+                   
+                   const options:any = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                   let today  = moment();
+                   m = Number(m.replace(/[^0-9.-]+/g,""));
+                   let beginning = p;
+                   let monthlyPrincipal = 0;
+                   let monthlyInterest=0;//m-(p/n);
+                   let payment = monthlyInterest + monthlyPrincipal;
+                   let total = m *n;
+                   console.log(p)
+                   console.log(total)
+                   for(var c=0;c<n;c++){
+                    if(period==="month"){today.add(1,"month")}else{
+                      today.add(1,"day");
+                    }
+                    monthlyInterest= beginning*i;
+                    monthlyPrincipal = m-monthlyInterest;
+                    // console.log(today.toLocaleDateString("en-US", options));
+                     let lDate=today.toDate().toLocaleDateString("en-US", options);
+                    
+                     let outstanding = beginning-monthlyPrincipal;
+                     if(outstanding<0) outstanding=0;
+                     if(beginning<0) beginning=0;
+                     template+=`<tr style="padding-top:10px; padding-bottom:10px; width:100%;">
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${lDate}</td>
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(beginning).replace("NGN",'').trim()}</td>
+                                  
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(monthlyPrincipal).replace("NGN",'').trim()}</td>
+                                  
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(monthlyInterest).replace("NGN",'').trim()}</td>
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(m).replace("NGN",'').trim()}</td>
+                                </tr>`
+                                beginning = beginning - monthlyPrincipal;
+                              }
+        template+=`<tr style="style="width:100%" background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;"><td style="padding-left:10px;background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;" colspan="4">Total Repayment (Principal + Interest)</td><td style="padding-left:10px;background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;">${this._utilService.currencyFormatter(total).replace("NGN",'').trim()}</td></tr></tbody></table></div>`
+      
+      return template;
+}
+}

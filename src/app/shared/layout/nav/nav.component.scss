@@ -1,0 +1,13 @@
+@import "../../../../styles/abstracts/_abstracts-dir";
+@import '../../../../styles/themes/_theme-dir';
+ul{
+    &.sidenav{
+        // display: flex !important;
+        left: 0;
+    }
+    @include flex(true,center);
+    flex-direction: column;
+    li{
+        @include color(white);
+    }
+}

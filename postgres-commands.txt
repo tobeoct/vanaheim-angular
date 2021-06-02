@@ -10,3 +10,5 @@ psql -U myuser -d second_db</tmp/table_dump
 PGPASSWORD=mypassword pg_dump -Fc --no-acl --no-owner -h localhost -U myuser mydb > mydb.dump
 
 heroku pg:backups:restore '<SIGNED URL>' DATABASE_URL
+
+https://vanaheim-bucket.s3.us-east-2.amazonaws.com/livedb.dump

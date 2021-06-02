@@ -21,4 +21,20 @@ check
 </span></b></li>
 
 </ul>
+
+
+
+<div class="sidenav_mobi theme_row">
+    <div class="theme_color" style=" backdrop-filter: blur(4px); position: absolute; display: flex; align-items: center; right: 0px; z-index: 5; top:0%; background: rgba(0, 0, 0, 0.2); height: 100%; padding-left: 7px; padding-right: 5px;"><i class="fas fa-caret-right fa-2x"></i></div>
+<div class="theme_row theme_scrolling--wrapper theme_bg--yellow removables" style="display: flex;">
+   
+    <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [attr.data-pointable]="true"  [routerLinkActive]="'sidenav_link--active'" class="sidenav_link" id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
+        <!-- <b><span class="material-icons material-icons-round">
+check
+</span></b> -->
+
+</li>
+
+</div>
+</div>
 <!-- [ngClass]="{'sidenav_link--active':(active$|async)==nav.id}" data-order="1" (click)="onNavigate(nav.url)" -->

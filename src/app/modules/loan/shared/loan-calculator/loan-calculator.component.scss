@@ -10,3 +10,18 @@
     #repayment-plan{
         justify-self: flex-end;
     }
+#calculator{
+    display:flex; justify-content:space-between;
+}
+
+
+@media all and (max-width:900px){
+    #calculator{
+        display: block;
+        .theme_col-6,.theme_col-5{
+            width: 100% !important;
+        }
+    }
+    
+}
+

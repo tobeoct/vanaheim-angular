@@ -69,20 +69,13 @@ allowedExtensions =
 
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
-    // if(this.docsToUpload)
-    //const documents:any[] = [...form.value["documentArray"]]
-    let documents:any={};
+    let documents:any=[];
     let f=form.value["documentArray"] as any[]; 
     console.log(f)
     this.docsToUpload.forEach((doc,i) => {
-      // let doc:any = f[i];
-     documents[doc.requirement] = {name:doc.name,id:doc.id}
-    //  documents.push(document);
+     documents.push({name:doc.name,id:doc.id,label:doc.requirement})
     });
-    // let arr = form.value["documentArray"] as string[];
-    // for(let i=0;i<arr.length;i++){
-    //   documents.push({[this.requirements[i].title]:arr[i]});
-    // }
+   
      this._store.setDocuments(documents);
     this.onNavigate("preview");
   }

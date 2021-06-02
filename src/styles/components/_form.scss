@@ -6,3 +6,28 @@
 }
     }
 }
+
+#form{
+    position: relative;
+    z-index: 0;
+
+}
+
+
+
+
+@media all and (max-width:900px){
+    #loan-content 
+{
+    &.loggedIn{
+    div#form{
+    min-width: 0 !important;
+    margin-top: 10%;
+}
+    }
+    form{
+        padding-top: 10px;
+    }
+}
+
+}

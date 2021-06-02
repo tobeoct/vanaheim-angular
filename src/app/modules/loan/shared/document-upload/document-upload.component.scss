@@ -8,6 +8,17 @@
         font-size: 1.2em;
     }
 
+    .list{
+            width: 22.5%;
+            vertical-align: bottom;
+            display: inline-block;
+            
+            margin-right:3.333333%;
+            &:nth-child(4n+1){
+                margin-right: 0;
+            }
+        
+    }
     // &.disabled{
     //     *{
     //         pointer-events: none !important;
@@ -16,3 +27,30 @@
     // }
    
 }
+
+
+
+@media all and (max-width:900px){
+    #document-upload{
+    .list{
+         &:nth-child(2n+1){
+             margin-right: 0 !important;
+         }
+         width: 45%;
+         margin-right:10%;
+         
+     }
+    }
+ }
+ 
+ @media all and (max-width:768px){
+    #document-upload{
+    .list{
+         &:nth-child(n){
+             margin-right: 0;
+         }
+         width: 100%;
+        
+     }
+    }
+ }

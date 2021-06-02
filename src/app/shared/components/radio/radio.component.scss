@@ -1,0 +1,43 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+
+.checkbox{
+    @include background(lightGrey);
+    @include flex(true,center);
+    @include color(grey);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border-radius: $border-radius;
+    span{
+    font-size: 1em;
+    }
+    &_group{display: flex;}
+    &_container{
+        @include flex(vertical,center);
+        @include marginVertical(false,"px",0,0.5);
+        @include marginHorizontal(false,"px",0,1);
+        .label{
+            @include marginHorizontal(false,"px",0.5,0);
+        }
+    }
+    &--stroke{
+        background: transparent;
+        @include border(2px,solid,black);
+        @include color(black);
+        span{
+            opacity: 0;
+        }
+    }
+    &.active{
+        @include color(white);
+        @include background(black);
+        &+.label{
+            font-weight: map-get($font-weights, "semi-bold");
+        }
+        span{
+            opacity: 1;
+        }
+    }
+
+}

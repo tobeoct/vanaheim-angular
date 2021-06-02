@@ -56,6 +56,9 @@
     }
     #loan-history{
         @include marginVertical(false,"px",1,0); 
+        padding-bottom: 5%;        
+    overflow: hidden;
+    overflow-x: auto;
     }
 }
 

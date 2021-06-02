@@ -2,10 +2,11 @@
 <div id="document-upload" [ngClass]="{'disabled':!isLoggedIn}">
     <app-form [form]="form" [class]="'box-shadow content'" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
         <p id="disclaimer" style="text-align: center; display: flex; align-items: center; justify-content: center;"><span class="material-icons" style="margin-right: 10px;">info</span><span>Only images and text documents are allowed</span></p>
-    <app-document *ngFor="let req of requirements;let i =index" title="{{req.title}}" fieldClass="document no-margin--top" description="{{req.description}}" [control]="documentControls[i]|toControl" (onChange)="onFileChange($event,i)">
+    <div class="list" *ngFor="let req of requirements;let i =index" >
+        <app-document title="{{req.title}}" fieldClass="document no-margin--top" description="{{req.description}}" [control]="documentControls[i]|toControl" (onChange)="onFileChange($event,i)">
 
     </app-document>
-       
+</div>
     <div style="margin-top: 30px;">
         <app-button [form]="form" [loading$]="loading$" fieldClass="theme_col-3 no-margin--top">Next</app-button>
         

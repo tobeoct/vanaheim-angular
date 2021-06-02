@@ -1,5 +1,9 @@
 @import "../../../../styles/abstracts/_abstracts-dir";
-.faq{
+#faq{
+    
+    position: absolute;
+    top: 10%;
+    .faq{
             width: 100%;
             // padding: 2.5vh 0;
             height: 100%;
@@ -9,6 +13,7 @@
             // width: 80%;
             overflow: hidden;
             overflow-y: auto;
+            position: relative;
         }
         .faq_section{
             width: 80%;
@@ -90,3 +95,4 @@
             transform:scale(1.05) ;
         }
      
+    }

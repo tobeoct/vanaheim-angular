@@ -1,8 +1,8 @@
 <div id="loan-header" *ngIf="loanType$|async as loanType" class="animate__animated animate__fadeInUp" [ngClass]="{'no-margin--bottom':isLoggedIn}">
-    <p id="title" *ngIf="title$|async as title"><b>{{title}}</b></p>
-    <p *ngIf="loanType$|async as loanType" (click)="onNavigate('loan-type')"><small>Type:</small> <span style="background: lightgray; font-weight: 800; margin-left: 5px; padding: 5px;">{{loanType}}</span></p>
-    <p *ngIf="applyingAs$|async as applyingAs" (click)="onNavigate('applying-as')"><small>Applying As:</small> <span style="background: lightgray; font-weight: 800; margin-left: 5px; padding: 5px;">{{applyingAs}}</span></p>
-    <p *ngIf="loanProduct$|async as loanProduct" (click)="onNavigate('loan-product')"><small>Loan Product:</small> <span style="background: lightgray; font-weight: 800; margin-left: 5px; padding: 5px;">{{loanProduct}}</span></p>
+    <p  id="title" *ngIf="(title$|async) && isLoggedIn"><b>{{title$|async}}</b></p>
+    <p class="item" *ngIf="loanType$|async as loanType" (click)="onNavigate('loan-type')"><small>Type:</small> <span style="background: lightgray; font-weight: 800; margin-left: 5px; padding: 5px;">{{loanType}}</span></p>
+    <p class="item" *ngIf="applyingAs$|async as applyingAs" (click)="onNavigate('applying-as')"><small>Applying As:</small> <span style="background: lightgray; font-weight: 800; margin-left: 5px; padding: 5px;">{{applyingAs}}</span></p>
+    <p class="item" *ngIf="loanProduct$|async as loanProduct" (click)="onNavigate('loan-product')"><small>Loan Product:</small> <span style="background: lightgray; font-weight: 800; margin-left: 5px; padding: 5px;">{{loanProduct}}</span></p>
    
     <div id="back" (click)="back()"><span class="material-icons">
     arrow_back

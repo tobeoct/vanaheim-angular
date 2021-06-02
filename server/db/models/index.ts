@@ -55,7 +55,7 @@ fs
   .filter((file:any) =>
     (file.indexOf('.') !== 0) &&
     (file !== basename) &&
-    (file.slice(-3) === '.js'))
+    (file.slice(-3) === '.js'||file.slice(-3) === '.ts'))
   .forEach((file:any) => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);//sequelize.import(path.join(__dirname, file));
     db[model.name] = model;
@@ -70,4 +70,5 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+// module.exports = db;
+export default db;

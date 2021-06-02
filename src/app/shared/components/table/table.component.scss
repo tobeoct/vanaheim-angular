@@ -1,6 +1,8 @@
 @import '../../../../styles/abstracts/_abstracts-dir';
 @import '../../../../styles/themes/_theme-dir';
 #table{
+    
+    min-width: fit-content;
     #filters{
         @include paddingVertical(true,"px",0.5);
         display: flex;

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserCategory } from '@models/helpers/enums/usercategory';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { ElementStyle, ElementSize, ElementState } from 'src/app/shared/constants/enum';
 import { ButtonOptions } from 'src/app/shared/constants/variables';
 import { Utility } from 'src/app/shared/helpers/utility.service';
@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 })
 export class NavigationComponent implements OnInit {
 
+  @Input() type:UserCategory;
   logoutSub:Subscription;
   loanButtonOptions:ButtonOptions= new ButtonOptions("Loans",ElementStyle.stroke,"",ElementSize.small,true,ElementState.active);
   invButtonOptions:ButtonOptions= new ButtonOptions("Investment",ElementStyle.stroke,"",ElementSize.small,true,ElementState.default);
@@ -30,7 +31,6 @@ active$:Observable<string>;
   ngOnDestroy(): void {
     if(this.logoutSub)this.logoutSub.unsubscribe()
   }
-  @Input() type:UserCategory;
   ngOnInit(): void {
   }
 

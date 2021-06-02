@@ -8,6 +8,7 @@ import { Store } from 'src/app/shared/helpers/store';
 import { ShareholderInfo } from './shareholder-info';
 import { EmploymentInfo } from '../../personal/employment-info/employment-info';
 import { Address } from 'src/app/shared/interfaces/address';
+import { DOB } from 'src/app/shared/interfaces/dob';
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -159,6 +160,10 @@ ngOnDestroy(): void {
      shareholderInfo.educationalQualification = group["educationalQualification"];
      shareholderInfo.email = group["contactGroup"]["email"];
      shareholderInfo.phoneNumber = group["contactGroup"]["phone"];
+     shareholderInfo.dob = new DOB();
+     shareholderInfo.dob.day = group["dobGroup"]["day"];
+     shareholderInfo.dob.month = group["dobGroup"]["month"];
+     shareholderInfo.dob.year = group["dobGroup"]["year"];
      shareholderInfo.address = new Address();
      shareholderInfo.address.state = group["contactGroup"]["addressGroup"]["state"];
      shareholderInfo.address.city = group["contactGroup"]["addressGroup"]["city"];

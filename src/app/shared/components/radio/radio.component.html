@@ -1,0 +1,16 @@
+<div class="checkbox_group">
+<ng-container *ngFor="let item of items$|async">
+
+    <div class="checkbox_container" (click)="toggle(item.label)">
+        <div class="checkbox {{class}}"  [ngClass]="{'active':item.selected==true}">
+            <span class="material-icons material-icons-round">
+                check
+            </span>
+        </div>
+        <div class="label">{{item.label}}</div>
+        
+    </div>
+
+</ng-container>
+<input  hidden type="text" id="{{id}}" [formControl]="control" class="form-control" [ngClass]="{ 'is-invalid':(control.touched || control.dirty) && !control.valid  }" />
+</div>

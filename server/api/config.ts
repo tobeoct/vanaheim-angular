@@ -10,7 +10,7 @@
 //   };
 
 export default class AppConfig {
-  environment:string = "production";
+  environment:string = "development";
   port:string;
   ADMIN_EMAIL:string;
 CC_EMAIL:string;

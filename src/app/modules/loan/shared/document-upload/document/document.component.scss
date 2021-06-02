@@ -1,12 +1,6 @@
 @import '../../../../../../styles/abstracts/_abstracts-dir';
 @import '../../../../../../styles/themes/_theme-dir';
-:host{
-        
-    margin-right:3.333333%;
-    &:nth-child(4n+1){
-        margin-right: 0;
-    }
-}
+
 .document_content{
     text-align: center;
     width: 100%;
@@ -95,28 +89,3 @@
     }
 }
 
-
-@media all and (max-width:900px){
-   :host{
-        &:nth-child(2n+1){
-            margin-right: 0 !important;
-        }
-    }
-    .document{
-        width: 45%;
-        margin-right:10%;
-        
-    }
-}
-
-@media all and (max-width:768px){
-    :host{
-        &:nth-child(n){
-            margin-right: 0;
-        }
-    }
-    .document{
-        width: 100%;
-       
-    }
-}

@@ -15,6 +15,18 @@ export class TemplateService{
     <br/><br/>
     Thank you for your patronage.<br/><br/>
     Best regards.<br><br><b>Vanir Capital Loans and Capital Finance Team</b></p><div>`;
+    REPAYMENT_CUSTOMER_TEMPLATE = `<div style="margin-top:50px;"><p>Dear Customer,<br/><br/> 
+    Thank you for your interest in Vanir Capital Limited’s loan service.  <br/><br/> 
+    Further to your enquiry on a loan, please find attached, the applicable
+    repayment plan for your information.  <br/><br/> 
+    Please be informed that our loan interest repayments are calculated on a reducing balance basis making it cheaper with each repayment.<br/><br/> 
+    We thank you for your interest and look forward to a mutually beneficial
+    business relationship with you. <br/><br/> 
+    PS: for further clarifications please contact us on this number: +234
+    818 027 9270
+       </p> </div>
+        
+        `;
     private generateRow(label:string,value:string){
     return `<tr class="item" style="border: 2px solid #E0E0E0;width:100% !important;  color:#6B6B6B; padding:10px 2.5%; margin-top:10px;">
                 <td style="border: 2px solid #E0E0E0; padding-top:10px;padding-bottom:10px; padding-left:20px;">
@@ -74,11 +86,11 @@ pathMap.forEach((dir,i)=>{
     }
 })
    }
-    generatePDF=(documentTitle:string,data:any[],fileName:any)=>new Promise(async (resolve,reject)=>{
+    generatePDF=(documentTitle:string,data:any[],fileName:any,generatedTemplate?:any)=>new Promise(async (resolve,reject)=>{
     try{
         let css = 'body {padding:5vh 5%;font-family:sans-serif !important;} .section{margin-top:70px} .table{width:100% !important; } p{margin:0;padding:0;} .item p:first-child{font-weight:300; font-size:0.85em;} .item .value{margin-top:5px;} .item{border: 2px solid #E0E0E0; color:#6B6B6B; padding:10px 2.5%; margin-top:10px;}  .heading{margin-top:20px;text-transform: uppercase;width:100% !important;  padding-top:30px; padding-bottom:30px; background:#333333;text-align:center;color:#E6AF2A;}';
 
-        let template = this.generateTemplate(data);
+        let template = generatedTemplate?generatedTemplate:this.generateTemplate(data);
         let basePath ="uploads/generated-documents/";
         let filePath = basePath + fileName;
         this.createDirectory(filePath);

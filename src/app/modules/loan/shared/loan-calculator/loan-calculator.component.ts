@@ -8,6 +8,7 @@ import { Store } from 'src/app/shared/helpers/store';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanDetails } from './loan-details';
+import { NgZone } from '@angular/core';
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -60,6 +61,12 @@ export class LoanCalculatorComponent implements OnInit {
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
+
+  
+  apiErrorSubject:BehaviorSubject<string>= new BehaviorSubject<string>('');
+  apiError$:Observable<string> = this.apiErrorSubject.asObservable();
+  apiSuccessSubject:BehaviorSubject<string>= new BehaviorSubject<string>('');
+  apiSuccess$:Observable<string> = this.apiSuccessSubject.asObservable();
   rate:number;
   get loanType(){
     return this.form.get("loanType") as FormControl|| new FormControl();
@@ -80,7 +87,7 @@ export class LoanCalculatorComponent implements OnInit {
     return this.repaymentForm.get("email") as FormControl|| new FormControl();
   }
   base:string;
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _zone:NgZone,
     private _validators:VCValidators, private _route: ActivatedRoute, private _loanService:LoanService, private _utility:Utility) {  
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -95,6 +102,9 @@ export class LoanCalculatorComponent implements OnInit {
     this._store.titleSubject.next("Loan Calculator");
     this.range = this._loanService.getMinMax(this.lType);
     this.loanPurposes = this._loanService.getLoanPurposes(this.lType);
+    let tenureRange = this._loanService.getTenureRange(this.lType);
+    this.minTenure = tenureRange["min"];
+    this.maxTenure = tenureRange["max"];
     this.form = this._fb.group({
       loanAmount: [this.loanDetails.loanAmount?this.loanDetails.loanAmount:this._utility.currencyFormatter(this.range.min),[Validators.required,Validators.minLength(6),Validators.maxLength(10), this._validators.numberRange(this.range.min,this.range.max)]],
       purpose: [this.loanDetails.purpose?this.loanDetails.purpose:'', [Validators.required]],
@@ -103,6 +113,7 @@ export class LoanCalculatorComponent implements OnInit {
   this.repaymentForm = this._fb.group({
    email: ['', [Validators.required, Validators.email]],
 });
+this.rate = this._loanService.getRate(this.lType,this._utility.convertToPlainNumber(this.loanAmount.value),this.range.min,this.range.max);
   this.tenureDenominatorSubject.next(this._loanService.getDenominator(this.tenure.value,this.lType));
     let d = data.filter(d=>d.allowedTypes.includes(this.loanType)&&d.allowedApplicant.includes(this.applyingAs));
     this.dataSelectionSubject.next(d);
@@ -152,7 +163,29 @@ ngOnDestroy(): void {
     this.onNavigate(this._store.loanCategory=="personal"? "bvn-info":"additional-info");
   }
   onSubmit2=(event:any)=>{
-    this.onNavigate("bvn-info");
+    // this.onNavigate("bvn-info");
+    //{ email,tenure,denominator,loanType,purpose, rate, loanAmount, monthlyRepayment }
+    this.planLoadingSubject.next(true);
+    this._loanService.repaymentPlan({email:this.email.value,purpose:this.purpose.value,rate:this.rate, monthlyRepayment:this.monthlyRepaymentSubject.value,tenure:this.tenure.value,denominator:this.tenureDenominatorSubject.value,loanAmount:this.loanAmount.value,loanType:this.lType})
+    .subscribe( data=>{ 
+      //  console.log("Res",data)
+      this._zone.run(() => {
+      this.planLoadingSubject.next(false);
+      this.apiSuccessSubject.next("Repayment Plan has been sent to your email");
+      setTimeout(()=>
+this.apiSuccessSubject.next(''),3000);
+
+      });
+    },
+    (error:string) => {
+      console.log("Error",error)
+      this._zone.run(() => {
+      this.planLoadingSubject.next(false);
+  this.apiErrorSubject.next("Repayment Plan failed to send");
+  setTimeout(()=>
+this.apiErrorSubject.next(''),3000);
+      });
+    })
   }
   onNavigate(route:string,params:any={}):void{
     let r = this.base+route;

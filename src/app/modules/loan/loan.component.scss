@@ -32,7 +32,21 @@
     margin-left: 0;
     position: relative;
         #main-content{
+        width: 100% !important;
+        margin-left: 0 !important;
+        }
+    }
+    
+}
+
+
+@media all and (max-width:768px){
+    #loan-content{
         width: 100%;
+    margin-left: 0;
+    position: relative;
+        #main-content{
+        width: 100% !important;
         margin-left: 0 !important;
         }
     }

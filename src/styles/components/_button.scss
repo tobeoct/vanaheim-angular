@@ -15,6 +15,11 @@
     position:relative;
     &.loading{
         display: flex;
+        pointer-events: none;
+        cursor: not-allowed;
+        @include border(2px,solid,lightGrey );
+       @include background(lightGrey ); 
+       @include color(grey );
         // justify-content: space-evenly;
         .widget_button--loader{
             display: block;

@@ -4,7 +4,7 @@
     @include flex(vertical,center);
     @include flex(horizontal,space-between);
     @include paddingVertical(true,"px",0.5);
-    @include paddingHorizontal(true,"px",2);
+    // @include paddingHorizontal(true,"px",2);
     visibility: hidden;
     width: 100%;
     margin: auto;

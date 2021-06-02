@@ -4,7 +4,8 @@ import { WebNotificationService } from 'src/app/shared/services/web-notification
 import { UpdatesService } from 'src/app/shared/services/web-notification/update.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { environment } from '@environments/environment';
-import { Observable, timer } from 'rxjs';
+import { Observable, Subject, timer } from 'rxjs';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-customer',
@@ -16,7 +17,10 @@ export class CustomerComponent implements OnInit {
   isGranted:boolean = Notification.permission === 'granted';
   updateAvailable = false;
   timer$:Observable<any>;
-  constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private checkForUpdateService: UpdatesService) {
+  isLoggedIn:boolean =false;
+  showSubject:Subject<string> = new Subject<string>();
+  show$:Observable<string> =this.showSubject.asObservable();
+  constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private _authenticationService:AuthService) {
 
     if(environment.production){
     this.swPush.notificationClicks.subscribe( event => {
@@ -38,6 +42,10 @@ export class CustomerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const sideNavSub = this._utility.activeNavigation$.subscribe(r=>{
+      this.showSubject.next(r.toString());
+  })
+    this.isLoggedIn = this._authenticationService.isLoggedIn();
   }
   ngOnChanges(): void {
     this.isGranted = Notification.permission === 'granted';

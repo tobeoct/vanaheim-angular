@@ -8,7 +8,7 @@
      width: map-get($sizings, "px")*2; 
      height:  map-get($sizings, "px")*2;
      border-radius: map-get($sizings, "px")*2;
-     z-index: 99999; 
+     z-index: 999999999999999999999999; 
 }
 .contact,.scrolldown{
     position:fixed;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SideNavigationList } from 'src/app/shared/constants/enum';
 import { Utility } from 'src/app/shared/helpers/utility.service';
@@ -12,6 +12,8 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 export class SideNavigationComponent implements OnInit {
 
   isOpen$:Observable<boolean>;
+  @Input()
+  class = "right light";
   constructor(private _utility:Utility) { }
 
   ngOnInit(): void {

@@ -29,6 +29,7 @@ import { ModalBodyComponent } from './modal/modal-body/modal-body.component';
 import { DateComponent } from './date/date.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { ProgressComponent } from './progress/progress.component';
+import { RadioComponent } from './radio/radio.component';
 
 export function playerFactory() {
   return player;
@@ -60,7 +61,8 @@ export function playerFactory() {
     ModalBodyComponent,
     DateComponent,
     PaginationComponent,
-    ProgressComponent
+    ProgressComponent,
+    RadioComponent
   ],
   imports: [
     BaseModule, 
@@ -68,6 +70,7 @@ export function playerFactory() {
     LottieModule.forRoot({ player: playerFactory })
   ],
   exports:[
+    RadioComponent,
     CheckboxComponent,
     LottieComponent,
     InputComponent,

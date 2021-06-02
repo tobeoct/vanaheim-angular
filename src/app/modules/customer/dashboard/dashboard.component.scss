@@ -35,6 +35,7 @@
         .item{
             width: 100%;
             min-height: 60vh;
+            margin-bottom: map-get($sizings, "px")*2;
         }
     }
 }

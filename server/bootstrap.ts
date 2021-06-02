@@ -34,7 +34,8 @@ import { AccountRepository } from '@repository/implementation/account-repository
 import { LoanRequestLogRepository } from '@repository/implementation/loan/loan-request-log-repository';
 import DocumentService from '@services/implementation/document-service';
 import { TemplateService } from '@services/implementation/common/template-service';
-const db = require('server/db/models');
+import db = require('server/db/models');
+import { RepaymentService } from '@services/implementation/repayment-service';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -63,7 +64,7 @@ export default class Bootstrap {
         container.register({
             app: asClass(App).singleton(),
             _appConfig: asClass(AppConfig).singleton(),
-            _db: asValue(db),
+            _db: asValue(db.default||db),
             jwt:asValue(jwt),
             webPush:asValue(webPush),
             bcrypt:asValue(bcrypt),
@@ -94,6 +95,7 @@ export default class Bootstrap {
             _userRepository: asClass(UserRepository).singleton(),
             _customerRepository: asClass(CustomerRepository).singleton(),
             _loanRequestService: asClass(LoanRequestService).singleton(),
+            _repaymentService: asClass(RepaymentService).singleton(),
             _loanRequestLogService: asClass(LoanRequestLogService).singleton(),
             _loanService: asClass(LoanService).singleton(),
             _notificationService: asClass(NotificationService).singleton(),

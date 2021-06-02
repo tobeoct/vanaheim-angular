@@ -2,7 +2,7 @@
 @import '../../../../../styles/themes/_theme-dir';
 .preview{
     &-container{
-        @include padding(true,"px",0.5);
+        // @include padding(true,"px",0.5);
         // margin-top: map-get($sizings, "px")* 0.5;
     }
     &-item{
@@ -14,8 +14,11 @@
         margin-bottom: map-get($sizings, "px")* 0.5;
     }
     &-title{
+        @include flex(horizontal,space-between);
+        @include flex(vertical,flex-end);
         margin-bottom: map-get($sizings, "px")* 0.5;
     }
+    
     
 }
 .widget_button--small{
