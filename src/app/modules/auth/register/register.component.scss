@@ -86,9 +86,21 @@
                
             }
     .theme_row{
+        .theme_col-6{
+            padding-left: 0 !important;
+            padding-right: 0 !important; 
+        }
         .theme_col-6:nth-child(2){
            padding:0 !important;
         }
+    }
+
+    #name.theme_row{
+       
+        .theme_col-6:nth-child(2){
+            padding:0 !important;
+            margin-top: 30px !important;
+         }
     }
 }
     }

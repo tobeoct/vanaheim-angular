@@ -1,8 +1,9 @@
 @import '../../../../styles/abstracts/_abstracts-dir';
 @import '../../../../styles/themes/_theme-dir';
 .modal{
+
     @include flex(true,center);
-    @include background(overlay);
+   
     position: fixed;
     top: 0;
     left:0;
@@ -21,6 +22,13 @@
         }
         height: 10%;
     }
+    &-overlay{
+        @include background(overlay);
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+        }
     &-body{
         @include marginVertical(false,"px",1,0);
         @include flex(vertical,center);

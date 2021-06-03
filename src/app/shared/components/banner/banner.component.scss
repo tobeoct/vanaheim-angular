@@ -34,6 +34,10 @@
             font-weight: map-get($font-weights, "bold" );
         }
     }
+    &--small{
+        height: map-get($sizings, "px" )*1.5;
+
+    }
     &--tertiary{
         @include background(lightYellow);
     }

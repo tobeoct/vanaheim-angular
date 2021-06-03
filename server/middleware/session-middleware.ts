@@ -7,6 +7,7 @@ export default class SessionMiddleware{
     // console.log("Session Middleware",expressSession)
    }
     getSession=()=>{
+        console.log("Session Middleware",this.expressSession)
         return this.expressSession({
                 store: this._redis.getRedisStore(),
                 secret: this._appConfig.SESSION_SECRET_KEY,

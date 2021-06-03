@@ -8,3 +8,11 @@
         @include marginVertical(false,"vh",3,1);
     }
 }
+
+
+@media all and (max-width:900px) {
+    .auth_container{
+        margin-top: 15vh;
+    }
+   
+}

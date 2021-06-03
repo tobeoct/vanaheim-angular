@@ -14,7 +14,7 @@ const data:any = {
   {title:"Account", id:"account-info",url:"account-info"},
   {title:"Documents", id:"upload",url:"upload"},
   {title:"Preview", id:"preview",url:"preview"},
-  {title:"Home", id:"home",url:""}],
+  {title:"Login", id:"login",url:"/auth/account"}],
   personal:[
     {title:"Loan Details", id:"loan-calculator",url:"loan-calculator"},
     {title:"BVN", id:"bvn-info",url:"bvn-info"},
@@ -24,7 +24,7 @@ const data:any = {
     {title:"Next Of Kin", id:"nok-info",url:"nok-info"},
     {title:"Documents", id:"upload",url:"upload"},
     {title:"Preview", id:"preview",url:"preview"},
-    {title:"Home", id:"home",url:""},
+    {title:"Login", id:"login",url:"/auth/account"},
 
 ]
 }

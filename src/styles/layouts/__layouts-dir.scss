@@ -13,23 +13,6 @@
       @include paddingHorizontal(true,"%",0.16667,$important:important);
    }
 }
-.no-margin{
-   &--top{
-       margin-top: 0 !important;
-   }
-   &--bottom{
-       margin-bottom: 0 !important;
-   }
-   &--left{
-       margin-left: 0 !important;
-   }
-   &--right{
-       margin-right: 0 !important;
-   }
-   &--all{
-      margin: 0 !important;
-   }
-}
 .d-flex{ 
    display: flex;
    &_horizontal{
@@ -77,6 +60,56 @@
 .margin{
    &--large{
       @include marginVertical(false,"px",2,0, $important:important);
+   }
+}
+
+
+
+.padding{
+   &--x{
+      padding-top: map-get($sizings, "px")*0.25 !important;
+      padding-bottom: map-get($sizings, "px")*0.25 !important;
+   }
+   &--2x{
+     padding-top: map-get($sizings, "px")*0.5 !important;
+     padding-bottom: map-get($sizings, "px")*0.5 !important;
+  } 
+  &--3x{
+     padding-top: map-get($sizings, "px")*0.75 !important;
+     padding-bottom: map-get($sizings, "px")*0.75 !important;
+  }
+}
+
+
+.margin{
+  &--x{
+     margin-top: map-get($sizings, "px")*0.25 !important;
+     margin-bottom: map-get($sizings, "px")*0.25 !important;
+  }
+  &--2x{
+    margin-top: map-get($sizings, "px")*0.5 !important;
+    margin-bottom: map-get($sizings, "px")*0.5 !important;
+ } 
+ &--3x{
+    margin-top: map-get($sizings, "px")*0.75 !important;
+    margin-bottom: map-get($sizings, "px")*0.75 !important;
+ }
+}
+.no-margin{
+   &--top{
+       margin-top: 0 !important;
+   }
+   &--bottom{
+       margin-bottom: 0 !important;
+   }
+   &--left{
+       margin-left: 0 !important;
+   }
+   &--right{
+       margin-right: 0 !important;
+   }
+   &--all{
+      margin: 0 !important;
    }
 }
 @media all and (max-width:1233px){

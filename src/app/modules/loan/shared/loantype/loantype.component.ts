@@ -26,6 +26,8 @@ export class LoantypeComponent implements OnInit {
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
   showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$:Observable<boolean> = this.showSubject.asObservable();
+  show2Subject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  show2$:Observable<boolean> = this.show2Subject.asObservable();
   items:RadioButtonItem[] = [{label:"For Individual",value:"Float Me (Personal)",selected:true},{label:"For Business",value:"Float Me (Business)",selected:false}]
   constructor(private _router:Router, private _fb:FormBuilder, private _store:Store, private _route:ActivatedRoute) { 
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
@@ -51,7 +53,7 @@ export class LoantypeComponent implements OnInit {
     })
     // let d = data.filter(d=>d.allowedTypes.includes(this.loanType));
     let d = data.map(c=>{
-      if(c.id=="Float Me") c.title = this._store.loanType;
+      if(c.id=="Float Me" && this._store.loanType.includes("Float Me")) c.title = this._store.loanType;
       return c;
     });
     this.dataSelectionSubject.next(d);
@@ -66,15 +68,25 @@ export class LoantypeComponent implements OnInit {
   }
 
   next=(event:any)=>{
-   let type = this.loanType.value=="Float Me"?this.choice.value:this.loanType.value;
+   
+   if((this.loanType.value!=this._store.loanType) && this._store.loanType){
+    this.show2Subject.next(true);
+   }else{
+   this.continue()
+  }
+  //  this.onNavigate("welcome/loans/apply/applying-as");
+  }
+
+  continue=()=>{
+    let type = this.loanType.value=="Float Me"?this.choice.value:this.loanType.value;
     this._store.setLoanType(type);
     if(this._router.url!="/welcome/loans"){
       this.onNavigate("applying-as");
     }
-  //  this.onNavigate("welcome/loans/apply/applying-as");
   }
 
   close(){
+    this.show2Subject.next(false);
    let d = data.map(c=>{
       if(c.id=="Float Me") c.title = this.choice.value;
       return c;

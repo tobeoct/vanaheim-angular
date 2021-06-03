@@ -9,6 +9,7 @@ export class BannerComponent implements OnInit {
 
   @Input() show = true;
   @Input() color="tertiary";
+  @Input() class:string;
   constructor() { }
 
   ngOnInit(): void {

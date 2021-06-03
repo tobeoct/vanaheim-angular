@@ -36,7 +36,7 @@
 </div>
                       
 
-<app-modal *ngIf="show$|async" >
+<app-modal *ngIf="show$|async" (onChange)="close()">
   <app-modal-body  slot="body">
     <!-- <form role="form" style="text-align: center !important; margin-top: -40px !important;"> -->
         <div style=" margin-top: -40px; text-align: center !important;">
@@ -59,5 +59,21 @@
             <app-button [class]="'no-margin--bottom'" (onClick)="close()"><ng-container slot="button">Continue</ng-container></app-button>
         
     <!-- </form> -->
+  </app-modal-body>
+</app-modal>
+
+
+
+<app-modal *ngIf="show2$|async" (onChange)="close()">
+  <app-modal-header slot="header">
+    <h3>Change Notice</h3>
+  </app-modal-header>
+  <app-modal-body  slot="body">
+    <p>Changing a loan type would restart your loan application, you may lose already entered information</p>
+    <div class="d-flex d-flex_horizontal--space-between">
+      <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'" (onClick)="close()" ><ng-container slot="button">Cancel</ng-container></app-button>
+    <app-button [class]="'no-margin--bottom widget_button--small'" (onClick)="continue()" ><ng-container slot="button">Continue</ng-container></app-button>
+      
+    </div>
   </app-modal-body>
 </app-modal>

@@ -166,7 +166,7 @@ ngOnDestroy(): void {
     // this.onNavigate("bvn-info");
     //{ email,tenure,denominator,loanType,purpose, rate, loanAmount, monthlyRepayment }
     this.planLoadingSubject.next(true);
-    this._loanService.repaymentPlan({email:this.email.value,purpose:this.purpose.value,rate:this.rate, monthlyRepayment:this.monthlyRepaymentSubject.value,tenure:this.tenure.value,denominator:this.tenureDenominatorSubject.value,loanAmount:this.loanAmount.value,loanType:this.lType})
+    this._loanService.repaymentPlan({email:this.email.value,purpose:this.purpose.value,rate:this.rate, monthlyRepayment:this.monthlyRepaymentSubject.value,tenure:this.tenure.value,denominator:this.tenureDenominatorSubject.value?.replace("Mo","Month"),loanAmount:this.loanAmount.value,loanType:this.lType})
     .subscribe( data=>{ 
       //  console.log("Res",data)
       this._zone.run(() => {

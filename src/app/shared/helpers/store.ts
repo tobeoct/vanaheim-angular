@@ -297,6 +297,12 @@ get additionalInfo() { return JSON.parse(this.getFromCurrentApplication("additio
     this.loanCategorySubject.next(value);
   }
 
+  
+  get registerDetails() { 
+    if(!this.personalInfo) return null;
+    return {firstName:this.personalInfo.firstName,surname:this.personalInfo.surname,email:this.personalInfo.email,phoneNumber:this.personalInfo.phoneNumber}
+  }
+
   back=()=>{
     let page = "loan-type";
     if(this.applyingAsSubject.value && this.pageSubject.value =="loan-product") page = "applying-as";

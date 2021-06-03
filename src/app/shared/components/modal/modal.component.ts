@@ -7,9 +7,9 @@ import { ModalHeaderComponent } from './modal-header/modal-header.component';
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
-  host: {
-    '(document:click)': 'onClick($event)',
-  }
+  // host: {
+  //   '(document:click)': 'onClick($event)',
+  // }
 })
 export class ModalComponent implements OnInit {
   @ViewChild('modalContent') modalContent:ElementRef;

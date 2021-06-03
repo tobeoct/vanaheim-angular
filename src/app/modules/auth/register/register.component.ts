@@ -8,6 +8,7 @@ import { first } from 'rxjs/operators';
 import  {VCValidators}  from 'src/app/shared/validators/default.validators';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LoginType } from '@models/helpers/enums/logintype';
+import { Store } from 'src/app/shared/helpers/store';
 
 @Component({
   selector: 'app-register',
@@ -65,7 +66,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       private authenticationService: AuthService,
       private socialAuthService: SocialAuthService,
       private _router:Router,
-      private _validators:VCValidators
+      private _validators:VCValidators,
+      private _store:Store
   ) { 
       // redirect to home if already logged in
       const user = this.authenticationService.userValue;
@@ -84,15 +86,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.redirectEmail = params['email'];
     });
+    const {firstName,surname,email,phoneNumber}:any = this._store.registerDetails;
       this.form = this._fb.group({
-        firstName: ['',[Validators.required,Validators.minLength(3)]],
-        lastName: ['',[Validators.required,Validators.maxLength(50)]],
+        firstName: [firstName?firstName:'',[Validators.required,Validators.minLength(3)]],
+        lastName: [surname?surname:'',[Validators.required,Validators.maxLength(50)]],
         passwordGroup: this._fb.group({
           password: ['', [Validators.required, this._validators.password]],
           confirmPassword: ['', [Validators.required, this._validators.password]]},
           {validator:this._validators.matcher("password","confirmPassword")}),
-        phone:['', [Validators.required, this._validators.phone]],
-        email:[this.redirectEmail?this.redirectEmail:'', [Validators.email,Validators.required]],
+        phone:[phoneNumber?phoneNumber:'', [Validators.required, this._validators.phone]],
+        email:[email?email:this.redirectEmail?this.redirectEmail:'', [Validators.email,Validators.required]],
         channel: []
       });
       // get return url from route parameters or default to '/'

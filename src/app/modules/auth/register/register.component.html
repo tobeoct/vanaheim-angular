@@ -24,7 +24,7 @@
                 </div>
             </div>
                 <app-form [form]="form" (onSubmit)="onSubmit($event)"  (errorMessageChange) = "onError($event)">
-                    <div class="theme_row grid-2x1">
+                    <div id="name" class="theme_row grid-2x1">
                         <div class="theme_col-6">
                             <app-input fieldClass="no-margin--top" id="firstName"  errorType="left" placeholder="Enter your first name"  [control]="firstName" class="form-control" [error]="(errorMessage$ | async)?.firstName" autocomplete="name"  >
                                 <label for="firstName">First Name</label>

@@ -41,7 +41,7 @@ ul{
     font-size:1em;
     width: 100%;
     &:last-child{
-        margin-top: 20vh;
+        margin-top: 10vh;
     }
 .material-icons{
     font-size: 1em;
@@ -129,9 +129,12 @@ ul{
     z-index:9;
     height: map-get($sizings, "px")*1.25;
     display:none;
-    display:flex;
+    // display:flex;
     align-items:center;
     transform: translateY(-15px);
+    &.loggedIn{
+        top: map-get($sizings, "vh") * 0.5;
+    }
     .removables{
         align-items: center;
         height: 100%;
@@ -197,3 +200,12 @@ ul{
     cursor:pointer;}
 .sidenav_mobi .sidenav_link[data-completed] .theme_flex--middle{
     border-color:#FAFAFA;}
+
+
+    
+
+@media all and (max-width:768px){
+    .grid-padding-3x{
+       @include paddingHorizontal(true,"%",0.25,$important:important)
+    }
+} 

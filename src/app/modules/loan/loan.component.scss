@@ -6,6 +6,14 @@
         padding-left: 0 !important;
     }
 }
+#header{
+    display: none;
+    box-sizing: border-box;
+    width: 100vw;height:map-get($sizings, "vh")*3; align-items: center; padding-left: 2.5%;padding-right: 2.5%;
+    .logo{
+        padding-top: 0 !important;
+    }
+}
 #loan-content{
     width: 85vw;
     margin-left: 15vw;
@@ -27,6 +35,9 @@
 }
 
 @media all and (max-width:900px){
+    #header{
+        display: flex;
+    }
     #loan-content{
         width: 100%;
     margin-left: 0;
