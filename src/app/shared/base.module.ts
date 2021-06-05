@@ -9,11 +9,12 @@ import { ReplacePipe } from './pipes/replace/replace.pipe';
 import { ConvertToFormControlPipe } from './pipes/form/convert-to-formcontrol.pipe';
 import { SplitCamelCasePipe } from './pipes/split/split-camel-case.pipe';
 import { ConvertToFormGroupPipe } from './pipes/form/convert-to-formgroup.pipe copy';
+import { ToasterComponent } from './components/toaster/toaster.component';
 
 
 
 @NgModule({
-  declarations: [
+  declarations: [ToasterComponent,
     ReplacePipe,ConvertToFormControlPipe,ConvertToFormGroupPipe,SplitCamelCasePipe],
   imports: [ ScrollingModule,
     DragDropModule,
@@ -24,6 +25,7 @@ import { ConvertToFormGroupPipe } from './pipes/form/convert-to-formgroup.pipe c
     FormsModule
   ],
   exports:[
+    ToasterComponent,
     ScrollingModule,
     DragDropModule,
     OverlayModule,

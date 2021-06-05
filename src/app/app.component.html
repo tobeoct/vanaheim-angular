@@ -5,3 +5,5 @@
 </app-page>
 <app-faq *ngIf="(show$|async)=='faq'"></app-faq>
 <app-notification *ngIf="(show$|async)=='notification'"></app-notification>
+
+<app-toaster [show]="updateAvailable"></app-toaster> 

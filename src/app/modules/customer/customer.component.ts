@@ -23,14 +23,14 @@ export class CustomerComponent implements OnInit {
   constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private _authenticationService:AuthService) {
 
     if(environment.production){
-    this.swPush.notificationClicks.subscribe( event => {
-      console.log('Received notification: ', event);
-      const url = event.notification.data.url;
-      this._utility.$browser.window.open(url, '_blank');
-    });
-    this.swUpdate.available.subscribe((event) => {
-      this.updateAvailable = true;
-    });
+    // this.swPush.notificationClicks.subscribe( event => {
+    //   console.log('Received notification: ', event);
+    //   const url = event.notification.data.url;
+    //   this._utility.$browser.window.open(url, '_blank');
+    // });
+    // this.swUpdate.available.subscribe((event) => {
+    //   this.updateAvailable = true;
+    // });
     
   this.timer$= timer(0,100000);
   this.timer$.subscribe(c=>{

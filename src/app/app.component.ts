@@ -20,22 +20,22 @@ export class AppComponent implements OnChanges, OnInit {
   title = 'vanaheim';
   isLoggedIn:Boolean = false;
   navType:UserCategory = UserCategory.Customer;
-  // isEnabled:boolean = this.swPush.isEnabled;
-  // isGranted:boolean = Notification.permission === 'granted';
-  // updateAvailable = false;
+  isEnabled:boolean = this.swPush.isEnabled;
+  isGranted:boolean = Notification.permission === 'granted';
+  updateAvailable = false;
   @ViewChild('templates') templates:any; 
-  constructor(private authenticationService: AuthService, private _utility:Utility){
-    // if(environment.production){
-    //   this.swPush.notificationClicks.subscribe( (event:any) => {
-    //     console.log('Received notification: ', event);
-    //     const url = event.notification.data.url;
-    //     this._utility.$browser.window.open(url, '_blank');
-    //   });
-    //   this.swUpdate.available.subscribe((event) => {
-    //     this.updateAvailable = true;
-    //   });
-    //    if(this.isGranted) this.submitNotification();
-    // }
+  constructor(private authenticationService: AuthService, private _utility:Utility,private swPush: SwPush,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private _authenticationService:AuthService){
+  
+    if(environment.production){
+      this.swPush.notificationClicks.subscribe( (event:any) => {
+        // console.log('Received notification: ', event);
+        const url = event.notification.data.url;
+        this._utility.$browser.window.open(url, '_blank');
+      });
+      this.swUpdate.available.subscribe((event) => {
+        this.updateAvailable = true;
+      });
+    }
 
   }
   allSubscriptions:Subscription[]=[];
@@ -59,10 +59,8 @@ export class AppComponent implements OnChanges, OnInit {
   }
   ngOnChanges(): void {
    
-    // this.isGranted = Notification.permission === 'granted';
-    // if(this.isGranted){
-    //   this._cd.detectChanges();
-    // }
+    this.isGranted = Notification.permission === 'granted';
+  
   }
 
   ngOnDestroy(){

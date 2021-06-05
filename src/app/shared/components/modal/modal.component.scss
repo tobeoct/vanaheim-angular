@@ -10,7 +10,7 @@
     height: 100vh;
     width: 100%;
    
-    z-index: 999999999999999999999999999;
+    z-index: 99;
     &-header{
         @include font(heading3);
         text-align: center;
@@ -41,7 +41,7 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        z-index: 99999999999;
+        z-index: 99;
        box-sizing: border-box;
        width: 60%;
        max-height: 70%;

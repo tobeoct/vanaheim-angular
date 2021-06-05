@@ -28,7 +28,7 @@ JWT_SECRET_KEY:string ;
     constructor() {
 
       this.environment= process.env.NODE_ENV || 'development'
-      this.port= process.env.PORT ||''
+      this.port= process.env.PORT ||'4200'
       this.ADMIN_EMAIL=process.env.LOAN_EMAIL||''
   this.CC_EMAIL=process.env.LOAN_EMAIL||''
   this.INVESTMENT_EMAIL= process.env.INVESTMENT_EMAIL||''

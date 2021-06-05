@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { SideNavigationList } from 'src/app/shared/constants/enum';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 @Component({
   selector: 'app-loan',
@@ -15,7 +17,7 @@ export class LoanComponent implements OnInit {
 showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 show$:Observable<boolean> = this.showSubject.asObservable();
 isLoggedIn:boolean=false;
-  constructor( private _authService:AuthService, private _router:Router) {
+  constructor( private _authService:AuthService, private _router:Router, private _utility:Utility) {
     
    }
 
@@ -34,6 +36,10 @@ isLoggedIn:boolean=false;
      });
   }
 
+
+  toggleSideNav(){
+    this._utility.toggleSideNav(SideNavigationList.faq);
+  }
  
 
 }
