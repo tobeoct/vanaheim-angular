@@ -24,16 +24,9 @@ export class CustomerComponent implements OnInit {
 
     if(environment.production){
       this.isEnabled = this.swPush?this.swPush.isEnabled:false;
+      if(Notification){
 this.isGranted = Notification.permission === 'granted';
-    // this.swPush.notificationClicks.subscribe( event => {
-    //   console.log('Received notification: ', event);
-    //   const url = event.notification.data.url;
-    //   this._utility.$browser.window.open(url, '_blank');
-    // });
-    // this.swUpdate.available.subscribe((event) => {
-    //   this.updateAvailable = true;
-    // });
-    
+      }
   this.timer$= timer(0,100000);
   this.timer$.subscribe(c=>{
     if(this.isGranted) this.submitNotification();
@@ -49,7 +42,9 @@ this.isGranted = Notification.permission === 'granted';
     this.isLoggedIn = this._authenticationService.isLoggedIn();
   }
   ngOnChanges(): void {
+    if(Notification){
     this.isGranted = Notification.permission === 'granted';
+    }
   }
   submitNotification(): void {
     this.webNotificationService.subscribeToNotification();

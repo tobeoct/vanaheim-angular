@@ -28,7 +28,9 @@ export class AppComponent implements OnChanges, OnInit {
   try{
     if(environment.production){
       this.isEnabled = this.swPush?this.swPush.isEnabled:false;
+      if(Notification){
 this.isGranted = Notification.permission === 'granted';
+      }
       this.swPush.notificationClicks.subscribe( (event:any) => {
         // console.log('Received notification: ', event);
         const url = event.notification.data.url;
@@ -39,7 +41,7 @@ this.isGranted = Notification.permission === 'granted';
       });
     }
   }catch(err){
-    alert(err);
+    console.log(err);
   }
 
   }
@@ -63,10 +65,11 @@ this.isGranted = Notification.permission === 'granted';
     this.allSubscriptions.push(authSub)
   }
   ngOnChanges(): void {
-   try{
+   try{if(Notification){
     this.isGranted = Notification.permission === 'granted';
+   }
    }catch(err){
-     alert(err);
+     console.log(err);
    }
   
   }
