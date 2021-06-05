@@ -20,13 +20,15 @@ export class AppComponent implements OnChanges, OnInit {
   title = 'vanaheim';
   isLoggedIn:Boolean = false;
   navType:UserCategory = UserCategory.Customer;
-  isEnabled:boolean = this.swPush.isEnabled;
-  isGranted:boolean = Notification.permission === 'granted';
+  isEnabled:boolean ;
+  isGranted:boolean;
   updateAvailable = false;
   @ViewChild('templates') templates:any; 
   constructor(private authenticationService: AuthService, private _utility:Utility,private swPush: SwPush,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private _authenticationService:AuthService){
-  
+  try{
     if(environment.production){
+      this.isEnabled = this.swPush?this.swPush.isEnabled:false;
+this.isGranted = Notification.permission === 'granted';
       this.swPush.notificationClicks.subscribe( (event:any) => {
         // console.log('Received notification: ', event);
         const url = event.notification.data.url;
@@ -36,6 +38,9 @@ export class AppComponent implements OnChanges, OnInit {
         this.updateAvailable = true;
       });
     }
+  }catch(err){
+    alert(err);
+  }
 
   }
   allSubscriptions:Subscription[]=[];
@@ -58,8 +63,11 @@ export class AppComponent implements OnChanges, OnInit {
     this.allSubscriptions.push(authSub)
   }
   ngOnChanges(): void {
-   
+   try{
     this.isGranted = Notification.permission === 'granted';
+   }catch(err){
+     alert(err);
+   }
   
   }
 

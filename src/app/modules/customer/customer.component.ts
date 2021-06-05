@@ -13,16 +13,18 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
   styleUrls: ['./customer.component.scss']
 })
 export class CustomerComponent implements OnInit {
-  isEnabled:boolean = this.swPush.isEnabled;
-  isGranted:boolean = Notification.permission === 'granted';
+  isEnabled:boolean;
+  isGranted:boolean ;
   updateAvailable = false;
   timer$:Observable<any>;
   isLoggedIn:boolean =false;
   showSubject:Subject<string> = new Subject<string>();
   show$:Observable<string> =this.showSubject.asObservable();
-  constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private swUpdate: SwUpdate,private _authenticationService:AuthService) {
+  constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private _authenticationService:AuthService) {
 
     if(environment.production){
+      this.isEnabled = this.swPush?this.swPush.isEnabled:false;
+this.isGranted = Notification.permission === 'granted';
     // this.swPush.notificationClicks.subscribe( event => {
     //   console.log('Received notification: ', event);
     //   const url = event.notification.data.url;
