@@ -21,11 +21,14 @@ export class WebNotificationService {
     // private baseUrl = `${environment.apiUrl}/notification/subscribe`;
     subscribeToNotification() {
       // console.log("subscribing")
+      
+   if(this._swPush){
       this.requestSubscription()
       .then(sub => {
         this.sendToServer(sub)
       })
       .catch(err => console.error('Could not subscribe to notifications', err));
+    }
     }
     sendToServer(params: any) {
       this.http.post(`${environment.apiUrl}/notification/subscribe`, { token : params, browserID: this._utility.$browserID }).pipe(take(1)).subscribe();

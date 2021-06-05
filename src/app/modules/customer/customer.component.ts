@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SwPush, SwUpdate } from '@angular/service-worker';
+import { SwPush } from '@angular/service-worker';
 import { WebNotificationService } from 'src/app/shared/services/web-notification/webnotification.service';
-import { UpdatesService } from 'src/app/shared/services/web-notification/update.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { environment } from '@environments/environment';
 import { Observable, Subject, timer } from 'rxjs';
@@ -21,7 +20,7 @@ export class CustomerComponent implements OnInit {
   showSubject:Subject<string> = new Subject<string>();
   show$:Observable<string> =this.showSubject.asObservable();
   constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private _authenticationService:AuthService) {
-
+try{
     if(environment.production){
       this.isEnabled = this.swPush?this.swPush.isEnabled:false;
       if(Notification){
@@ -32,6 +31,9 @@ this.isGranted = Notification.permission === 'granted';
     if(this.isGranted) this.submitNotification();
   })
   }
+}catch(err){
+  console.log(err);
+}
 
   }
 
@@ -42,9 +44,13 @@ this.isGranted = Notification.permission === 'granted';
     this.isLoggedIn = this._authenticationService.isLoggedIn();
   }
   ngOnChanges(): void {
+    try{
     if(Notification){
     this.isGranted = Notification.permission === 'granted';
     }
+  }catch(err){
+    console.log(err);
+  }
   }
   submitNotification(): void {
     this.webNotificationService.subscribeToNotification();
