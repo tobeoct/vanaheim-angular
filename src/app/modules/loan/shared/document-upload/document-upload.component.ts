@@ -61,7 +61,8 @@ allowedExtensions =
     let groups:FormControl[] = [];
     for(let i=0;i<this.requirements.length;i++){
       let requirement =this.requirements[i];
-      groups.push(new FormControl(this.documents[requirement.title]?this.documents[requirement.title].name:''));
+      let doc = this.documents.find(c=>c.label==requirement.title)
+      groups.push(new FormControl(doc?doc.name:''));
       //, [this._validators.filterFile(this.allowedExtensions)]
     }
     return groups

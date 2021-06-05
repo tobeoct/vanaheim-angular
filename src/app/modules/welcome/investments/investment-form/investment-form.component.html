@@ -38,3 +38,60 @@
     </app-form>
     <app-footer></app-footer>
 </div>
+
+
+<app-modal  *ngIf="(show$|async)==true" (onChange)="close()">
+  <app-modal-header slot="header">
+      <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
+          <app-lottie  assetPath="vanir-capital-badge" ></app-lottie>
+          
+      </div>
+  </app-modal-header>
+  <app-modal-body slot="body">
+          
+             <div class="modal_content" style="text-align: center;">
+                      <h1>Investment Indication</h1>
+                  <div class="form_group">
+                      <p class="theme_text--heading theme_text--heading3">{{apiSuccess$|async}}</p>
+                      
+                  </div>
+                  <div class="form_group">
+                      <!-- <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You would be notified as your request is processed. </p> -->
+                      <button class="widget_button" (click)="close()" id="submit" type="submit" style="margin: 5px auto;" tabindex="0"><div>Done</div></button>
+                      <p class="theme_color--grey">Are you looking to get some funds? <span class="theme_color--yellow"><a href="welcome/loans" ><u>Go to Loans</u></a></span></p>
+      
+                  </div>
+                 
+             </div>
+        
+      
+  </app-modal-body>
+</app-modal>
+
+
+
+<app-modal  *ngIf="(show2$|async)==true" (onChange)="close()">
+  <app-modal-header slot="header">
+      <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
+          <app-lottie assetPath="vanir-capital-error" ></app-lottie>
+          
+      </div>
+  </app-modal-header>
+  <app-modal-body slot="body">
+          
+             <div class="modal_content" style="text-align: center;">
+                 
+                      <h1>Oops</h1>
+                  <div class="form_group">
+                      <p class="theme_text--heading theme_text--heading3">There seems to be a problem</p>
+                  </div>
+                  <div class="form_group">
+                      <p class="theme_color--grey">{{apiError$|async}} </p>
+                      <app-button (onClick)="close()"><ng-container slot="button" >Close</ng-container ></app-button>
+                     
+                  </div>
+             </div>
+        
+      
+  </app-modal-body>
+</app-modal>

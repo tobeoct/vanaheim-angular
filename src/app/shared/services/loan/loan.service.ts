@@ -168,10 +168,14 @@ else if(loanAmount>=100000 && loanAmount<200000)
     validateLoanApplication(){
        let application = this._store.loanApplication;
        let category = this._store.loanCategory;
-       if(!application["loanType"]||!application["loanProduct"]||!application["applyingAs"]||!application["account"]||!application["loanCalculator"]) return false;
-       if(category=='personal' && (!application["bvnInfo"]||!application["personalInfo"]||!application["employmentInfo"]||!application["nokInfo"])) return false;
+       if(application && category){
+         application = application[category];
+       if(!application["loanType"]||!application["loanProduct"]||!application["applyingAs"]||!application["accountInfo"]||!application["loanCalculator"]) return false;
+       if(category=='personal' && (!application["bvn"]||!application["personalInfo"]||!application["employmentInfo"]||!application["nokInfo"])) return false;
        if(category=='business' && (!application["collateralInfo"]||!application["companyInfo"]||!application["shareholderInfo"])) return false;
       return true;
+       }
+       return false;
     }
     getLatest=()=>{
       

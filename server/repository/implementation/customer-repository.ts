@@ -9,11 +9,13 @@ import { BaseRepository } from "./base-repository";
   }
   getByUserID= (userID: number) => {
     return new Promise<any>(async (resolve, reject) =>{
-      resolve(await this._db.findOne({
+      let response=await this._db.findOne({
         where: {
           userID: userID
         }
-      }));
+      });
+      
+      resolve(response);
     });
     
 }

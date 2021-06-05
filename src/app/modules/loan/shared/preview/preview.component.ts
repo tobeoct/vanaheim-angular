@@ -57,7 +57,7 @@ export class PreviewComponent implements OnInit {
     // this.apiSuccessSubject.next();
   }
   close3=()=>{
-    this.show3Subject.next(false);
+    setTimeout(()=>this.show3Subject.next(false),0);
     // this.apiErrorSubject.next();
     // this.apiSuccessSubject.next();
   }
@@ -82,23 +82,17 @@ let a = this._store.loanApplication;
   this._loanService.apply(loanResponse).pipe(take(1)).subscribe(
    data=>{  this._zone.run(() => {
     this.loadingSubject.next(false);
-    this.apiSuccessSubject.next(data.loanRequestId);
+    setTimeout(()=>this.apiSuccessSubject.next(data.loanRequestId),0);
     this.show2Subject.next(true);
-    setTimeout(()=>
-this.apiSuccessSubject.next(),3000);
 
    })
   },
   (error:string) => {
-    this._zone.run(() => {
     this.loadingSubject.next(false);
-this.apiErrorSubject.next(error);
+    if(error="Not Found") error = "You do not seem to be connected to the internet";
+    setTimeout(()=>this.apiErrorSubject.next(error),0);
 this.show3Subject.next(true);
-setTimeout(()=>
-this.apiErrorSubject.next(),3000);
-})
-  }
-  );
+  });
     
      }else{
        this.showSubject.next(true);

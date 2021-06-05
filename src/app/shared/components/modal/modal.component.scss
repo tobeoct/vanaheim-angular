@@ -10,7 +10,7 @@
     height: 100vh;
     width: 100%;
    
-    z-index: 11;
+    z-index: 999999999999999999999999999;
     &-header{
         @include font(heading3);
         text-align: center;

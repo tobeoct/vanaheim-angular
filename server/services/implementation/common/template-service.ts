@@ -7,7 +7,19 @@ const pdfGenerator = require('template-pdf-generator');
 
 export class TemplateService{
     constructor(private fs:any,private fsExtra:any){}
-
+    INVESTMENT_CUSTOMER_TEMPLATE=`Welcome to Vanir Capital Limited.<br/><br/>
+    We thank you for your interest in our investment service. We are
+    resolute in our mission for quality financial service delivery, assured by
+    our core values of passion and sustained through Professionalism,
+    Integrity, Innovation and business sustainability.<br/><br/>
+    The documents listed below have been attached for your information to
+    enable you make the right investment decision:<br/><br/>
+    - A Copy of our Investors Pitch Deck<br/>
+    - A Copy of our Privacy Policy Document<br/>
+    Thank you for choosing Vanir Capital. You will be contacted by a
+    member of the investment team shortly.<br/><br/>
+    Kind Regards<br/><br/>
+    <b>Vanir Capital Investment Team</b>`;
    LOAN_CUSTOMER_TEMPLATE =  `<div style="width:100% !important;  margin-top:20px;"><p>Dear Customer,<br/><br/>
     Thank you for your interest in Vanir Capital Limited's loan service.<br/><br/>
     We acknowledge receipt of your loan request and the documents provided.<br/><br/>

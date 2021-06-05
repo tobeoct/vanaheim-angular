@@ -12,5 +12,5 @@ export interface IInvestmentService{
     getInvestmentRequestById:()=>Promise<InvestmentRequest>
     getInvestmentRequestLogById:()=>Promise<InvestmentRequestLog>
     updateInvestmentRequest:(investmentRequest:InvestmentRequest)=> Promise<InvestmentRequest>
-
+    process:({name,email,payout,duration,rate,maturity,amount}: any) => Promise<any>
 }

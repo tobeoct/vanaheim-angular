@@ -71,6 +71,7 @@ uploaded$:Observable<boolean> = this.uploadedSubject.asObservable();
       };
     } else{
       alert("Invalid file type");
+      return;
     }
     
       

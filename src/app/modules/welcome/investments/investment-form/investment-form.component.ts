@@ -3,12 +3,13 @@ import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { Subject, Observable, BehaviorSubject, from } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, take } from 'rxjs/operators';
 import { ElementStyle, ElementSize, ElementState } from 'src/app/shared/constants/enum';
 import { ButtonOptions, AssetPath } from 'src/app/shared/constants/variables';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
 import { InvestmentIndication, RateDetail } from '../investment';
+import { InvestmentService } from '../investment.service';
 
 @Component({
   selector: 'app-investment-form',
@@ -81,7 +82,13 @@ amount$:Observable<number> = this.amountSubject.asObservable();
 changedSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
 changed$:Observable<boolean> = this.changedSubject.asObservable();
 
-  constructor( private _fb:FormBuilder, private _zone: NgZone,private _utility:Utility, private _validators:VCValidators) {
+
+showSubject:BehaviorSubject<boolean>= new BehaviorSubject<boolean>(false);
+show$:Observable<boolean> = this.showSubject.asObservable();
+show2Subject:BehaviorSubject<boolean>= new BehaviorSubject<boolean>(false);
+show2$:Observable<boolean> = this.show2Subject.asObservable();
+
+  constructor( private _fb:FormBuilder, private _zone: NgZone,private _utility:Utility, private _validators:VCValidators, private _investmentService:InvestmentService) {
    }
   ngAfterViewInit(): void {
       this.delay$.subscribe(c=>{
@@ -128,25 +135,28 @@ onChange(obj:any){
   }
 }
   onSubmit(event:any){
-    // console.log(event)
-    // event.preventDefault();
-    
-    // this.showModal=true;
-    // form.amount = this.amount;
-    // form.duration = this.rateDetail.duration;
-    // form.maturity = this.rateDetail.maturity;
-    // form.rate= this.rateDetail.rate;
-    // form.payout= this.rateDetail.payout;
-    // form.emailAddress =this.emailAddress;
-    // form.preferredName = this.name;
-    console.log(this.form.value)
-    // const payload = {email:form.emailAddress, payload:{amount : form.amount, duration:form.duration, payout:form.payout, name:form.preferredName,rate:form.rate, maturity: form.maturity}};
-    //   new APIHelper().post("sendinvestment", payload,undefined).then(res=>{
-    //     console.log("Investment",res)
-    //     this.showModal=true;
-    //   }).catch(err=>{console.log(err);this.showModal=true;});
-    
+    this.loadingSubject.next(true);
+    this._investmentService.apply(this.form.value).pipe(take(1)).subscribe(
+      data=>{  this._zone.run(() => {
+       this.loadingSubject.next(false);
+       setTimeout(()=>this.apiSuccessSubject.next(data.message),0);
+       this.showSubject.next(true);
+   
+      })
+     },
+     (error:string) => {
+       this.loadingSubject.next(false);
+       if(error="Not Found") error = "You do not seem to be connected to the internet";
+       setTimeout(()=>this.apiErrorSubject.next(error),0);
+   this.show2Subject.next(true);
+     });
+       
+      
   }
 
-   
+  close=()=>{
+    setTimeout(()=>{this.show2Subject.next(false);this.showSubject.next(false)},0);
+    // this.apiErrorSubject.next();
+    // this.apiSuccessSubject.next();
+  }
 }

@@ -51,8 +51,8 @@
       
             </div>
         </div>
-        <ng-container *ngIf="loanApplication['account']">
-            <div class="preview-container" *ngFor="let acc of toJson(loanApplication['account']);let i=index">
+        <ng-container *ngIf="loanApplication['accountInfo']">
+            <div class="preview-container" *ngFor="let acc of toJson(loanApplication['accountInfo']);let i=index">
                 <div class="preview-title"><h3>Account {{i+1}}</h3>
          <app-button (onClick)="onNavigate('account')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>       
          <div class="preview-items">
@@ -70,13 +70,13 @@
         </ng-container>
 
         <ng-container *ngIf="category=='personal'">
-            <ng-container *ngIf="loanApplication['bvnInfo']">
+            <ng-container *ngIf="loanApplication['bvn']">
                 <div class="preview-container">
                     <div class="preview-title"><h3>BVN</h3>
                     <app-button (onClick)="onNavigate('bvn-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>
                     <div class="preview-items">
                             <div class="preview-item" > 
-                                        <p><span><b>Bank Verification Number</b></span>:<span>{{toJson(loanApplication['bvnInfo'])["bvn"]}}</span></p>
+                                        <p><span><b>Bank Verification Number</b></span>:<span>{{toJson(loanApplication['bvn'])["bvn"]}}</span></p>
                             </div>
                     </div>
                 </div>
@@ -367,11 +367,11 @@
                    
                         <h1>Oops</h1>
                     <div class="form_group">
-                        <p class="theme_text--heading theme_text--heading3">There seems to be a problem with your request</p>
+                        <p class="theme_text--heading theme_text--heading3">There seems to be a problem</p>
                     </div>
                     <div class="form_group">
                         <p class="theme_color--grey">{{apiError$|async}} </p>
-                        <app-button (onClick)="close2()"><ng-container slot="button" >Close</ng-container ></app-button>
+                        <app-button (onClick)="close3()"><ng-container slot="button" >Close</ng-container ></app-button>
                        
                     </div>
                </div>

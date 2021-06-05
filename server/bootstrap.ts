@@ -36,6 +36,7 @@ import DocumentService from '@services/implementation/document-service';
 import { TemplateService } from '@services/implementation/common/template-service';
 import db = require('server/db/models');
 import { RepaymentService } from '@services/implementation/repayment-service';
+import { InvestmentService } from '@services/implementation/investment/investment-service';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -98,6 +99,7 @@ export default class Bootstrap {
             _repaymentService: asClass(RepaymentService).singleton(),
             _loanRequestLogService: asClass(LoanRequestLogService).singleton(),
             _loanService: asClass(LoanService).singleton(),
+            _investmentService: asClass(InvestmentService).singleton(),
             _notificationService: asClass(NotificationService).singleton(),
             _clientService: asClass(ClientService).singleton(),
             _templateService: asClass(TemplateService).singleton(),
