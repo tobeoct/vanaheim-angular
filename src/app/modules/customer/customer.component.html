@@ -1,6 +1,6 @@
 <app-customer-navigation></app-customer-navigation>
 <div id="main-content">
-  <div class="notifications" *ngIf="!isGranted">
+  <div class="notifications" *ngIf="!isGranted&&pwaAble">
     <div class="notifications_subscription" *ngIf="isEnabled" >
         <h3 *ngIf="!isGranted">Get notified on your device whenever there are updates</h3>
         <p *ngIf="isGranted" class="success">

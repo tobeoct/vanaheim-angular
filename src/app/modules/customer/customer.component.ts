@@ -15,6 +15,7 @@ export class CustomerComponent implements OnInit {
   isEnabled:boolean;
   isGranted:boolean ;
   updateAvailable = false;
+  pwaAble:boolean = true;
   timer$:Observable<any>;
   isLoggedIn:boolean =false;
   showSubject:Subject<string> = new Subject<string>();
@@ -25,6 +26,8 @@ try{
       this.isEnabled = this.swPush?this.swPush.isEnabled:false;
       if(Notification){
 this.isGranted = Notification.permission === 'granted';
+      }else{
+        this.pwaAble = false;
       }
   this.timer$= timer(0,100000);
   this.timer$.subscribe(c=>{
@@ -33,6 +36,7 @@ this.isGranted = Notification.permission === 'granted';
   }
 }catch(err){
   console.log(err);
+  this.pwaAble = false;
 }
 
   }
@@ -50,6 +54,7 @@ this.isGranted = Notification.permission === 'granted';
     }
   }catch(err){
     console.log(err);
+    this.pwaAble = false;
   }
   }
   submitNotification(): void {
