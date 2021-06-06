@@ -40,6 +40,8 @@ export class LoansComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
 
+  loanDetailsSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  loanDetails$:Observable<any> = this.loanDetailsSubject.asObservable();
   focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   focus$:Observable<boolean> = this.focusSubject.asObservable();
   delay$ = from([1]).pipe(delay(3000));
@@ -70,6 +72,8 @@ loans$:Observable<any>;
 totalRepaymentSubject:BehaviorSubject<number> = new BehaviorSubject<number>(0); 
 totalRepayment$:Observable<number> = this.totalRepaymentSubject.asObservable();
 
+showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+show$:Observable<boolean> = this.showSubject.asObservable();
 
 base:string;
 
@@ -89,10 +93,14 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
   ngOnInit(): void {
   this.loanDetails = this._store.loanCalculator as LoanDetails;
   this.loanCalculator = this._store.loanCalculator;
-  
+  this.loanDetailsSubject.next(this._store.loanCalculator)
   this.latestLoan$ = this._loanService.latestLoan$;
+  
   this.search()
   let lType =this._store.loanType||"Personal Loans";
+  let tenureRange = this._loanService.getTenureRange(lType);
+  this.minTenure = tenureRange["min"];
+  this.maxTenure = tenureRange["max"];
     this._store.titleSubject.next("Loan Calculator");
     this.range = this._loanService.getMinMax(lType);
     this.form = this._fb.group({
@@ -159,5 +167,12 @@ onNavigate(route:string,params:any={}):void{
   }
   changeFilter(event:any){
     this._loanService.filterSubject.next(event);
+  }
+  
+  trackByFn(index:any,item:any){
+    return index;
+  }
+  close(){
+    this.showSubject.next(false);
   }
 }

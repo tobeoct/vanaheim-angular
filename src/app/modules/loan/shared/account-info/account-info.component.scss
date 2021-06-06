@@ -39,7 +39,9 @@
     }
 
 }
-
+.text-button{
+    @include color(facebook);
+}
 #accounts{
     @include marginVertical(false,"px",0,1, $important:important);
     p{

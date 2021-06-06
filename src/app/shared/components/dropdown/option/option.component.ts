@@ -11,6 +11,8 @@ export class DropdownOptionComponent implements OnInit {
   class:string;
   @Input()
   value:string;
+  @Input()
+  label:string;
   @ViewChild(TemplateRef)
   content: TemplateRef<any>;
 

@@ -4,7 +4,7 @@
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
             <app-dropdown [current]="type.value" [fieldClass]="'no-margin--top'" [id]="'type'" [control]="type"  aria-placeholder="What type of collateral is this?">
                     <ng-container slot="label"><label for="type">Collateral Type</label></ng-container>
-                    <app-option *ngFor="let t of types; let i =index" [value]="t">{{t}}</app-option>
+                    <app-option *ngFor="let t of types; let i =index" [value]="t" [label]="t">{{t}}</app-option>
                 </app-dropdown>
                 <app-input [focus$]="focus$" id="description" [placeholder]="'Enter your description'" [control]="description" class="form-control" [error]="(errorMessage$ | async)?.description" >
                     <label for="description">Collateral Description</label>

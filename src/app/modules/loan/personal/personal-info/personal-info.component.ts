@@ -3,9 +3,12 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter } from 'rxjs/operators';
+import { delay, filter, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { PersonalInfo } from './personal-info';
+import { CustomerService } from 'src/app/shared/services/customer/customer.service';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import moment = require('moment');
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -31,6 +34,7 @@ export class PersonalInfoComponent implements OnInit {
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
   
+  customerFromDb:any;
 
   get surname(){
     return this.form.get("surname") as FormControl|| new FormControl();
@@ -89,8 +93,8 @@ export class PersonalInfoComponent implements OnInit {
 
     base:string;
 
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
-    private _validators:VCValidators, private _route: ActivatedRoute) { 
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store, private _customerService:CustomerService,
+    private _validators:VCValidators, private _route: ActivatedRoute, private _authService:AuthService) { 
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
        });
@@ -104,7 +108,7 @@ export class PersonalInfoComponent implements OnInit {
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
-    
+   
     let year = new Date().getFullYear();
     let max = year-18;
     const personalInfo = this._store.personalInfo as PersonalInfo;
@@ -131,6 +135,13 @@ export class PersonalInfoComponent implements OnInit {
           {}),
        
   });
+
+  if(this._authService.isLoggedIn()){
+    this._customerService.customer().pipe(take(1)).subscribe(c=>{
+      console.log(c);
+      this.patchValue(c)
+    });
+ }
     this._store.titleSubject.next("Personal Information");
     this.titles = this._store.titles;
     this.states =this._store.states;
@@ -154,6 +165,66 @@ ngOnDestroy(): void {
   this.allSubscriptions.forEach(sub=>sub.unsubscribe());
 }
 
+patchValue(customer:any){
+  // BVN: "22326677629"
+if(customer){
+if(!this.email.value&&customer.email){
+  this.email.patchValue(customer.email);
+}
+if(!this.title.value&&customer.title){
+  this.title.patchValue(customer.title);
+}
+if(!this.phone.value&&customer.phoneNumber){
+  this.phone.patchValue(customer.phoneNumber);
+}
+if(!this.firstName.value&&customer.firstName){
+  this.firstName.patchValue(customer.firstName);
+}
+if(!this.surname.value&&customer.lastName){
+  this.surname.patchValue(customer.lastName);
+}
+if(!this.otherNames.value &&customer.otherNames){
+  this.otherNames.patchValue(customer.otherNames);
+}
+if(!this.gender.value && customer.gender){
+  this.gender.patchValue(customer.gender);
+}
+if(!this.maritalStatus.value && customer.maritalStatus){
+  this.maritalStatus.patchValue(customer.maritalStatus);
+}
+if(customer.address){
+  let a = customer.address.split(",");
+  let street = a[0];
+  let city = a[1];
+  let state = a[2];
+if(!this.street.value){
+  this.street.patchValue(street);
+}
+if(!this.city.value){
+  this.city.patchValue(city);
+}
+if(!this.state.value){
+  this.state.patchValue(state);
+}
+}
+
+if(customer.dateOfBirth){
+  let d = moment(customer.dateOfBirth);
+  let day = d.get("day");
+  let month = d.get("month");
+  let year = d.get("year");
+if(!this.day.value){
+  this.day.patchValue(day);
+}
+if(!this.month.value){
+  this.month.patchValue(month);
+}
+if(!this.year.value){
+  this.year.patchValue(year);
+}
+}
+}
+}
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
     const personalInfo:PersonalInfo ={title:this.title.value, surname: this.surname.value, gender: this.gender.value, maritalStatus: this.maritalStatus.value, firstName: this.firstName.value, otherNames: this.otherNames.value, email: this.email.value, phoneNumber:this.phone.value, dob:{day:this.day.value, month: this.month.value, year:this.year.value},address:{street:this.street.value, city:this.city.value, state:this.state.value}};

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SideNavigationList } from 'src/app/shared/constants/enum';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 
@@ -9,7 +10,7 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private _utility:Utility) { }
+  constructor(private _utility:Utility, private _router:Router) { }
 
   ngOnInit(): void {
   }
@@ -19,5 +20,7 @@ export class HeaderComponent implements OnInit {
     console.log(type);
     this._utility.toggleSideNav(type);
   }
-  
+  onNavigate(route:string){
+    this._router.navigate([route])
+  }
 }

@@ -3,11 +3,13 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter } from 'rxjs/operators';
+import { delay, filter, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { CollateralInfo } from './collateral-info';
 import { Document } from '../../shared/document-upload/document';
 import { Utility } from 'src/app/shared/helpers/utility.service';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 
 @Component({
   selector: 'app-collateral-info',
@@ -46,10 +48,10 @@ export class CollateralInfoComponent implements OnInit {
     return this.form.get("hasDocument") as FormControl|| new FormControl();
   }
 
-
+  collateralsFromDb$:Observable<any[]>
     base:string;
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
-    private _validators:VCValidators,private _utility:Utility, private _route: ActivatedRoute) {
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _customerService:CustomerService,
+    private _validators:VCValidators,private _utility:Utility, private _route: ActivatedRoute, private _authService:AuthService) {
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
        });
@@ -64,6 +66,9 @@ export class CollateralInfoComponent implements OnInit {
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   allSubscriptions:Subscription[]=[];
   ngOnInit(): void {
+    if(this._authService.isLoggedIn()){
+      this.collateralsFromDb$ = this._customerService.customer().pipe(take(1));
+    }
     const collateralInfo = this._store.collateralInfo as CollateralInfo;
     this.form = this._fb.group({
       type: [collateralInfo.type?collateralInfo.type:"",[Validators.required]],

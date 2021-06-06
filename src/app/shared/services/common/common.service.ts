@@ -4,7 +4,6 @@ import { environment } from '@environments/environment';
 import { throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Utility } from '../../helpers/utility.service';
-// import { LoanResponse } from '../../poco/loan/loan-response';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +32,16 @@ export class CommonService {
       return this._http.post<any>(`${environment.apiUrl}/account/enquiry`, {...payload})
       .pipe(map(response => {
           return response;
+      }), catchError(err => {
+        console.error(err);
+        return throwError(err);
+      }));
+    }
+
+    accounts=()=>{
+      return this._http.get<any>(`${environment.apiUrl}/account`)
+      .pipe(map(response => {
+        if(response.status==true){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);

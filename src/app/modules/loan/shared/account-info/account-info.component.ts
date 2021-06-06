@@ -3,10 +3,11 @@ import { FormBuilder, Validators, FormGroup, FormControl, FormArray, Form } from
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
-import { catchError, delay, filter, map } from 'rxjs/operators';
+import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { AccountInfo } from './account-info';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -57,9 +58,14 @@ export class AccountInfoComponent implements OnInit {
     return this.form.get("valid") as FormControl|| new FormControl();
   }
 
-
+  // get salaryId(){
+  //   return this.form.get("salaryId") as FormControl|| new FormControl();
+  // }
+  // get loanAccountId(){
+  //   return this.form.get("loanAccountId") as FormControl|| new FormControl();
+  // }
   constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
-    private _validators:VCValidators, private _route: ActivatedRoute,private _commonService:CommonService) {
+    private _validators:VCValidators,private _authService:AuthService, private _route: ActivatedRoute,private _commonService:CommonService) {
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
        });
@@ -70,6 +76,10 @@ export class AccountInfoComponent implements OnInit {
   disableInputSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true); 
   disableInput$:Observable<boolean> = this.disableInputSubject.asObservable();
   delay$ = from([1]).pipe(delay(1000));
+  
+  dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
+
   loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
   errorMessageSubject:Subject<any> = new Subject<any>(); 
@@ -80,12 +90,25 @@ export class AccountInfoComponent implements OnInit {
   apiSuccessSubject:Subject<any> = new Subject<any>(); 
   apiSuccess$:Observable<any> = this.apiSuccessSubject.asObservable();
   allSubscriptions:Subscription[]=[];
+
+  accounts:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
+  accountsFromDb$:Observable<any[]> = this.accounts.asObservable();
+
+  
+  showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  showForm$:Observable<boolean> = this.showFormSubject.asObservable();
   ngOnInit(): void {
+    if(this._authService.isLoggedIn()){
+      this.dataLoadingSubject.next(true);
+    this.accountsFromDb$ = this._commonService.accounts().pipe(map((c:any[])=>{
+      this.accounts.next(c);
+      return c;
+    }),take(1),tap(c=>this.dataLoadingSubject.next(false)));
+    }
     let accountInfo = this._store.accountInfo as AccountInfo[];
     if(accountInfo.length==0) accountInfo = [new AccountInfo()];
     let account2:AccountInfo= new AccountInfo();
     this.form = this._fb.group({
-      
       accountArray:this._fb.array( [...this.buildAccountGroups(accountInfo)]),
       pay: [accountInfo.length>1?null:true],
       valid: [],
@@ -109,6 +132,10 @@ export class AccountInfoComponent implements OnInit {
     this.focusSubject.next(true)
   }
 
+  showForm(){
+    this.showFormSubject.next(true);
+  }
+
 ngAfterViewInit(): void {
     const sub = this.delay$.subscribe(c=>{
         this.focus();    
@@ -128,7 +155,9 @@ ngOnDestroy(): void {
     }
   }
   buildAccountGroup=(accountInfo:AccountInfo)=>{
+    if(accountInfo)this.accounts.next([accountInfo]);
     let group= new FormGroup({
+      id:new FormControl(accountInfo.id?accountInfo.id:0),
       bank: new FormControl(accountInfo.bank?accountInfo.bank:'', [Validators.required]),
       accountNumber: new FormControl(accountInfo.accountNumber?accountInfo.accountNumber:'', [Validators.required, Validators.minLength(10),Validators.maxLength(10)]),
       accountName:new FormControl( accountInfo.accountName?accountInfo.accountName:'', [Validators.required])
@@ -137,15 +166,34 @@ ngOnDestroy(): void {
     group.get("bank")?.valueChanges.subscribe(v=>{
       
      if(group.get("accountNumber")?.valid &&group.get("bank")?.valid) {
-      console.log(v)
+      if(!group.get("id")?.value){
        this.onValidate(group.get("accountNumber")?.value,v,nameCtrl);
+      }
       }
     })
     group.get("accountNumber")?.valueChanges.subscribe(v=>{
       if(group.get("bank")?.valid &&group.get("accountNumber")?.valid){
-        console.log(v)
+        // console.log(v)
+        if(!group.get("id")?.value){
         this.onValidate(v,group.get("bank")?.value,nameCtrl);
+        }
       }
+     })
+
+     group.get("id")?.valueChanges.subscribe(v=>{
+       console.log("ID",v);
+      let id =group.get("id")?.value ;
+      if(id&& id>0 ) {
+        let a = this.accounts.value.find(c=>c.id==id);
+        if(a){
+        group.get("bank")?.patchValue(a.bank);
+        group.get("bank")?.updateValueAndValidity();
+        group.get("accountNumber")?.patchValue(a.number);
+        group.get("accountNumber")?.updateValueAndValidity();
+        group.get("accountName")?.patchValue(a.name);
+        group.get("accountName")?.updateValueAndValidity();
+        }
+       }
      })
      return group;
   }
@@ -167,9 +215,10 @@ ngOnDestroy(): void {
 
     let accountInfo:AccountInfo[]=[]
     console.log("Accounts", accounts)
-    accounts.forEach((group:any)=>{
+    accounts.forEach((group:any,i)=>{
       let info = new AccountInfo();
       console.log("Group",group)
+      info.id = group["id"];
       info.bank = group["bank"];
       info.accountName = group["accountName"];
       info.accountNumber = group["accountNumber"];

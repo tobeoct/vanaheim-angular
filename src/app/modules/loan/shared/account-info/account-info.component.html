@@ -1,37 +1,66 @@
 <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
         <div class=" content box-shadow" style="box-sizing: border-box;">
     <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
-    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-        <div id="accounts" class="theme_row no-margin--top animate__animated animate__fadeInUp animate__fast" *ngFor="let accountGroup of accountArrayGroups;let i =index">
-<p *ngIf="i==0"><b><span *ngIf="(loanCategory$|async)=='personal'">Salary</span><span *ngIf="(loanCategory$|async)=='business'">Business</span> Account Details</b></p>
-<p *ngIf="i!=0"><b><span *ngIf="(loanCategory$|async)=='personal'">Loan Disbursement</span><span *ngIf="(loanCategory$|async)=='business'">Personal</span> Account Details</b></p>
-<ng-container  [formGroup]="accountGroup">
-                <app-dropdown [current]="(accountGroup.get('bank')|toControl).value" [fieldClass]="'no-margin--top'" [id]="'bank'" [control]="accountGroup.get('bank')|toControl"  aria-placeholder="Select your bank">
-                    <ng-container slot="label"><label for="bank">Bank</label></ng-container>
-                    <app-option *ngFor="let t of banks; let i =index" [value]="t.title">{{t.title}}</app-option>
+    <ng-container *ngIf="!(dataLoading$|async)">
+        <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+        <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
+            <app-dropdown current="{{(accountArrayGroups[0].get('bank')|toControl).value}} - {{(accountArrayGroups[0].get('accountNumber')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'salary-accounts'" [control]="(accountArrayGroups[0].get('id')|toControl)"  aria-placeholder="Select your salary account">
+                <ng-container slot="label"><label for="salary-accounts"><span *ngIf="(loanCategory$|async)=='personal'">Salary</span><span *ngIf="(loanCategory$|async)=='business'">Business</span> Account</label></ng-container>
+                <app-option *ngFor="let t of (accountsFromDb$|async); let i =index" [value]="t.id" label="{{t.bank}} - {{t.number}}">{{t.bank}} - {{t.number}}</app-option>
+            </app-dropdown>
+            <p class="text-button" (click)="showForm()">Enter a different account</p>
+           
+            <ng-container *ngIf="accountArrayGroups.length>1">
+                <app-dropdown current="{{(accountArrayGroups[1].get('bank')|toControl).value}} - {{(accountArrayGroups[1].get('accountNumber')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'salary-accounts'" [control]="(accountArrayGroups[1].get('id')|toControl)"  aria-placeholder="Select your loan disbursement account">
+                    <ng-container slot="label"><label for="salary-accounts"><span *ngIf="(loanCategory$|async)=='personal'">Loan Disbursement</span><span *ngIf="(loanCategory$|async)=='business'">Personal</span> Account</label></ng-container>
+                    <app-option *ngFor="let t of (accountsFromDb$|async); let i =index" [value]="t.id" label="{{t.bank}} - {{t.number}}">{{t.bank}} - {{t.number}}</app-option>
                 </app-dropdown>
-           
-           <app-input [focus$]="focus$" id="accountNumber" [loading$]="loading$" [placeholder]="'Enter your account number'" [control]="accountGroup.get('accountNumber')|toControl" class="form-control" [error]="(errorMessage$ | async)?.accountNumber" >
-            <label for="accountNumber">Account Number</label>
-         
-        </app-input>   
-        <fieldset [disabled]="(disableInput$|async)">
-                <app-input id="accountName" [placeholder]="'Enter your account name'" [control]="accountGroup.get('accountName')|toControl" class="form-control" [error]="(errorMessage$ | async)?.accountName" >
-                    <label for="accountName">Account Name</label>
-                </app-input>
-            </fieldset>
-            </ng-container>    
-        </div>
-           
-        <div class="form_group">
-          <app-checkbox [outline]="true" [active]="pay.value" [control]="pay" [value]="'true'">Pay loan into my <span *ngIf="(loanCategory$|async)=='personal'">salary</span><span *ngIf="(loanCategory$|async)=='business'">business</span> account</app-checkbox>
-        </div>
-               
-               
+                <p class="text-button" (click)="showForm()">Enter a different account</p>
+            </ng-container>
+            <div class="form_group">
+                <app-checkbox [outline]="true" [active]="pay.value" [control]="pay" [value]="'true'">Pay loan into my <span *ngIf="(loanCategory$|async)=='personal'">salary</span><span *ngIf="(loanCategory$|async)=='business'">business</span> account</app-checkbox>
+                </div>
+        </ng-container>
+        <ng-container *ngIf="!(accountsFromDb$|async) || (showForm$|async)">
+    
+            <div id="accounts" class="theme_row no-margin--top animate__animated animate__fadeInUp animate__fast" *ngFor="let accountGroup of accountArrayGroups;let i =index">
+            <p *ngIf="i==0"><b><span *ngIf="(loanCategory$|async)=='personal'">Salary</span><span *ngIf="(loanCategory$|async)=='business'">Business</span> Account Details</b></p>
+            <p *ngIf="i!=0"><b><span *ngIf="(loanCategory$|async)=='personal'">Loan Disbursement</span><span *ngIf="(loanCategory$|async)=='business'">Personal</span> Account Details</b></p>
+            <ng-container  [formGroup]="accountGroup">
+                    <app-dropdown [current]="(accountGroup.get('bank')|toControl).value" [fieldClass]="'no-margin--top'" [id]="'bank'" [control]="accountGroup.get('bank')|toControl"  aria-placeholder="Select your bank">
+                        <ng-container slot="label"><label for="bank">Bank</label></ng-container>
+                        <app-option *ngFor="let t of banks; let i =index" [value]="t.title" [label]="t.title">{{t.title}}</app-option>
+                    </app-dropdown>
+            
+            <app-input [focus$]="focus$" id="accountNumber" [loading$]="loading$" [placeholder]="'Enter your account number'" [control]="accountGroup.get('accountNumber')|toControl" class="form-control" [error]="(errorMessage$ | async)?.accountNumber" >
+                <label for="accountNumber">Account Number</label>
+            
+            </app-input>   
+            <fieldset [disabled]="(disableInput$|async)">
+                    <app-input id="accountName" [placeholder]="'Enter your account name'" [control]="accountGroup.get('accountName')|toControl" class="form-control" [error]="(errorMessage$ | async)?.accountName" >
+                        <label for="accountName">Account Name</label>
+                    </app-input>
+                </fieldset>
+                </ng-container>    
+            </div>
+            
+            <div class="form_group">
+            <app-checkbox [outline]="true" [active]="pay.value" [control]="pay" [value]="'true'">Pay loan into my <span *ngIf="(loanCategory$|async)=='personal'">salary</span><span *ngIf="(loanCategory$|async)=='business'">business</span> account</app-checkbox>
+            </div>
+        </ng-container>
         <div style="margin-top: 60px;">
             <app-button [form]="form" >Next</app-button>
         </div>
-    </app-form>
+        </app-form>
+    </ng-container>
+    <ng-container *ngIf="(dataLoading$|async) && !(accountsFromDb$|async)">
+        <div class="d-flex d-flex_vertical--center" style="margin:auto; text-align: center;">
+            <span style="margin-left: 10px;">Loading ...</span>
+            <div class="image" style="width: 30px;">
+                <img src="assets/button-loader.gif" />
+            </div>
+        </div>
+    </ng-container>
     </div>
 </div>
 <div class="snackbar_container ">

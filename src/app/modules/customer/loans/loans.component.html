@@ -32,7 +32,47 @@
         </ng-container>
     <div id="loan-history" [ngClass]="{'no-margin--top':totalLoans.length==0}">
         <div class="heading"><h3>Loan History</h3></div>
-        <app-table (filterChange)="changeFilter($event)" [data$]="loans$">
+        <app-table (filterChange)="changeFilter($event)" >
+            <ng-container slot="header">
+                <tr>
+                    <th>Date</th>
+                    <th>Loan ID</th>
+                    <th>Amount</th>
+                    <th>Loan Product</th>
+                    <th>Tenure</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </ng-container>
+            <ng-container slot="body" *ngIf="loans$|async as data">
+                    <ng-container *ngIf="data.rows.length==0">
+                            <div class="no-data">
+                            <span class="material-icons material-icons-outlined">
+                                info
+                                </span>
+                            <h3>No data available</h3>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="data.rows.length>0">
+                        <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                            <td>{{row.requestDate | date :'MMMM d, y'}}</td>
+                            <td>{{row.requestId}}</td>
+                            <td>{{row.amount|currency:'₦'}}</td>
+                            <td>{{row.loanProduct}}</td>
+                            <td>{{row.tenure}} {{row.denominator}}</td>
+                            <td>{{row.requestStatus}}</td>
+                            <td><app-button [class]="'widget_button--small'" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+                <ng-container slot="body" *ngIf="!(loans$|async)">
+                    <div class="no-data">
+                        <span class="material-icons material-icons-outlined">
+                            info
+                            </span>
+                        <h3>No data available</h3>
+                    </div>
+            </ng-container>
             <ng-container slot="pagination">
                 <app-pagination [totalCount]="(loans$|async)?.count||0" [maxSize]="10" [pagingChangeSubject]="pagingSubject"></app-pagination>
             </ng-container>
@@ -169,3 +209,37 @@
 <app-template #templates></app-template>
 
 </div>
+
+<app-modal *ngIf="show$|async" (onChange)="close()">
+    <app-modal-header slot="header">
+        <h3>LOAN-1387428</h3>
+    </app-modal-header >
+    <app-modal-body slot="body">
+        <div class="preview-container" *ngIf="(loanDetails$|async) as loanDetails">
+            <div  class="preview-item"><h3>Loan Details</h3> </div>
+            <div id="loan-details" >
+                    <div class="item" > 
+                                <small>Loan Amount</small>
+                                <p><b>{{loanDetails["loanAmount"]}}</b></p>
+                    </div>
+                    
+                    <div class="item" > 
+                    <p><span><b>Tenure</b></span>:<span>{{loanDetails["tenure"]}} {{loanDetails["denominator"]}}</span></p>
+                    </div>
+                    
+                    <div class="item" > 
+                    <p><span><b>Loan Amount</b></span>:<span>{{loanDetails["loanAmount"]}}</span></p>
+                    </div>
+                    
+                    <div class="item" > 
+                    <p><span><b>Monthly Payment</b></span>:<span>{{loanDetails["monthlyPayment"]}}</span></p>
+                    </div>
+                    
+                    <div class="item" > 
+                    <p><span><b>Total Repayment</b></span>:<span>{{loanDetails["totalRepayment"]}}</span></p>
+                    </div>
+                </div>
+            </div>
+            <div id="loan-details" class="preview-item"><h3>Repayment Plan</h3> </div>
+    </app-modal-body>
+</app-modal>

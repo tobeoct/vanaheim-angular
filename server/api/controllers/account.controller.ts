@@ -1,3 +1,5 @@
+import { Customer } from '@models/customer';
+import { AccountRepository } from '@repository/implementation/account-repository';
 import UtilService  from '@services/implementation/common/util';
 import { GET, POST, route,before } from 'awilix-express'; 
 import axios from 'axios';
@@ -15,7 +17,7 @@ export default class AccountController {
     headers: {'Content-Type': 'application/json','api-key': "7UBUKPMxF8i99DgB",'userid':'1543318849803'}, //,'accountNumber':body.accountNumber,'bankcode':key},
   });
  
-    constructor(private _utilService:UtilService,private _redis:RedisMiddleware) {
+    constructor(private _utilService:UtilService,private _redis:RedisMiddleware, private _accountRepository:AccountRepository) {
 
     }
 
@@ -70,6 +72,29 @@ export default class AccountController {
         res.statusCode = 400;
       }
       await this._redis.save(cacheKey,accountList);
+      next();
+    }
+
+
+    @route('/')
+    @GET()
+     accounts=async (req:any, res:any,next:any) => {
+try{
+      let customer = req.session?.userData?.customer as Customer;
+      if(customer){
+          let accounts = await this._accountRepository.getByCustomerID(customer.id);
+          res.statusCode =200;
+          res.data= accounts;
+      }else{
+        res.statusCode =400;
+        res.data = {status:false,message:"Not a customer"}
+
+      }
+}
+catch(err){
+  res.statusCode =400;
+  res.data = {status:false,message:"Failed to get accounts"}
+}
       next();
     }
 }

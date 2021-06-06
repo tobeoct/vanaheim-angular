@@ -113,6 +113,24 @@
     }
 }
 
+#loan-details{
+    .item{
+        display: inline-block;
+        width: 47.5%;
+        @include border(1px,solid,lightGrey);
+        border-radius: $border-radius;
+        @include paddingHorizontal(true,"px",0.5);
+        box-sizing: border-box;
+        height: map-get($sizings, "px")*2;
+        margin-right: 5%;
+        margin-bottom: 10px;
+        &:nth-child(2n){
+            margin-right: 0;
+        }
+        vertical-align: middle;
+
+    }
+}
 @media all and (max-width:1233px){
     #loan-content{
         flex-direction: column;

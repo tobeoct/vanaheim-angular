@@ -3,9 +3,11 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter } from 'rxjs/operators';
+import { delay, filter, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { CompanyInfo } from './company-info';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -81,8 +83,8 @@ export class CompanyInfoComponent implements OnInit {
   }
 
     base:string;
-
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
+companiesFromDb$:Observable<any[]>;
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
     private _validators:VCValidators, private _route: ActivatedRoute) { 
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -97,6 +99,9 @@ export class CompanyInfoComponent implements OnInit {
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
+    if(this._authService.isLoggedIn()){
+      this.companiesFromDb$ = this._customerService.companies().pipe(take(1));
+    }
     const companyInfo = this._store.companyInfo as CompanyInfo;
     this.form = this._fb.group({
       companyName: [companyInfo.companyName?companyInfo.companyName:"",[Validators.required,Validators.minLength(3),Validators.maxLength(20)]],

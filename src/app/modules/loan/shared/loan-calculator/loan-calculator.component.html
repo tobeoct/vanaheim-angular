@@ -42,7 +42,7 @@
 
         <app-dropdown [current]="purpose.value" [fieldClass]="'margin--large no-margin--bottom'" [id]="'purpose'" [control]="purpose"  aria-placeholder="What is the purpose of your loan">
             <ng-container slot="label"><label for="purpose">Purpose of the loan</label></ng-container>
-            <app-option *ngFor="let purpose of loanPurposes; let i =index" [value]="purpose">{{purpose}}</app-option>
+            <app-option *ngFor="let purpose of loanPurposes; let i =index" [value]="purpose" [label]="purpose">{{purpose}}</app-option>
         </app-dropdown>
         <div style="margin-top: 60px;">
             <app-button [form]="form" [loading$]="loading$">Next</app-button>

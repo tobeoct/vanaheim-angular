@@ -3,9 +3,11 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter } from 'rxjs/operators';
+import { delay, filter, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { EmploymentInfo } from './employment-info';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -64,8 +66,8 @@ export class EmploymentInfoComponent implements OnInit {
     return this.form.get("contactGroup.addressGroup.state") as FormControl|| new FormControl();
   }
  base:string;
-
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
+employersFromDb$:Observable<any[]>;
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
     private _validators:VCValidators, private _route: ActivatedRoute) { this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
      });}
@@ -78,6 +80,9 @@ export class EmploymentInfoComponent implements OnInit {
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
+    if(this._authService.isLoggedIn()){
+      this.employersFromDb$ = this._customerService.employers().pipe(take(1));
+    }
     const employmentInfo = this._store.employmentInfo as EmploymentInfo;
     this.form = this._fb.group({
       netMonthlyAmount: [employmentInfo.netMonthlySalary?employmentInfo.netMonthlySalary:"",[Validators.required]],

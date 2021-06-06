@@ -8,45 +8,11 @@
     </div>
     <table>
         <thead>
-            <tr>
-                <th>Date</th>
-                <th>Loan ID</th>
-                <th>Amount</th>
-                <th>Loan Product</th>
-                <th>Tenure</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
+            <ng-content select="[slot=header]"></ng-content>
         </thead>
-        <tbody *ngIf="data$|async as data">
-            <ng-container *ngIf="data.rows.length==0">
-                    <div class="no-data">
-                    <span class="material-icons material-icons-outlined">
-                        info
-                        </span>
-                    <h3>No data available</h3>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="data.rows.length>0">
-                <tr *ngFor="let row of data.rows;trackBy:trackByFn">
-                    <td>{{row.requestDate | date :'MMMM d, y'}}</td>
-                    <td>{{row.requestId}}</td>
-                    <td>{{row.amount|currency:'₦'}}</td>
-                    <td>{{row.loanProduct}}</td>
-                    <td>{{row.tenure}} {{row.denominator}}</td>
-                    <td>{{row.requestStatus}}</td>
-                    <td><app-button [class]="'widget_button--small'" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td>
-                </tr>
-            </ng-container>
-        </tbody>
-        <tbody *ngIf="!(data$|async)">
-            <div class="no-data">
-                <span class="material-icons material-icons-outlined">
-                    info
-                    </span>
-                <h3>No data available</h3>
-            </div>
-        </tbody>
+     <tbody>
+        <ng-content select="[slot=body]"></ng-content>
+     </tbody>
     </table>
 </div>
 

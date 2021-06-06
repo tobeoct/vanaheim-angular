@@ -3,10 +3,12 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter } from 'rxjs/operators';
+import { delay, filter, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { NOKInfo } from './nok-info';
 import { DateRange } from 'src/app/shared/components/date/date';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 
 @Component({
   selector: 'app-nok-info',
@@ -64,10 +66,14 @@ export class NOKInfoComponent implements OnInit {
     return this.form.get("contactGroup.phone") as FormControl|| new FormControl();
   }
 
+  get id(){
+    return this.form.get("id") as FormControl|| new FormControl();
+  }
 
     base:string;
+    nokFromDb$:Observable<any>;
   constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
-    private _validators:VCValidators, private _route: ActivatedRoute) {
+    private _validators:VCValidators, private _route: ActivatedRoute, private _authService:AuthService,private _customerService:CustomerService) {
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
        });
@@ -80,10 +86,13 @@ export class NOKInfoComponent implements OnInit {
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
-    
+    if(this._authService.isLoggedIn()){
+      this.nokFromDb$ = this._customerService.nok().pipe(take(1));
+    }
     let max = new Date().getFullYear();
     const nokInfo = this._store.nokInfo as NOKInfo;
     this.form = this._fb.group({
+      id:[0],
       surname: [nokInfo.surname?nokInfo.surname:"",[Validators.required,Validators.minLength(3),Validators.maxLength(20)]],
       otherNames: [nokInfo.otherNames?nokInfo.otherNames:""],
       title: [nokInfo.title?nokInfo.title:"",[Validators.required]],

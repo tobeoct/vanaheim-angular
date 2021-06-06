@@ -24,7 +24,7 @@ fieldClass:string='';
 @Input()
 type:string='';
 @Input()
-placeholder:string = '';
+placeholder:string = '- select -';
 @Input()
 control:FormControl;
 @Input()
@@ -38,10 +38,7 @@ current:string ='';
   show$:Observable<boolean> = this.showSubject.asObservable();
    activeOption: DropdownOptionComponent;
   ngOnInit(): void {
-    if(!this.placeholder){
-   this.placeholder =this.current? this.current: this.type?.includes("icon")?"":"- select -";
-    }
-    this.currentSubject.next(this.placeholder);
+    this.currentSubject.next(this.current? this.current: this.type?.includes("icon")?"":this.placeholder);
     switch(this.type){
       case "icon":
         this.class+=" dropdown--icon";
@@ -50,6 +47,9 @@ current:string ='';
         break;
     }
   }
+  ngOnChanges(){  
+    this.currentSubject.next(this.current? this.current: this.type?.includes("icon")?"":this.placeholder);
+    }
   ngAfterContentInit(): void {
     this.dropdownItems$ = this.dropdowns.changes
       .pipe(startWith(""))
@@ -57,7 +57,7 @@ current:string ='';
       .pipe(map(() => this.dropdowns.toArray()));
   }
   selectOption(option: DropdownOptionComponent) {
-    this.currentSubject.next(option.value);
+    this.currentSubject.next(option.label);
     this.showSubject.next(false);
     this.control?.patchValue(option.value);
   }

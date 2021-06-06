@@ -36,6 +36,9 @@
             width: 100%;
             min-height: 60vh;
             margin-bottom: map-get($sizings, "px")*2;
+            &:nth-child(2){
+                @include paddingHorizontal(true,"px",0.5);
+            }
         }
     }
 }

@@ -3,12 +3,14 @@ import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@ang
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter } from 'rxjs/operators';
+import { delay, filter, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { ShareholderInfo } from './shareholder-info';
 import { EmploymentInfo } from '../../personal/employment-info/employment-info';
 import { Address } from 'src/app/shared/interfaces/address';
 import { DOB } from 'src/app/shared/interfaces/dob';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -44,8 +46,8 @@ export class ShareholderInfoComponent implements OnInit {
     return this.form.get("shareholderArray") as FormArray|| new FormControl();
   }
  base:string;
-
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,
+shareholdersFromDb$:Observable<any[]>;
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
     private _validators:VCValidators, private _route: ActivatedRoute) { this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
      });}
@@ -58,6 +60,9 @@ export class ShareholderInfoComponent implements OnInit {
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
+    if(this._authService.isLoggedIn()){
+      this.shareholdersFromDb$ = this._customerService.customer().pipe(take(1));
+    }
     let shareholderInfos= this._store.shareholderInfo as ShareholderInfo[];
     if(shareholderInfos.length==0) shareholderInfos = [new ShareholderInfo()];
     // let shareholder2:ShareholderInfo= new ShareholderInfo();

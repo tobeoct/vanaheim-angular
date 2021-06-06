@@ -1,0 +1,21 @@
+.preview{
+    &-container{
+        // @include padding(true,"px",0.5);
+        // margin-top: map-get($sizings, "px")* 0.5;
+    }
+    &-item{
+        @include paddingVertical(true,"px",0.15);
+        @include paddingHorizontal(true,"px",0.5);
+        @include background(lightGrey);
+        border-radius: $border-radius;
+        box-sizing: border-box;
+        margin-bottom: map-get($sizings, "px")* 0.5;
+    }
+    &-title{
+        @include flex(horizontal,space-between);
+        @include flex(vertical,flex-end);
+        margin-bottom: map-get($sizings, "px")* 0.5;
+    }
+    
+    
+}

@@ -11,7 +11,7 @@
             <div class="theme_col-4">
                 <app-dropdown [current]="(shareholderGroup.get('title')|toControl).value"  [id]="'title'" [control]="shareholderGroup.get('title')|toControl"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
                     <ng-container slot="label"><label for="title">Title</label></ng-container>
-                    <app-option *ngFor="let t of titles; let i =index" [value]="t">{{t}}</app-option>
+                    <app-option *ngFor="let t of titles; let i =index" [value]="t" [label]="t">{{t}}</app-option>
                 </app-dropdown>
             </div>
             <div class="theme_col-7">
@@ -28,13 +28,13 @@
             <div class="theme_col-5">
                 <app-dropdown [current]="(shareholderGroup.get('gender')|toControl).value" [id]="'gender'" [control]="shareholderGroup.get('gender')|toControl"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
                     <ng-container slot="label"><label for="gender">Gender</label></ng-container>
-                    <app-option *ngFor="let t of genders; let i =index" [value]="t">{{t}}</app-option>
+                    <app-option *ngFor="let t of genders; let i =index" [value]="t" [label]="t">{{t}}</app-option>
                 </app-dropdown>
             </div>
             <div class="theme_col-5">
                 <app-dropdown [current]="(shareholderGroup.get('maritalStatus')|toControl).value" [id]="'maritalStatus'" [control]="shareholderGroup.get('maritalStatus')|toControl"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
                     <ng-container slot="label"><label for="maritalStatus">Marital Status</label></ng-container>
-                    <app-option *ngFor="let t of maritalStatuses; let i =index" [value]="t">{{t}}</app-option>
+                    <app-option *ngFor="let t of maritalStatuses; let i =index" [value]="t" [label]="t">{{t}}</app-option>
                 </app-dropdown>
             </div>
         </div>
@@ -73,7 +73,7 @@
                             <div class="theme_col-5">
                                 <app-dropdown [current]="(shareholderGroup.get('contactGroup.addressGroup.state')|toControl).value"  [id]="'state'" [control]="shareholderGroup.get('contactGroup.addressGroup.state')|toControl"  aria-placeholder="What is your state of birth">
                                     <ng-container slot="label"><label for="state">State</label></ng-container>
-                                    <app-option *ngFor="let state of states; let i =index" [value]="state">{{state}}</app-option>
+                                    <app-option *ngFor="let state of states; let i =index" [value]="state"  [label]="state">{{state}}</app-option>
                                 </app-dropdown>
                             </div>
                         </div>
