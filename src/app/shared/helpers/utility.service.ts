@@ -17,6 +17,8 @@ export class Utility{
   activeNavigation$:Observable<SideNavigationList> = this.activeNavigationSubject.asObservable();
   isSideNavOpenedSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isSideNavOpened$:Observable<boolean> = this.isSideNavOpenedSubject.asObservable();
+  private showLoanInvalidSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showLoanInvalid$:Observable<boolean> =this.showLoanInvalidSubject.asObservable();
   
   constructor(private _router:Router){
     _router.events.pipe(filter(event => event instanceof NavigationEnd))
@@ -55,6 +57,10 @@ export class Utility{
     if(type!= SideNavigationList.close){
     this.activeNavigationSubject.next(type);
     }
+  }
+
+  toggleLoanInvalid(){
+    this.showLoanInvalidSubject.next(!this.showLoanInvalidSubject.value);
   }
   onNavigate(route:string,params:any={}):void{
     this._router.navigate([route],{queryParams: params})

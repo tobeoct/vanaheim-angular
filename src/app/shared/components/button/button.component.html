@@ -10,9 +10,9 @@
 
 <ng-container *ngIf="form">
   <div class="form_group {{fieldClass}}">
-  <button class="widget_button {{class}}" type="submit" [ngClass]="{'loading':(loading$|async)==true}"
+  <button #btn class="widget_button {{class}}" type="submit" [ngClass]="{'loading':(loading$|async)==true}"
                             
-  [title]="form&&form.valid?'You can log in now':'Please fill the form first'" 
+  [title]="form&&form.valid?'You can proceed':title" 
   [disabled]="form &&!form.valid"><div><ng-content></ng-content></div><div class="widget_button--loader"><img src="assets/button-loader.gif" /></div></button>
 
   </div>
@@ -21,6 +21,6 @@
 
 <ng-container *ngIf="!form">
   <div class="form_group {{fieldClass}}">
-  <button class="widget_button {{class}}" type="button" (click)="handleClick($event)"><div><ng-content select="[slot=button]"></ng-content></div></button>
+  <button class="widget_button {{class}}"  [title]="title" type="button" (click)="handleClick($event)"><div><ng-content select="[slot=button]"></ng-content></div></button>
 </div>
   </ng-container>

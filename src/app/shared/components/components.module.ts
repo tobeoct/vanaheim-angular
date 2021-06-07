@@ -30,6 +30,7 @@ import { DateComponent } from './date/date.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { ProgressComponent } from './progress/progress.component';
 import { RadioComponent } from './radio/radio.component';
+import { LoadingComponent } from './loading/loading.component';
 
 export function playerFactory() {
   return player;
@@ -61,7 +62,8 @@ export function playerFactory() {
     DateComponent,
     PaginationComponent,
     ProgressComponent,
-    RadioComponent
+    RadioComponent,
+    LoadingComponent
   ],
   imports: [
     BaseModule, 
@@ -94,7 +96,8 @@ export function playerFactory() {
     ModalBodyComponent,
     DateComponent,
     PaginationComponent,
-    ProgressComponent
+    ProgressComponent,
+    LoadingComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })

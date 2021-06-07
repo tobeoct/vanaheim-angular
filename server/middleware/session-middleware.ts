@@ -7,7 +7,7 @@ export default class SessionMiddleware{
     // console.log("Session Middleware",expressSession)
    }
     getSession=()=>{
-        console.log("Session Middleware",this.expressSession)
+        // console.log("Session Middleware",this.expressSession)
         return this.expressSession({
                 store: this._redis.getRedisStore(),
                 secret: this._appConfig.SESSION_SECRET_KEY,
@@ -16,7 +16,7 @@ export default class SessionMiddleware{
                 cookie: {
                     secure: false, // if true only transmit cookie over https
                     httpOnly: true, // if true prevent client side JS from reading the cookie 
-                    maxAge: 1000 * 60  * 60 * 10, // session max age in miliseconds
+                    maxAge: 1000 * 60 *5 *12 //* 60 * 10, 300 // session max age in miliseconds
                 }
             })
         

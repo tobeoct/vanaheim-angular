@@ -138,7 +138,7 @@ export class PersonalInfoComponent implements OnInit {
 
   if(this._authService.isLoggedIn()){
     this._customerService.customer().pipe(take(1)).subscribe(c=>{
-      console.log(c);
+      // console.log(c);
       this.patchValue(c)
     });
  }

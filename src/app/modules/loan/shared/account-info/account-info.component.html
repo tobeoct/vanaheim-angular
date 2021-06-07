@@ -1,6 +1,5 @@
 <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
         <div class=" content box-shadow" style="box-sizing: border-box;">
-    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
     <ng-container *ngIf="!(dataLoading$|async)">
         <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
         <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
@@ -54,12 +53,7 @@
         </app-form>
     </ng-container>
     <ng-container *ngIf="(dataLoading$|async) && !(accountsFromDb$|async)">
-        <div class="d-flex d-flex_vertical--center" style="margin:auto; text-align: center;">
-            <span style="margin-left: 10px;">Loading ...</span>
-            <div class="image" style="width: 30px;">
-                <img src="assets/button-loader.gif" />
-            </div>
-        </div>
+        <app-loading></app-loading>
     </ng-container>
     </div>
 </div>

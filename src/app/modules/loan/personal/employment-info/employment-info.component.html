@@ -1,8 +1,17 @@
  <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
         <div class=" content box-shadow" style="box-sizing: border-box;">
     <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+    <ng-container *ngIf="!(dataLoading$|async)">
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-       
+        <ng-container *ngIf="(employersFromDb$|async) && !(showForm$|async) ">
+            <app-dropdown current="{{employer.value}}"  [fieldClass]="'no-margin--top'" [id]="'employers'" [control]="employerId"  aria-placeholder="Select your salary employer">
+                <ng-container slot="label">Employers</ng-container>
+                <app-option *ngFor="let t of (employersFromDb$|async); let i =index" [value]="t.id" label="{{t.employer}}">{{t.employer}}</app-option>
+            </app-dropdown>
+            <p class="text-button" (click)="showForm()">Enter a different employer</p>
+            
+        </ng-container>
+        <ng-container *ngIf="!(employersFromDb$|async) || (showForm$|async)">
         <app-input [focus$]="focus$" fieldClass="no-margin--top" id="employer" [placeholder]="'Enter name of employer'" [control]="employer" class="form-control" [error]="(errorMessage$ | async)?.employer" >
             <label for="employer">Employer</label>
         </app-input>     
@@ -61,9 +70,14 @@
                         </app-input>
                     </div>
                 </div>
+            </ng-container>
         <div style="margin-top: 60px;">
             <app-button [form]="form" [loading$]="loading$">Next</app-button>
         </div>
     </app-form>
+    </ng-container>
+    <ng-container *ngIf="(dataLoading$|async) && !(employersFromDb$|async)">
+        <app-loading></app-loading>
+    </ng-container>
     </div>
 </div>                

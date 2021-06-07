@@ -22,7 +22,7 @@
         </div>
         <div class="item box-shadow">
           <div class="heading" style="text-align: center;">
-            <h3>Let's get you started</h3>
+            <h3>{{(latestLoan$|async)?"Thanks for coming back":"Let's get you started"}}</h3>
           </div>
               <ng-container *ngTemplateOutlet="templates.LoanCard">
               <!-- [appTemplatePortalOutlet]="'LoanCard'"> -->

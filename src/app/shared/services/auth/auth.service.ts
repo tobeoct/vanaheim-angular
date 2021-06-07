@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, interval, Observable, throwError, timer } from 'rxjs';
+import { catchError, debounceTime, map, timeout } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/shared/interfaces/user';
@@ -19,6 +19,8 @@ export class AuthService {
     public get userValue(): User {
         return this.userSubject.value;
     }
+     sessionTimeout$ = timer(0,5000);
+ 
     constructor(
         private _router: Router,
         private _http: HttpClient,
@@ -26,6 +28,15 @@ export class AuthService {
     ) {
         this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')|| '{}'));
         this.user = this.userSubject.asObservable();
+        
+this.sessionTimeout$
+.subscribe(c=>{
+    let expirationDate = this.getExpiration();
+    // console.log("Checking Session",expirationDate?.toDate());
+    if(expirationDate && moment().isAfter(expirationDate)){
+        this.logout();
+    }
+})
     }
 
    
@@ -65,30 +76,31 @@ createSession = (obj:any,expiresIn:any,isSocial:boolean=false,authToken:string =
     user.category = category;
     user.type = type;
     this.setSession({expiresIn:expiresIn,user: user })
+    
     return user;
 }
 
 verify=({username}:any)=>{
-    console.log(username)
+    // console.log(username)
     return this._http.post<any>(`${environment.apiUrl}/auth/verify`, { username })
     .pipe(map(response => {
         // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
         
         if(response && response.status==true){
-            console.log(response);
+            // console.log(response);
             return response.response;
         }
         return null;
     }));
 }
 resetPassword=({username}:any)=>{
-    console.log(username)
+    // console.log(username)
     return this._http.post<any>(`${environment.apiUrl}/auth/resetpassword`, { username })
     .pipe(map(response => {
         // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
         
         if(response && response.status==true){
-            console.log(response);
+            // console.log(response);
             return response.response;
         }
         return null;
@@ -125,11 +137,11 @@ resetPassword=({username}:any)=>{
 
     private setSession({expiresIn,user}:any) {
         // console.log("Setting Session", expiresIn)
-      const expiresAt = moment().add(expiresIn,'second');
+      const expiresAt = moment().add(expiresIn*0.001,'second');
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
-      setTimeout(()=>{console.log("Logging Out");this.logout()}, +expiresIn*1000)
+    //   setTimeout(()=>{console.log("Logging Out");this.logout()}, +expiresIn*1000)
   }
   public isLoggedIn() {
       const expiry =  this.getExpiration();

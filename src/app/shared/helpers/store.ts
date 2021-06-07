@@ -178,6 +178,7 @@ natureOfBusiness:string[]= [
 
   private documentsSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   private documents$:Observable<any[]> = this.documentsSubject.asObservable();
+  
 
   constructor(private _router:Router){
     this.applyingAsSubject.next(this.getFromCurrentApplication("applyingAs")||'');
@@ -193,6 +194,9 @@ natureOfBusiness:string[]= [
  }
  setItem(key:string,value:any){
   localStorage.setItem(key,value);
+ }
+ removeItem(key:string){
+  localStorage.removeItem(key);
  }
   setPrevious(page:string){
     this.previousSubject.next(page);

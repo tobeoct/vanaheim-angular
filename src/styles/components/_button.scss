@@ -1,3 +1,8 @@
+
+.text-button{
+    @include color(facebook);
+    cursor: pointer;
+}
 .widget_button{
     @include font(button);
     @include marginVertical(true,"px",1);

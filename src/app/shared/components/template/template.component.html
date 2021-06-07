@@ -11,9 +11,7 @@
             </div>
         </div>
         <div class="actions" style="display: flex; justify-content: flex-end;">
-            <button class="widget_button widget_button--small " (click)="onNavigate('/my/loans/apply')">
-                Get Started
-            </button>
+            <app-button [title]="(runningLoan$|async)?'You currently have a loan processing':'Proceed'" [fieldClass]="'no-margin--all'"  [class]="'widget_button widget_button--small no-margin--all'"  (onClick)="onNavigate()"><ng-container slot="button">{{(latestLoan$|async)?'Explore':'Get Started'}}</ng-container></app-button>
         </div>
     </div>
 </ng-template>

@@ -3,7 +3,7 @@ import { SwPush } from '@angular/service-worker';
 import { WebNotificationService } from 'src/app/shared/services/web-notification/webnotification.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { environment } from '@environments/environment';
-import { Observable, Subject, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, timer } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
@@ -20,8 +20,13 @@ export class CustomerComponent implements OnInit {
   isLoggedIn:boolean =false;
   showSubject:Subject<string> = new Subject<string>();
   show$:Observable<string> =this.showSubject.asObservable();
+
+  
+  showInvalid$:Observable<boolean>;
+  
   constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private _authenticationService:AuthService) {
 try{
+  this.showInvalid$ = this._utility.showLoanInvalid$;
     if(environment.production){
       this.isEnabled = this.swPush?this.swPush.isEnabled:false;
       if(Notification){
@@ -46,6 +51,10 @@ this.isGranted = Notification.permission === 'granted';
       this.showSubject.next(r.toString());
   })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
+  }
+
+  closeInvalid(){
+    this._utility.toggleLoanInvalid();
   }
   ngOnChanges(): void {
     try{

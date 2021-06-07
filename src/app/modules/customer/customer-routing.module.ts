@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { FlowGuard } from 'src/app/shared/guards/loan/flow.guard';
 import { LoanComponent } from '../loan/loan.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DocumentComponent } from './document/document.component';
@@ -11,7 +12,7 @@ const LOAN_ROUTES: Routes = [
 const routes: Routes = [
 {path:"dashboard", component:DashboardComponent},
 {path:"loans", component:LoansComponent},
-{ path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES },
+{ path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES, canActivate:[FlowGuard] },
 {path:"documents", component:DocumentComponent},
 {path:"**", redirectTo:"dashboard"},
 ];

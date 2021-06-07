@@ -12,10 +12,12 @@ import { LoanService } from 'src/app/shared/services/loan/loan.service';
 export class LoanSummaryComponent implements OnInit {
 
   latestLoan$:Observable<any>;
+  runningLoan$:Observable<boolean>;
   constructor(private _router:Router, private _loanService:LoanService) { }
 
   ngOnInit(): void {
     this.latestLoan$ = this._loanService.latestLoan$;
+    this.runningLoan$ =this._loanService.runningLoan$;
     
   }
   onNavigate(route:string,params:any={}):void{

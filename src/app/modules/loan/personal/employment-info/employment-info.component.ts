@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
-import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter, take } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
+import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { EmploymentInfo } from './employment-info';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -43,7 +43,9 @@ export class EmploymentInfoComponent implements OnInit {
   get employer(){
     return this.form.get("employer") as FormControl|| new FormControl();
   }
-
+  get employerId(){
+    return this.form.get("id") as FormControl|| new FormControl();
+  }
   get contactGroup(){
     return this.form.get("contactGroup") as FormGroup|| new FormControl();
   }
@@ -66,7 +68,6 @@ export class EmploymentInfoComponent implements OnInit {
     return this.form.get("contactGroup.addressGroup.state") as FormControl|| new FormControl();
   }
  base:string;
-employersFromDb$:Observable<any[]>;
   constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
     private _validators:VCValidators, private _route: ActivatedRoute) { this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -79,12 +80,28 @@ employersFromDb$:Observable<any[]>;
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
+
+  
+  employers:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
+  employersFromDb$:Observable<any[]> = this.employers.asObservable();
+
+  dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
+  
+  showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  showForm$:Observable<boolean> = this.showFormSubject.asObservable();
   ngOnInit(): void {
     if(this._authService.isLoggedIn()){
-      this.employersFromDb$ = this._customerService.employers().pipe(take(1));
+      this.dataLoadingSubject.next(true);
+    this.employersFromDb$ =this._customerService.employers().pipe(map((c:any[])=>{
+      this.employers.next(c);
+      return c;
+    }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}));
     }
+    
     const employmentInfo = this._store.employmentInfo as EmploymentInfo;
     this.form = this._fb.group({
+      id:[0],
       netMonthlyAmount: [employmentInfo.netMonthlySalary?employmentInfo.netMonthlySalary:"",[Validators.required]],
       employer: [employmentInfo.employer?employmentInfo.employer:"",[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
       businessSector: [employmentInfo.businessSector?employmentInfo.businessSector:"",[Validators.required]],
@@ -105,6 +122,13 @@ employersFromDb$:Observable<any[]>;
     this._store.titleSubject.next("Employment Information");
     this.businessSectors = this._store.businessSectors;
     this.states = this._store.states;
+    this.employerId.valueChanges.subscribe(c=>{
+      console.log("ID",c)
+      if(c>0){
+        
+        this.setValue(this.employers.value.find(e=>e.id==c));
+      }
+    })
   }
 
   allSubscriptions:Subscription[]=[];
@@ -122,9 +146,84 @@ ngOnDestroy(): void {
   this.allSubscriptions.forEach(sub=>sub.unsubscribe());
 }
 
+patchValue(employer:any){
+if(employer){
+if(!this.email.value&&employer.email){
+  this.email.patchValue(employer.email);
+}
+if(!this.netMonthlySalary.value&&employer.netMonthlySalary){
+  this.netMonthlySalary.patchValue(employer.netMonthlySalary);
+}
+if(!this.phone.value&&employer.phoneNumber){
+  this.phone.patchValue(employer.phoneNumber);
+}
+if(!this.employer.value&&employer.employer){
+  this.employer.patchValue(employer.employer);
+}
+if(!this.businessSector.value&&employer.businessSector){
+  this.businessSector.patchValue(employer.businessSector);
+}
+if(!this.payDay.value &&employer.payDay){
+  this.payDay.patchValue(employer.payDay);
+}
+if(employer.address){
+  let a = employer.address.split(",");
+  let street = a[0];
+  let city = a[1];
+  let state = a[2];
+if(!this.street.value){
+  this.street.patchValue(street);
+}
+if(!this.city.value){
+  this.city.patchValue(city);
+}
+if(!this.state.value){
+  this.state.patchValue(state);
+}
+}
+
+}
+}
+setValue(employer:any){
+  if(employer){
+  if(!employer.email){
+    this.email.patchValue(employer.email);
+  }
+  if(employer.netMonthlySalary){
+    this.netMonthlySalary.patchValue(employer.netMonthlySalary);
+  }
+  if(employer.phoneNumber){
+    this.phone.patchValue(employer.phoneNumber);
+  }
+  if(employer.employer){
+    this.employer.patchValue(employer.employer);
+  }
+  if(employer.businessSector){
+    this.businessSector.patchValue(employer.businessSector);
+  }
+  if(employer.payDay){
+    this.payDay.patchValue(employer.payDay);
+  }
+  if(employer.address){
+    let a = employer.address.split(",");
+    let street = a[0];
+    let city = a[1];
+    let state = a[2];
+    this.street.patchValue(street);
+    this.city.patchValue(city);
+    this.state.patchValue(state);
+  
+  }
+  
+  }
+  }
+showForm(){
+  this.showFormSubject.next(true);
+}
+
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
-    const employmentInfo:EmploymentInfo ={id:0,payDay:this.payDay.value, businessSector: this.businessSector.value, netMonthlySalary: this.netMonthlySalary.value, employer: this.employer.value, email: this.email.value, phoneNumber:this.phone.value,address:{street:this.street.value, city:this.city.value, state:this.state.value}};
+    const employmentInfo:EmploymentInfo ={id:this.employerId.value,payDay:this.payDay.value, businessSector: this.businessSector.value, netMonthlySalary: this.netMonthlySalary.value, employer: this.employer.value, email: this.email.value, phoneNumber:this.phone.value,address:{street:this.street.value, city:this.city.value, state:this.state.value}};
      this._store.setEmploymentInfo(employmentInfo);
     this.onNavigate("nok-info");
   }

@@ -198,7 +198,7 @@
                         </div>
 
                         <div style="margin-top: 60px;" #applyNow>
-                            <app-button [form]="form" [loading$]="loading$"><span *ngIf="loanCalculator">Continue</span><span *ngIf="!loanCalculator">Apply</span></app-button>
+                            <app-button [title]="(runningLoan$|async)?'You currently have a loan processing':'Fill the form to proceed'" [form]="form" [loading$]="loading$"><span *ngIf="loanCalculator">Continue</span><span *ngIf="!loanCalculator">Apply</span></app-button>
                          </div>
                     </app-form>
             </div>

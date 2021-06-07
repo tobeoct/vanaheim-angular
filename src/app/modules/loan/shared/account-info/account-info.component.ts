@@ -77,9 +77,6 @@ export class AccountInfoComponent implements OnInit {
   disableInput$:Observable<boolean> = this.disableInputSubject.asObservable();
   delay$ = from([1]).pipe(delay(1000));
   
-  dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
-  dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
-
   loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
   errorMessageSubject:Subject<any> = new Subject<any>(); 
@@ -94,6 +91,8 @@ export class AccountInfoComponent implements OnInit {
   accounts:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
   accountsFromDb$:Observable<any[]> = this.accounts.asObservable();
 
+  dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
   
   showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   showForm$:Observable<boolean> = this.showFormSubject.asObservable();
@@ -103,7 +102,7 @@ export class AccountInfoComponent implements OnInit {
     this.accountsFromDb$ = this._commonService.accounts().pipe(map((c:any[])=>{
       this.accounts.next(c);
       return c;
-    }),take(1),tap(c=>this.dataLoadingSubject.next(false)));
+    }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}) );
     }
     let accountInfo = this._store.accountInfo as AccountInfo[];
     if(accountInfo.length==0) accountInfo = [new AccountInfo()];

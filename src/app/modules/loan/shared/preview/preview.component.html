@@ -304,8 +304,10 @@
     <div>
 
     <app-form [form]="form" (onSubmit)="submitApplication($event)" >
-        <app-button [form]="form" [loading$]="loading$" fieldClass="theme_col-3 no-margin--top  widget_button--wide">Submit Application</app-button>
-        </app-form>
+        <div #button>
+            <app-button  [autoClick]="(autoClick$|async)||false"  [form]="form" [loading$]="loading$" fieldClass="theme_col-3 no-margin--top  widget_button--wide">Submit Application</app-button>
+        </div>
+</app-form>
 </div>
 
 
@@ -369,9 +371,9 @@
                     <div class="form_group">
                         <p class="theme_text--heading theme_text--heading3">There seems to be a problem</p>
                     </div>
-                    <div class="form_group">
+                    <div class="form_group" id="submit-button" >
                         <p class="theme_color--grey">{{apiError$|async}} </p>
-                        <app-button (onClick)="close3()"><ng-container slot="button" >Close</ng-container ></app-button>
+                        <app-button  (onClick)="close3()"><ng-container slot="button" >Close</ng-container ></app-button>
                        
                     </div>
                </div>

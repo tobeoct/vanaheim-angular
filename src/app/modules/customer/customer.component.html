@@ -23,3 +23,10 @@
 
 <app-side-nav [class]="'left'" *ngIf="(show$|async)=='mainNav'"></app-side-nav>
 
+<app-modal *ngIf="showInvalid$|async" (onChange)="closeInvalid()">
+  <app-modal-header slot="header"><h3>Oops,Invalid Action</h3></app-modal-header>
+  <app-modal-body slot="body">
+      <p style="text-align: center;"><b>You cannot apply for another loan if you have a running or processing loan</b></p>
+  </app-modal-body>
+</app-modal>
+

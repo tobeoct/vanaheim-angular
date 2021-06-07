@@ -26,6 +26,8 @@ search$:Observable<string> = this.searchSubject.asObservable();
 pagingSubject:BehaviorSubject<any> = new BehaviorSubject<any>({pageNumber:1,maxSize:10}); 
 paging$:Observable<any> = this.pagingSubject.asObservable();
 
+runningLoanSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+runningLoan$:Observable<boolean> = this.runningLoanSubject.asObservable();
 
   constructor(
     private _http: HttpClient,
@@ -193,7 +195,12 @@ else if(loanAmount>=100000 && loanAmount<200000)
     timer$:Observable<any> = timer(0, 1000);
 
     loans$:Observable<any>= this.search({pageNumber:1,maxSize:10});
-    latestLoan$:Observable<any> =  this.getLatest();//combineLatest([this.getLatest(),this.timer$]).pipe(map(([loans,timer])=>loans),shareReplay(1));
+    latestLoan$:Observable<any> =  this.getLatest().pipe(tap(c=>{
+      if(!c||c.requestStatus=="NotQualified"){this.runningLoanSubject.next(false)}else{
+        this.runningLoanSubject.next(true)
+      }
+    }
+      ));//combineLatest([this.getLatest(),this.timer$]).pipe(map(([loans,timer])=>loans),shareReplay(1));
 loanWithFilter$= combineLatest([
   this.loans$,
   this.filter$,

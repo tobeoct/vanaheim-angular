@@ -18,7 +18,7 @@ import { LoanDetails } from '../../loan/shared/loan-calculator/loan-details';
 })
 export class LoansComponent implements OnInit {
   
-  @ViewChild('applyNow') public applyNow:ElementRef;
+  @ViewChild('applyNow') applyNow:ElementRef;
   form: FormGroup;
   assetPaths: IAssetPath = new AssetPath;
   activeLoan:boolean=false;
@@ -79,6 +79,7 @@ base:string;
 
 pagingSubject:BehaviorSubject<any>;
 latestLoan$:Observable<any>;
+runningLoan$:Observable<any>;
 tenureDenominatorSubject:BehaviorSubject<string> = new BehaviorSubject<string>("Mos"); 
 tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservable();
   constructor(private _fb: FormBuilder, private _store:Store, private _utility:Utility,
@@ -95,6 +96,7 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
   this.loanCalculator = this._store.loanCalculator;
   this.loanDetailsSubject.next(this._store.loanCalculator)
   this.latestLoan$ = this._loanService.latestLoan$;
+  this.runningLoan$ = this._loanService.runningLoan$;
   
   this.search()
   let lType =this._store.loanType||"Personal Loans";
@@ -145,7 +147,7 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
     if (form.invalid) {
         return;
     }
-
+    if(!this._loanService.runningLoanSubject.value){
     this.loadingSubject.next(true);
 
     this._store.setLoanType(this.loanType.value);
@@ -156,10 +158,13 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
         currency: 'NGN'})};
     this._store.setLoanCalculator(loanDetails);
     this.onNavigate('apply/applying-as');
+      }else{
+        this._utility.toggleLoanInvalid();
+      }
 }
 onNavigate(route:string,params:any={}):void{
   let r = this.base+route;
-  console.log(r);
+  // console.log(r);
   this._router.navigate([r],{queryParams: params})
 }
   onError(value:any):void{
