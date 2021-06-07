@@ -123,11 +123,13 @@
             </div>
         </ng-container>
         <ng-container *ngIf="loan.requestStatus!='Funded'">
-            <div class="heading"><h3>Most Recent</h3> 
-        </div>
-            
-            <div class="card card-stroke card-stroke--black grid-padding-3x" style="margin-bottom: 30px;">
-                <app-loan-status [loan$]="latestLoan$"></app-loan-status>
+            <div id="most-recent">
+                <div class="heading"><h3>Most Recent</h3> 
+                </div>
+                    
+                    <div class="card card-stroke card-stroke--black grid-padding-3x" style="margin-bottom: 30px;">
+                        <app-loan-status [loan$]="latestLoan$"></app-loan-status>
+                    </div>
             </div>
         </ng-container>
         <!-- <ng-container>
