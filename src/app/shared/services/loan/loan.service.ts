@@ -182,7 +182,7 @@ else if(loanAmount>=100000 && loanAmount<200000)
     }
     getLatest=()=>{
       
-      return timer(0, 3000000)
+      return timer(0, 300000)
     .pipe(take(1), concatMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
       .pipe(map(response => {
         if(response && response.status==true){
@@ -193,7 +193,7 @@ else if(loanAmount>=100000 && loanAmount<200000)
     )
     }
 
-    timer$:Observable<any> = timer(0, 1000);
+    // timer$:Observable<any> = timer(0, 1000);
 
     loans$:Observable<any>= this.search({pageNumber:1,maxSize:10});
     latestLoan$:Observable<any> =  this.getLatest().pipe(tap(c=>{

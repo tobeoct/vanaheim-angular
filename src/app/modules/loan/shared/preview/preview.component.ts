@@ -123,4 +123,7 @@ this.show3Subject.next(true);
     const r =base+route;
     this._router.navigate([r],{queryParams: params})
   }
+  login():void{
+    this._router.navigate(["auth/login"])
+  }
 }

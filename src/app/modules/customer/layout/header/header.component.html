@@ -1,11 +1,11 @@
 <div id="customer-header">
     <div class="d-flex d-flex_vertical--center">
-<span class="material-icons" (click)="toggleSideNav('mainNav')">
+<span id="menu-bar" style="cursor: pointer;" class="material-icons" (click)="toggleSideNav('mainNav')">
     menu
 </span>
     <div id="greetings" (click)="onNavigate('/')">
         <div><img src="../../../../assets/icons/sun.svg"/></div>
-        <div><small>Rise and Shine</small><p style="margin:0;font-weight: 700;"><b>Tobechukwu</b></p></div>
+        <div><small>Rise and Shine</small><p style="margin:0;font-weight: 700;"><b>{{user.firstName}}</b></p></div>
     </div>
 </div>
     <div id="actions">

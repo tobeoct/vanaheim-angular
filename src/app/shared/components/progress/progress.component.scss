@@ -18,7 +18,7 @@
     .slide{
         position: absolute;
         z-index: 2;
-        @include background(midYellow);
+        @include background(yellow);
         &#Pending{
             @include background(midGrey);
         }

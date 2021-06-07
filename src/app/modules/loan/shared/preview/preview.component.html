@@ -320,7 +320,7 @@
     <app-modal-body slot="body">
         <p>Don't worry, your application would be submitted automatically once you've signed in.</p>
         <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
-        <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="onNavigate('auth/login')">Login</button>
+        <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="login()">Login</button>
     </div>
     </app-modal-body>
 </app-modal>
@@ -343,7 +343,7 @@
                     </div>
                     <div class="form_group">
                         <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You would be notified as your request is processed. </p>
-                        <button class="widget_button" id="submit" type="submit" style="margin: 5px auto;" tabindex="0" data-next="modal_ratings"><div>Done</div></button>
+                        <button (click)="close2()" class="widget_button" id="submit" type="submit" style="margin: 5px auto;" tabindex="0" data-next="modal_ratings"><div>Done</div></button>
                         <p class="theme_color--grey">Are you looking to invest? <span class="theme_color--yellow"><a href="/investment" target="_blank" ><u>Go to investments</u></a></span></p>
         
                     </div>
