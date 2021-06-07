@@ -41,7 +41,7 @@ ul{
     font-size:1em;
     width: 100%;
     &:last-child{
-        margin-top: 10vh;
+        margin-top: 10%;
     }
 .material-icons{
     font-size: 1em;
@@ -202,7 +202,13 @@ ul{
     border-color:#FAFAFA;}
 
 
-    
+    @media all and (max-width:900px){
+        #sidenav-hidden{
+            .sidenav{
+                top: 0 !important;
+            }
+        }
+    }
 
 @media all and (max-width:768px){
     .grid-padding-3x{
