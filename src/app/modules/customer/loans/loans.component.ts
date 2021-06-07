@@ -97,8 +97,8 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
   this.loanDetailsSubject.next(this._store.loanCalculator)
   this.latestLoan$ = this._loanService.latestLoan$;
   this.runningLoan$ = this._loanService.runningLoan$;
-  
-  this.search()
+  this.loans$ = this._loanService.loanWithFilter$;
+  // this.search()
   let lType =this._store.loanType||"Personal Loans";
   let tenureRange = this._loanService.getTenureRange(lType);
   this.minTenure = tenureRange["min"];
@@ -137,10 +137,9 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
  moveToApply():void {
     this.applyNow.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
 }
-  search(){
-    this.loans$ = this._loanService.loanWithFilter$;// this._loanService.search({pageNumber:0,maxSize:10,status:"Processing"});
-    // this._loanService.search({}).subscribe();
-  }
+  // search(){
+  //   this.loans$ = this._loanService.loanWithFilter$;
+  // }
   onSubmit(form:FormGroup) {
         
     // stop here if form is invalid

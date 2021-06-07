@@ -110,6 +110,7 @@ export default class UserController {
     @route('/search')
     @POST()
     search =async (req:any, res:any,next:any) => {
+        console.log("Searching Logs");
         let response:any = await this._loanRequestLogService.search(req.body,req.session.userData.customer);
         if(response.status==true){
             res.statusCode = 200;

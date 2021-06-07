@@ -168,11 +168,11 @@ export function clientApiKeyValidation (_clientService:IClientService){
             });
           }
   
-        console.log("API Authorising Response", res.data)
+        // console.log("API Authorising Response", res.data)
         
           var apiUrl = req.originalUrl;
           var httpMethod = req.method;
-          console.log("AUTH RESPONSE",apiUrl,req.session)
+          // console.log("AUTH RESPONSE",apiUrl,req.session)
           if(req.session && req.session.cookie && _authService.isNewTokenRequired(httpMethod, apiUrl)){
             const tokenExpirationDate = req.session.cookie.originalMaxAge;
             res.setHeader('expires-in',tokenExpirationDate);

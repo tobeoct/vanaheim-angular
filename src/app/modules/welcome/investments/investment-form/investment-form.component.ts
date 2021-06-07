@@ -64,11 +64,6 @@ delay$ = from([1]).pipe(delay(1000));
 errorMessageSubject:Subject<any> = new Subject<any>(); 
 errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
 
-apiSuccessSubject:Subject<string> = new Subject<string>(); 
-apiSuccess$:Observable<string> = this.apiSuccessSubject.asObservable();
-
-apiErrorSubject:Subject<string> = new Subject<string>(); 
-apiError$:Observable<string> = this.apiErrorSubject.asObservable();
 
 loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
 loading$:Observable<boolean> = this.loadingSubject.asObservable();
@@ -83,10 +78,6 @@ changedSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 changed$:Observable<boolean> = this.changedSubject.asObservable();
 
 
-showSubject:BehaviorSubject<boolean>= new BehaviorSubject<boolean>(false);
-show$:Observable<boolean> = this.showSubject.asObservable();
-show2Subject:BehaviorSubject<boolean>= new BehaviorSubject<boolean>(false);
-show2$:Observable<boolean> = this.show2Subject.asObservable();
 
   constructor( private _fb:FormBuilder, private _zone: NgZone,private _utility:Utility, private _validators:VCValidators, private _investmentService:InvestmentService) {
    }
@@ -101,7 +92,7 @@ show2$:Observable<boolean> = this.show2Subject.asObservable();
       amount: ["250,000",[Validators.required,Validators.minLength(6),Validators.maxLength(10), this._validators.numberRange(this.minAmount,this.maxAmount)]],
       duration: [0,[Validators.required]],
       maturity:['',[Validators.required]],
-      rate:[0,[Validators.required]],
+      rate:[0,[Validators.required, Validators.min(15)]],
       payout:[0,[Validators.required]],
       emailAddress:['',[Validators.required,Validators.email]],
       name:['',[Validators.required,Validators.minLength(3)]]
@@ -139,24 +130,20 @@ onChange(obj:any){
     this._investmentService.apply(this.form.value).pipe(take(1)).subscribe(
       data=>{  this._zone.run(() => {
        this.loadingSubject.next(false);
-       setTimeout(()=>this.apiSuccessSubject.next(data.message),0);
-       this.showSubject.next(true);
+       setTimeout(()=>{this._investmentService.success(data.message); this._investmentService.show(true);},0);
+      
    
       })
      },
      (error:string) => {
        this.loadingSubject.next(false);
-       if(error="Not Found") error = "You do not seem to be connected to the internet";
-       setTimeout(()=>this.apiErrorSubject.next(error),0);
-   this.show2Subject.next(true);
+       if(error=="Not Found") error = "You do not seem to be connected to the internet";
+       setTimeout(()=>{this._investmentService.error(error);this._investmentService.show2(true);},0);
+       
      });
        
       
   }
 
-  close=()=>{
-    setTimeout(()=>{this.show2Subject.next(false);this.showSubject.next(false)},0);
-    // this.apiErrorSubject.next();
-    // this.apiSuccessSubject.next();
-  }
+  
 }

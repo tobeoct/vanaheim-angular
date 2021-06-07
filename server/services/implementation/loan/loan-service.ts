@@ -71,8 +71,10 @@ export class LoanService implements ILoanService{
 
      //Send Email to support and customer
        const loanApplication = request.loanApplication;
-     let documents =  JSON.parse(loanApplication.documents)
+       
      let documentPath=[];
+       if(loanApplication.documents){
+     let documents =  JSON.parse(loanApplication.documents)
      for(let key in documents){
        const d = documents[key];
        let docInDb:any =await this._documentService.getById(d.id);
@@ -81,6 +83,7 @@ export class LoanService implements ILoanService{
        documentPath.push(doc.url);
        }
      }
+    }
 
 let bvnInfo = JSON.parse(loanApplication.bvn) as BVN;
 let bvnFileResponse = await this._documentService.getBVNDocument(bvnInfo.bvn,c.code);

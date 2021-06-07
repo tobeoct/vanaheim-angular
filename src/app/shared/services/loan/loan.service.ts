@@ -182,8 +182,8 @@ else if(loanAmount>=100000 && loanAmount<200000)
     }
     getLatest=()=>{
       
-      return timer(0, 30000)
-    .pipe(concatMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
+      return timer(0, 3000000)
+    .pipe(take(1), concatMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
       .pipe(map(response => {
         if(response && response.status==true){
            return Object.keys(response.response).length>0?response.response:null;

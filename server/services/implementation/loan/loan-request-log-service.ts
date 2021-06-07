@@ -1,3 +1,4 @@
+import { Customer } from "@models/customer";
 import { LoanRequestLog } from "@models/loan/loan-request-log";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
@@ -13,7 +14,7 @@ export class LoanRequestLogService extends BaseService<LoanRequestLog> implement
         try{
         let repo = this._baseRepository as ILoanRequestLogRepository;
         let request = await repo.getByCustomerID(customerID);
-        console.log(request);
+        // console.log(request);
         resolve(request);
         }
         catch(err){
@@ -26,13 +27,16 @@ export class LoanRequestLogService extends BaseService<LoanRequestLog> implement
         let response = await this._baseRepository.search({requestDate,loanRequestID},0,1);
         resolve(response.rows[0]||{});
     })
-    search=(parameters:any,userData:any) =>  new Promise<any>(async (resolve,reject)=>{
+    search=(parameters:any,customer:any) =>  new Promise<any>(async (resolve,reject)=>{
         try{
+            console.log("LoanRequestLog Search")
             let {pageNumber,maxSize,from,to,status,requestId,orderBy="updatedAt"}:any = parameters;
             pageNumber = +pageNumber;
             pageNumber-=1;
         let repo = this._baseRepository as ILoanRequestLogRepository;
-        const customer = await this._customerRepository.getByUserID(userData.id);
+            if(customer && Object.keys(customer).length==0){
+                resolve({status:false,data:{}});
+            }else{
         let queryParameters:any = {customerID:customer.id};
             if(from && to) {
                 queryParameters["requestDate"]= {
@@ -58,6 +62,7 @@ export class LoanRequestLogService extends BaseService<LoanRequestLog> implement
 
         let requests = await repo.search(queryParameters,pageNumber,maxSize);
         resolve({status:true,data:requests});
+            }
         }
         catch(err){
             console.error(err);

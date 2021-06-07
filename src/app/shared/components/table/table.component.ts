@@ -20,7 +20,7 @@ export class TableComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.data$.subscribe(console.log)
+    // this.data$.subscribe(console.log)
   }
   changeFilter(value:string){
     this.filterChange.next(value);

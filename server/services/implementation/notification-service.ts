@@ -73,9 +73,11 @@ import { BaseService } from "./base-service";
         return new Promise<PushNotification>(async (resolve, reject) => {
             try{
             let {device,notification}= payload;
-            const sub = await this.convertToSubscription(await this._subscriptionRepository.getByDeviceID(device.id))
-            if(!sub) {reject("Failed to get subscription");}
+            let sub = await this._subscriptionRepository.getByDeviceID(device.id);
+            
+            if(!sub || Object.keys(sub).length==0) {reject("Failed to get subscription");}
             else{
+             sub = await this.convertToSubscription(sub)
             console.log("Notification",notification)
             let pushNot = await this.logPushNotification({notification,subscription:sub});
            await this.sendNotification({notification,token:JSON.parse(sub.token),pushNotification:pushNot});
