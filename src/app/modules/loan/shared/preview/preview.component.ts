@@ -101,7 +101,7 @@ let a = this._store.loanApplication;
     this.loadingSubject.next(false);
     setTimeout(()=>this.apiSuccessSubject.next(data.loanRequestId),0);
     this.show2Subject.next(true);
-
+    this._store.removeApplication();
    })
   },
   (error:string) => {

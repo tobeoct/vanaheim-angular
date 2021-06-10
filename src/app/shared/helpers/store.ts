@@ -207,7 +207,12 @@ natureOfBusiness:string[]= [
     this.setItem("page",page); 
   }
 
-  
+  removeApplication(){
+    this.removeItem("loan-application");
+    this.removeItem("page");
+    this.removeItem("category");
+    this.removeItem("previous");
+  }
   clear(category:string){
     let application = this.getLoanApplication();
     delete application[category];
