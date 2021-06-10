@@ -4,7 +4,7 @@
     menu
 </span>
     <div id="greetings" (click)="onNavigate('/')">
-        <div><img src="../../../../assets/icons/sun.svg"/></div>
+        <div><img src="../../../../assets/icons/{{emoji$|async}}.svg"/></div>
         <div><small>{{greeting$|async}}</small><p style="margin:0;font-weight: 700;"><b>{{user.firstName}}</b></p></div>
     </div>
 </div>
