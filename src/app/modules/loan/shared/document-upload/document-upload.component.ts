@@ -33,6 +33,10 @@ allowedExtensions =
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
+  showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  show$:Observable<boolean> = this.showSubject.asObservable();
+  show2Subject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  show2$:Observable<boolean> = this.show2Subject.asObservable();
   get documentArray(){
     return this.form.get("documentArray") as FormArray|| new FormControl();
   }
@@ -89,6 +93,17 @@ allowedExtensions =
   }
 
   onFileChange(result:any,id:number) {
+    if(result.error){
+     if(result.message =="Invalid file type"){this.show2Subject.next(true)}else{ this.showSubject.next(true);}
+    }else{
      this.docsToUpload[id] = result;
+    }
+  }
+  login():void{
+    this._router.navigate(["auth/login"])
+  }
+  close(){
+    this.showSubject.next(false);
+    this.show2Subject.next(false);
   }
 }

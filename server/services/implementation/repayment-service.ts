@@ -125,7 +125,7 @@ private getRepaymentTemplate({ tenure,loanType,purpose, rate, loanAmount, monthl
                       <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; justify-content:space-between; color:#E6AF2A;">Purpose</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(purpose)}</p>
                     </div>
                     <div style="color:#333333;padding-top:10px; padding-bottom:10px; width:100%;  justify-content:space-between;">
-                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; color:#E6AF2A;">Category</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(loanType)}</p>
+                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; color:#E6AF2A;">Type</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(loanType)}</p>
                     </div>  
                     </div>
                     <div style="width:100%;position:relative;">
@@ -142,7 +142,7 @@ private getRepaymentTemplate({ tenure,loanType,purpose, rate, loanAmount, monthl
                     </tr>
                     
                     <tr>
-                      <td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333; font-weight:bold;">${this._utilService.titleCase(tp)}  Installment <b>(NGN)</b></td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333;background:#e0e0e0;"><b>${m.replace("NGN",'').trim()}</b></td> 
+                      <td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333; font-weight:bold;">${this._utilService.titleCase(tp)}  Installment <b>(NGN)</b></td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333;background:#e0e0e0;"><b>${this._utilService.currencyFormatter(this._utilService.convertToPlainNumber(m)).replace("NGN",'').trim()}</b></td> 
                     </tr>
                     </tbody>
         </table>

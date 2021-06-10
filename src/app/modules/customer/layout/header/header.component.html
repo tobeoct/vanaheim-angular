@@ -5,7 +5,7 @@
 </span>
     <div id="greetings" (click)="onNavigate('/')">
         <div><img src="../../../../assets/icons/sun.svg"/></div>
-        <div><small>Rise and Shine</small><p style="margin:0;font-weight: 700;"><b>{{user.firstName}}</b></p></div>
+        <div><small>{{greeting$|async}}</small><p style="margin:0;font-weight: 700;"><b>{{user.firstName}}</b></p></div>
     </div>
 </div>
     <div id="actions">

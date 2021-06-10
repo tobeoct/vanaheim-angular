@@ -70,7 +70,7 @@ uploaded$:Observable<boolean> = this.uploadedSubject.asObservable();
         this.docToUpload ={data: reader.result, name:file.name};
       };
     } else{
-      alert("Invalid file type");
+      this.onChange.emit({error:true,message:"Invalid file type"});
       return;
     }
     
@@ -85,7 +85,7 @@ uploaded$:Observable<boolean> = this.uploadedSubject.asObservable();
 
 uploadDocument(){
   if(!this.isLoggedIn) {
-    alert("Kindly sign in to upload document");
+    this.onChange.emit({error:true,message:"Kindly sign in to upload document"});
     return;
   }
   let {data,name} = this.docToUpload;
