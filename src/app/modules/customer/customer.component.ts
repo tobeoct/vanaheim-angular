@@ -3,7 +3,7 @@ import { SwPush } from '@angular/service-worker';
 import { WebNotificationService } from 'src/app/shared/services/web-notification/webnotification.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { environment } from '@environments/environment';
-import { BehaviorSubject, Observable, Subject, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, timer } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class CustomerComponent implements OnInit {
 
   
   showInvalid$:Observable<boolean>;
-  
+  timerSubscription:Subscription;
   constructor(private swPush: SwPush, private _utility:Utility,private webNotificationService:WebNotificationService, private _authenticationService:AuthService) {
 try{
   this.showInvalid$ = this._utility.showLoanInvalid$;
@@ -35,7 +35,7 @@ this.isGranted = Notification.permission === 'granted';
         this.pwaAble = false;
       }
   this.timer$= timer(0,100000);
-  this.timer$.subscribe(c=>{
+ this.timerSubscription= this.timer$.subscribe(c=>{
     if(this.isGranted) this.submitNotification();
   })
   }
@@ -45,7 +45,9 @@ this.isGranted = Notification.permission === 'granted';
 }
 
   }
-
+ngOnDestroy(){
+  this.timerSubscription.unsubscribe();
+}
   ngOnInit(): void {
     const sideNavSub = this._utility.activeNavigation$.subscribe(r=>{
       this.showSubject.next(r.toString());

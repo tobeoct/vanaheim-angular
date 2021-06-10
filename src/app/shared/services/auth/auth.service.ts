@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, EMPTY, interval, Observable, throwError, timer } from 'rxjs';
+import { BehaviorSubject, EMPTY, interval, Observable, Subscription, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, map, timeout } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
@@ -16,6 +16,7 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 export class AuthService {
   private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
+    private timeoutSubscription:Subscription;
     public get userValue(): User {
         return this.userSubject.value;
     }
@@ -29,7 +30,7 @@ export class AuthService {
         this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')|| '{}'));
         this.user = this.userSubject.asObservable();
         
-this.sessionTimeout$
+this.timeoutSubscription = this.sessionTimeout$
 .subscribe(c=>{
     let expirationDate = this.getExpiration();
     // console.log("Checking Session",expirationDate?.toDate());
@@ -115,6 +116,7 @@ resetPassword=({username}:any)=>{
         localStorage.removeItem('session_token');
         localStorage.removeItem("expires_at");
         this.userSubject.next(new User());
+        this.timeoutSubscription.unsubscribe();
         this._router.navigate(['/login']);
        return this._http.get<any>(`${environment.apiUrl}/auth/logout`)
             .pipe(map(()=>{
