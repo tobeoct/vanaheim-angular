@@ -30,7 +30,7 @@ private generateData():any{
  {label:"Phone Number",value:this.phoneNumber},
  {label:"Address",value:this.street+", "+this.city+", "+this.state},
  {label:"Monthly Salary",value:this.netMonthlySalary},
- {label:"Pay Day",value:this.payDay.toString()}]
+ {label:"Pay Day",value:this.payDay?.toString()}]
   return {title,rows};
 }
 

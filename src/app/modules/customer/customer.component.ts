@@ -46,7 +46,7 @@ this.isGranted = Notification.permission === 'granted';
 
   }
 ngOnDestroy(){
-  this.timerSubscription.unsubscribe();
+  if(this.timerSubscription)this.timerSubscription.unsubscribe();
 }
   ngOnInit(): void {
     const sideNavSub = this._utility.activeNavigation$.subscribe(r=>{

@@ -9,6 +9,7 @@ import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanDetails } from './loan-details';
 import { NgZone } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -37,6 +38,7 @@ export class LoanCalculatorComponent implements OnInit {
   monthlyRepaymentSubject:BehaviorSubject<number> = new BehaviorSubject<number>(0); 
   monthlyRepayment$:Observable<number> = this.monthlyRepaymentSubject.asObservable();
 
+  isLoggedIn:boolean;
   
   totalRepaymentSubject:BehaviorSubject<number> = new BehaviorSubject<number>(0); 
   totalRepayment$:Observable<number> = this.totalRepaymentSubject.asObservable();
@@ -88,13 +90,14 @@ export class LoanCalculatorComponent implements OnInit {
   }
   base:string;
   constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _zone:NgZone,
-    private _validators:VCValidators, private _route: ActivatedRoute, private _loanService:LoanService, private _utility:Utility) {  
+    private _validators:VCValidators, private _route: ActivatedRoute, private _loanService:LoanService, private _utility:Utility, private _authService:AuthService) {  
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
      });
     }
 
   ngOnInit(): void {
+    this.isLoggedIn = this._authService.isLoggedIn();
     this.loanDetails = this._store.loanCalculator as LoanDetails;
     this.lType = this._store.loanType;
     this.applyingAs = this._store.applyingAs;
@@ -160,7 +163,7 @@ ngOnDestroy(): void {
       currency: 'NGN',
     })};
     this._store.setLoanCalculator(loanDetails);
-    this.onNavigate(this._store.loanCategory=="personal"? "bvn-info":"additional-info");
+    this.onNavigate(this._store.loanCategory=="personal"? "bvn-info":this.isLoggedIn?"company-info":"additional-info");
   }
   onSubmit2=(event:any)=>{
     // this.onNavigate("bvn-info");

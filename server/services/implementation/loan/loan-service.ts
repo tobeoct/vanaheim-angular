@@ -65,7 +65,7 @@ export class LoanService implements ILoanService{
        throw "Not yet a customer, kindly register to be able to reapply";
     }
     let c= Object.assign(customer.dataValues as Customer,new Customer());
-    console.log("Customer",c)
+    // console.log("Customer",c)
     let {loanRequest,templates} = await this._loanRequestService.createLoanRequest(request,c);
 
 
@@ -78,18 +78,21 @@ export class LoanService implements ILoanService{
      for(let key in documents){
        const d = documents[key];
        let docInDb:any =await this._documentService.getById(d.id);
-       if(docInDb){
-       let doc:Document = Object.assign(docInDb.dataValues as Document, new Document())
+       if(docInDb && Object.keys(docInDb).length>0){
+       let doc:Document =  new Document(); 
+       Object.assign(doc,docInDb.dataValues as Document)
        documentPath.push(doc.url);
        }
      }
     }
 
+    if(loanApplication.bvn){
 let bvnInfo = JSON.parse(loanApplication.bvn) as BVN;
 let bvnFileResponse = await this._documentService.getBVNDocument(bvnInfo.bvn,c.code);
   if(bvnFileResponse.status==true){
     documentPath.push(bvnFileResponse.file.path);
   }
+}
     let {path,template}:any = await this._templateService.generatePDF("Loan Application",templates,customer.code+"/"+loanRequest.requestId)
     let sent = await this._emailService.SendEmail({type:'form',to:this._appConfig.ADMIN_EMAIL,attachment:path,filePaths:documentPath,html:template,toCustomer:false})
    await this._emailService.SendEmail({type:'form',to:customer.email,attachment:path,filePaths:null,html:this._templateService.LOAN_CUSTOMER_TEMPLATE,toCustomer:true})
@@ -103,7 +106,8 @@ let bvnFileResponse = await this._documentService.getBVNDocument(bvnInfo.bvn,c.c
    await this._notificationService.sendNotificationToMany({customerIds:[customer.id],notification})
     resolve({status:true,data:{loanRequestId: loanRequest.requestId}});
     }catch(err){
-      resolve({status:false,message:err});
+      console.log(err);
+      resolve({status:false,message:err instanceof Object?err.message:err});
     }
   });
   

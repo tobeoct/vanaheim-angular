@@ -120,17 +120,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(
             data => {
-                console.log("Logged In ", data)
                 this.loadingSubject.next(false);
                 this.apiSuccessSubject.next("Welcome back "+data?.firstName);
               setTimeout(()=> this.onNavigate(this.returnUrl),2000);
             },
             error => {
-                // this.error = error;
-                // let err = "Small wahala dey with connectivity, abeg retry"
-                // // if(error=="Not Found")
-                // console.log(error)
-                
           setTimeout(()=>{this.apiErrorSubject.next("Error: "+error);this.loadingSubject.next(false);},1000)
           setTimeout(()=>{this.apiErrorSubject.next();},5000)
             });

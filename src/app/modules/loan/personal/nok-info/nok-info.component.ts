@@ -9,6 +9,7 @@ import { NOKInfo } from './nok-info';
 import { DateRange } from 'src/app/shared/components/date/date';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
+import moment = require('moment');
 
 @Component({
   selector: 'app-nok-info',
@@ -109,6 +110,12 @@ export class NOKInfoComponent implements OnInit {
           {}),
        
   });
+  if(this._authService.isLoggedIn()){
+    this._customerService.nok().pipe(take(1)).subscribe(c=>{
+      // console.log(c);
+      this.patchValue(c)
+    });
+ }
     this._store.titleSubject.next("Next Of Kin Information");
     this.titles = this._store.titles;
     this.states =this._store.states;
@@ -136,6 +143,45 @@ ngOnDestroy(): void {
      this._store.setNOKInfo(nokInfo);
     this.onNavigate("upload");
   }
+  
+patchValue(nok:any){
+  // BVN: "22326677629"
+if(nok){
+if(!this.email.value&&nok.email){
+  this.email.patchValue(nok.email);
+}
+if(!this.title.value&&nok.title){
+  this.title.patchValue(nok.title);
+}
+if(!this.phone.value&&nok.phoneNumber){
+  this.phone.patchValue(nok.phoneNumber);
+}
+if(!this.surname.value&&nok.lastName){
+  this.surname.patchValue(nok.lastName);
+}
+if(!this.otherNames.value &&nok.otherNames){
+  this.otherNames.patchValue(nok.otherNames);
+}
+if(!this.relationship.value &&nok.relationship){
+  this.relationship.patchValue(nok.relationship);
+}
+if(nok.dateOfBirth){
+  let d = moment(nok.dateOfBirth);
+  let day = d.get("day");
+  let month = d.get("month");
+  let year = d.get("year");
+if(!this.day.value){
+  this.day.patchValue(day);
+}
+if(!this.month.value){
+  this.month.patchValue(month);
+}
+if(!this.year.value){
+  this.year.patchValue(year);
+}
+}
+}
+}
   onNavigate(route:string,params:any={}):void{
     const r =this.base+route;
     this._router.navigate([r],{queryParams: params})

@@ -75,6 +75,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   }
   close3=()=>{
     setTimeout(()=>this.show3Subject.next(false),0);
+    this.onNavigate("my/loans");
     // this.apiErrorSubject.next();
     // this.apiSuccessSubject.next();
   }

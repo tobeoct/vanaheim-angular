@@ -88,6 +88,7 @@ export class AccountInfoComponent implements OnInit {
   apiSuccess$:Observable<any> = this.apiSuccessSubject.asObservable();
   allSubscriptions:Subscription[]=[];
 
+  isLoggedIn:boolean;
   accounts:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
   accountsFromDb$:Observable<any[]> = this.accounts.asObservable();
 
@@ -97,12 +98,15 @@ export class AccountInfoComponent implements OnInit {
   showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   showForm$:Observable<boolean> = this.showFormSubject.asObservable();
   ngOnInit(): void {
-    if(this._authService.isLoggedIn()){
+    this.isLoggedIn=this._authService.isLoggedIn();
+    if(this.isLoggedIn){
       this.dataLoadingSubject.next(true);
     this.accountsFromDb$ = this._commonService.accounts().pipe(map((c:any[])=>{
       this.accounts.next(c);
       return c;
     }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}) );
+    }else{
+      this.showForm();
     }
     let accountInfo = this._store.accountInfo as AccountInfo[];
     if(accountInfo.length==0) accountInfo = [new AccountInfo()];

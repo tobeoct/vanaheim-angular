@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -31,7 +31,8 @@ const data:any = {
 @Component({
   selector: 'app-loan-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationComponent implements OnInit,OnDestroy {
 
@@ -64,9 +65,14 @@ show$:Observable<boolean> = this.showSubject.asObservable();
     }
    }
   ngOnInit(): void {
-    let sub = this._store.loanCategory$.subscribe((c:string)=>this.dataSelectionSubject.next(data[c]));
-    this.allSubscriptions.push(sub);
     this.isLoggedIn = this._authService.isLoggedIn();
+    let sub = this._store.loanCategory$.subscribe((c:string)=>{
+      let links = data[c].filter((d:any)=>{
+        return this.isLoggedIn && c=="business" && d.title!="Additional"; 
+      })
+      this.dataSelectionSubject.next(links)
+    });
+    this.allSubscriptions.push(sub);
   }
 
   onNavigate(route:string){

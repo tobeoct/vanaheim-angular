@@ -2,19 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
-import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter, take } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
+import { catchError, delay, distinctUntilChanged, filter, map, take, tap } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { CompanyInfo } from './company-info';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
-const data:any[] = [
-  {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
-  {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
-  {title:"LPO Financing",allowedApplicant:["Business Owner", "Corporate", "Contractor"],allowedTypes:["Business Loans", "Float Me - Business", "LPO Financing"], description:"Spread your loan payment, repay when you get your salary"},
-  {title:"Business Loans",allowedApplicant:["Business Owner", "Corporate", "Contractor"],allowedTypes:["Business Loans", "Float Me - Business"], description:"Spread your loan payment, repay when you get your salary"},
-  {title:"Business Line Of Credit",allowedApplicant:["Business Owner", "Corporate", "Contractor"],allowedTypes:["Business Loans", "Float Me - Business"], description:"Spread your loan payment, repay when you get your salary"},
-]
+import moment = require('moment');
 @Component({
   selector: 'app-company-info',
   templateUrl: './company-info.component.html',
@@ -32,7 +26,29 @@ export class CompanyInfoComponent implements OnInit {
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
   
+  base:string;
 
+  isLoggedIn:boolean;
+  companies:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
+  companiesFromDb$:Observable<any[]> = this.companies.asObservable();
+  
+  dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
+  
+  showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  showForm$:Observable<boolean> = this.showFormSubject.asObservable();
+  
+  focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  focus$:Observable<boolean> = this.focusSubject.asObservable();
+  delay$ = from([1]).pipe(delay(1000));
+  loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  loading$:Observable<boolean> = this.loadingSubject.asObservable();
+  errorMessageSubject:Subject<any> = new Subject<any>(); 
+  errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
+
+  get companyId(){
+    return this.form.get("id") as FormControl|| new FormControl();
+  }
   get companyRCNo(){
     return this.form.get("rcNo") as FormControl|| new FormControl();
   }
@@ -58,7 +74,6 @@ export class CompanyInfoComponent implements OnInit {
   get year(){
     return this.form.get("doiGroup.year") as FormControl|| new FormControl();
   }
-
   
   get contactGroup(){
     return this.form.get("contactGroup") as FormGroup|| new FormControl();
@@ -82,28 +97,28 @@ export class CompanyInfoComponent implements OnInit {
     return this.form.get("contactGroup.addressGroup.state") as FormControl|| new FormControl();
   }
 
-    base:string;
-companiesFromDb$:Observable<any[]>;
+
   constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
     private _validators:VCValidators, private _route: ActivatedRoute) { 
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
        });
     }
-
-  focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
-  focus$:Observable<boolean> = this.focusSubject.asObservable();
-  delay$ = from([1]).pipe(delay(1000));
-  loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
-  loading$:Observable<boolean> = this.loadingSubject.asObservable();
-  errorMessageSubject:Subject<any> = new Subject<any>(); 
-  errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
-    if(this._authService.isLoggedIn()){
-      this.companiesFromDb$ = this._customerService.companies().pipe(take(1));
+    this.isLoggedIn=this._authService.isLoggedIn();
+    if(this.isLoggedIn){
+      this.dataLoadingSubject.next(true);
+      this.companiesFromDb$ = this._customerService.companies().pipe(map((c:any[])=>{
+        this.companies.next(c);
+        return c;
+      }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}));
+      
+    }else{
+      this.showForm();
     }
     const companyInfo = this._store.companyInfo as CompanyInfo;
     this.form = this._fb.group({
+      id:[0],
       companyName: [companyInfo.companyName?companyInfo.companyName:"",[Validators.required,Validators.minLength(3),Validators.maxLength(20)]],
       rcNo: [companyInfo.companyRCNo?companyInfo.companyRCNo:"",[Validators.required,Validators.minLength(3),Validators.maxLength(25)]],
       natureOfBusiness: [companyInfo.natureOfBusiness?companyInfo.natureOfBusiness:""],
@@ -124,6 +139,12 @@ companiesFromDb$:Observable<any[]>;
           {}),
        
   });
+  this.companyId.valueChanges.pipe(distinctUntilChanged()).subscribe(c=>{
+    if(c>0){
+      let company =this.companies.value.find(e=>e.id==c);
+      this.setValue(company);
+    }
+  })
     this._store.titleSubject.next("Company Information");
     this.titles = this._store.titles;
     this.states = this._store.states;
@@ -135,6 +156,107 @@ companiesFromDb$:Observable<any[]>;
   focus(){
     this.focusSubject.next(true)
   }
+  showForm(){
+    this.showFormSubject.next(true);
+  }
+
+  
+patchValue(company:any){
+  if(company){
+  if(!this.email.value&&company.email){
+    this.email.patchValue(company.email);
+  }
+  if(!this.companyRCNo.value&&company.rcNo){
+    this.companyRCNo.patchValue(company.rcNo);
+  }
+  if(!this.phone.value&&company.phoneNumber){
+    this.phone.patchValue(company.phoneNumber);
+  }
+  if(!this.companyName.value&&company.name){
+    this.companyName.patchValue(company.name);
+  }
+  if(!this.natureOfBusiness.value&&company.natureOfBusiness){
+    this.natureOfBusiness.patchValue(company.natureOfBusiness);
+  }
+  if(!this.timeInBusiness.value &&company.timeInBusiness){
+    this.timeInBusiness.patchValue(company.timeInBusiness);
+  }
+  if(company.address){
+    let a = company.address.split(",");
+    let street = a[0];
+    let city = a[1];
+    let state = a[2];
+  if(!this.street.value){
+    this.street.patchValue(street);
+  }
+  if(!this.city.value){
+    this.city.patchValue(city);
+  }
+  if(!this.state.value){
+    this.state.patchValue(state);
+  }
+  }
+  
+if(company.dateOfIncorporation){
+  let d = moment(company.dateOfIncorporation);
+  let day = d.get("day")?.toString();
+  let month = d.get("month")?.toString();
+  let year = d.get("year")?.toString();
+if(!this.day.value){
+  this.day.patchValue(day);
+}
+if(!this.month.value){
+  this.month.patchValue(month);
+}
+if(!this.year.value){
+  this.year.patchValue(year);
+}
+}
+  
+  }
+  }
+  setValue(company:any){
+    if(company){
+    if(company.email){
+      this.email.patchValue(company.email);
+    }
+    if(company.timeInBusiness){
+      this.timeInBusiness.patchValue(company.timeInBusiness);
+    }
+    if(company.phoneNumber){
+      this.phone.patchValue(company.phoneNumber);
+    }
+    if(company.name){
+      this.companyName.patchValue(company.name);
+    }
+    if(company.natureOfBusiness){
+      this.natureOfBusiness.patchValue(company.natureOfBusiness);
+    }
+    if(company.rcNo){
+      this.companyRCNo.patchValue(company.rcNo);
+    }
+    if(company.address){
+      let a = company.address.split(",");
+      let street = a[0];
+      let city = a[1];
+      let state = a[2];
+      this.street.patchValue(street);
+      this.city.patchValue(city);
+      this.state.patchValue(state);
+    
+    }
+    
+if(company.dateOfIncorporation){
+  let d = moment(company.dateOfIncorporation);
+  let day = d.get("day")?.toString();
+  let month = d.get("month")?.toString();
+  let year = d.get("year")?.toString();
+  this.day.patchValue(day);
+  this.month.patchValue(month);
+  this.year.patchValue(year);
+}
+    }
+    }
 
 ngAfterViewInit(): void {
     const sub = this.delay$.subscribe(c=>{
@@ -148,7 +270,8 @@ ngOnDestroy(): void {
 
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
-    const companyInfo:CompanyInfo ={id:0,timeInBusiness:this.timeInBusiness.value, companyRCNo: this.companyRCNo.value, companyName: this.companyName.value, natureOfBusiness: this.natureOfBusiness.value, email: this.email.value, phoneNumber:this.phone.value, dateOfIncorporation:{day:this.day.value, month: this.month.value, year:this.year.value},address:{street:this.street.value, city:this.city.value, state:this.state.value}};
+    console.log(this.companyId.value)
+    const companyInfo:CompanyInfo ={id:this.companyId.value,timeInBusiness:this.timeInBusiness.value, companyRCNo: this.companyRCNo.value, companyName: this.companyName.value, natureOfBusiness: this.natureOfBusiness.value, email: this.email.value, phoneNumber:this.phone.value, dateOfIncorporation:{day:this.day.value, month: this.month.value, year:this.year.value},address:{street:this.street.value, city:this.city.value, state:this.state.value}};
      this._store.setCompanyInfo(companyInfo);
     this.onNavigate("shareholder-info");
   }

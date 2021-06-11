@@ -14,7 +14,8 @@ export class Shareholder extends BaseEntity implements ContactDetails{
    dateOfBirth:Date;
    gender:Gender;
    maritalStatus:MaritalStatus;
-   educationalQualifications:string;
+   educationalQualification:string;
+   relationship:string;
    designation:string;
    phoneNumber:string;
    state:string;
@@ -30,7 +31,7 @@ private generateData():any{
  let rows = [{label:"Name",value:this.title+" "+this.surname+" "+this.otherNames},
  {label:"Gender",value:this.gender},
  {label:"Marital Status",value:this.maritalStatus},
- {label:"Educational Qualification",value:this.educationalQualifications},
+ {label:"Educational Qualification",value:this.educationalQualification},
  {label:"Designation",value:this.designation},
  {label:"Date Of Birth",value:this.dateOfBirth.toLocaleDateString('en-GB', {
    day : 'numeric',

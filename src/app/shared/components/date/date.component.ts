@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 import { Store } from '../../helpers/store';
 import { DateRange } from './date';
 
@@ -9,7 +9,7 @@ import { DateRange } from './date';
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.scss']
 })
-export class DateComponent implements OnInit {
+export class DateComponent implements OnInit, OnDestroy {
   @Input()
   dateGroup:FormGroup
   @Input()
@@ -27,13 +27,20 @@ export class DateComponent implements OnInit {
   months:string[];
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
+  daySubscription:Subscription;
+  monthSubscription:Subscription;
+  yearSubscription:Subscription;
   constructor(private _store:Store) { }
+  ngOnDestroy(): void {
+    if(this.monthSubscription)this.monthSubscription.unsubscribe();
+    if(this.yearSubscription)this.yearSubscription.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.months =this._store.months;
     this.modify();
 
-    this.month.valueChanges.subscribe(v=>{
+    this.monthSubscription = this.month.valueChanges.subscribe(v=>{
       const maxDay=this.getMaxDay(v,this.year.value);
       this.day.setValidators(Validators.max(maxDay));
       if(this.day.value>maxDay){
@@ -43,12 +50,12 @@ export class DateComponent implements OnInit {
       this.day.updateValueAndValidity();
     })
 
-    this.year.valueChanges.subscribe(v=>{
-      this.modify()
+   this.yearSubscription= this.year.valueChanges.subscribe(v=>{
+      this.modify();
     });
   }
   isValidDate=(day:number,year:number,month:string)=>{
-    let date = `${year}-${month.substring(0,3)}-${day}`;
+    let date = `${year}-${month?.toString().substring(0,3)}-${day}`;
     let d:any = new Date(date);
       return d==="Invalid Date"? false: d.getDate()===1?false:true;
      
@@ -67,9 +74,6 @@ return (year % 100 === 0) ? (year % 400 === 0) : (year % 4 === 0);
  if(month==="February") maxDay=isLeap?29:28;
  return maxDay;
 }
-init(){
-  
-}
   modify(){
     let year = new Date().getFullYear();
     this.day.setValidators(Validators.max(this.getMaxDay(this.month.value,this.year.value)));
@@ -78,7 +82,7 @@ init(){
         this.year.setValidators(Validators.max(year-18))
         if(this.year.value>(year-18)){
           setTimeout(()=>this.year.patchValue(year-18),500);
-          console.log(year-18)
+          // console.log(year-18)
         }
       break;
       default:

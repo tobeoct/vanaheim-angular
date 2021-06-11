@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
-import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter, take } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
+import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { ShareholderInfo } from './shareholder-info';
 import { EmploymentInfo } from '../../personal/employment-info/employment-info';
@@ -32,26 +32,11 @@ export class ShareholderInfoComponent implements OnInit {
   titles:string[];
   genders:string[];
   maritalStatuses:string[];
-  designations:string[];
+  designations:string[]
   activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
-  
-
-  get shareholderArrayGroups(){
-    return this.shareholderArray.controls as FormGroup[]|| new FormControl();
-  }
-  get shareholderArray(){
-    return this.form.get("shareholderArray") as FormArray|| new FormControl();
-  }
- base:string;
-shareholdersFromDb$:Observable<any[]>;
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
-    private _validators:VCValidators, private _route: ActivatedRoute) { this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
-      this.base = x.url.replace(/\/[^\/]*$/, '/');
-     });}
-   
   focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   focus$:Observable<boolean> = this.focusSubject.asObservable();
   delay$ = from([1]).pipe(delay(1000));
@@ -59,10 +44,44 @@ shareholdersFromDb$:Observable<any[]>;
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
-  ngOnInit(): void {
-    if(this._authService.isLoggedIn()){
-      this.shareholdersFromDb$ = this._customerService.customer().pipe(take(1));
-    }
+ base:string;
+ isLoggedIn:boolean;
+ shareholders:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
+ shareholdersFromDb$:Observable<any[]> = this.shareholders.asObservable();
+ 
+ dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+ dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
+ 
+ showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+ showForm$:Observable<boolean> = this.showFormSubject.asObservable();
+
+  get shareholderArrayGroups(){
+    return this.shareholderArray.controls as FormGroup[]|| new FormControl();
+  }
+  get shareholderArray(){
+    return this.form.get("shareholderArray") as FormArray|| new FormControl();
+  }
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
+    private _validators:VCValidators, private _route: ActivatedRoute) { this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
+      this.base = x.url.replace(/\/[^\/]*$/, '/');
+     });}
+   
+  ngOnInit(): void { 
+    this.isLoggedIn=this._authService.isLoggedIn();
+    if(this.isLoggedIn){
+      this.dataLoadingSubject.next(true);
+      let companyId = this._store.companyInfo?this._store.companyInfo.id:0;
+      if(companyId>0){
+      this.shareholdersFromDb$ = this._customerService.shareholders(companyId).pipe(map((c:any[])=>{
+        this.shareholders.next(c);
+        return c;
+      }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}) );
+    }else{
+      this.showForm();
+    }}
+      else{
+        this.showForm();
+      }
     let shareholderInfos= this._store.shareholderInfo as ShareholderInfo[];
     if(shareholderInfos.length==0) shareholderInfos = [new ShareholderInfo()];
     // let shareholder2:ShareholderInfo= new ShareholderInfo();
@@ -89,7 +108,9 @@ shareholdersFromDb$:Observable<any[]>;
   focus(){
     this.focusSubject.next(true)
   }
-
+  showForm(){
+    this.showFormSubject.next(true);
+  }
   clearFormArray = (formArray: FormArray) => {
     while (formArray.length !== 0) {
       formArray.removeAt(0)
@@ -102,7 +123,8 @@ shareholdersFromDb$:Observable<any[]>;
     
     let year = new Date().getFullYear();
     let max = year-18;
-    return new FormGroup({
+    let group = new FormGroup({
+      id:new FormControl(0),
       title: new FormControl(shareholder.title?shareholder.title:'', [Validators.required]),
       surname:new FormControl( shareholder.surname?shareholder.surname:'', [Validators.required]),
       otherNames:new FormControl( shareholder.otherNames?shareholder.otherNames:'', [Validators.required]),
@@ -126,6 +148,8 @@ shareholdersFromDb$:Observable<any[]>;
             {})},
           {}),
     },{validators:[Validators.required]})
+    this.trackId(group);
+    return group;
   }
   
   buildShareholderGroups=(shareholders:ShareholderInfo[]):FormGroup[]=>{
@@ -135,7 +159,30 @@ shareholdersFromDb$:Observable<any[]>;
     }
     return groups
   }
+trackId(group:FormGroup){
+  group.get("id")?.valueChanges.subscribe(v=>{
+    console.log("ID",v);
+   let id =group.get("id")?.value ;
+   if(id&& id>0 ) {
+     let a = this.shareholders.value.find(c=>c.id==id);
+     if(a){
+      this.updateValue(group,"title",a.title);
+      this.updateValue(group,"surname",a.surname);
+      this.updateValue(group,"otherNames",a.otherNames);
+      this.updateValue(group,"gender",a.gender);
+      this.updateValue(group,"maritalStatus",a.maritalStatus);
+      this.updateValue(group,"designation",a.designation);
+      this.updateValue(group,"educationalQualification",a.educationalQualification);
+    
+     }
+    }
+  })
+}
 
+updateValue(group:FormGroup,label:string,value:string){
+  group.get(label)?.patchValue(value);
+     group.get(label)?.updateValueAndValidity();
+}
   addShareholder(){
     this.shareholderArray.push(this.buildShareholderGroup(new ShareholderInfo()));
   }
@@ -156,6 +203,7 @@ ngOnDestroy(): void {
     console.log(f)
     f.forEach(group => {
      let shareholderInfo = new ShareholderInfo();
+     shareholderInfo.id = group["id"];
      shareholderInfo.title = group["title"];
      shareholderInfo.surname = group["surname"];
      shareholderInfo.otherNames = group["otherNames"];

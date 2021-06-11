@@ -87,16 +87,19 @@ export class EmploymentInfoComponent implements OnInit {
 
   dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
-  
+  isLoggedIn:boolean;
   showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   showForm$:Observable<boolean> = this.showFormSubject.asObservable();
   ngOnInit(): void {
-    if(this._authService.isLoggedIn()){
+    this.isLoggedIn = this._authService.isLoggedIn();
+    if(this.isLoggedIn){
       this.dataLoadingSubject.next(true);
     this.employersFromDb$ =this._customerService.employers().pipe(map((c:any[])=>{
       this.employers.next(c);
       return c;
     }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}));
+    }else{
+      this.showForm();
     }
     
     const employmentInfo = this._store.employmentInfo as EmploymentInfo;
@@ -123,7 +126,6 @@ export class EmploymentInfoComponent implements OnInit {
     this.businessSectors = this._store.businessSectors;
     this.states = this._store.states;
     this.employerId.valueChanges.subscribe(c=>{
-      console.log("ID",c)
       if(c>0){
         
         this.setValue(this.employers.value.find(e=>e.id==c));

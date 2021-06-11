@@ -237,7 +237,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
           templates.push(...loanRequest.loanTypeRequirements.shareholders)
           templates.push(loanRequest.loanTypeRequirements.collateral)
         }
-       
+       console.log(templates);
         resolve({loanRequest,templates});
     }catch(err){
       console.log(err);
@@ -409,7 +409,9 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
          if(comp.length==0) {
           company.id=0;
          company.createdAt = new Date();
-         company.status = BaseStatus.Active; }else{
+         company.status = BaseStatus.Active;
+         company.code = this._utilService.autogenerate({prefix:"Company"}); }
+         else{
           company.updatedAt = new Date();
       }
 
@@ -441,6 +443,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
          companyInDb = await this._companyRepository.create(company);
         }else{
             companyInDb =await  this._companyRepository.update(company);
+            companyInDb = company;
         }
         company.id = companyInDb.id;
        //For SHAREHOLDER
@@ -449,13 +452,16 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
        shareholderInfos = JSON.parse(loanApplication.shareholderInfo) as ShareholderInfo[];
        if(!shareholderInfos || shareholderInfos.length==0) throw "Please provide your Shareholders";
        shareholderInfos.forEach(async shareholderInfo=>{
+       console.log("SHAREHOLDER INFO",shareholderInfo);
          let shareholder:Shareholder;
          let shareholderInDb:Shareholder;
        if(shareholderInfo.id==0){ 
          if(!shareholderInfo || Object.keys(shareholderInfo).length==0) throw "Please provide Shareholder details";
          shareholder = new Shareholder();
+         shareholder.id =0;
          shareholder.createdAt = new Date();
          shareholder.status = BaseStatus.Active;
+         shareholder.code = this._utilService.autogenerate({prefix:"SHLDR"});
        }
        else{
         let e:any = await this._shareholderRepository.getById(shareholderInfo.id);
@@ -466,7 +472,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
        }
        
        if(shareholderInfo && Object.keys(shareholderInfo).length>0){
-           
+         shareholder.title = shareholderInfo.title;
          shareholder.dateOfBirth = this._utilService.toDate(shareholderInfo.dob.day,shareholderInfo.dob.month,shareholderInfo.dob.year);
          shareholder.email = shareholderInfo.email;
          shareholder.designation =shareholderInfo.designation;
@@ -476,8 +482,9 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
          shareholder.city = shareholderInfo.address.city;
          shareholder.state = shareholderInfo.address.state;
          shareholder.address = this._utilService.toAddress(shareholderInfo.address.street,shareholderInfo.address.city,shareholderInfo.address.state);
-         shareholder.educationalQualifications = shareholderInfo.educationalQualification;
+         shareholder.educationalQualification = shareholderInfo.educationalQualification;
          shareholder.phoneNumber = shareholderInfo.phoneNumber;
+         shareholder.relationship = "";
          shareholder.maritalStatus = shareholderInfo.maritalStatus as unknown as MaritalStatus;
          shareholder.gender = shareholderInfo.gender as unknown as Gender;
        }
@@ -487,6 +494,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
          shareholderInDb =await  this._shareholderRepository.create(shareholder);
         }else{
             shareholderInDb =await  this._shareholderRepository.update(shareholder);
+            shareholderInDb = shareholder;
         }
         shareholder.id = shareholderInDb.id;
        shareholders.push(shareholder);
@@ -499,8 +507,10 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
        if(collateralInfo.id==0){ 
          if(!collateralInfo || Object.keys(collateralInfo).length==0) throw "Please provide your Collateral details";
          collateral = new Collateral();
+         collateral.id =0;
          collateral.createdAt = new Date();
          collateral.status = BaseStatus.Active;
+         collateral.code = this._utilService.autogenerate({prefix:"COLLAT"});
        }
        else{
         let e:any = await this._collateralRepository.getById(collateralInfo.id);
@@ -528,6 +538,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
          collateralInDb = await this._collateralRepository.create(collateral);
         }else{
             collateralInDb = await this._collateralRepository.update(collateral);
+            collateralInDb = collateral;
         }
         collateral.id = collateralInDb.id;
      loanTypeRequirements.company = company;

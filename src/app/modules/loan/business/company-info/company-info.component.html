@@ -1,7 +1,19 @@
  
     <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
         <div class=" content box-shadow" style="box-sizing: border-box;">
+            <ng-container *ngIf="!(dataLoading$|async)">
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+        <ng-container *ngIf="isLoggedIn">
+            <ng-container *ngIf="(companiesFromDb$|async) && !(showForm$|async) ">
+                <app-dropdown current="{{companyName.value}}"  [fieldClass]="'no-margin--top'" [id]="'companies'" [control]="companyId"  aria-placeholder="Select your company">
+                    <ng-container slot="label">Companies</ng-container>
+                    <app-option *ngFor="let t of (companiesFromDb$|async); let i =index" [value]="t.id" label="{{t.name}}">{{t.name}}</app-option>
+                </app-dropdown>
+                <p class="text-button" (click)="showForm()">Enter a different company</p>
+                
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!(companiesFromDb$|async) || (showForm$|async)">
         <app-input [focus$]="focus$" fieldClass="no-margin--top" id="companyName" [placeholder]="'Enter your company name'" [control]="companyName" class="form-control" [error]="(errorMessage$ | async)?.companyName" >
             <label for="companyName">Company Name</label>
         </app-input>
@@ -52,18 +64,23 @@
                     </div>
                 </div>
                 <div *ngIf="addressGroup.errors">
-                    <div *ngIf="addressGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+                    <div *ngIf="addressGroup.errors?.match" class="snackbar snackbar-danger">Fill your address</div>
                 </div>
             </div>
            
             <div *ngIf="contactGroup.errors">
-                <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+                <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Contact Info incomplete</div>
             </div>
         </div>
+        </ng-container>
          <div style="margin-top: 60px;">
             <app-button [form]="form" [loading$]="loading$">Next</app-button>
         </div>
     </app-form>
+    </ng-container>
+    <ng-container *ngIf="(dataLoading$|async) && !(companiesFromDb$|async)">
+        <app-loading></app-loading>
+    </ng-container>
     </div>
 </div>
                             

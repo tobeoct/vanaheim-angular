@@ -3,13 +3,15 @@
     <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
     <ng-container *ngIf="!(dataLoading$|async)">
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-        <ng-container *ngIf="(employersFromDb$|async) && !(showForm$|async) ">
-            <app-dropdown current="{{employer.value}}"  [fieldClass]="'no-margin--top'" [id]="'employers'" [control]="employerId"  aria-placeholder="Select your salary employer">
-                <ng-container slot="label">Employers</ng-container>
-                <app-option *ngFor="let t of (employersFromDb$|async); let i =index" [value]="t.id" label="{{t.employer}}">{{t.employer}}</app-option>
-            </app-dropdown>
-            <p class="text-button" (click)="showForm()">Enter a different employer</p>
-            
+        <ng-container *ngIf="isLoggedIn">
+            <ng-container *ngIf="(employersFromDb$|async) && !(showForm$|async) ">
+                <app-dropdown current="{{employer.value}}"  [fieldClass]="'no-margin--top'" [id]="'employers'" [control]="employerId"  aria-placeholder="Select your employer">
+                    <ng-container slot="label">Employers</ng-container>
+                    <app-option *ngFor="let t of (employersFromDb$|async); let i =index" [value]="t.id" label="{{t.employer}}">{{t.employer}}</app-option>
+                </app-dropdown>
+                <p class="text-button" (click)="showForm()">Enter a different employer</p>
+                
+            </ng-container>
         </ng-container>
         <ng-container *ngIf="!(employersFromDb$|async) || (showForm$|async)">
         <app-input [focus$]="focus$" fieldClass="no-margin--top" id="employer" [placeholder]="'Enter name of employer'" [control]="employer" class="form-control" [error]="(errorMessage$ | async)?.employer" >

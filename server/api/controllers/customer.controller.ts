@@ -79,7 +79,7 @@ try{
             nok = nok.dataValues as NOK;
         }
           res.statusCode =200;
-          res.data= nok;
+          res.data= nok?nok:{};
         
       }else{
         res.statusCode =400;

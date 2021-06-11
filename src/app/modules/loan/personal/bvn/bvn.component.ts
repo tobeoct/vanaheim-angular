@@ -98,14 +98,14 @@ ngAfterViewInit(): void {
 ngOnDestroy(): void {
   this.allSubscriptions.forEach(sub=>sub.unsubscribe());
 }
-  displayMessage(success:boolean){
+  displayMessage(success:boolean,message?:string){
     this.loadingSubject.next(false);
     if(success){
       this.bvn.setErrors(null);
       this.apiErrorSubject.next();  this.apiSuccessSubject.next("BVN Verification Successful");
       setTimeout(()=>this.apiSuccessSubject.next(),2000);
     }else{
-      this.apiErrorSubject.next("BVN Verification Failed");  this.apiSuccessSubject.next();
+      this.apiErrorSubject.next( message?message:"BVN Verification Failed");  this.apiSuccessSubject.next();
       setTimeout(()=>this.apiErrorSubject.next(),2000);
     }
   }
@@ -121,7 +121,7 @@ this._commonService.validateBVN(this.bvn.value).pipe(map(r=>{
   }
   return r;
 }),catchError(err => {
- this.displayMessage(false)
+ this.displayMessage(false,err)
   console.error(err);
   return EMPTY;
 })).subscribe(c=>{

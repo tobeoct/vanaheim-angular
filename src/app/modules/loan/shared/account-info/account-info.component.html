@@ -2,23 +2,25 @@
         <div class=" content box-shadow" style="box-sizing: border-box;">
     <ng-container *ngIf="!(dataLoading$|async)">
         <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-        <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
-            <app-dropdown current="{{(accountArrayGroups[0].get('bank')|toControl).value}} - {{(accountArrayGroups[0].get('accountNumber')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'salary-accounts'" [control]="(accountArrayGroups[0].get('id')|toControl)"  aria-placeholder="Select your salary account">
-                <ng-container slot="label"><label for="salary-accounts"><span *ngIf="(loanCategory$|async)=='personal'">Salary</span><span *ngIf="(loanCategory$|async)=='business'">Business</span> Account</label></ng-container>
-                <app-option *ngFor="let t of (accountsFromDb$|async); let i =index" [value]="t.id" label="{{t.bank}} - {{t.number}}">{{t.bank}} - {{t.number}}</app-option>
-            </app-dropdown>
-            <p class="text-button" (click)="showForm()">Enter a different account</p>
-           
-            <ng-container *ngIf="accountArrayGroups.length>1">
-                <app-dropdown current="{{(accountArrayGroups[1].get('bank')|toControl).value}} - {{(accountArrayGroups[1].get('accountNumber')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'salary-accounts'" [control]="(accountArrayGroups[1].get('id')|toControl)"  aria-placeholder="Select your loan disbursement account">
-                    <ng-container slot="label"><label for="salary-accounts"><span *ngIf="(loanCategory$|async)=='personal'">Loan Disbursement</span><span *ngIf="(loanCategory$|async)=='business'">Personal</span> Account</label></ng-container>
+            <ng-container *ngIf="isLoggedIn">
+            <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
+                <app-dropdown current="{{(accountArrayGroups[0].get('bank')|toControl).value}} - {{(accountArrayGroups[0].get('accountNumber')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'salary-accounts'" [control]="(accountArrayGroups[0].get('id')|toControl)"  aria-placeholder="Select your salary account">
+                    <ng-container slot="label"><label for="salary-accounts"><span *ngIf="(loanCategory$|async)=='personal'">Salary</span><span *ngIf="(loanCategory$|async)=='business'">Business</span> Account</label></ng-container>
                     <app-option *ngFor="let t of (accountsFromDb$|async); let i =index" [value]="t.id" label="{{t.bank}} - {{t.number}}">{{t.bank}} - {{t.number}}</app-option>
                 </app-dropdown>
                 <p class="text-button" (click)="showForm()">Enter a different account</p>
+            
+                <ng-container *ngIf="accountArrayGroups.length>1">
+                    <app-dropdown current="{{(accountArrayGroups[1].get('bank')|toControl).value}} - {{(accountArrayGroups[1].get('accountNumber')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'salary-accounts'" [control]="(accountArrayGroups[1].get('id')|toControl)"  aria-placeholder="Select your loan disbursement account">
+                        <ng-container slot="label"><label for="salary-accounts"><span *ngIf="(loanCategory$|async)=='personal'">Loan Disbursement</span><span *ngIf="(loanCategory$|async)=='business'">Personal</span> Account</label></ng-container>
+                        <app-option *ngFor="let t of (accountsFromDb$|async); let i =index" [value]="t.id" label="{{t.bank}} - {{t.number}}">{{t.bank}} - {{t.number}}</app-option>
+                    </app-dropdown>
+                    <p class="text-button" (click)="showForm()">Enter a different account</p>
+                </ng-container>
+                <div class="form_group">
+                    <app-checkbox [outline]="true" [active]="pay.value" [control]="pay" [value]="'true'">Pay loan into my <span *ngIf="(loanCategory$|async)=='personal'">salary</span><span *ngIf="(loanCategory$|async)=='business'">business</span> account</app-checkbox>
+                    </div>
             </ng-container>
-            <div class="form_group">
-                <app-checkbox [outline]="true" [active]="pay.value" [control]="pay" [value]="'true'">Pay loan into my <span *ngIf="(loanCategory$|async)=='personal'">salary</span><span *ngIf="(loanCategory$|async)=='business'">business</span> account</app-checkbox>
-                </div>
         </ng-container>
         <ng-container *ngIf="!(accountsFromDb$|async) || (showForm$|async)">
     
