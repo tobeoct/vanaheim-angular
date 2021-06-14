@@ -308,8 +308,11 @@ get additionalInfo() { return JSON.parse(this.getFromCurrentApplication("additio
 
   
   get registerDetails() { 
-    if(!this.personalInfo) return null;
-    return {firstName:this.personalInfo.firstName,surname:this.personalInfo.surname,email:this.personalInfo.email,phoneNumber:this.personalInfo.phoneNumber}
+    let info = this.personalInfo;
+    if(info&&Object.keys(info).length>0) return {firstName:info.firstName,surname:info.surname,email:info.email,phoneNumber:info.phoneNumber}
+    info = this.additionalInfo;
+    if(info&&Object.keys(info).length>0) return {firstName:info.preferredName,email:info.preferredEmail,phoneNumber:info.preferredPhoneNumber}
+    return null;
   }
 
   back=()=>{
