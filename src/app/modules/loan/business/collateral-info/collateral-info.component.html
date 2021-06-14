@@ -1,7 +1,19 @@
 
     <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
         <div class=" content box-shadow" style="box-sizing: border-box;">
+            <ng-container *ngIf="!(dataLoading$|async)">
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
+        <ng-container *ngIf="isLoggedIn">
+            <ng-container *ngIf="(collateralsFromDb$|async) && !(showForm$|async) ">
+                <app-dropdown current="{{owner.value}} - {{type.value}} {{valuation.value}}"  [fieldClass]="'no-margin--top'" [id]="'collaterals'" [control]="collateralId"  aria-placeholder="Select your collateral">
+                    <ng-container slot="label">Collaterals</ng-container>
+                    <app-option *ngFor="let t of (collateralsFromDb$|async); let i =index" [value]="t.id" label="{{t.collateral}}">{{t.owner}} - {{t.type}} {{t.valuation|currency:"₦"}}</app-option>
+                </app-dropdown>
+                <p class="text-button" (click)="showForm()">Enter a different collateral</p>
+                
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!(collateralsFromDb$|async) || (showForm$|async)">
             <app-dropdown [current]="type.value" [fieldClass]="'no-margin--top'" [id]="'type'" [control]="type"  aria-placeholder="What type of collateral is this?">
                     <ng-container slot="label"><label for="type">Collateral Type</label></ng-container>
                     <app-option *ngFor="let t of types; let i =index" [value]="t" [label]="t">{{t}}</app-option>
@@ -23,10 +35,15 @@
               <div style="margin-top: 30px;">
                   <app-checkbox [outline]="true" [active]="hasDocument.value!=''" [control]="hasDocument" [value]="'true'">Do you have your collateral document?</app-checkbox>
               </div>
+            </ng-container>
         <div style="margin-top: 60px;">
             <app-button [form]="form" [loading$]="loading$">Next</app-button>
         </div>
     </app-form>
+</ng-container>
+<ng-container *ngIf="(dataLoading$|async) && !(collateralsFromDb$|async)">
+    <app-loading></app-loading>
+</ng-container>
     </div>
 </div>
                             

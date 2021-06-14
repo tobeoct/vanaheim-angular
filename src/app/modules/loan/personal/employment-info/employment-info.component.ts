@@ -96,6 +96,7 @@ export class EmploymentInfoComponent implements OnInit {
       this.dataLoadingSubject.next(true);
     this.employersFromDb$ =this._customerService.employers().pipe(map((c:any[])=>{
       this.employers.next(c);
+      this.patchValue(c)
       return c;
     }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}));
     }else{

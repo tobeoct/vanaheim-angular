@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
-import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter, take } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
+import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { CollateralInfo } from './collateral-info';
 import { Document } from '../../shared/document-upload/document';
@@ -25,6 +25,9 @@ export class CollateralInfoComponent implements OnInit {
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
   
+  get collateralId(){
+    return this.form.get("id") as FormControl|| new FormControl();
+  }
 
   get type(){
     return this.form.get("type") as FormControl|| new FormControl();
@@ -48,7 +51,8 @@ export class CollateralInfoComponent implements OnInit {
     return this.form.get("hasDocument") as FormControl|| new FormControl();
   }
 
-  collateralsFromDb$:Observable<any[]>
+  collaterals:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
+  collateralsFromDb$:Observable<any[]> = this.collaterals.asObservable();
     base:string;
   constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _customerService:CustomerService,
     private _validators:VCValidators,private _utility:Utility, private _route: ActivatedRoute, private _authService:AuthService) {
@@ -62,15 +66,31 @@ export class CollateralInfoComponent implements OnInit {
   delay$ = from([1]).pipe(delay(1000));
   loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
+
+  dataLoadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  dataLoading$:Observable<boolean> = this.dataLoadingSubject.asObservable();
+  isLoggedIn:boolean;
+  showFormSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
+  showForm$:Observable<boolean> = this.showFormSubject.asObservable();
+
   errorMessageSubject:Subject<any> = new Subject<any>(); 
   errorMessage$:Observable<any> = this.errorMessageSubject.asObservable();
   allSubscriptions:Subscription[]=[];
-  ngOnInit(): void {
-    if(this._authService.isLoggedIn()){
-      this.collateralsFromDb$ = this._customerService.customer().pipe(take(1));
-    }
+  ngOnInit(): void { 
+    this.isLoggedIn = this._authService.isLoggedIn();
+    if(this.isLoggedIn){
+      this.dataLoadingSubject.next(true);
+      this.collateralsFromDb$ = this._customerService.collaterals().pipe(map((c:any[])=>{
+        this.collaterals.next(c);
+        this.patchValue(c)
+        return c;
+      }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}));
+      }else{
+        this.showForm();
+      }
     const collateralInfo = this._store.collateralInfo as CollateralInfo;
     this.form = this._fb.group({
+      id:[0],
       type: [collateralInfo.type?collateralInfo.type:"",[Validators.required]],
       description: [collateralInfo.description?collateralInfo.description:"",[Validators.required, Validators.minLength(5)]],
       valuationAmount: [collateralInfo.valuation?collateralInfo.valuation:"",[Validators.required]],
@@ -85,13 +105,70 @@ export class CollateralInfoComponent implements OnInit {
       if(this.hasDocument.value=="true"){
         this.document.setValidators(Validators.required);
       }
+    });
+    this.collateralId.valueChanges.subscribe(c=>{
+      if(c>0){
+        
+        this.setValue(this.collaterals.value.find(e=>e.id==c));
+      }
     })
   }
 
   focus(){
     this.focusSubject.next(true)
   }
+  showForm(){
+    this.showFormSubject.next(true);
+  }
 
+  patchValue(collateral:any){
+    if(collateral){
+    if(!this.type.value&&collateral.type){
+      this.type.patchValue(collateral.type);
+    }
+    if(!this.owner.value&&collateral.owner){
+      this.owner.patchValue(collateral.owner);
+    }
+    if(!this.description.value&&collateral.description){
+      this.description.patchValue(collateral.description);
+    }
+   
+    if(!this.valuation.value&&collateral.valuation){
+      this.valuation.patchValue(collateral.valuation);
+    }
+    if(!this.hasDocument.value &&collateral.document){
+      this.hasDocument.patchValue('true');
+    }
+    if(!this.document.value &&collateral.document){
+      this.document.patchValue(collateral.document?.fileName);
+    }
+    
+    }
+    }
+    setValue(collateral:any){
+      if(collateral){
+        if(collateral.type){
+          this.type.patchValue(collateral.type);
+        }
+        if(collateral.owner){
+          this.owner.patchValue(collateral.owner);
+        }
+        if(collateral.description){
+          this.description.patchValue(collateral.description);
+        }
+       
+        if(collateral.valuation){
+          this.valuation.patchValue(collateral.valuation);
+        }
+        if(collateral.document){
+          this.hasDocument.patchValue('true');
+        }
+        if(collateral.document){
+          this.document.patchValue(collateral.document?.fileName);
+        }
+        
+        }
+      }
 ngAfterViewInit(): void {
     const sub = this.delay$.subscribe(c=>{
         this.focus();    
