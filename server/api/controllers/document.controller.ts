@@ -83,10 +83,10 @@ export default class DocumentController {
     @POST()
     download =async (req:any, res:any,next:any) => {
       const url = req.body.url;
-      const base = path.resolve("../../../../",url);
-      const file = path.resolve(base, url);
+      const file = path.resolve(__dirname, "../../"+url);
+      // const file = path.resolve(base, url);
       //No need for special headers
-      res.download(base); 
+      res.download(file); 
   }
     // @route('/upload_chunks')
     // @before(upload.single('file'))
