@@ -86,6 +86,7 @@ export default class DocumentController {
       const file = path.resolve(__dirname, "../../"+url);
       // const file = path.resolve(base, url);
       //No need for special headers
+      console.log("FILE",file);
       res.download(file); 
   }
     // @route('/upload_chunks')
