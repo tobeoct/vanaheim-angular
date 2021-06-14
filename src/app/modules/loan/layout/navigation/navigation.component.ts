@@ -70,7 +70,7 @@ show$:Observable<boolean> = this.showSubject.asObservable();
       console.log(c)
       let links = data[c].filter((d:any)=>{
         if(c=="personal") return true;
-         if(this.isLoggedIn && c=="business" && d.title!="Additional") return false;
+         if(this.isLoggedIn && c=="business" && d.title=="Additional") return false;
          return true; 
       })
       this.dataSelectionSubject.next(links)
