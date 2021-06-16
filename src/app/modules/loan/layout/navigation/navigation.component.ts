@@ -68,12 +68,14 @@ show$:Observable<boolean> = this.showSubject.asObservable();
     this.isLoggedIn = this._authService.isLoggedIn();
     let sub = this._store.loanCategory$.subscribe((c:string)=>{
       console.log(c)
+      if(data[c]){
       let links = data[c].filter((d:any)=>{
         if(c=="personal") return true;
          if(this.isLoggedIn && c=="business" && d.title=="Additional") return false;
          return true; 
       })
       this.dataSelectionSubject.next(links)
+    }
     });
     this.allSubscriptions.push(sub);
   }
