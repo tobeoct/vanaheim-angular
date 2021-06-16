@@ -158,8 +158,27 @@ else{
 let customerInDb = await this._customerRepository.create(customer);
 user.customer.id = customerInDb.id;
 if(customerInDb){
-  
+  const template = `
+  <div style="width:100% !important;  margin-top:20px;"><p>Dear ${customer.firstName},<br/><br/>
+  Welcome to Vanir Capital LLC.<br/><br/>
+  Congratulations! You are on your way to financial freedom and information.<br/><br/>
+  We are so happy to have you onboard and elated that you have chosen us as partners.<br/><br/>
+  Vanir Capital LLC continuously provides efficient financial services and products to individuals and
+  organizations operating in developed and emerging markets. We are a money lending company and we
+  also create investment opportunities. The goal is to help you advance financially and guide you to a
+  future of financial freedom and security.</div><br/><br/>
+  `;
+  try{
+    let response = await this._emailService.SendEmail({subject:"Vanaheim By Vanir: Password Reset",to:user.email,html:template, toCustomer:true})
+    // resolve({status:true,data:user}); 
+    
+  }
+   catch(err){
+      console.log("We were able to register the user but could not send you an email.");
+    console.log(err);
+  }
   resolve({status:true,userData: user,data: {...user, passwordHash:undefined, firstName: user.customer.firstName,type:type, lastName: user.customer.lastName}});
+  
 }
 else resolve({status:false,message:"Registration failed"})
   }
@@ -186,14 +205,24 @@ else resolve({status:false,message:"Registration failed"})
       user.passwordSalt = encryptedPass.salt;
       user.updatedAt = new Date();
       const updatedUser = await this._userRepository.update(user);
+      
       if(updatedUser && Object.keys(updatedUser).length>0){
-        const template = `<div style="width:100% !important;  margin-top:20px;"><p>Dear ${user.name},<br/><br/>
-        You just reset your password<br/><br/>
-        Your new login details:<br/><br/>
-       Username: ${username}<br/><br/>
-        Password: ${password} <br/><br/>
-        Thank you for sticking with us.<br/><br/>
-        Best regards.<br><br><b>Vanir Capital Loans and Capital Finance Team</b></p><div>`;
+      //   const template = `<div style="width:100% !important;  margin-top:20px;"><p>Dear ${user.name},<br/><br/>
+      //   You just reset your password<br/><br/>
+      //   Your new login details:<br/><br/>
+      //  Username: ${username}<br/><br/>
+      //   Password: ${password} <br/><br/>
+      //   Thank you for sticking with us.<br/><br/>
+      //   Best regards.<br><br><b>Vanir Capital Loans and Capital Finance Team</b></p><div>`;
+      const template = `
+      <div style="width:100% !important;  margin-top:20px;"><p>Dear ${user.name},<br/><br/>
+      There was a request to change your password.
+If you didn’t make this request, please ignore this email.<br/>
+Otherwise, use this code KYF75*
+Remember to always change your password immediately after reset.<br/>
+Thanks for sticking with us.
+Best Regards,<div>
+      `;
        try{
         let response = await this._emailService.SendEmail({subject:"Vanaheim By Vanir: Password Reset",to:user.email,html:template, toCustomer:true})
         resolve({status:true,data:user}); 

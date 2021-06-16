@@ -312,7 +312,7 @@ get additionalInfo() { return JSON.parse(this.getFromCurrentApplication("additio
     if(info&&Object.keys(info).length>0) return {firstName:info.firstName,surname:info.surname,email:info.email,phoneNumber:info.phoneNumber}
     info = this.additionalInfo;
     if(info&&Object.keys(info).length>0) return {firstName:info.preferredName,email:info.preferredEmail,phoneNumber:info.preferredPhoneNumber}
-    return null;
+    return {firstName:null,surname:null,email:null,phoneNumber:null};
   }
 
   back=()=>{
