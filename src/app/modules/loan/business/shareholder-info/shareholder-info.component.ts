@@ -11,6 +11,7 @@ import { Address } from 'src/app/shared/interfaces/address';
 import { DOB } from 'src/app/shared/interfaces/dob';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
+import moment = require('moment');
 const data:any[] = [
   {title:"PayDay Loans",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["Personal Loans", "Float Me - Personal"], description:"Spread your loan payment, repay when you get your salary"},
@@ -135,7 +136,7 @@ export class ShareholderInfoComponent implements OnInit {
     dobGroup:new FormGroup({
         day: new FormControl( shareholder.dob?.day?shareholder.dob.day:1, [Validators.required, Validators.min(1), Validators.max(31)]),
         month:new FormControl(shareholder.dob?.month?shareholder.dob.month:'January', [Validators.required]),
-        year:new FormControl(shareholder.dob?.year?shareholder.dob.year:max, [Validators.required, Validators.min(1900), Validators.max(2002)])
+        year:new FormControl(shareholder.dob?.year?shareholder.dob.year:max, [Validators.required, Validators.min(1900), Validators.max(max)])
       },
         {}),
         contactGroup: this._fb.group({
@@ -161,7 +162,6 @@ export class ShareholderInfoComponent implements OnInit {
   }
 trackId(group:FormGroup){
   group.get("id")?.valueChanges.subscribe(v=>{
-    console.log("ID",v);
    let id =group.get("id")?.value ;
    if(id&& id>0 ) {
      let a = this.shareholders.value.find(c=>c.id==id);
@@ -173,6 +173,27 @@ trackId(group:FormGroup){
       this.updateValue(group,"maritalStatus",a.maritalStatus);
       this.updateValue(group,"designation",a.designation);
       this.updateValue(group,"educationalQualification",a.educationalQualification);
+      this.updateValue( group,"contactGroup.email",a.email);
+      this.updateValue(group,"contactGroup.phone",a.phoneNumber)
+      if(a.address){
+        let add = a.address.split(",");
+        let street = add[0];
+        let city = add[1];
+        let state = add[2];
+        this.updateValue(group,"contactGroup.addressGroup.state",state);
+        this.updateValue(group,"contactGroup.addressGroup.city",city);
+        this.updateValue(group,"contactGroup.addressGroup.street",street);
+      }
+      
+if(a.dateOfBirth){
+  let d = moment(a.dateOfBirth);
+  let day = d.get("day");
+  let month = d.get("month");
+  let year = d.get("year");
+      this.updateValue(group,"dobGroup.day",day.toString());
+      this.updateValue(group,"dobGroup.month",month.toString());
+      this.updateValue(group,"dobGroup.year",year.toString());
+    }
     
      }
     }
@@ -200,7 +221,6 @@ ngOnDestroy(): void {
     if(!form.valid) return;
     const shareholderInfos:ShareholderInfo[] = [];
     let f=form.value["shareholderArray"] as any[]; 
-    console.log(f)
     f.forEach(group => {
      let shareholderInfo = new ShareholderInfo();
      shareholderInfo.id = group["id"];

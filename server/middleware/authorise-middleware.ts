@@ -46,8 +46,8 @@ export function clientApiKeyValidation (_clientService:IClientService){
   
   export function sessionRequestAuthorisation(_authService:IAuthService){
     return async (req:any, res:any, next:any) => {
-      var apiUrl = req.originalUrl;
-      var httpMethod = req.method;
+      let apiUrl = req.originalUrl;
+      let httpMethod = req.method;
       console.log("SESSION REQUEST",apiUrl,req.session)
       console.log("COOKIES", req.cookies, req.signedCookies)
       if(_authService.isNewTokenRequired(httpMethod, apiUrl)||_authService.isAuthRequired(httpMethod, apiUrl)){
@@ -83,7 +83,7 @@ export function clientApiKeyValidation (_clientService:IClientService){
   export function sessionResponseAuthorisation(){
     return async (req:any, res:any) => {
       
-      var apiUrl = req.originalUrl;
+      let apiUrl = req.originalUrl;
       console.log("SESSION RESPONSE",apiUrl,req.session)
       if(req.session && req.session.cookie){
         const tokenExpirationDate = req.session.cookie.originalMaxAge;
@@ -102,10 +102,9 @@ export function clientApiKeyValidation (_clientService:IClientService){
   export function authoriseRequest(_authService:IAuthService){
       return async (req:any, res:any, next:any) => {
         console.log("authoriseRequest")
-          var apiUrl = req.originalUrl;
-          var httpMethod = req.method;
+          let apiUrl = req.originalUrl;
+          let httpMethod = req.method;
           // req.session = {};
-          
           if ( _authService.isNewTokenRequired(httpMethod, apiUrl)) {
               console.log("New Token Required")
             req.newTokenRequired = true;
@@ -170,8 +169,8 @@ export function clientApiKeyValidation (_clientService:IClientService){
   
         // console.log("API Authorising Response", res.data)
         
-          var apiUrl = req.originalUrl;
-          var httpMethod = req.method;
+          let apiUrl = req.originalUrl;
+          let httpMethod = req.method;
           // console.log("AUTH RESPONSE",apiUrl,req.session)
           if(req.session && req.session.cookie && _authService.isNewTokenRequired(httpMethod, apiUrl)){
             const tokenExpirationDate = req.session.cookie.originalMaxAge;

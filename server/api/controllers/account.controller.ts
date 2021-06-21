@@ -84,7 +84,7 @@ try{
       if(customer){
           let accounts = await this._accountRepository.getByCustomerID(customer.id);
           res.statusCode =200;
-          res.data= accounts;
+          res.data= accounts.length==0?{}:accounts;
       }else{
         res.statusCode =400;
         res.data = {status:false,message:"Not a customer"}

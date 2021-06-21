@@ -52,6 +52,7 @@ export class DateComponent implements OnInit, OnDestroy {
 
    this.yearSubscription= this.year.valueChanges.subscribe(v=>{
       this.modify();
+      console.log(v)
     });
   }
   isValidDate=(day:number,year:number,month:string)=>{

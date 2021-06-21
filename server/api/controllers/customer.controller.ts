@@ -6,7 +6,7 @@ import { CustomerRepository } from '@repository/implementation/customer-reposito
 import { EmploymentRepository } from '@repository/implementation/employment-repository';
 import { NOKRepository } from '@repository/implementation/nok-repository';
 import { ShareholderRepository } from '@repository/implementation/shareholder-repository';
-import { GET, route } from 'awilix-express'; 
+import { GET, POST, route } from 'awilix-express'; 
 const expAutoSan = require('express-autosanitizer');
 
 // const accountList:any={};
@@ -120,17 +120,18 @@ catch(err){
     }
 
     
-    @route('/shareholders/:companyId')
-    @GET()
+    @route('/shareholders')
+    @POST()
      shareholders=async (req:any, res:any,next:any) => {
         try{
             let customer = req.session?.userData?.customer as Customer;
+            console.log(req.body)
             if(customer){
                 if(!req.body){
                     res.statusCode =400;
                     res.data = {status:false,message:"No company id specified"}    
                 }
-                let shareholders =await this._shareholderRepository.getByCompanyID(req.body);
+                let shareholders =await this._shareholderRepository.getByCompanyID(req.body.companyID);
                 res.statusCode =200;
                 res.data= shareholders;
                 

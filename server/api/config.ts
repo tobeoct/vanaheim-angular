@@ -23,7 +23,7 @@ SERVICE:string;
 LOAN_EMAIL:string;
 LOAN_EMAIL_PASS:string;
 ISSECURE:string;
-SESSION_SECRET_KEY:string ;
+SESSION_SECRET_KEY:string;
 JWT_SECRET_KEY:string ;
     constructor() {
 

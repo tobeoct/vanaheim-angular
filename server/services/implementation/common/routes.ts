@@ -21,7 +21,7 @@ export const authRoutes = [
   { path: '/api/customer/companies', method: 'GET'},
   { path: '/api/customer/nok', method: 'GET'},
   { path: '/api/customer/collaterals', method: 'GET'},
-  { path: '/api/customer/shareholders/:companyId', method: 'GET'},
+  { path: '/api/customer/shareholders', method: 'POST'},
   { path: '/api/document/upload', method: 'POST' },
   { path: '/api/document/download', method: 'POST' },
   { path: '/api/document/getAll', method: 'GET' },

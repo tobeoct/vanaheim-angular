@@ -41,7 +41,7 @@ export class CommonService {
     accounts=()=>{
       return this._http.get<any>(`${environment.apiUrl}/account`)
       .pipe(map(response => {
-        if(response.status==true){return response.response;} return null;
+        if(response.status==true&& Object.keys(response.response).length>0){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);

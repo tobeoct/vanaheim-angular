@@ -1,7 +1,23 @@
  <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
         <div class=" content box-shadow" style="box-sizing: border-box;">
+            <ng-container *ngIf="!(dataLoading$|async)">
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-
+       
+        <ng-container *ngIf="isLoggedIn">
+            <ng-container *ngIf="(shareholdersFromDb$|async) && !(showForm$|async) ">
+                <div *ngFor="let shareholderGroup of shareholderArrayGroups;let i =index" >
+                    <h3 class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><b>Director/Shareholder {{i+1}}</b> <b style="cursor: pointer;" class="d-flex d-flex_vertical--center" *ngIf="i>0" (click)="removeFromFormArray(i)"><span class="material-icons"><span class="material-icons">
+                    remove_circle
+                    </span></span></b></h3>
+                <app-dropdown  current="{{(shareholderGroup.get('surname')|toControl).value}} {{(shareholderGroup.get('otherNames')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'shareholder_{{i}}'" [control]="(shareholderGroup.get('id')|toControl)"  aria-placeholder="Select a shareholder">
+                    <ng-container slot="label"><label for="salary-accounts"></label></ng-container>
+                    <app-option *ngFor="let t of (shareholdersFromDb$|async); let i =index" [value]="t.id" label="{{t.surname}} {{t.otherNames}}">{{t.surname}} {{t.otherNames}}</app-option>
+                </app-dropdown>
+                <p class="text-button" (click)="showForm()">Enter a different Shareholder</p>
+            </div>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!(shareholdersFromDb$|async) || (showForm$|async)">
         <div id="accounts" [ngClass]="{'no-margin--top':i==0}" class="theme_row form_group  animate__animated animate__fadeInUp animate__fast" *ngFor="let shareholderGroup of shareholderArrayGroups;let i =index">
             <h3 class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><b>Director/Shareholder {{i+1}}</b> <b style="cursor: pointer;" class="d-flex d-flex_vertical--center" *ngIf="i>0" (click)="removeFromFormArray(i)"><span class="material-icons"><span class="material-icons">
                 remove_circle
@@ -89,12 +105,16 @@
                 </ng-container>
                 
         </div>
-
         
+        </ng-container>
         <app-button *ngIf="shareholderArrayGroups.length !== 4" (onClick)="addShareholder()" [class]="'widget_button--small widget_button--fill'"><ng-container slot="button">Add Shareholder</ng-container></app-button>
         <div style="margin-top: 60px;">
             <app-button [form]="form" [loading$]="loading$">Next</app-button>
         </div>
     </app-form>
+    </ng-container>
+    <ng-container *ngIf="(dataLoading$|async) && !(shareholdersFromDb$|async)">
+        <app-loading></app-loading>
+    </ng-container>
     </div>
 </div>                

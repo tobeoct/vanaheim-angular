@@ -18,7 +18,7 @@ export class CustomerService {
     customer=()=>{
       return this._http.get<any>(`${environment.apiUrl}/customer`)
       .pipe(map(response => {
-          if(response.status==true){return response.response;} return null;
+          if(response.status==true && Object.keys(response.response).length>0){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);
@@ -28,7 +28,7 @@ export class CustomerService {
     employers=()=>{
       return this._http.get<any>(`${environment.apiUrl}/customer/employers`)
       .pipe(map(response => {
-          if(response.status==true){return response.response;} return null;
+          if(response.status==true&& Object.keys(response.response).length>0){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);
@@ -38,7 +38,7 @@ export class CustomerService {
     companies=()=>{
       return this._http.get<any>(`${environment.apiUrl}/customer/companies`)
       .pipe(map(response => {
-          if(response.status==true){return response.response;} return null;
+          if(response.status==true&& Object.keys(response.response).length>0){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);
@@ -47,16 +47,16 @@ export class CustomerService {
     nok=()=>{
       return this._http.get<any>(`${environment.apiUrl}/customer/nok`)
       .pipe(map(response => {
-          if(response.status==true){return response.response;} return null;
+          if(response.status==true&& Object.keys(response.response).length>0){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);
       }));
     }
     shareholders=(companyID:number)=>{
-      return this._http.get<any>(`${environment.apiUrl}/customer/shareholders?companyId=${companyID}`)
+      return this._http.post<any>(`${environment.apiUrl}/customer/shareholders`,{companyID})
       .pipe(map(response => {
-          if(response.status==true){return response.response;} return null;
+          if(response.status==true&& Object.keys(response.response).length>0){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);
@@ -66,7 +66,7 @@ export class CustomerService {
     collaterals=()=>{
       return this._http.get<any>(`${environment.apiUrl}/customer/collaterals`)
       .pipe(map(response => {
-          if(response.status==true){return response.response;} return null;
+          if(response.status==true&& Object.keys(response.response).length>0){return response.response;} return null;
       }), catchError(err => {
         console.error(err);
         return throwError(err);
