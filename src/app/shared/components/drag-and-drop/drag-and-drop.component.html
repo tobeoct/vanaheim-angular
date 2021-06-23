@@ -1,25 +1,137 @@
-<div cdkDropListGroup>
-    <div class="example-container">
-      <h2>To do</h2>
+<div class="dd" cdkDropListGroup>
+    <div class="dd-container">
+      <div class="dd-title d-flex d-flex_horizontal--space-between">
+        <p><b>NEW</b></p>
+        <p>Count:{{totalCount$|async}}</p>
+      </div>
   
       <div
         cdkDropList
-        [cdkDropListData]="todo"
-        class="example-list todo"
+        [cdkDropListData]="items"
+        class="dd-list items"
         (cdkDropListDropped)="drop($event)">
-        <div class="example-box todo" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+        <div class="dd-box items" *ngFor="let item of items" cdkDrag>
+          <div class="dd-box-content">
+            <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot new"></div></div>
+            <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+              <p>2,000,000</p>
+              <p>3 Months</p>
+            </div>
+          </div>
+          <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <small>PAY DAY</small>
+            <small>Mar 15, 2021 11:59:03 AM</small>
+          </div>
+        </div>
       </div>
     </div>
   
-    <div class="example-container">
-      <h2>Done</h2>
+    <div class="dd-container">
+      <div class="dd-title d-flex d-flex_horizontal--space-between">
+        <p><b>Processing</b></p>
+        <p>Count:{{totalCount$|async}}</p>
+      </div>
+  
   
       <div
         cdkDropList
         [cdkDropListData]="done"
-        class="example-list done"
+        class="dd-list done"
         (cdkDropListDropped)="drop($event)">
-        <div class="example-box done" *ngFor="let item of done" cdkDrag>{{item}}</div>
+        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
+          <div class="dd-box-content">
+          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot processing"></div></div>
+          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <p>2,000,000</p>
+            <p>3 Months</p>
+          </div>
+        </div>
+        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+          <small>PAY DAY</small>
+          <small>Mar 15, 2021 11:59:03 AM</small>
+        </div></div>
       </div>
     </div>
+
+    <div class="dd-container">
+      <div class="dd-title d-flex d-flex_horizontal--space-between">
+        <p><b>Update Required</b></p>
+        <p>Count:{{totalCount$|async}}</p>
+      </div>
+  
+  
+      <div
+        cdkDropList
+        [cdkDropListData]="done"
+        class="dd-list done"
+        (cdkDropListDropped)="drop($event)">
+        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
+          <div class="dd-box-content">
+          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot update"></div></div>
+          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <p>2,000,000</p>
+            <p>3 Months</p>
+          </div>
+        </div>
+        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+          <small>PAY DAY</small>
+          <small>Mar 15, 2021 11:59:03 AM</small>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="dd-container">
+      <div class="dd-title d-flex d-flex_horizontal--space-between">
+        <p><b>Declined</b></p>
+        <p>Count:{{totalCount$|async}}</p>
+      </div>
+  
+  
+      <div
+        cdkDropList
+        [cdkDropListData]="done"
+        class="dd-list done"
+        (cdkDropListDropped)="drop($event)">
+        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
+          <div class="dd-box-content">
+          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot declined"></div></div>
+          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <p>2,000,000</p>
+            <p>3 Months</p>
+          </div>
+        </div>
+        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+          <small>PAY DAY</small>
+          <small>Mar 15, 2021 11:59:03 AM</small>
+        </div></div>
+      </div>
+    </div>
+    <div class="dd-container">
+      <div class="dd-title d-flex d-flex_horizontal--space-between">
+        <p><b>Approved</b></p>
+        <p>Count:{{totalCount$|async}}</p>
+      </div>
+  
+  
+      <div
+        cdkDropList
+        [cdkDropListData]="done"
+        class="dd-list done"
+        (cdkDropListDropped)="drop($event)">
+        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
+          <div class="dd-box-content">
+          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot approved"></div></div>
+          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <p>2,000,000</p>
+            <p>3 Months</p>
+          </div>
+        </div>
+        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+          <small>PAY DAY</small>
+          <small>Mar 15, 2021 11:59:03 AM</small>
+        </div></div>
+      </div>
+    </div>
+
+
   </div>

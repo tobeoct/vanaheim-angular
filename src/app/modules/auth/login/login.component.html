@@ -40,7 +40,7 @@
             
               <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="loginForm" >Login</app-button>
 
-                        <div class="form_group" style="margin-top: 0; display: flex; justify-content: center;">
+                        <div *ngIf="loginAs=='Customer'" class="form_group" style="margin-top: 0; display: flex; justify-content: center;">
                             <div style=" display: flex; ">
                             <p><b>Don't have an account?</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="onNavigate('auth/register')">Register</button>
                         </div>

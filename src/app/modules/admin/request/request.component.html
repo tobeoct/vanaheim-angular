@@ -1,1 +1,25 @@
-<p>request works!</p>
+<div class="content content--smaller">
+
+    <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center margin--2x">
+        <h2>All Requests</h2>
+
+        <app-dropdown [fieldClass]="'no-margin--all'" [class]="'no-margin--all'" [current]="'Today'">
+            <option value="Today">Today</option>
+        </app-dropdown>
+    </div>
+    <app-tabs>
+        <app-tab>
+            <app-tab-header>Loans</app-tab-header>
+            <app-tab-body>
+                <div class="padding--2x"><app-drag-and-drop></app-drag-and-drop></div>
+            </app-tab-body>
+          </app-tab>
+        <app-tab>
+          <app-tab-header>Investment</app-tab-header>
+          <app-tab-body>
+            <div class="padding--2x"><app-drag-and-drop></app-drag-and-drop></div>
+          </app-tab-body>
+        </app-tab>
+       
+      </app-tabs>
+</div>

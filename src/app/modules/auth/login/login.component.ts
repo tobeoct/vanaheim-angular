@@ -48,6 +48,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     
   loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   loading$:Observable<boolean> = this.loadingSubject.asObservable();
+
+  loginAs:string;
     constructor(
         private _fb: FormBuilder,
         private route: ActivatedRoute,
@@ -57,6 +59,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private _router:Router,
         private _validators:VCValidators
     ) { 
+      this.loginAs =this._router.url.includes("admin")?"Admin":"Customer";
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         // redirect to home if already logged in
         const user = this.authenticationService.userValue;
         if (this.authenticationService.isLoggedIn()) { 
@@ -81,12 +85,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
         // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.socialAuthService.authState.subscribe((user) => {
             this.socialUser = user;
             this.isLoggedin = (user != null);
             if(this.isLoggedin){
-                this.login({type: LoginType.Social,socialUser:user});//this.socialUser.id,"passwordQ","social",user)
+                this.login({type: LoginType.Social,socialUser:user,loginAs:this.loginAs});//this.socialUser.id,"passwordQ","social",user)
             }else{
                 alert("Error logging in")
             }
@@ -113,10 +116,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
 
         this.loadingSubject.next(true);
-       this.login({username:form.controls.username.value,password:form.controls.password.value, type:LoginType.Default})
+       this.login({username:form.controls.username.value,password:form.controls.password.value, type:LoginType.Default,loginAs:this.loginAs})
     }
-    login({username,password,type,socialUser}:any){
-       const sub = this.authenticationService.login({username, password,type,socialUser})
+    login({username,password,type,socialUser,loginAs}:any){
+       const sub = this.authenticationService.login({username, password,type,socialUser,loginAs})
         .pipe(first())
         .subscribe(
             data => {

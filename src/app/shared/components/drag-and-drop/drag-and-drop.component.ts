@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { from, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-drag-and-drop',
@@ -9,10 +10,10 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 export class DragAndDropComponent implements OnInit {
 
   constructor() { }
-
+  totalCount$:Observable<number> = from([1]);
   ngOnInit(): void {
   }
-  todo = [
+  items = [
     'Get to work',
     'Pick up groceries',
     'Go home',
@@ -45,7 +46,7 @@ export class DragAndDropComponent implements OnInit {
  updateListOnDrag=(event: CdkDragDrop<string[]>)=>{
    
   console.log("Before")
- console.log(this.todo)
+ console.log(this.items)
   console.log(this.done)
   let value = event.previousContainer.data[event.previousIndex];
   let index =       event.previousIndex;
@@ -70,7 +71,7 @@ export class DragAndDropComponent implements OnInit {
 //   }
 // }
 console.log("After")
- console.log(this.todo)
+ console.log(this.items)
   console.log(this.done)
 }
 }

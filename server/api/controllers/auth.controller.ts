@@ -4,6 +4,7 @@ import { IAuthService } from '@services/interfaces/Iauth-service';
 import { IUserService } from '@services/interfaces/Iuser-service';
 import Encryption from '@services/implementation/common/encryption-service';
 import NotificationService from '@services/implementation/notification-service';
+import { UserCategory } from '@models/helpers/enums/usercategory';
 @route('/api/auth')
 export default class AuthController {
 
@@ -96,7 +97,7 @@ export default class AuthController {
     let uname= req.body.username;
     let userDetails = await this._userService.getByUserName(uname);
     res.statusCode =200;
-    if (userDetails && Object.keys(userDetails).length>0) {
+    if (userDetails && Object.keys(userDetails).length>0 && userDetails.category== UserCategory.Customer) {
      
         res.data = {verified:true};
       

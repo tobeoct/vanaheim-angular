@@ -1,0 +1,10 @@
+#page-content{
+    width: 85vw; left: 15vw; position: fixed;
+}
+
+@media all and (max-width:768px){
+    #page-content{
+      width: 100%;
+      left: 0;
+    }
+  }

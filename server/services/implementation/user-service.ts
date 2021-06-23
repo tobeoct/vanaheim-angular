@@ -61,11 +61,13 @@ import EmailService from "./common/email-service";
      let type = payload.type as LoginType; 
      let customer:Customer = new Customer();
      let socialUser = payload.socialUser;
+     let loginAs = payload.loginAs;
      if(type == LoginType.Social){
        const {firstName,lastName,email,name,photoUrl} = socialUser;
        let id =0;
        let userDetails = await this.getByUserName(email);
        if(userDetails){
+         if(loginAs=="Admin" && userDetails.category!=UserCategory.Staff) resolve({status:false,message:"Invalid login details"});
          id =userDetails.id;
         let customerInDb = await this._customerRepository.getByUserID(id);
         console.log("Social Customer", customerInDb);
@@ -74,15 +76,19 @@ import EmailService from "./common/email-service";
         }
 
        }else{
-        resolve(await this.register( {socialUser,browserID}));
+         if(loginAs=="Admin") {resolve({status:false,message:"Invalid login details"})}
+         else{
+        resolve(await this.register( {socialUser,browserID}));}
        }
-       resolve({status:true,data: {category: UserCategory.Customer, firstName,lastName,username:email,id},
-      userData: {...socialUser,id,category: UserCategory.Customer, firstName,lastName,username:email,customer:customer}});
+       resolve({status:true,data: {category:loginAs=="Admin"?UserCategory.Staff: UserCategory.Customer, firstName,lastName,username:email,id},
+      userData: {...socialUser,id,category:loginAs=="Admin"?UserCategory.Staff:UserCategory.Customer, firstName,lastName,username:email,customer:customer}});
      }
    else{
      let userDetails = await this.getByUserName(uname);
     
      if (userDetails && Object.keys(userDetails).length>0) {
+      if(loginAs=="Admin" && userDetails.category!=UserCategory.Staff) resolve({status:false,message:"Invalid login details"});
+        
        let { passwordHash } = userDetails;
        if (await this._encryption.compare(pwd,passwordHash)==true) {
          //register the users device

@@ -28,16 +28,9 @@ export class AdminGuard implements CanActivate {
         console.log("Admin Route")
         return true;
         }
-        
-        else if(user.category==UserCategory.Customer){
-            console.log("Customer Route")
-            this.router.navigate(['/my']);
-            return false;
-        }
- 
 }
 
-this.router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
+this.router.navigate(['/admin/auth/login'], { queryParams: { returnUrl: state.url } });
     
 return false;
   }

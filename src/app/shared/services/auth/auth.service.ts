@@ -42,8 +42,8 @@ this.timeoutSubscription = this.sessionTimeout$
 
    
 
-    login({username, password, type, socialUser}:any) {
-        return this._http.post<any>(`${environment.apiUrl}/auth/login`, { username, password,type,socialUser,browserID: this._utility.$browserID })
+    login({username, password, type, socialUser,loginAs}:any) {
+        return this._http.post<any>(`${environment.apiUrl}/auth/login`, { username, password,type,socialUser,browserID: this._utility.$browserID,loginAs })
             .pipe(map(response => {
                 // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
                 if(response && response.status==true){

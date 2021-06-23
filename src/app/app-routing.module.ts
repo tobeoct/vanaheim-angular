@@ -14,7 +14,7 @@ import { CustomerComponent } from './modules/customer/customer.component';
   {path:"",loadChildren:()=>import('./modules/customer/customer.module').then(m=>m.CustomerModule), canActivate:[AuthenticationGuard, CustomerGuard]}
 ]
 const ADMIN_ROUTES: Routes = [
-  {path:"", loadChildren:()=>import('./modules/admin/admin.module').then(m=>m.AdminModule), canActivate:[AuthenticationGuard, AdminGuard]}
+  {path:"", loadChildren:()=>import('./modules/admin/admin.module').then(m=>m.AdminModule)}
 ]
 const routes: Routes = [
   {path:"welcome", loadChildren:()=>import('./modules/welcome/welcome.module').then(m=>m.WelcomeModule), canActivate:[WelcomeGuard]},
