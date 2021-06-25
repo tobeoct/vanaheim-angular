@@ -8,7 +8,7 @@ class AuthService implements IAuthService{
   }
   isNewTokenRequired = (httpMethod:any, url:any) => {
     for (let routeObj of newSessionRoutes) {
-      if (routeObj.method === httpMethod && routeObj.path === url) {
+      if (routeObj.method === httpMethod && routeObj.path === url?.split("?")[0]) {
         return true;
       }
     }
@@ -16,7 +16,7 @@ class AuthService implements IAuthService{
   }
     isAuthRequired = (httpMethod:any, url:any) => {
     for (let routeObj of authRoutes) {
-      if (routeObj.method === httpMethod && routeObj.path === url) {
+      if (routeObj.method === httpMethod && routeObj.path === url?.split("?")[0]) {
         return true;
       }
     }

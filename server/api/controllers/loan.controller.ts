@@ -55,11 +55,26 @@ export default class UserController {
     
         next()
     }
+    @route('/searchToProcess')
+    @POST()
+    searchForAdmin =async (req:any, res:any,next:any) => {
+        console.log("Searching Logs");
+        let response:any = await this._loanRequestService.search(req.body);
+        if(response.status==true){
+            res.statusCode = 200;
+            res.data = response.data
+        }else{
+            res.statusCode = 400;
+            res.data = response;
+        }
+    
+        next()
+    }
     @route('/updateStatus')
     @POST()
     updateStatus =async (req:any, res:any,next:any) => {
-        let {requestStatus,id} = req.body
-        let response:any = await this._loanService.updateStatus({requestStatus,id});
+        let {status,id} = req.body
+        let response:any = await this._loanService.updateStatus({requestStatus:status,id});
         if(response.status==true){
             res.statusCode = 200;
             res.data = response.data

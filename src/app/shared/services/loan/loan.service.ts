@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
+import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
 import { catchError, concatMap, filter, map, mergeMap, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Store } from '../../helpers/store';
@@ -157,7 +158,7 @@ else if(loanAmount>=100000 && loanAmount<200000)
 
   }
 
-    
+  
     search=(payload:any)=>{
       return this._http.post<any>(`${environment.apiUrl}/loans/search`, {...payload})
       .pipe(map(response => {
@@ -167,6 +168,7 @@ else if(loanAmount>=100000 && loanAmount<200000)
           return {};
       }));
     }
+    
     validateLoanApplication(){
        let application = this._store.loanApplication;
        let category = this._store.loanCategory;
@@ -196,7 +198,7 @@ else if(loanAmount>=100000 && loanAmount<200000)
     // timer$:Observable<any> = timer(0, 1000);
 
     loans$:Observable<any>= this.search({pageNumber:1,maxSize:10});
-    latestLoan$:Observable<any> =  this.getLatest().pipe(tap(c=>{
+     latestLoan$:Observable<any> =  this.getLatest().pipe(tap(c=>{
       if(!c||c.requestStatus=="NotQualified"){this.runningLoanSubject.next(false)}else{
         this.runningLoanSubject.next(true)
       }

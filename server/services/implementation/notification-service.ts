@@ -116,7 +116,7 @@ import { BaseService } from "./base-service";
 
 resolve(pushNots);
     }catch(err){
-        reject(err)
+        resolve(err)
     }
     });
 

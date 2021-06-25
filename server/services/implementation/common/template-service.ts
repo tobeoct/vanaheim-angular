@@ -7,6 +7,13 @@ const pdfGenerator = require('template-pdf-generator');
 
 export class TemplateService{
     constructor(private fs:any,private fsExtra:any){}
+    STATUS_UPDATE(status:string, id:string){
+        return `   LOAN ID: ${id} <br/><br/>
+        Your loan request status has been updated to ${status};<br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
     INVESTMENT_CUSTOMER_TEMPLATE=`Welcome to Vanir Capital Limited.<br/><br/>
     We thank you for your interest in our investment service. We are
     resolute in our mission for quality financial service delivery, assured by

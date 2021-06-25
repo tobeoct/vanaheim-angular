@@ -4,7 +4,7 @@ import { IBaseService } from "../Ibaseservice";
 
 export interface ILoanRequestLogService extends IBaseService<LoanRequestLog>{
 
-    search:(parameters:any,customer:any)=>Promise<any>
+    search:(parameters:any,customer?:any)=>Promise<any>
     getByLoanRequestIDAndRequestDate:({requestDate,loanRequestID}:any) => Promise<any>
 }
 

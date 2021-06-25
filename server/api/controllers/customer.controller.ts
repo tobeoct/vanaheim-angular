@@ -13,7 +13,7 @@ const expAutoSan = require('express-autosanitizer');
 @route('/api/customer')
 export default class CustomerController {
 
-    constructor( private _customerRepository:CustomerRepository, private _employmentRepository:EmploymentRepository, private _nokRepository:NOKRepository, private _companyRepository:CompanyRepository, private _shareholderRepository:ShareholderRepository, private _collateralRepository:CollateralRepository) {
+    constructor( private sanitizer:any,private _customerRepository:CustomerRepository, private _employmentRepository:EmploymentRepository, private _nokRepository:NOKRepository, private _companyRepository:CompanyRepository, private _shareholderRepository:ShareholderRepository, private _collateralRepository:CollateralRepository) {
 
     }
 
@@ -34,6 +34,26 @@ try{
         res.data = {status:false,message:"Invalid user"}
 
       }
+}
+catch(err){
+  res.statusCode =400;
+  res.data = {status:false,message:"Failed to get customer info"}
+}
+      next();
+    }
+
+    @route('/getById')
+    @GET()
+     customerById=async (req:any, res:any,next:any) => {
+try{
+  var id = this.sanitizer.escape(req.query.id);
+          let customer:any =await this._customerRepository.getById(id);
+          if(customer){
+              customer = customer.dataValues as Customer;
+          }
+          res.statusCode =200;
+          res.data= customer;
+      
 }
 catch(err){
   res.statusCode =400;

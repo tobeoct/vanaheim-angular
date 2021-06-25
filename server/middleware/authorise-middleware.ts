@@ -71,7 +71,7 @@ export function clientApiKeyValidation (_clientService:IClientService){
         }
         else{
           //User is logged out
-          if(apiUrl.includes("/welcome/")||apiUrl.includes("/auth/login")||apiUrl.includes("/auth/register")){
+          if(apiUrl.includes("/admin")||apiUrl.includes("/welcome/")||apiUrl.includes("/auth/login")||apiUrl.includes("/auth/register")){
             next()
           }else{
           res.redirect("/auth/login");

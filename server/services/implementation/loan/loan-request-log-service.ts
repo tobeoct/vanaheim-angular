@@ -27,17 +27,20 @@ export class LoanRequestLogService extends BaseService<LoanRequestLog> implement
         let response = await this._baseRepository.search({requestDate,loanRequestID},0,1);
         resolve(response.rows[0]||{});
     })
-    search=(parameters:any,customer:any) =>  new Promise<any>(async (resolve,reject)=>{
+    search=(parameters:any,customer?:any) =>  new Promise<any>(async (resolve,reject)=>{
         try{
             console.log("LoanRequestLog Search")
             let {pageNumber,maxSize,from,to,status,requestId,orderBy="updatedAt"}:any = parameters;
             pageNumber = +pageNumber;
             pageNumber-=1;
         let repo = this._baseRepository as ILoanRequestLogRepository;
-            if(customer && Object.keys(customer).length==0){
-                resolve({status:false,data:{}});
-            }else{
-        let queryParameters:any = {customerID:customer.id};
+        let queryParameters:any={}; 
+            // if(customer && Object.keys(customer).length==0){
+            //     // resolve({status:false,data:{}});
+            // }else{
+                if(customer && Object.keys(customer).length>0){
+         queryParameters = {customerID:customer.id};
+            }
             if(from && to) {
                 queryParameters["requestDate"]= {
                     [this.Op.between]: [from, to]
@@ -62,7 +65,7 @@ export class LoanRequestLogService extends BaseService<LoanRequestLog> implement
 
         let requests = await repo.search(queryParameters,pageNumber,maxSize);
         resolve({status:true,data:requests});
-            }
+            
         }
         catch(err){
             console.error(err);

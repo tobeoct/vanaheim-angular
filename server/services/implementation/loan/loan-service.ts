@@ -6,6 +6,7 @@ import { LoanRequest } from "@models/loan/loan-request";
 import { LoanRequestLog } from "@models/loan/loan-request-log";
 import { WebNotData, WebNotification } from "@models/webnotification";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
+import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
 import { IDocumentService } from "@services/interfaces/Idocument-service";
 import { INotificationService } from "@services/interfaces/Inotification-service";
 import { ILoanRequestLogService } from "@services/interfaces/loan/Iloan-log-request-service";
@@ -17,7 +18,7 @@ import { TemplateService } from "../common/template-service";
 import UtilService from "../common/util";
   
 export class LoanService implements ILoanService{
-  constructor(private _appConfig:AppConfig,private _notificationService:INotificationService,private _documentService:IDocumentService,private _templateService: TemplateService,private _emailService:EmailService,private _customerRepository:ICustomerRepository, private _loanRequestService:ILoanRequestService,private _utilService:UtilService, private _loanRequestLogService:ILoanRequestLogService){
+  constructor(private _appConfig:AppConfig,private _notificationService:INotificationService,private _documentService:IDocumentService,private _templateService: TemplateService,private _emailService:EmailService,private _customerRepository:ICustomerRepository, private _loanRequestService:ILoanRequestService,private _utilService:UtilService, private _loanRequestLogService:ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository){
 
   }
  getAllLoanRequests: () => Promise<LoanRequest[]>;
@@ -36,20 +37,49 @@ export class LoanService implements ILoanService{
     try{
       let loanRequest = await this._loanRequestService.getById(id);
       if(!loanRequest || Object.keys(loanRequest).length==0) throw "Invalid Loan Request";
+      let customer:any = await this._customerRepository.getById(loanRequest.customerID);
+      if(!customer || Object.keys(customer).length==0) throw "Invalid Customer";
+      customer = customer.dataValues as Customer;
       let loanRequestLog = await this._loanRequestLogService.getByLoanRequestIDAndRequestDate({loanRequestID:loanRequest.id,requestDate:loanRequest.requestDate})
       if(!loanRequestLog || Object.keys(loanRequestLog).length==0) throw "Invalid Loan Request log";
-      let status = requestStatus as unknown as LoanRequestStatus;
-      loanRequest.requestStatus = status;
+      // let status = requestStatus as unknown as LoanRequestStatus;
+      loanRequest.requestStatus = requestStatus;
       loanRequest.updatedAt = new Date();
+      if(requestStatus== LoanRequestStatus.Processing){
+        loanRequest.dateProcessed = new Date();
+        loanRequestLog.dateProcessed = new Date();
+      }else if(requestStatus== LoanRequestStatus.Approved){
+        loanRequest.dateApproved = new Date();
+        loanRequestLog.dateApproved = new Date();
+      }else if(requestStatus== LoanRequestStatus.NotQualified){
+        loanRequest.dateDeclined = new Date();
+        loanRequestLog.dateDeclined = new Date();
+      }
+      else if(requestStatus== LoanRequestStatus.Approved){
+        loanRequest.dateDueForDisbursement = new Date();
+        loanRequestLog.dateDueForDisbursement = new Date();
+      }
+      else if(requestStatus== LoanRequestStatus.Funded){
+        loanRequest.dateApproved = new Date();
+        loanRequestLog.dateApproved = new Date();
+      }
       await this._loanRequestService.update(loanRequest);
 
-      loanRequestLog.requestStatus = status;
+      loanRequestLog.requestStatus = requestStatus;
       loanRequestLog.updatedAt = new Date();
-      await this._loanRequestLogService.update(loanRequestLog);
-      if(status== LoanRequestStatus.Funded){
+      console.log("loan Request Log", loanRequestLog);
+      await this._loanRequestLogRepository.update(loanRequestLog);
+      if(requestStatus== LoanRequestStatus.Funded){
         //create disbursed loan record
       }
-      resolve({status:true,loanRequest});
+      let notification = new WebNotification();
+      notification.body = `Your loan request status for LOAN ID:${loanRequest.requestId} has been updated to ${requestStatus}`;
+      notification.title = `Vanaheim: Loan Status Update`
+      notification.data = new WebNotData();
+      notification.data.url ="http://localhost:4200/my/loans"; 
+      await this._emailService.SendEmail({subject:"Vanir Capital: Loan Status Update",html:this._templateService.STATUS_UPDATE(requestStatus,loanRequest.requestId),to:customer.email,toCustomer:true});
+      await this._notificationService.sendNotificationToMany({customerIds:[loanRequest.customerID],notification})
+      resolve({status:true,data:loanRequest});
     }catch(err){
       console.log(err)
       resolve({status:false})

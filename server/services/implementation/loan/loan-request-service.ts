@@ -1,4 +1,3 @@
-import AppConfig from "@api/config";
 import { Account } from "@models/account";
 import { IBaseEntity } from "@models/base-entity";
 import { Collateral } from "@models/collateral";
@@ -16,7 +15,6 @@ import { LoanRequestLog } from "@models/loan/loan-request-log";
 import { LoanTypeRequirements } from "@models/loan/loan-type-requirements";
 import { NOK } from "@models/nok";
 import { Shareholder } from "@models/shareholder";
-import { IDocumentRepository } from "@repository/interface/document/Idocument-repository";
 import { IAccountRepository } from "@repository/interface/Iaccount-repository";
 import { ICollateralRepository } from "@repository/interface/Icollateral-repository";
 import { ICompanyRepository } from "@repository/interface/Icompany-repository";
@@ -38,32 +36,93 @@ import { PersonalInfo } from "src/app/modules/loan/personal/personal-info/person
 import { AccountInfo } from "src/app/modules/loan/shared/account-info/account-info";
 import { LoanDetails } from "src/app/modules/loan/shared/loan-calculator/loan-details";
 import { BaseService } from "../base-service";
-import EmailService from "../common/email-service";
-import { TemplateService } from "../common/template-service";
 import UtilService from "../common/util";
 
 export class LoanRequestService extends BaseService<LoanRequest> implements ILoanRequestService{
     convertToModel: (modelInDb: any) => Promise<LoanRequest>;
-    constructor(private moment:any,private _loanRequestLogRepository:ILoanRequestLogRepository ,private _customerRepository:ICustomerRepository, private _accountRepository:IAccountRepository,private _nokRepository:INOKRepository,private _companyRepository:ICompanyRepository,private _shareholderRepository:IShareholderRepository,private _collateralRepository:ICollateralRepository,private _employmentRepository:IEmploymentRepository,private _loanTypeRequirementRepository:ILoanTypeRequirementRepository,private _utilService:UtilService, _loanRequestRepository:ILoanRequestRepository){
+    constructor(private moment:any,private Op:any,private _loanRequestLogRepository:ILoanRequestLogRepository ,private _customerRepository:ICustomerRepository, private _accountRepository:IAccountRepository,private _nokRepository:INOKRepository,private _companyRepository:ICompanyRepository,private _shareholderRepository:IShareholderRepository,private _collateralRepository:ICollateralRepository,private _employmentRepository:IEmploymentRepository,private _loanTypeRequirementRepository:ILoanTypeRequirementRepository,private _utilService:UtilService, _loanRequestRepository:ILoanRequestRepository){
         super(_loanRequestRepository);
     }
     process= (payload:any) =>new Promise<any>((resolve, reject) =>{
       
     });
-    search=(parameters:any,userData:any) =>  new Promise<any>(async (resolve,reject)=>{
-        try{
-            const {pageNumber,maxSize,from,to} = parameters;
+    // search=(parameters:any,userData:any) =>  new Promise<any>(async (resolve,reject)=>{
+    //     try{
+    //         const {pageNumber,maxSize,from,to} = parameters;
 
-        let repo = this._baseRepository as ILoanRequestRepository;
-        const customer = await this._customerRepository.getByUserID(userData.id);
-        let requests = await repo.search({customerID:customer.id},pageNumber,maxSize);
-        resolve({status:true,data:requests});
-        }
-        catch(err){
-            console.error(err);
-            resolve({status:false,data:err});
-        }
-    });
+    //     let repo = this._baseRepository as ILoanRequestRepository;
+    //     const customer = await this._customerRepository.getByUserID(userData.id);
+    //     let requests = await repo.search({customerID:customer.id},pageNumber,maxSize);
+    //     resolve({status:true,data:requests});
+    //     }
+    //     catch(err){
+    //         console.error(err);
+    //         resolve({status:false,data:err});
+    //     }
+    // });
+
+    search=(parameters:any,customer?:any) =>  new Promise<any>(async (resolve,reject)=>{
+      try{
+          console.log("LoanRequest Search")
+          let {pageNumber,maxSize,from,to,status,requestId,orderBy="updatedAt"}:any = parameters;
+          pageNumber = +pageNumber;
+          pageNumber-=1;
+      let repo = this._baseRepository as ILoanRequestLogRepository;
+      let queryParameters:any={}; 
+          // if(customer && Object.keys(customer).length==0){
+          //     // resolve({status:false,data:{}});
+          // }else{
+              if(customer && Object.keys(customer).length>0){
+       queryParameters = {customerID:customer.id};
+          }
+          if(from && to) {
+              queryParameters["requestDate"]= {
+                  [this.Op.between]: [from, to]
+              }
+              // {"fieldOfYourDate" : {[Op.between] : [startedDate , endDate ]}}
+          }else if(from && !to){
+              queryParameters["requestDate"]= {
+                  [this.Op.between]: [from, this.moment()]
+              }
+          }else if(!from && to){
+              queryParameters["requestDate"]= {
+                  [this.Op.between]: [this.moment().subtract(1, 'year'), to]
+              }
+          }
+
+          if(status){
+              queryParameters["requestStatus"] = status; 
+          }
+          if(requestId){
+              queryParameters["requestId"] = requestId; 
+          }
+
+      let requests = await repo.search(queryParameters,pageNumber,maxSize);
+      let rows:any[] =[];
+if(requests){
+  Object.assign(rows,requests.rows);
+      rows.map(async (r:any)=>{
+      let request:any = {};
+      Object.assign(request,r);
+      // console.log(request.dataValues.customerID);
+        let name =await this._customerRepository.getById(request.dataValues.customerID);
+        request.dataValues["name"]= name?.dataValues?.firstName+" "+name?.dataValues?.lastName;
+        console.log(request)
+        return request.dataValues;
+      });
+      
+      console.log("Map Request",rows);
+    }
+
+    
+      resolve({status:true,data:{count:requests.count,rows}});
+          
+      }
+      catch(err){
+          console.error(err);
+          resolve({status:false,data:err});
+      }
+  });
 
     getLatestLoan=(userData:any) =>  new Promise<any>(async (resolve,reject)=>{
         try{

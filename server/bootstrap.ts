@@ -44,6 +44,7 @@ const {Op} = require('sequelize');
 const moment = require('moment');
 const md5 = require('md5');
 const fs = require('fs');
+const sanitizer = require('sanitizer');
 const fsExtra = require('fs-extra');
 export default class Bootstrap {
     instance:any
@@ -74,6 +75,7 @@ export default class Bootstrap {
             moment:asValue(moment),
             fs:asValue(fs),
             fsExtra:asValue(fsExtra),
+            sanitizer:asValue(sanitizer),
             expressSession: asValue(session),
             _session:asClass(SessionMiddleware).singleton(),
             _redis:asClass(RedisMiddleware).singleton(),
