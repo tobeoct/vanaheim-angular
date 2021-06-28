@@ -6,5 +6,5 @@ import { BaseEntity } from "@models/base-entity";
     update: (data:BaseEntity) => Promise<T>
     create: (data:BaseEntity) => Promise<T>
     delete: (id:number) => Promise<T>
-    search:(parameters:object,pageNumber:number,maxSize:number,orderBy?:any[])=> Promise<any>
+    search:(parameters:object,pageNumber:number,maxSize:number,orderBy?:any[],include?:any[])=> Promise<any>
 }

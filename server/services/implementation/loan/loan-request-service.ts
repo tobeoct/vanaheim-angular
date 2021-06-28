@@ -40,7 +40,7 @@ import UtilService from "../common/util";
 
 export class LoanRequestService extends BaseService<LoanRequest> implements ILoanRequestService{
     convertToModel: (modelInDb: any) => Promise<LoanRequest>;
-    constructor(private moment:any,private Op:any,private _loanRequestLogRepository:ILoanRequestLogRepository ,private _customerRepository:ICustomerRepository, private _accountRepository:IAccountRepository,private _nokRepository:INOKRepository,private _companyRepository:ICompanyRepository,private _shareholderRepository:IShareholderRepository,private _collateralRepository:ICollateralRepository,private _employmentRepository:IEmploymentRepository,private _loanTypeRequirementRepository:ILoanTypeRequirementRepository,private _utilService:UtilService, _loanRequestRepository:ILoanRequestRepository){
+    constructor(private moment:any,private _db:any,private Op:any,private _loanRequestLogRepository:ILoanRequestLogRepository ,private _customerRepository:ICustomerRepository, private _accountRepository:IAccountRepository,private _nokRepository:INOKRepository,private _companyRepository:ICompanyRepository,private _shareholderRepository:IShareholderRepository,private _collateralRepository:ICollateralRepository,private _employmentRepository:IEmploymentRepository,private _loanTypeRequirementRepository:ILoanTypeRequirementRepository,private _utilService:UtilService, _loanRequestRepository:ILoanRequestRepository){
         super(_loanRequestRepository);
     }
     process= (payload:any) =>new Promise<any>((resolve, reject) =>{
@@ -97,7 +97,10 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
               queryParameters["requestId"] = requestId; 
           }
 
-      let requests = await repo.search(queryParameters,pageNumber,maxSize);
+      let requests = await repo.search(queryParameters,pageNumber,maxSize,undefined,[{
+        model: this._db.Customer,
+        required: true
+       }]);
       let rows:any[] =[];
 if(requests){
   Object.assign(rows,requests.rows);
@@ -105,9 +108,8 @@ if(requests){
       let request:any = {};
       Object.assign(request,r);
       // console.log(request.dataValues.customerID);
-        let name =await this._customerRepository.getById(request.dataValues.customerID);
-        request.dataValues["name"]= name?.dataValues?.firstName+" "+name?.dataValues?.lastName;
-        console.log(request)
+        request.dataValues["name"]= request?.dataValues?.Customer?.firstName+" "+ request?.dataValues?.Customer?.lastName;
+        // console.log(request)
         return request.dataValues;
       });
       

@@ -42,6 +42,7 @@ export class LoanService implements ILoanService{
       customer = customer.dataValues as Customer;
       let loanRequestLog = await this._loanRequestLogService.getByLoanRequestIDAndRequestDate({loanRequestID:loanRequest.id,requestDate:loanRequest.requestDate})
       if(!loanRequestLog || Object.keys(loanRequestLog).length==0) throw "Invalid Loan Request log";
+      loanRequestLog = loanRequestLog.dataValues;
       // let status = requestStatus as unknown as LoanRequestStatus;
       loanRequest.requestStatus = requestStatus;
       loanRequest.updatedAt = new Date();

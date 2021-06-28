@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { request } from 'express';
-import { Observable, of } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
-import { LoanService } from 'src/app/shared/services/loan/loan.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RequestService } from './request.service';
 
 @Component({
@@ -12,7 +10,7 @@ import { RequestService } from './request.service';
 })
 export class RequestComponent implements OnInit {
   loans$:Observable<any[]>
-  constructor(private _requestService: RequestService, private _loanService:LoanService) { }
+  constructor(private _requestService: RequestService) { }
 
   ngOnInit(): void {
       // this._requestService.fetchToken()

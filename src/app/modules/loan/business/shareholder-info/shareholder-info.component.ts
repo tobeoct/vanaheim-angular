@@ -70,16 +70,17 @@ export class ShareholderInfoComponent implements OnInit {
   ngOnInit(): void { 
     this.isLoggedIn=this._authService.isLoggedIn();
     if(this.isLoggedIn){
-      this.dataLoadingSubject.next(true);
       let companyId = this._store.companyInfo?this._store.companyInfo.id:0;
       if(companyId>0){
+        this.dataLoadingSubject.next(true);
       this.shareholdersFromDb$ = this._customerService.shareholders(companyId).pipe(map((c:any[])=>{
         this.shareholders.next(c);
         return c;
       }),take(1),tap(c=>this.dataLoadingSubject.next(false)), catchError(c=>{console.log(c);this.dataLoadingSubject.next(false);return EMPTY}) );
     }else{
       this.showForm();
-    }}
+    }
+  }
       else{
         this.showForm();
       }

@@ -46,15 +46,18 @@ import { IBaseRepository } from "@repository/interface/Ibase-repository";
           resolve(await this._db.findByPk(id));
         });
       }
-    search=(parameters:object,pageNumber:number,maxSize:number,orderBy:any[]=[["updatedAt","DESC"]])=>{
+    search=(parameters:object,pageNumber:number,maxSize:number,orderBy:any[]=[["updatedAt","DESC"]],include?:any[])=>{
         return new Promise<any>(async(resolve, reject) =>{
-
-         resolve(await this._db.findAndCountAll({
+          let params:any ={
             limit: maxSize,
             offset: pageNumber * maxSize,
             where: {...parameters}, // conditions
             order:orderBy
-          }));
+          };
+          if(include){
+            params["include"] = include;
+          }
+         resolve(await this._db.findAndCountAll(params));
 
         });
       }
