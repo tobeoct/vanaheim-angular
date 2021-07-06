@@ -177,8 +177,9 @@ resolve(pushNots);
          const {browserID,token,userID} = payload;
         return new Promise<Subscription>(async (resolve, reject) => {
             try{
+                console.log("UserID",userID)
             let user = await this._userService.convertToModel(await this._userService.getById(userID));
-            console.log("UserID",userID)
+           
            const device =await this.registerDevice({browserID,customerID:user.customer.id})
            if(device && Object.keys(device).length>0){
             let subscription =await this.convertToSubscription(await this._subscriptionRepository.getByDeviceID(device.id));

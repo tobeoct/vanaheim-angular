@@ -21,7 +21,7 @@ import EmailService from "./common/email-service";
       let user:any;
       if(modelInDb && Object.keys(modelInDb).length>0){
         user = new User();
-        user = modelInDb.dataValues as User;
+        user = modelInDb.dataValues as User ?? modelInDb;
         const customer = await this._customerRepository.getByUserID(user.id);
         if(customer && Object.keys(customer).length>0){
         user.customer = new Customer();
