@@ -22,7 +22,7 @@ import { BaseService } from "./base-service";
     let notification:any;
     if(modelInDb && Object.keys(modelInDb).length>0){
       notification = new PushNotification();
-      notification = modelInDb.dataValues as PushNotification;
+      notification = modelInDb.dataValues as PushNotification ?? modelInDb;
       const subscription = await this._subscriptionRepository.getById(notification.subscriptionID);
         if(subscription && Object.keys(subscription).length>0){
         notification.subscription = new Subscription();
@@ -37,7 +37,7 @@ import { BaseService } from "./base-service";
     let subscription:any;
     if(modelInDb && Object.keys(modelInDb).length>0){
       subscription = new Subscription();
-      subscription = modelInDb.dataValues as Subscription;
+      subscription = modelInDb.dataValues as Subscription ?? modelInDb;
       const device = await this._deviceRepository.getById(subscription.deviceID);
         if(device && Object.keys(device).length>0){
         subscription.device = new Device();
@@ -53,7 +53,7 @@ import { BaseService } from "./base-service";
     console.log(modelInDb);
     if(modelInDb && Object.keys(modelInDb).length>0){
       device = new Device();
-      device = modelInDb.dataValues as Device;
+      device = modelInDb.dataValues as Device ??modelInDb; 
       
       }
            resolve(device);
