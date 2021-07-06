@@ -21,7 +21,10 @@
     border-top: 0;
     padding-top: 0;
     border-radius: $border-radius;
-   
+   &.disabled{
+     pointer-events: none;
+     cursor: not-allowed;
+   }
   }
   &-title{
     width: 100%;
@@ -78,6 +81,9 @@
     }
     .approved{
       @include background(green);
+    }
+    .funded{
+      @include background(white);
     }
     }
   }

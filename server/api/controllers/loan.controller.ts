@@ -9,7 +9,7 @@ export default class UserController {
    bvnList:any={
   };
    bankList:any={};
-    constructor(private _loanService:ILoanService,private _loanRequestService:ILoanRequestService,private _loanRequestLogService:ILoanRequestLogService) {
+    constructor( private sanitizer:any,private _loanService:ILoanService,private _loanRequestService:ILoanRequestService,private _loanRequestLogService:ILoanRequestLogService) {
 
     }
 
@@ -60,6 +60,21 @@ export default class UserController {
     searchForAdmin =async (req:any, res:any,next:any) => {
         console.log("Searching Logs");
         let response:any = await this._loanRequestService.search(req.body);
+        if(response.status==true){
+            res.statusCode = 200;
+            res.data = response.data
+        }else{
+            res.statusCode = 400;
+            res.data = response;
+        }
+    
+        next()
+    }
+    @route('/getLoanDetails')
+    @GET()
+    getLoanDetails =async (req:any, res:any,next:any) => {
+        var id = this.sanitizer.escape(req.query.id);
+        let response:any = await this._loanService.getLoanDetails(id);
         if(response.status==true){
             res.statusCode = 200;
             res.data = response.data

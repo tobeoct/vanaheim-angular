@@ -13,6 +13,7 @@ export class ButtonComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() class:string;
   @Input() fieldClass:string;
+  @Input() color:string;
   @Input() title:string='Please fill the form first';
   @Input() autoClick:boolean;
   @Input() loading$:Observable<boolean>

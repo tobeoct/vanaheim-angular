@@ -20,6 +20,7 @@ export class ModalComponent implements OnInit {
   @Output()
   onChange=new EventEmitter<boolean>();
   @Input() show:boolean|null= false;
+  @Input() size:string;
   constructor(private _cd:ChangeDetectorRef) { }
 
   ngOnInit(): void {

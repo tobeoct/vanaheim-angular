@@ -46,6 +46,13 @@ import { IBaseRepository } from "@repository/interface/Ibase-repository";
           resolve(await this._db.findByPk(id));
         });
       }
+      getByIdWithInclude=(id:number, include?:any[])=>{
+        return new Promise<any>(async (resolve, reject) =>{
+         
+          resolve(await this._db.findByPk(id,{include}));
+          
+        });
+      }
     search=(parameters:object,pageNumber:number,maxSize:number,orderBy:any[]=[["updatedAt","DESC"]],include?:any[])=>{
         return new Promise<any>(async(resolve, reject) =>{
           let params:any ={

@@ -1,16 +1,21 @@
 import AppConfig from "@api/config";
+import { Account } from "@models/account";
 import { Customer } from "@models/customer";
 import { Document } from "@models/document";
 import { LoanRequestStatus } from "@models/helpers/enums/loanrequeststatus";
 import { LoanRequest } from "@models/loan/loan-request";
 import { LoanRequestLog } from "@models/loan/loan-request-log";
 import { WebNotData, WebNotification } from "@models/webnotification";
+import { AccountRepository } from "@repository/implementation/account-repository";
+import { NOKRepository } from "@repository/implementation/nok-repository";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
+import { ILoanTypeRequirementRepository } from "@repository/interface/Iloantyperequirement-repository";
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
 import { IDocumentService } from "@services/interfaces/Idocument-service";
 import { INotificationService } from "@services/interfaces/Inotification-service";
 import { ILoanRequestLogService } from "@services/interfaces/loan/Iloan-log-request-service";
 import { ILoanRequestService } from "@services/interfaces/loan/Iloan-request-service";
+import { ILoanTypeRequirementService } from "@services/interfaces/loan/Iloan-type-requirement-service";
 import { ILoanService } from "@services/interfaces/loan/Iloanservice";
 import { BVN } from "src/app/modules/loan/personal/bvn/bvn";
 import EmailService from "../common/email-service";
@@ -18,9 +23,136 @@ import { TemplateService } from "../common/template-service";
 import UtilService from "../common/util";
   
 export class LoanService implements ILoanService{
-  constructor(private _appConfig:AppConfig,private _notificationService:INotificationService,private _documentService:IDocumentService,private _templateService: TemplateService,private _emailService:EmailService,private _customerRepository:ICustomerRepository, private _loanRequestService:ILoanRequestService,private _utilService:UtilService, private _loanRequestLogService:ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository){
+  constructor(private _db:any,private _appConfig:AppConfig,private _nokRepository:NOKRepository,private _accountRepository:AccountRepository,private _notificationService:INotificationService,private _loanTypeRequirementService:ILoanTypeRequirementService,private _documentService:IDocumentService,private _templateService: TemplateService,private _emailService:EmailService,private _customerRepository:ICustomerRepository, private _loanRequestService:ILoanRequestService,private _utilService:UtilService, private _loanRequestLogService:ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository){
 
   }
+  getLoanDetails= (id: number) =>  new Promise<any>(async (resolve,reject)=>{
+    try{
+   let request = await this._loanRequestService.getByIdWithInclude(id,[{
+    model: this._db.Customer,
+    required: true
+   }]);
+   if(request){
+     request.loanTypeRequirements = await this._loanTypeRequirementService.getByIdExtended(request.loanTypeRequirementID);
+      request.Customer.NOK = await this._nokRepository.getByCustomerID(request.customerID);
+    }
+   let accountDetails = await this._accountRepository.search({number:request.accountNumber},0,1);
+   let account = accountDetails?.rows[0] as Account;
+   let requestDetails = [
+
+    {
+      key:"Loan Details",
+      data:[
+        {key:"Loan Type",value:request.loanType},
+        {key:"Applying As",value:request.applyingAs},
+        {key:"Loan Product",value:request.loanProduct},
+      {key:"Loan Purpose",value:request.loanPurpose},
+      {key:"Loan Amount",value:this._utilService.currencyFormatter(request.amount)},
+      {key:"Monthly Repayment",value:this._utilService.currencyFormatter(request.monthlyPayment)},
+      {key:"Total Repayment",value:this._utilService.currencyFormatter(request.totalRepayment)},
+      {key:"Tenure",value:request.tenure+" "+request.denominator},
+      ]
+    },
+    {
+      key:"Personal Information",
+      data:[
+      {key:"Name",value:this._utilService.replaceAll((request.Customer.title+" "+request.Customer.lastName + " "+request.Customer.otherNames+" "+request.Customer.firstName),"null","")},
+      {key:"Date Of Birth",value:request.Customer.dateOfBirth},
+      {key:"Gender",value:request.Customer.gender?.toString()},
+      {key:"Marital Status",value:request.Customer.maritalStatus?.toString()},
+      {key:"Email Address",value:request.Customer.email},
+      {key:"Phone Number",value:request.Customer.phoneNumber},
+      {key:"Address",value:request.Customer.address},
+      ]
+    },
+    {
+      key:"Account Information",
+      data:[
+      {key:"Number",value:request.accountNumber},
+      {key:"Name",value:account.name},
+      {key:"Bank",value:account.bank}
+      ]
+    }
+   ];
+    
+   
+    if(request.loanType.toLowerCase().includes("personal")){
+      
+   let personal = [
+    {
+      key:"Employment Information",
+      data:[
+      {key:"Employer",value:request.loanTypeRequirements?.employment?.employer},
+      {key:"Business Sector",value:request.loanTypeRequirements?.employment?.businessSector},
+      {key:"Email",value:request.loanTypeRequirements?.employment?.email},
+      {key:"Phone Number",value:request.loanTypeRequirements?.employment?.phoneNumber},
+      {key:"Address",value:request.loanTypeRequirements?.employment?.address},
+      {key:"Net Monthly Salary",value:request.loanTypeRequirements?.employment?.netMonthlySalary},
+      {key:"Pay Day",value:request.loanTypeRequirements?.employment?.payDay},
+      ]
+    },
+    {
+      key:"NOK Information",
+      data:[
+      {key:"Name",value:this._utilService.replaceAll((request.Customer?.NOK?.title+" "+request.Customer?.NOK?.lastName + " "+request.Customer?.NOK?.otherNames+" "+request.Customer?.NOK?.firstName),"null","")},
+      {key:"Date Of Birth",value:request.Customer?.NOK?.dateOfBirth},
+      {key:"Relationship",value:request.Customer?.NOK?.relationship.toString()},
+      {key:"Email Address",value:request.Customer?.NOK?.email},
+      {key:"Phone Number",value:request.Customer?.NOK?.phoneNumber},
+      ]
+    }]
+      requestDetails = [...requestDetails,...personal];
+    }else{
+      let business = [
+        {
+          key:"Company Information",
+          data:[
+          {key:"Name",value:request.loanTypeRequirements?.company?.name},
+          {key:"RC No",value:request.loanTypeRequirements?.company?.rcNo},
+          {key:"Nature Of Business",value:request.loanTypeRequirements?.company?.natureOfBusiness},
+          {key:"Date Of Incorporation",value:request.loanTypeRequirements?.company?.dateOfIncorporation},
+          {key:"Time In Business",value:request.loanTypeRequirements?.company?.timeInBusiness},
+          {key:"Email",value:request.loanTypeRequirements?.company?.email},
+          {key:"Phone Number",value:request.loanTypeRequirements?.company?.phoneNumber},
+          {key:"Address",value:request.loanTypeRequirements?.company?.address},
+          ]
+        },
+        {
+          key:"Collateral Information",
+          data:[
+            {key:"Owner",value:request.loanTypeRequirements?.collateral?.owner},
+            {key:"Valuation",value:this._utilService.currencyFormatter(request.loanTypeRequirements?.collateral?.valuation)},
+            {key:"Type",value:request.loanTypeRequirements?.collateral?.type},
+            {key:"Description",value:request.loanTypeRequirements?.collateral?.description},
+            {key:"Document",value:request.loanTypeRequirements?.collateral?.document?.requirement},
+          ]
+        }]
+    
+        request.loanTypeRequirements?.shareholders?.forEach((s,i)=>{
+          business.push({
+            key:"Shareholder "+(i+1),
+            data:[
+              {key:"Name",value:s.title+" "+s.surname + " "+s.otherNames},
+              {key:"Designation",value:s.designation},
+              {key:"Educational Qualification",value:s.educationalQualification},
+              {key:"Date Of Birth",value:s.dateOfBirth},
+              {key:"Gender",value:s.gender?.toString()},
+              {key:"Marital Status",value:s.maritalStatus?.toString()},
+              {key:"Email Address",value:s.email},
+              {key:"Phone Number",value:s.phoneNumber},
+              {key:"Address",value:s.address}
+            ]
+          })
+        }
+    
+        )
+      requestDetails = [...requestDetails,...business];
+    }
+     resolve({status:true,data:{code:request.code,status:request.requestStatus,details:requestDetails}});
+    }catch(err){
+        reject(err);
+    }
+ })
  getAllLoanRequests: () => Promise<LoanRequest[]>;
  getAllLoanRequestLogs: () => Promise<LoanRequestLog[]>;
  getLoanRequestById: () => Promise<LoanRequest>;

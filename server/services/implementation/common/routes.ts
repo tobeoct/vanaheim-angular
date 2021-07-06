@@ -5,6 +5,7 @@ export const newSessionRoutes = [{ path: '/api/auth/login', method: 'POST' },{ p
 { path: '/api/loans/searchToProcess', method: 'POST' },
 {path:"/api/customer/getById",method:"GET"},
 { path: '/api/loans/updateStatus', method: 'POST' },
+{ path: '/api/loans/getLoanDetails', method: 'GET' },
 { path: '/api/account/enquiry', method: 'POST'},{ path: '/api/common/validatebvn', method: 'POST'},{ path: '/api/auth/verify', method: 'POST' },{ path: '/api/auth/resetpassword', method: 'POST' }];
 export const authRoutes = [
   { path: '/api/auth/password', method: 'PUT' },

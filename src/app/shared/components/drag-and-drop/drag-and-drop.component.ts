@@ -1,24 +1,40 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { from, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 import { RequestService } from 'src/app/modules/admin/request/request.service';
 
 @Component({
   selector: 'app-drag-and-drop',
   templateUrl: './drag-and-drop.component.html',
-  styleUrls: ['./drag-and-drop.component.scss']
+  styleUrls: ['./drag-and-drop.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DragAndDropComponent implements OnInit {
   nativeElement:any[]=[];
+
+  eventSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
+  event$:Observable<any> = this.eventSubject.asObservable();
+  
+  
+  idSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
+  classListSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
+
+  showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  show$:Observable<boolean> = this.showSubject.asObservable();
+  @Output()
+  onClick:EventEmitter<any> = new EventEmitter<any>();
   constructor(private _requestService:RequestService) { }
   ngOnInit(): void {
   }
 
   ngOnDestroy(){
-    console.log("Destroying");
     this.nativeElement.forEach(n=>{
       n.removeChildren();
     })
+  }
+
+  select(value:any){
+    this.onClick.emit(value)
   }
   @Input()
   items$:Observable<any[]>;
@@ -28,16 +44,29 @@ export class DragAndDropComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      let data = event.previousContainer.data[event.previousIndex];
-      let classList =event.container.element.nativeElement.classList; 
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
-        this.handleUpdate(event,data,classList)();
-                         
+        let data = event.previousContainer.data[event.previousIndex];
+        let classList =event.container.element.nativeElement.classList; 
+        let id = event.item.element.nativeElement.id;
+        this.idSubject.next(id);
+        this.classListSubject.next(classList);
+                  setTimeout(()=>this.eventSubject.next(event));     
+                   this.showSubject.next(true); 
 
     }
+  }
+  confirm(){
+    let event = this.eventSubject.value;
+    this.handleUpdate(event,this.idSubject.value,this.classListSubject.value)();
+    this.showSubject.next(false);
+
+  }
+  closeModal(){
+    this.reverse(this.eventSubject.value);
+    this.showSubject.next(false);
   }
    transferNodeToContainer=(node:any, container:any, toIndex:any)=>{
     if (toIndex === container.children.length) {
@@ -47,11 +76,15 @@ export class DragAndDropComponent implements OnInit {
       targetItem.parentNode.insertBefore(node, targetItem);
     }
   }
-  handleUpdate=(event:any,data:any,classList:any)=>{
+  getStatus(classList:any){
+    if(!classList) return "";
+    return this._requestService.getStatus(classList)
+  }
+  handleUpdate=(event:any,id:any,classList:any)=>{
     return ()=>{
       
-      this._requestService.updateStatus(data.id,this.getStatus(classList)).then(c=>{
-        if(!c || c.requestStatus != this.getStatus(classList)){
+      this._requestService.updateStatus(id,this._requestService.getStatus(classList)).then(c=>{
+        if(!c || c.requestStatus != this._requestService.getStatus(classList)){
       this.reverse(event)
        }else{
          
@@ -73,33 +106,30 @@ export class DragAndDropComponent implements OnInit {
          previousContainer.data,
          currentIndex,
          previousIndex);
-    this.transferNodeToContainer(
-      nodeToMove,
-      previousContainer.element.nativeElement,
-      previousIndex
-    );
-    Promise.resolve().then(() => {
-      // container.removeItem(event.item);
-      this.nativeElement.push(previousContainer.element.nativeElement);
-      let item =container.element.nativeElement.children[previousIndex];
-      container.element.nativeElement.removeChild(item);
-      event.item.dropContainer = previousContainer;
-      event.item._dragRef._withDropContainer(previousContainer._dropListRef);
-      previousContainer.addItem(item);
-    });
+    // this.transferNodeToContainer(
+    //   nodeToMove,
+    //   previousContainer.element.nativeElement,
+    //   previousIndex
+    // );
+    this.updateListOnDrag(event, true);
+    // Promise.resolve().then(() => {
+    //   // container.removeItem(event.item);
+    //   this.nativeElement.push(previousContainer.element.nativeElement);
+    //   let item =container.element.nativeElement.children[previousIndex];
+    //   container.element.nativeElement.removeChild(item);
+    //   event.item.dropContainer = previousContainer;
+    //   event.item._dragRef._withDropContainer(previousContainer._dropListRef);
+    //   previousContainer.addItem(item);
+    //   this.updateListOnDrag(event);
+    // });
   }
-  getStatus(classList:any){
-    if(classList.value.includes("APPROVED")) return "Approved";
-    if(classList.value.includes("PROCESSING")) return "Processing";
-    if(classList.value.includes("UPDATE")) return "UpdateRequired";
-    if(classList.value.includes("DECLINED")) return "Declined";
-    return "Pending";
-  }
- updateListOnDrag=(event: CdkDragDrop<any[]>)=>{
+ updateListOnDrag=(event: CdkDragDrop<any[]>,failed:boolean=false)=>{
   let index =       event.previousIndex;
   let value = event.previousContainer.data[event.previousIndex];
   let fromClassList = event.previousContainer.element.nativeElement.classList;
   let toClassList = event.container.element.nativeElement.classList;
+
+  this._requestService.updaterequests(!failed?{from:fromClassList,to:toClassList}:{});
 //   if(value){
 //   if(fromClassList.contains("todo")){
 //     // return "todo";

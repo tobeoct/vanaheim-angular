@@ -40,7 +40,7 @@ button{
     .item{
         @include flex(vertical,center);
         @include flex(horizontal,space-between);
-        @include paddingHorizontal(true,"px",1);
+        @include paddingHorizontal(true,"px",0.75);
         width: 100%;
         height: map-get($sizings, "px")*1.5;
         @include border(2px,solid,black);

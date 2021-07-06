@@ -30,6 +30,8 @@
             display: block;
         }
     }
+
+  
     &--underline{
         border:0 !important;
         border-bottom: 2px solid map-get($colors,  yellow) !important;
@@ -50,6 +52,10 @@
 }
 .widget_button.widget_button--fill{
     background: map-get($colors,  yellow) !important; color: map-get($colors,  black) !important;
+    &.widget_button--secondary{
+        background: map-get($colors, lightGrey) !important;
+        @include border(2px,solid,lightGrey );
+       }
     &:hover{
         background: map-get($colors,  white) !important;
     }

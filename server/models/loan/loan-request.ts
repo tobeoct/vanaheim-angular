@@ -7,7 +7,7 @@ import { LoanType } from "./loan-type";
 import { LoanTypeRequirements } from "./loan-type-requirements";
 
 export class LoanRequest extends BaseEntity{
-    customer:Customer;
+    Customer:Customer;
     customerID:number;
      loanProduct:string;
      loanProductID:number;

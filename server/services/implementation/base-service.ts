@@ -17,6 +17,11 @@ export class BaseService<T> implements IBaseService<T>{
         if(response && Object.keys(response).length>0) response = response.dataValues as T
         resolve(response);
     });
+    getByIdWithInclude= (id:number,include?:any[]) =>new Promise<T>(async (resolve, reject) =>{
+        let response:any =await this._baseRepository.getByIdWithInclude(id,include);
+        if(response && Object.keys(response).length>0) response = response.dataValues as T
+        resolve(response);
+    });
     update=(data:any) =>new Promise<T>(async(resolve, reject) =>{
         let response:any =await this._baseRepository.update(data as unknown as BaseEntity);
         resolve(response);
