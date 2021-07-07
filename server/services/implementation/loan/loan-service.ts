@@ -209,7 +209,7 @@ export class LoanService implements ILoanService{
       notification.body = `Your loan request status for LOAN ID:${loanRequest.requestId} has been updated to ${requestStatus}`;
       notification.title = `Vanaheim: Loan Status Update`
       notification.data = new WebNotData();
-      notification.data.url ="http://localhost:4200/my/loans"; 
+      notification.data.url =this._appConfig.WEBURL+"/my/loans"; 
       await this._emailService.SendEmail({subject:"Vanir Capital: Loan Status Update",html:this._templateService.STATUS_UPDATE(requestStatus,loanRequest.requestId),to:customer.email,toCustomer:true});
       await this._notificationService.sendNotificationToMany({customerIds:[loanRequest.customerID],notification})
       resolve({status:true,data:loanRequest});
