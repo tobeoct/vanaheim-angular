@@ -11,9 +11,10 @@ import { INotificationService } from "@services/interfaces/Inotification-service
 import { IUserService } from "@services/interfaces/Iuser-service";
 import { WebNotData, WebNotification } from "@models/webnotification";
 import { BaseService } from "./base-service";
+import AppConfig from "@api/config";
 
  class NotificationService extends BaseService<any> implements INotificationService{
- constructor(private webPush:any,private _userService:IUserService,private _deviceRepository:IDeviceRepository, private _subscriptionRepository:ISubscriptionRepository,private _pushNotificationRepository:IPushNotificationRepository,_baseRepository:IBaseRepository<any>){
+ constructor(private webPush:any,private _appConfig:AppConfig,private _userService:IUserService,private _deviceRepository:IDeviceRepository, private _subscriptionRepository:ISubscriptionRepository,private _pushNotificationRepository:IPushNotificationRepository,_baseRepository:IBaseRepository<any>){
      super(_baseRepository)
      this.convertToModel = this.convertToPushNotification;
  }
@@ -198,7 +199,7 @@ resolve(pushNots);
                 notification.vibrate = [100, 50, 100]
                 notification.icon= 'https://i.tracxn.com/logo/company/Capture_6b9f9292-b7c5-405a-93ff-3081c395624c.PNG?height=120&width=120',//'https://www.shareicon.net/data/256x256/2015/10/02/110808_blog_512x512.png';
                 notification.data = new WebNotData();
-                notification.data.url = "http://localhost:4200/my/dashboard";
+                notification.data.url = this._appConfig.WEBURL+"/my/dashboard";
                 if(subscriptionInDb && Object.keys(subscriptionInDb).length>0){
                     console.log("Sending Notification for First Timer")
                     let pushNotification = await this.logPushNotification({notification,subscription});

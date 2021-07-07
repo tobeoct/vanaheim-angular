@@ -12,6 +12,7 @@
 export default class AppConfig {
   environment:string;
   port:string;
+  WEBURL:string;
   ADMIN_EMAIL:string;
 CC_EMAIL:string;
 INVESTMENT_EMAIL:string;
@@ -42,6 +43,7 @@ JWT_SECRET_KEY:string ;
   this.SUPPORT_EMAIL_PASS = process.env.SUPPORT_EMAIL_PASS||''
   this.SESSION_SECRET_KEY  =process.env.SESSION_SECRET_KEY||''
   this.JWT_SECRET_KEY = process.env.JWT_SECRET_KEY||''
+  this.WEBURL = process.env.WEBURL||'http://localhost:4200';
     }
 }
 

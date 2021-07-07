@@ -204,7 +204,7 @@ else resolve({status:false,message:"Registration failed"})
     const {username}=payload;
     let userInDB = await this.getByUserName(username);
     if(userInDB && Object.keys(userInDB).length>0){
-      let user = userInDB as User;
+      let user = userInDB as User??userInDB;
       const password = this._utilService.randPassword(4,2,2);
       const encryptedPass:any= await this._encryption.generateHash(password);
       user.passwordHash = encryptedPass.hash;
@@ -224,7 +224,7 @@ else resolve({status:false,message:"Registration failed"})
       <div style="width:100% !important;  margin-top:20px;"><p>Dear ${user.name},<br/><br/>
       There was a request to change your password.
 If you didn’t make this request, please ignore this email.<br/>
-Otherwise, use this code KYF75*
+Otherwise, use this code ${password}
 Remember to always change your password immediately after reset.<br/>
 Thanks for sticking with us.
 Best Regards,<div>
