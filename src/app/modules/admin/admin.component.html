@@ -1,4 +1,4 @@
-<app-admin-navigation></app-admin-navigation>
-<div id="page-content">
+<app-admin-navigation *ngIf="isLoggedIn$|async"></app-admin-navigation>
+<div id="page-content" [ngClass]="{'loggedIn':isLoggedIn$|async}">
     <router-outlet></router-outlet>
 </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
@@ -7,11 +8,11 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-isLoggedIn:boolean;
+isLoggedIn$:Observable<boolean>;
   constructor(private _authService:AuthService) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = this._authService.isLoggedIn();
+    this.isLoggedIn$ = this._authService.isLoggedIn$;//this._authService.isLoggedIn();
   }
 
 }

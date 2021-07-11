@@ -57,7 +57,7 @@ export default class AuthController {
  if(response.status==true){
   try{
     console.log("Registering Device after registration");
-    await this._notificationService.registerDevice({browserID:req.body.browserID,customerID: response.userData.customer.id});
+    await this._notificationService.registerDevice({browserID:req.body.browserID,customerID: req.body.registerAs=="Admin"?  response.userData.staff.id:response.userData.customer.id});
     }catch(err){
       console.log("Error Registering device",err,req.body.browserID);
     }

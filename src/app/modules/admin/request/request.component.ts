@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import moment = require('moment');
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
 import { RequestService } from './request.service';
 
 @Component({
@@ -14,6 +14,8 @@ export class RequestComponent implements OnInit {
 
   loanStatuses:any[] = [{label:"Pending",key:"new"},{label:"Processing",key:"processing"},{label:"UpdateRequired",key:"update"},{label:"Declined",key:"declined"},{label:"Approved",key:"approved"}, {label:"Funded",key:"funded"}];
 ctrl:FormControl = new FormControl("");
+fromDate:FormControl = new FormControl(moment().startOf("day").subtract(1,"month").format('yyyy-MM-dd'));
+toDate:FormControl = new FormControl(moment().endOf("day").format('yyyy-MM-dd'));
   showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$:Observable<boolean> = this.showSubject.asObservable();
 
@@ -33,10 +35,19 @@ ctrl:FormControl = new FormControl("");
    }
 
   ngOnInit(): void {
-    this.loans$ =   this._requestService.requests$;
+    this.loans$ =   this._requestService.filteredRequests$;
 this.ctrl.valueChanges.subscribe(c=>{
   this.showConfirmSubject.next(true);
 })
+this.fromDate.valueChanges.subscribe(d=>{
+  this._requestService.updateSearch(this.getCriteria(d,this.toDate.value));
+})
+this.toDate.valueChanges.subscribe(d=>{
+  this._requestService.updateSearch(this.getCriteria(this.fromDate.value,d));
+})
+  }
+  getCriteria(from:any,to:any){
+   return {from:moment(from).startOf("day").toDate(), to:moment(to).endOf("day").toDate()};
   }
 confirm(){
   const c = this.ctrl.value;

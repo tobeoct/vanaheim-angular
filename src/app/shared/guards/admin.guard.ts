@@ -30,7 +30,7 @@ export class AdminGuard implements CanActivate {
         }
 }
 
-this.router.navigate(['/admin/auth/login'], { queryParams: { returnUrl: state.url } });
+this.router.navigate(['/admin/auth'], { queryParams: { returnUrl: state.url } });
     
 return false;
   }

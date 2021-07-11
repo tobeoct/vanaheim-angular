@@ -17,6 +17,8 @@ export class AuthService {
   private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
     private timeoutSubscription:Subscription;
+    private isLoggedInSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    isLoggedIn$:Observable<boolean> = this.isLoggedInSubject.asObservable();
     public get userValue(): User {
         return this.userSubject.value;
     }
@@ -35,7 +37,10 @@ this.timeoutSubscription = this.sessionTimeout$
     let expirationDate = this.getExpiration();
     // console.log("Checking Session",expirationDate?.toDate());
     if(expirationDate && moment().isAfter(expirationDate)){
+        this.isLoggedInSubject.next(false);
         this.logout();
+    }else{
+       if(this.isLoggedIn()) this.isLoggedInSubject.next(true);
     }
 })
     }
@@ -116,8 +121,9 @@ resetPassword=({username}:any)=>{
         localStorage.removeItem('session_token');
         localStorage.removeItem("expires_at");
         this.userSubject.next(new User());
+        this.isLoggedInSubject.next(false);
         this.timeoutSubscription.unsubscribe();
-        this._router.navigate(['/login']);
+        if(this._router.url.includes("admin")){this._router.navigate(['admin/auth/login']);}else{this._router.navigate(['/login']);}
        return this._http.get<any>(`${environment.apiUrl}/auth/logout`)
             .pipe(map(()=>{
         //         localStorage.removeItem('user');
@@ -147,7 +153,9 @@ resetPassword=({username}:any)=>{
   }
   public isLoggedIn() {
       const expiry =  this.getExpiration();
-    return expiry?  moment().isBefore(this.getExpiration()):false; //&& this.getSessionToken();
+    let value= expiry?  moment().isBefore(this.getExpiration()):false; //&& this.getSessionToken();
+    this.isLoggedInSubject.next(value);
+    return value;
 }
 
  fetchToken= ()  => {

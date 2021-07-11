@@ -2,10 +2,15 @@
 
     <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center margin--2x">
         <h2>All Requests</h2>
-
-        <app-dropdown [fieldClass]="'no-margin--all'" [class]="'no-margin--all'" [current]="'Today'">
-            <option value="Today">Today</option>
-        </app-dropdown>
+        <div class="d-flex">
+          <app-input fieldClass="no-margin--top" type="date"  id="fromDate" [control]="fromDate" class="form-control"  >
+          </app-input>
+          <app-input fieldClass="no-margin--top" type="date"  id="toDate" [control]="toDate" class="form-control"  >
+          </app-input>
+            <!-- <app-dropdown [fieldClass]="'no-margin--all'" [class]="'no-margin--all'" [current]="'Today'">
+                <option value="Today">Today</option>
+            </app-dropdown> -->
+        </div>
     </div>
     <app-tabs>
         <app-tab>

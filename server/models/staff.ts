@@ -3,9 +3,9 @@ import { BaseEntity } from "./base-entity";
 import { UserRole } from "./user-role";
 
 export class Staff extends BaseEntity{
-    firstname:string;
-    othernames:string;
-    surname:string;
+    firstName:string;
+    otherNames:string;
+    lastName:string;
     role:UserRole;
     address:string;
     phoneNumber:string;
@@ -13,5 +13,6 @@ export class Staff extends BaseEntity{
     email:string;
     gender:Gender;
     dateOfBirth:string;
+    userID:number;
     staffId:string
 }

@@ -22,7 +22,6 @@ import { IBaseRepository } from "@repository/interface/Ibase-repository";
       let response = await this._db
         .create(data)
         let dataValues = response?.dataValues as T;
-        console.log("INSERTED COMPANY",dataValues)
       resolve(dataValues)
       }catch(err){
         console.log(err)

@@ -38,6 +38,7 @@ import db = require('server/db/models');
 import { RepaymentService } from '@services/implementation/repayment-service';
 import { InvestmentService } from '@services/implementation/investment/investment-service';
 import { LoanTypeRequirementService } from '@services/implementation/loan/loan-type-requirement-service';
+import { StaffRepository } from '@repository/implementation/staff-repository';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -95,6 +96,7 @@ export default class Bootstrap {
             _loanTypeRequirementRepository:asClass(LoanTypeRequirementRepository).singleton(),
             _clientRepository: asClass(ClientRepository).singleton(),
             _accountRepository: asClass(AccountRepository).singleton(),
+            _staffRepository: asClass(StaffRepository).singleton(),
             _baseRepository: asClass(BaseRepository).singleton(),
             _userRepository: asClass(UserRepository).singleton(),
             _customerRepository: asClass(CustomerRepository).singleton(),

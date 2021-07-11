@@ -9,4 +9,5 @@ export class Document extends BaseEntity{
    fileName:string;
    requirement:string;
    customerID:number;
+   loanRequestID:number;
 }

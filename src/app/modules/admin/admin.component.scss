@@ -1,5 +1,9 @@
-#page-content{
-    width: 85vw; left: 15vw; position: fixed;
+#page-content{ left: 0;
+  width: 100%; position: fixed;
+    &.loggedIn{
+     
+      width: 85vw; left: 15vw; 
+    }
 }
 
 @media all and (max-width:768px){
