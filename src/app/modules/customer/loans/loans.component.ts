@@ -10,6 +10,7 @@ import { Store } from 'src/app/shared/helpers/store';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanDetails } from '../../loan/shared/loan-calculator/loan-details';
+import { RequestService } from '../../admin/request/request.service';
 
 @Component({
   selector: 'app-loans',
@@ -42,6 +43,7 @@ export class LoansComponent implements OnInit {
 
   loanDetailsSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   loanDetails$:Observable<any> = this.loanDetailsSubject.asObservable();
+  loanDetailsFromDb$:Observable<any>
   focusSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); 
   focus$:Observable<boolean> = this.focusSubject.asObservable();
   delay$ = from([1]).pipe(delay(3000));
@@ -85,7 +87,7 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
   constructor(private _fb: FormBuilder, private _store:Store, private _utility:Utility,
     private _router:Router,
     private _validators:VCValidators,
-    private _loanService: LoanService) {
+    private _loanService: LoanService, private _requestService:RequestService) {
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url+'/';//.replace(/\/[^\/]*$/, '/');
        });
@@ -93,6 +95,7 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
  
   ngOnInit(): void {
   this.loanDetails = this._store.loanCalculator as LoanDetails;
+  this.loanDetailsFromDb$ = this._requestService.loanDetails$;
   this.loanCalculator = this._store.loanCalculator;
   this.loanDetailsSubject.next(this._store.loanCalculator)
   this.latestLoan$ = this._loanService.latestLoan$;
@@ -137,6 +140,10 @@ tenureDenominator$:Observable<string> = this.tenureDenominatorSubject.asObservab
  moveToApply():void {
     this.applyNow.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
 }
+selectLoan(id:number){
+  this._requestService.selectLoan(id);
+  this.showSubject.next(true);
+}
   // search(){
   //   this.loans$ = this._loanService.loanWithFilter$;
   // }
@@ -179,4 +186,11 @@ onNavigate(route:string,params:any={}):void{
   close(){
     this.showSubject.next(false);
   }
+  
+  getNextDueDateFormatted(dateFunded:any,tenure:number,denominator:string){
+    return this._loanService.getNextDueDateFormatted(dateFunded,tenure,denominator);
+    }
+    getDaysLeft(dateFunded:any,tenure:number,denominator:string){
+      return this._loanService.getDaysLeft(dateFunded,tenure,denominator);
+    }
 }

@@ -30,3 +30,9 @@
     }
     
 }
+
+
+#repayment{
+    @include border(1px,solid,lightGrey);
+    border-radius: $border-radius;
+}

@@ -1,8 +1,14 @@
-<div class="circular" style="--daysL:{{daysL}};--daysR:{{daysR}};">
+<div class="circular" [ngClass]="{'due':daysLeft==0}" style="--daysL:{{daysL}};--daysR:{{daysR}};">
     <div class="inner"></div>
     <div class="number">
-        <h2>{{daysLeft}}</h2>
-        <small>Days</small>
+        <ng-container *ngIf="daysLeft>0">
+            <h2>{{daysLeft}}</h2>
+            <small>Days</small>
+        </ng-container>
+        <ng-container *ngIf="daysLeft==0">
+            <h3>Due</h3>
+            <small>Today</small>
+        </ng-container>
     </div>
     <div class="circle">
        <div class="bar left">

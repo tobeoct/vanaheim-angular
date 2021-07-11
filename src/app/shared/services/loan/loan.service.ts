@@ -229,4 +229,22 @@ loanWithFilter$= combineLatest([
           )
       )
     );
+
+    
+  getNextDueDate(dateFunded:any,tenure:number,denominator:string){
+    let funded =moment(dateFunded);
+    let now=moment();
+    let d:any =denominator=="Months"?"months":"days";
+    let diff = now.diff(funded,d);
+    
+    return funded.add(diff,d)
+  }
+  getNextDueDateFormatted(dateFunded:any,tenure:number,denominator:string){
+  return this.getNextDueDate(dateFunded,tenure,denominator).format("MMMM Do YYYY");
+  }
+  getDaysLeft(dateFunded:any,tenure:number,denominator:string){
+    let d = this.getNextDueDate(dateFunded,tenure,denominator);
+    let now = moment();
+    return d.diff(now,"days");
+  }
 }

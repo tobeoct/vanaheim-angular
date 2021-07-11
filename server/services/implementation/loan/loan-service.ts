@@ -17,6 +17,7 @@ import { ILoanRequestLogService } from "@services/interfaces/loan/Iloan-log-requ
 import { ILoanRequestService } from "@services/interfaces/loan/Iloan-request-service";
 import { ILoanTypeRequirementService } from "@services/interfaces/loan/Iloan-type-requirement-service";
 import { ILoanService } from "@services/interfaces/loan/Iloanservice";
+import moment = require("moment");
 import { BVN } from "src/app/modules/loan/personal/bvn/bvn";
 import EmailService from "../common/email-service";
 import { TemplateService } from "../common/template-service";
@@ -35,7 +36,7 @@ export class LoanService implements ILoanService{
    if(request){
      request.loanTypeRequirements = await this._loanTypeRequirementService.getByIdExtended(request.loanTypeRequirementID);
       request.Customer.NOK = await this._nokRepository.getByCustomerID(request.customerID);
-    }
+    
    let accountDetails = await this._accountRepository.search({number:request.accountNumber},0,1);
    let account = accountDetails?.rows[0] as Account;
    let requestDetails = [
@@ -69,8 +70,8 @@ export class LoanService implements ILoanService{
       key:"Account Information",
       data:[
       {key:"Number",value:request.accountNumber},
-      {key:"Name",value:account.name},
-      {key:"Bank",value:account.bank}
+      {key:"Name",value:account?.name},
+      {key:"Bank",value:account?.bank}
       ]
     }
    ];
@@ -149,6 +150,9 @@ export class LoanService implements ILoanService{
       requestDetails = [...requestDetails,...business];
     }
      resolve({status:true,data:{code:request.code,status:request.requestStatus,details:requestDetails}});
+  }else{
+    resolve({status:false,data:"Could not find loan request"});
+  }
     }catch(err){
         reject(err);
     }
@@ -193,8 +197,13 @@ export class LoanService implements ILoanService{
         loanRequestLog.dateDueForDisbursement = new Date();
       }
       else if(requestStatus== LoanRequestStatus.Funded){
+        if(!loanRequest.dateDueForDisbursement){
+          loanRequest.dateDueForDisbursement = new Date();
+          loanRequestLog.dateDueForDisbursement = new Date();
+        }
         loanRequest.dateApproved = new Date();
         loanRequestLog.dateApproved = new Date();
+        loanRequest.maturityDate = moment().add(loanRequest.tenure,loanRequest.denominator=="Months"?"month":"day").format("MMMM Do YYYY");
       }
       await this._loanRequestService.update(loanRequest);
 

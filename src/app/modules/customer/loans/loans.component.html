@@ -61,7 +61,7 @@
                             <td>{{row.loanProduct}}</td>
                             <td>{{row.tenure}} {{row.denominator}}</td>
                             <td>{{row.requestStatus}}</td>
-                            <td><app-button [class]="'widget_button--small'" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td>
+                            <td><app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td>
                         </tr>
                     </ng-container>
                 </ng-container>
@@ -83,22 +83,24 @@
 <div class="right layout">
     <ng-container *ngIf="(latestLoan$|async) as loan">
         <ng-container *ngIf="loan.requestStatus=='Funded'">
-            <div class="heading"><h3>Active Loan</h3> <select id="month" required>
-                <option value="January" data-display-text="January" aria-label="January">This week</option>
-                <option value="February" aria-label="February">February</option>
-                <option value="March" aria-label="March">March</option>
-                <option value="April" aria-label="April">April</option>
-                <option value="May" aria-label="May">May</option>
-                <option value="June" aria-label="June">June</option>
-                <option value="July" aria-label="July">July</option>
-                <option value="August" aria-label="August">August</option>
-                <option value="September" aria-label="September">September</option>
-                <option value="October" aria-label="October">October</option>
-                <option value="November" aria-label="November">November</option>
-                    <option value="December" aria-label="December">December</option>
-                
-            </select></div>
-            <div class="card card-stroke card-stroke--black" id="current-loan-status">
+           
+
+            <div id="active-loan" class="margin--3x no-margin--top" style="width: 100%;"> 
+                <div class="heading">
+                    <h3>Active Loan</h3> 
+                </div>
+                <div class="content--smaller margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center" id="repayment">
+                    <div>
+                        <small>Next Payment</small>
+                        <h2 class="margin--x">{{loan.monthlyPayment|currency:"₦":'symbol':'1.0-2' }}</h2>
+                        <small>Due on <b>{{getNextDueDateFormatted(loan.dateApproved,loan.tenure,loan.denominator)}}</b></small>
+                    </div>
+                    <div>
+                        <app-progress-circular [daysLeft]="getDaysLeft(loan.dateApproved,loan.tenure,loan.denominator)"></app-progress-circular>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="card card-stroke card-stroke--black" id="current-loan-status">
                 <ng-container *ngIf="activeLoan">
                         <div id="active-loans">
                     <div>
@@ -120,7 +122,7 @@
                         <h3>You have no active loans</h3>
                     </div>
                 </ng-container>
-            </div>
+            </div> -->
         </ng-container>
         <ng-container *ngIf="loan.requestStatus!='Funded'">
             <div id="most-recent">
@@ -212,7 +214,7 @@
 
 </div>
 
-<app-modal *ngIf="show$|async" (onChange)="close()">
+<!-- <app-modal *ngIf="show$|async" (onChange)="close()">
     <app-modal-header slot="header">
         <h3>LOAN-1387428</h3>
     </app-modal-header >
@@ -244,4 +246,37 @@
             </div>
             <div id="loan-details" class="preview-item"><h3>Repayment Plan</h3> </div>
     </app-modal-body>
-</app-modal>
+</app-modal> -->
+
+
+<ng-container *ngIf="show$|async">
+    <app-modal size="large" (onChange)="close()">
+        <ng-container *ngIf="loanDetailsFromDb$|async as loanDetails">
+        <app-modal-header slot="header">
+            <h3>{{loanDetails.code}}</h3>
+        </app-modal-header >
+      <app-modal-body slot="body">
+        <div style="width: 100%;" id="loan-details">
+        
+          <div class="d-flex d-flex_vertical--center margin--2x">
+            <div style="margin-right: 10px;"><p><b>Status</b></p></div>
+            <div><b>{{loanDetails.status}}</b></div>
+          </div>
+    
+          <div *ngFor="let detail of loanDetails.details">
+            <div class="title"><h3>{{detail.key}}</h3></div>
+            <div class="margin--3x">
+              <div class="detail-card" *ngFor="let d of detail.data">
+                <small>{{d.key}}</small>
+                <p><b>{{d.value}}</b></p>
+              </div>
+             
+            </div>
+            
+          </div>
+        </div>
+      </app-modal-body>
+    </ng-container>
+    </app-modal>
+    
+    </ng-container>

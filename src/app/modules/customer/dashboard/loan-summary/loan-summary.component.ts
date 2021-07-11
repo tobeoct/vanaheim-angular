@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import moment = require('moment');
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 
@@ -22,5 +23,11 @@ export class LoanSummaryComponent implements OnInit {
   }
   onNavigate(route:string,params:any={}):void{
     this._router.navigate([route],{queryParams: params})
+  }
+  getNextDueDateFormatted(dateFunded:any,tenure:number,denominator:string){
+  return this._loanService.getNextDueDateFormatted(dateFunded,tenure,denominator);
+  }
+  getDaysLeft(dateFunded:any,tenure:number,denominator:string){
+    return this._loanService.getDaysLeft(dateFunded,tenure,denominator);
   }
 }

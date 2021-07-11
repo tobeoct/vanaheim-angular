@@ -17,18 +17,22 @@
                         <app-loan-status  [loan$]="latestLoan$"></app-loan-status>
                     </ng-container>
                     <ng-container *ngIf="loan.requestStatus=='Funded'">
-                        <div style="width: 100%;">
+                        <div id="active-loan" style="width: 100%;">
                             <small>Active Loan</small>
                             <div class="content--smaller margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center" id="repayment">
                                 <div>
                                     <small>Next Payment</small>
-                                    <h2 class="margin--x">{{loan.amount|currency:"₦":'symbol':'1.0-2' }}</h2>
-                                    <small>Due on <b>{{loan.maturityDate}}</b></small>
+                                    <h1 class="margin--x">{{loan.monthlyPayment|currency:"₦":'symbol':'1.0-2' }}</h1>
+                                    <small>Due on <b>{{getNextDueDateFormatted(loan.dateApproved,loan.tenure,loan.denominator)}}</b></small>
                                 </div>
                                 <div>
-                                    <app-progress-circular [daysLeft]="5"></app-progress-circular>
+                                    <app-progress-circular [daysLeft]="getDaysLeft(loan.dateApproved,loan.tenure,loan.denominator)"></app-progress-circular>
                                 </div>
                             </div>
+                        </div>
+                        <div class="margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                            <a (click)="onNavigate('my/loans')"><u><b>View History</b></u></a>
+                            <a><u><b>View Repayments</b></u></a>
                         </div>
                     </ng-container>
                    <div id="details">

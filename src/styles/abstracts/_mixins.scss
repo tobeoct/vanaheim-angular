@@ -47,8 +47,13 @@ background-repeat: no-repeat;
 background-size: cover;
 box-sizing: border-box;
 }
-@mixin background($color){
-background: map-get($colors, $color );
+@mixin background($color, $important: no){
+@if($important==no){
+  background: map-get($colors, $color );
+    }@else{
+      background: map-get($colors, $color ) !important;
+  
+    }
 }
 @mixin color($color, $important: no){
   @if($important==no){

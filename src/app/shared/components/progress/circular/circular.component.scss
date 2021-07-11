@@ -26,6 +26,7 @@ $daysL : var(--daysL);
         position: absolute;
       top:50%;
       left:50%;
+      text-align: center;
       transform: translate(-50%, -50%);
       z-index:10;
       font-size:18px;
@@ -67,6 +68,10 @@ $daysL : var(--daysL);
                 @include background(yellow)
             }  
         }
+    }
+
+    &.due  .circle .bar .progress{
+        @include background(google, important);
     }
   }
 

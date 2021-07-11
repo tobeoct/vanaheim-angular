@@ -18,7 +18,7 @@ export class ProgressCircularComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.calculateLR();
+    // this.calculateLR();
   }
 
   calculateLR(){
@@ -28,6 +28,5 @@ export class ProgressCircularComponent implements OnInit, OnChanges {
     l = l==0?180:l;
 this.daysR =r+"deg";
 this.daysL =l+"deg";
-console.log("Right",this.daysR,"Left",this.daysL)
   }
 }
