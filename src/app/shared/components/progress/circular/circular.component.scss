@@ -1,0 +1,82 @@
+@import '../../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../../styles/themes/_theme-dir';
+
+
+$daysR : var(--daysR);
+$daysL : var(--daysL);
+.circular{
+    height:100px;
+    width: 100px;
+    position: relative;  
+    // border:solid green 1px;
+    .inner{
+        position: absolute;
+        z-index: 6;
+        top: 50%;
+        left: 50%;
+        height: 80px;
+        width: 80px;
+        margin: -40px 0 0 -40px;
+        // background: white;
+        @include background(white);
+        border-radius: 100%;
+      }
+      .number{
+        @include color(grey);
+        position: absolute;
+      top:50%;
+      left:50%;
+      transform: translate(-50%, -50%);
+      z-index:10;
+      font-size:18px;
+      font-weight:500;
+    }
+    
+
+      .circle {
+        .left{ 
+            .progress{
+            z-index:1;
+            animation: left 2s linear both;
+          }
+        }
+          
+        .right {
+            transform: rotate($daysL);
+            z-index:3;
+            .progress{
+                animation: right 2s linear both;
+                animation-delay:2s;
+              }
+        
+        }
+        .bar{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: #fff;
+            -webkit-border-radius: 100%;
+            clip: rect(0px, 100px, 100px, 50px);
+          
+           .progress{
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                -webkit-border-radius: 100%;
+                clip: rect(0px, 50px, 100px, 0px);
+                @include background(yellow)
+            }  
+        }
+    }
+  }
+
+  @keyframes left{
+    100%{
+      transform: rotate($daysL);
+    }
+  }
+  @keyframes right{
+    100%{
+      transform: rotate($daysR);
+    }
+  }

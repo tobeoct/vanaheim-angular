@@ -18,7 +18,6 @@ import { TabHeaderComponent } from './tab/tab-header/tab-header.component';
 import { TabComponent } from './tab/tab/tab.component';
 import { TableComponent } from './table/table.component';
 import { TemplateComponent } from './template/template.component';
-import { ToasterComponent } from './toaster/toaster.component';
 import player from 'lottie-web';
 import { LottieComponent } from './lottie/lottie.component';
 import { CheckboxComponent } from './checkbox/checkbox.component';
@@ -31,6 +30,7 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { ProgressComponent } from './progress/progress.component';
 import { RadioComponent } from './radio/radio.component';
 import { LoadingComponent } from './loading/loading.component';
+import { ProgressCircularComponent } from './progress/circular/circular.component';
 
 export function playerFactory() {
   return player;
@@ -63,7 +63,8 @@ export function playerFactory() {
     PaginationComponent,
     ProgressComponent,
     RadioComponent,
-    LoadingComponent
+    LoadingComponent,
+    ProgressCircularComponent
   ],
   imports: [
     BaseModule, 
@@ -97,7 +98,8 @@ export function playerFactory() {
     DateComponent,
     PaginationComponent,
     ProgressComponent,
-    LoadingComponent
+    LoadingComponent,
+    ProgressCircularComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })
