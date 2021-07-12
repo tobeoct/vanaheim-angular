@@ -13,10 +13,10 @@
                 </div>
                <div class="theme_flex theme_flex--middle intro_thumbnail" style="overflow: hidden; height: 70%; padding-right: 5%; padding-left: 5%; flex-direction: column;">
                 <h1 class=" animate__animated animate__fadeInLeft">Welcome to <span class="theme_color--yellow">Vanaheim</span></h1> 
-                <div class="animate__animated animate__fadeInLeft" style="width: 20%; height: 5px; background: #E6AF2A; margin: 20px 0; justify-self: start; align-self: flex-start;"></div>
+                <div class="animate__animated animate__fadeInLeft underline"></div>
                 <!-- <div class="theme_row"> -->
                 <p class="theme_text--heading3 theme_color--lightgrey animate__animated animate__fadeInLeft" style="font-weight: 300">Get <span style="font-weight: 800 !important">quick loans</span> and easy access to funds with a stress-free and flexible payment period.</p>
-                <p class="theme_text--heading3 theme_color--lightgrey animate__animated animate__fadeInLeft" style="font-weight: 300;width: 100%; margin-top: 5px !important;">Grow your wealth by <span style="font-weight: 800 !important;">investing</span>. </p>
+                <p class="theme_text--heading3 theme_color--lightgrey animate__animated animate__fadeInLeft" style="font-weight: 300;width: 100%; margin-top: 5px !important;">Grow your wealth by <span style="font-weight: 800 !important;">earning with Vanir Cooperative today</span>. </p>
                 
                 <!-- <p class="theme_text--heading3 theme_color--lightgrey animate__animated animate__fadeInLeft" style="font-weight: 300;">Get quick loans and easy access to funds with a stress-free and flexible payment period</p>
             </div> -->
@@ -64,9 +64,9 @@
                         <!-- <lottie-player src="assets/animations/vanir-capital-investment-2.json"  background="transparent"  speed="1"  style="width: 100%;"  loop autoplay></lottie-player> -->
                         <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
                     </div>
-                    <div style="width: 100%; text-align: left;">
-                        <h3 class="theme_text--alt">Invest Now</h3>
-                        <p class="theme_color--grey">Grow your wealth by investing</p>
+                    <div #invest style="width: 100%; text-align: left;">
+                        <h3 class="theme_text--alt">Earn More</h3>
+                        <p class="theme_color--grey">Earn more with Vanir Capital Cooperative</p>
                     </div>
                 </div>
             </div>
@@ -78,8 +78,16 @@
             
         </div>
         
-        </div>
+            </div>
+           
         </div>
         
     </div>
-    
+    <ng-container *ngIf="show$|async">
+        <div id="scroll-down_container">
+            <div id="scroll-down" (click)="moveToApply()" class="box-shadow--warning animate__animated animate__fadeInUp animate__delay-1s">
+                <!-- <span class="material-icons">arrow_downward</span> -->
+                <h3>👇🏾</h3>
+            </div>
+        </div>
+    </ng-container>

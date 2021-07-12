@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AssetPath } from 'src/app/shared/constants/variables';
 import {IAssetPath} from "src/app/shared/interfaces/assetpath";
 @Component({
@@ -9,6 +10,9 @@ import {IAssetPath} from "src/app/shared/interfaces/assetpath";
 })
 export class OnboardingComponent implements OnInit {
 
+  @ViewChild('invest') invest:ElementRef;
+  showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  show$:Observable<boolean> = this.showSubject.asObservable();
   constructor(private router: Router) { }
   assetPaths: IAssetPath = new AssetPath;
 main:string="main";
@@ -25,5 +29,10 @@ isClicked: boolean = false;
 onNavigate(route:string){
     this.router.navigate([route])
   }
+
+  moveToApply():void {
+    this.invest.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+    this.showSubject.next(false);
+}
 
 }
