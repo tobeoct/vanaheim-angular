@@ -1,0 +1,24 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+#account-content{
+    height: 100%;
+    #pin{
+        @include color(grey);
+        font-size: 5em;
+    }
+    #left{
+        width: 47.5%;
+    }
+    #right{
+        width: 47.5%;
+        #card{
+            border-radius: $border-radius;
+            .item{
+                @include background(lightGrey);
+                @include padding(false,"px",0.15,0.15,0.25,0.25);
+                border-radius: $border-radius;
+                cursor: pointer;
+            }
+        }
+    }
+}

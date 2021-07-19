@@ -1,11 +1,6 @@
 <div id="table">
 
-    <div id="filters">
-        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}" (click)="changeFilter('')">All</div>
-        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Processing'}" (click)="changeFilter('Processing')">Processing</div>
-        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Defaulting'}" (click)="changeFilter('Defaulting')">Defaulting</div>
-        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='NotQualified'}" (click)="changeFilter('NotQualified')">Declined</div>
-    </div>
+    <ng-content select="[slot=filter]"></ng-content>
     <table>
         <thead>
             <ng-content select="[slot=header]"></ng-content>

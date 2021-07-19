@@ -49,14 +49,18 @@
     }
 }
 
-&-stroke {
+&-stroke, &--stroke {
 
     border-radius: $border-radius;
     background: transparent !important;
-    border: 2px solid  map-get($colors, black );
+    border: 2px solid  map-get($colors, lightGrey ) !important;
     &--black{
 
         border-color: map-get($colors, black ) !important;
+    }
+    &--primary{
+
+        border-color: map-get($colors, yellow ) !important;
     }
 }
 

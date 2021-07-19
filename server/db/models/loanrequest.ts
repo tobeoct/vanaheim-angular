@@ -111,6 +111,10 @@ module.exports = (sequelize:any, DataTypes:any) => {
     // LoanRequest.hasOne(models.LoanTypeRequirement, {
     //   foreignKey: 'loanTypeRequirementID',
     // });
+     LoanRequest.hasMany(models.DisbursedLoan, {
+      foreignKey: 'loanRequestID',
+    });
+    
   };
   return LoanRequest;
 };

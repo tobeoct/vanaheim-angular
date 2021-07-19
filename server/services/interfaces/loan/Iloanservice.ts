@@ -11,6 +11,6 @@ export interface ILoanService{
     updateLoanRequest:(loanRequest:LoanRequest)=> Promise<LoanRequest>
     processLoanRequest:(request:any,userData:any)=> Promise<LoanRequest>
     updateStatus:({requestStatus,id}:any)=>Promise<any>
-    getLoanDetails:(id:number)=>Promise<any>
+    getLoanDetails:(id:number, type:string)=>Promise<any>
 
 }

@@ -101,6 +101,9 @@ module.exports = (sequelize:any, DataTypes:any) => {
     LoanRequestLog.belongsTo(models.LoanRequest, {
       foreignKey: 'loanRequestID',
     });
+    LoanRequestLog.hasOne(models.DisbursedLoan, {
+     foreignKey: 'loanRequestLogID',
+   });
     // LoanRequestLog.belongsTo(models.LoanProduct, {
     //   foreignKey: 'loanProductID',
     // });

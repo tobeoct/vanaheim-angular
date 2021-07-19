@@ -39,7 +39,7 @@
           <h2>{{loanDetails.code}}</h2>
         </div>
         <div class="d-flex">
-          <app-button size="small"  [class]="'widget_button--fill widget_button--small'"><ng-container slot="button">Repayment</ng-container></app-button>
+          <app-button size="small" (onClick)="showRepayment(loanDetails.disbursedLoan?.id)" *ngIf="loanDetails.status=='Funded'"  [class]="'widget_button--fill widget_button--small'"><ng-container slot="button">Repayment</ng-container></app-button>
           <div style="margin-left: 10px;"><app-button  size="small" color="secondary" [class]="'widget_button--fill widget_button--small'"><ng-container slot="button">Notify</ng-container></app-button></div>
         </div>
        
@@ -86,3 +86,102 @@
   
   </ng-container>
 </ng-container>
+
+<ng-container *ngIf="showRepayment$|async">
+  <app-modal size="large" (onChange)="closeRepayment()">
+    
+    <ng-container  slot="body">
+      <div style="display: block; width: 100%;">
+        <div class="margin--3x no-margin--top">
+          <small>Loan Application</small>
+          <h2>{{(loanDetails$|async).code}}</h2>
+        </div>
+        
+        <ng-container *ngIf="loanDetails$|async as loanDetails">
+          <div style="margin:auto">
+            <app-form [form]="form" (onSubmit)="onSubmit($event,loanDetails?.disbursedLoan?.id)" (errorMessageChange) = "onError($event)">
+                      
+              <app-input fieldClass="no-margin--top" [focus$]="focus$" id="amount" placeholder="Enter repayment amount"  [control]="amount" class="form-control" [error]="(errorMessage$ | async)?.amount" >
+                  <label for="amount">Repayment Amount</label>
+              </app-input>
+          
+            <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form" >Repay</app-button>
+    
+                     
+              </app-form>
+          </div>
+          <div style="width: 100%;" id="loan-details">
+            <div *ngIf="loanDetails.details[0] as detail">
+              <div class="title"><h3>{{detail.key}}</h3></div>
+              <div class="margin--3x">
+                <ng-container *ngFor="let d of detail.data;let i =index">
+                  <div class="detail-card" *ngIf="i>3">
+                    <small>{{d.key}}</small>
+                    <p><b>{{d.value}}</b></p>
+                  </div>
+                </ng-container>
+              </div>
+              
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="repayments$|async as repayments">
+          <div style="width: 100%;" id="loan-details">
+            
+            <div class="title"><h3>Repayment History</h3></div>
+          
+            </div>
+            <app-table  >
+              <ng-container slot="header">
+                  <tr>
+                      <th>Payment Date</th>
+                      <th>Expected Payment</th>
+                      <th>Amount Repaid</th>
+                      <th>Status</th>
+                      <!-- <th>Tenure</th>
+                      <th>Status</th>
+                      <th>Action</th> -->
+                  </tr>
+              </ng-container>
+              <ng-container slot="body" *ngIf="repayments$|async as data">
+                      <ng-container *ngIf="data.length==0">
+                              <div class="no-data">
+                              <span class="material-icons material-icons-outlined">
+                                  info
+                                  </span>
+                              <h3>No data available</h3>
+                          </div>
+                      </ng-container>
+                      <ng-container *ngIf="data.length>0">
+                          <tr *ngFor="let row of data;trackBy:trackByFn">
+                              <td>{{row.dueDate | date :'MMMM d, y'}}</td>
+                              <td>{{row.expectedPayment|currency:'₦'}}</td>
+                              <td>{{row.amountRepaid|currency:'₦'}}</td>
+                              <td><app-badge [color]="getStatusColor(row.status)">{{row.status}}</app-badge></td>
+                              <!-- <td>{{row.tenure}} {{row.denominator}}</td>
+                              <td>{{row.requestStatus}}</td>
+                              <td><app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td> -->
+                          </tr>
+                      </ng-container>
+                  </ng-container>
+                  <ng-container slot="body" *ngIf="!(repayments$|async)">
+                      <div class="no-data">
+                          <span class="material-icons material-icons-outlined">
+                              info
+                              </span>
+                          <h3>No data available</h3>
+                      </div>
+              </ng-container>
+              
+          </app-table>
+        </ng-container>
+      </div>
+  </ng-container>
+  </app-modal>
+  </ng-container>
+  <div class="snackbar_container ">
+    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
+    </div>
+    <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0">{{success}}
+    </div>
+    </div>

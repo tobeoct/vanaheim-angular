@@ -1,0 +1,23 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+.badge{
+    @include background(lightGrey);
+    @include color(black);
+    @include padding(true,"px",0.25);
+    &--warning{
+        @include background(lightYellow);
+        @include color(yellow);
+    }
+    &--success{
+        @include background(lightGreen);
+        @include color(green);
+    }
+    &--info{
+        @include background(lightBlue);
+        @include color(facebook);
+    }
+    &--danger{
+        @include background(lightRed);
+        @include color(red);
+    }
+}

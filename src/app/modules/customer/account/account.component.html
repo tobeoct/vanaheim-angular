@@ -1,0 +1,63 @@
+<div id="account-content" class="grid-padding-2x" >
+    <div class="d-flex d-flex_horizontal--center d-flex_vertical--center">
+        <div style="text-align: center;">
+            <h3>Your Profile</h3>
+            <div class="image" style="width: 100px; height:100px; border-radius: 100px; margin: auto; margin-top: 10px;">
+                <!-- <img src="" alt="your profile picture"/> -->
+                <span id="pin" class="material-icons">person_pin</span>
+            </div>
+            <div>
+                <h4>Tobechukwu Onyema</h4>
+                <p>tobe.onyema@gmail.com</p>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex d-flex_horizontal--space-between margin--3x">
+        <div id="left">
+            <div class="card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <div class="margin--x">
+                    <small class="no-margin--all">BVN</small>
+                    <p class="no-margin--all"><b>223*****629</b></p>
+                </div>
+                <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    <app-badge color="success">Copy</app-badge>
+                    <app-button class="no-margin"  fieldClass="no-margin--top" [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'"><ng-container slot="button">Edit</ng-container></app-button>
+                </div>
+            </div>
+        </div>
+        <div id="right">
+            <div id="card" style="width: 100%;" class="box-shadow content--small padding--2x">
+                <div (click)="toggleSideNav('personal')" class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    <p><b>Personal Details</b></p>
+                    <span class="material-icons">
+                        arrow_right
+                    </span>
+                </div>
+                <div class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    <p><b>Account</b></p>
+                    <span class="material-icons">
+                        arrow_right
+                    </span>
+                </div>
+                <div class="item card--stroke card-stroke--primary margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    <p><b>Password</b></p>
+                    <span class="material-icons">
+                        arrow_right
+                    </span>
+                </div>
+                <div class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    <p><b>Contact Us</b></p>
+                    <span class="material-icons">
+                        arrow_right
+                    </span>
+                </div>
+                <div class="item card--stroke margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    <p><b>Logout</b></p>
+                    <span class="material-icons">
+                        arrow_right
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

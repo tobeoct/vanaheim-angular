@@ -25,7 +25,7 @@ export class ProgressCircularComponent implements OnInit, OnChanges {
     let days = 30 -this.daysLeft;
     let r = days>15? ((days -15)/15)*180:0;
     let l = days<=15? (days/15)*180:0;
-    l = l==0?180:l;
+    l = l==0&&days>0?180:l;
 this.daysR =r+"deg";
 this.daysL =l+"deg";
   }

@@ -3,13 +3,13 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const env = process.env.NODE_ENV || 'development';
-const configuration:any = {
+const configuration: any = {
   "development": {
     "username": "postgres",
     "password": null,
     "database": "vanaheim-dev",
     "host": "127.0.0.1",
-    "port":5432,
+    "port": 5432,
     "dialect": "postgres"
   },
   "test": {
@@ -17,7 +17,7 @@ const configuration:any = {
     "password": null,
     "database": "vanaheim-dev",
     "host": "127.0.0.1",
-    "port":5432,
+    "port": 5432,
     "dialect": "postgres"
   },
   "production": {
@@ -26,7 +26,7 @@ const configuration:any = {
     "database": "vanaheim",
     "dialect": "postgres",
     "use_env_variable": "DATABASE_URL",
-    "ssl":true,
+    "ssl": true,
     "dialectOptions": {
       "ssl": {
         "require": true, // This will help you. But you will see nwe error
@@ -38,9 +38,9 @@ const configuration:any = {
 //require(`${__dirname}/../config/config.json`)[env];
 
 const config = configuration[env];
-const db:any = {};
+const db: any = {};
 
-let sequelize:any;
+let sequelize: any;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
@@ -51,11 +51,11 @@ if (config.use_env_variable) {
 
 fs
   .readdirSync(__dirname)
-  .filter((file:any) =>
+  .filter((file: any) =>
     (file.indexOf('.') !== 0) &&
     (file !== basename) &&
-    (file.slice(-3) === '.js'||file.slice(-3) === '.ts'))
-  .forEach((file:any) => {
+    (file.slice(-3) === '.js' || file.slice(-3) === '.ts'))
+  .forEach((file: any) => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);//sequelize.import(path.join(__dirname, file));
     db[model.name] = model;
   });

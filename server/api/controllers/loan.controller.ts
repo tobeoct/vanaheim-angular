@@ -1,4 +1,5 @@
 
+import { IDisbursedLoanService } from '@services/interfaces/loan/Idisbursed-loan-service';
 import { ILoanRequestLogService } from '@services/interfaces/loan/Iloan-log-request-service';
 import { ILoanRequestService } from '@services/interfaces/loan/Iloan-request-service';
 import { ILoanService } from '@services/interfaces/loan/Iloanservice';
@@ -9,7 +10,7 @@ export default class UserController {
    bvnList:any={
   };
    bankList:any={};
-    constructor( private sanitizer:any,private _loanService:ILoanService,private _loanRequestService:ILoanRequestService,private _loanRequestLogService:ILoanRequestLogService) {
+    constructor( private sanitizer:any,private _loanService:ILoanService, private _disbursedLoanService:IDisbursedLoanService,private _loanRequestService:ILoanRequestService,private _loanRequestLogService:ILoanRequestLogService) {
 
     }
 
@@ -74,7 +75,37 @@ export default class UserController {
     @GET()
     getLoanDetails =async (req:any, res:any,next:any) => {
         var id = this.sanitizer.escape(req.query.id);
-        let response:any = await this._loanService.getLoanDetails(id);
+        let response:any = await this._loanService.getLoanDetails(id,"loanRequest");
+        if(response.status==true){
+            res.statusCode = 200;
+            res.data = response.data
+        }else{
+            res.statusCode = 400;
+            res.data = response;
+        }
+    
+        next()
+    }
+    @route('/getLoanLogDetails')
+    @GET()
+    getLoanLogDetails =async (req:any, res:any,next:any) => {
+        var id = this.sanitizer.escape(req.query.id);
+        let response:any = await this._loanService.getLoanDetails(id,"loanRequestLog");
+        if(response.status==true){
+            res.statusCode = 200;
+            res.data = response.data
+        }else{
+            res.statusCode = 400;
+            res.data = response;
+        }
+    
+        next()
+    }
+    @route('/getDisbursedLoan')
+    @GET()
+    getDisbursedLoans =async (req:any, res:any,next:any) => {
+        var id = this.sanitizer.escape(req.query.requestId);
+        let response:any = await this._disbursedLoanService.getDisbursedLoanById(id);
         if(response.status==true){
             res.statusCode = 200;
             res.data = response.data

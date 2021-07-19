@@ -1,5 +1,6 @@
 <div class="content content--small">
-    <ng-container *ngFor="let doc of (documents$|async)">
+    <ng-container *ngIf="(documents$|async) as documents">
+    <ng-container *ngFor="let doc of documents">
        <div class="doc">
            <div  class="d-flex">
             <span style="margin-right: 10px;" class="material-icons material-icons-two-tone">
@@ -23,5 +24,14 @@
 
         </div>
        </div>
+    </ng-container>
+</ng-container>
+<ng-container *ngIf="(documents$|async) as documents">
+    <div class="no-data">
+        <span class="material-icons material-icons-outlined">
+            info
+            </span>
+        <h3>No data available</h3>
+    </div>
     </ng-container>
 </div>

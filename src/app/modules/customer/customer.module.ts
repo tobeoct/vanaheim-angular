@@ -11,11 +11,12 @@ import { LoansComponent } from './loans/loans.component';
 import { LoanStatusComponent } from './shared/features/loan-status/loan-status.component';
 import { DocumentComponent } from './document/document.component';
 import { NavComponent } from 'src/app/shared/layout/nav/nav.component';
+import { AccountComponent } from './account/account.component';
 
 
 
 @NgModule({
-  declarations: [DashboardComponent, NavigationComponent,NavComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent, LoanStatusComponent, DocumentComponent],
+  declarations: [DashboardComponent, NavigationComponent,NavComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent, LoanStatusComponent, DocumentComponent, AccountComponent],
   imports: [
     SharedModule,
     CustomerRoutingModule

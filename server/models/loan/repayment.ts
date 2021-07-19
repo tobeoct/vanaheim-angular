@@ -9,7 +9,8 @@ export class Repayment extends BaseEntity{
     amount:number;
     dateRepaid:Date;
     repaymentType:PaymentType;
-    loanRequestId:string;
+    loanRequestID:number;
+    disbursedLoanID:number;
      accountNumber:string;
 
 }

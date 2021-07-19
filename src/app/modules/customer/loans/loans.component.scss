@@ -131,6 +131,26 @@
 
     }
 }
+
+#loan-details{
+    .title{
+        @include padding(true,"px",0.5);
+        @include background(lightGrey);
+        border-radius: $border-radius;
+    }
+    .detail-card{
+        @include border(1px,solid,lightGrey);
+        @include padding(true,"px",0.5);
+        border-radius: $border-radius;
+        width: 48.5%;
+        display: inline-block;
+        margin-right:3%;
+        margin-bottom: map-get($sizings, "px")*0.5;
+        &:nth-child(2n){
+            margin-right: 0;
+        }
+    }
+}
 @media all and (max-width:1233px){
     #loan-content{
         flex-direction: column;

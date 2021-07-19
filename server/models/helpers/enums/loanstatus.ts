@@ -1,6 +1,6 @@
 export enum LoanStatus{
-    PaidInFull,
-    Defaulting,
-    OnTrack,
-    AwaitingFirstPayment
+    PaidInFull="PaidInFull",
+    Defaulting="Defaulting",
+    OnTrack="OnTrack",
+    AwaitingFirstPayment="AwaitingFirstPayment"
 }

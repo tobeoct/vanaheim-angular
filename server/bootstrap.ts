@@ -39,6 +39,9 @@ import { RepaymentService } from '@services/implementation/repayment-service';
 import { InvestmentService } from '@services/implementation/investment/investment-service';
 import { LoanTypeRequirementService } from '@services/implementation/loan/loan-type-requirement-service';
 import { StaffRepository } from '@repository/implementation/staff-repository';
+import { DisbursedLoanRepository } from '@repository/implementation/loan/disbursed-loan-repository';
+import { RepaymentRepository } from '@repository/implementation/repayment-repository';
+import { DisbursedLoanService } from '@services/implementation/loan/disbursed-loan-service';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -100,11 +103,14 @@ export default class Bootstrap {
             _baseRepository: asClass(BaseRepository).singleton(),
             _userRepository: asClass(UserRepository).singleton(),
             _customerRepository: asClass(CustomerRepository).singleton(),
+            _disbursedLoanRepository: asClass(DisbursedLoanRepository).singleton(),
+            _repaymentRepository: asClass(RepaymentRepository).singleton(),
             _loanRequestService: asClass(LoanRequestService).singleton(),
             _repaymentService: asClass(RepaymentService).singleton(),
             _loanTypeRequirementService: asClass(LoanTypeRequirementService).singleton(),
             _loanRequestLogService: asClass(LoanRequestLogService).singleton(),
             _loanService: asClass(LoanService).singleton(),
+            _disbursedLoanService: asClass(DisbursedLoanService).singleton(),
             _investmentService: asClass(InvestmentService).singleton(),
             _notificationService: asClass(NotificationService).singleton(),
             _clientService: asClass(ClientService).singleton(),

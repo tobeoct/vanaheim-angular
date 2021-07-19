@@ -7,6 +7,7 @@ import { ApplyingAsComponent } from 'src/app/modules/loan/shared/applying-as/app
 import { LoanProductComponent } from 'src/app/modules/loan/shared/loan-product/loan-product.component';
 import { ComponentsModule } from '../components/components.module';
 import { LoantypeComponent } from 'src/app/modules/loan/shared/loantype/loantype.component';
+import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 
 
 
@@ -17,7 +18,8 @@ import { LoantypeComponent } from 'src/app/modules/loan/shared/loantype/loantype
     LoanHeaderComponent,
     LoantypeComponent,
     ApplyingAsComponent,
-    LoanProductComponent
+    LoanProductComponent,
+    PersonalDetailsComponent
   ],
   imports: [
     BaseModule,
@@ -29,7 +31,8 @@ import { LoantypeComponent } from 'src/app/modules/loan/shared/loantype/loantype
     LoanHeaderComponent,
     LoantypeComponent,
     ApplyingAsComponent,
-    LoanProductComponent
+    LoanProductComponent,
+    PersonalDetailsComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })

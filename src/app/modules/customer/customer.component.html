@@ -20,6 +20,7 @@
 </div>
 </div>
 
+<app-personal-details *ngIf="(show$|async)=='personal'"></app-personal-details>
 
 <app-side-nav [class]="'left'" *ngIf="(show$|async)=='mainNav'"></app-side-nav>
 
