@@ -1,6 +1,7 @@
 @import '../../../../styles/abstracts/_abstracts-dir';
 @import '../../../../styles/themes/_theme-dir';
 .badge{
+    border-radius: $border-radius;
     @include background(lightGrey);
     @include color(black);
     @include padding(true,"px",0.25);

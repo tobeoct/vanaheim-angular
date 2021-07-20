@@ -268,7 +268,7 @@
         
           <div class="d-flex d-flex_vertical--center margin--2x">
             <div style="margin-right: 10px;"><p><b>Status</b></p></div>
-            <div><b>{{(loanDetailsFromDb$|async)?.status}}</b></div>
+            <div><app-badge color="success"><b>{{(loanDetailsFromDb$|async)?.status}}</b></app-badge></div>
           </div>
     
           <div *ngFor="let detail of (loanDetailsFromDb$|async)?.details">

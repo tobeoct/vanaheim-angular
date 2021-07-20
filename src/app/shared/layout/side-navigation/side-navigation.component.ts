@@ -14,6 +14,8 @@ export class SideNavigationComponent implements OnInit {
   isOpen$:Observable<boolean>;
   @Input()
   class = "right light";
+  @Input()
+  title:string = "";
   constructor(private _utility:Utility) { }
 
   ngOnInit(): void {

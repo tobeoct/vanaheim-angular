@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 @Component({
-  selector: 'app-personal-details',
+  selector: 'app-side-personal',
   templateUrl: './personal-details.component.html',
   styleUrls: ['./personal-details.component.scss']
 })

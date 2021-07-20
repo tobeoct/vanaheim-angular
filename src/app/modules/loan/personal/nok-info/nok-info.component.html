@@ -1,6 +1,6 @@
 
-    <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
-        <div class=" content box-shadow" style="box-sizing: border-box;">
+    <div id="form" class="{{side?'':'theme_col-5'}} animate__animated animate__fadeInUp animate__fast">
+        <div class=" content {{!side?'box-shadow':''}} {{!side?'':'content--smaller'}}" style="box-sizing: border-box;">
     <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
         <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--center">
@@ -45,7 +45,7 @@
                 </div>
     
         <div style="margin-top: 60px;">
-            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+            <app-button [form]="form" [loading$]="loading$">{{side?'Save':'Next'}}</app-button>
         </div>
     </app-form>
     </div>

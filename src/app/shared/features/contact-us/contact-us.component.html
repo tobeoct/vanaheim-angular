@@ -1,0 +1,50 @@
+<app-side-navigation title="Contact Us">
+    <div>
+        <div
+            class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <div class="margin--x">
+                <small class="no-margin--all">Email</small>
+                <p class="no-margin--all"><b>support@vanircapital.org</b></p>
+            </div>
+            <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <app-badge color="success">Copy</app-badge>
+                <div style="margin-left: 10px;">
+                    <app-button class="no-margin" fieldClass="no-margin--top"
+                        [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
+                        <ng-container slot="button">Email</ng-container>
+                    </app-button>
+                </div>
+            </div>
+        </div>
+        <div
+            class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <div class="margin--x">
+                <small class="no-margin--all">Phone Number</small>
+                <p class="no-margin--all"><b>08180279270</b></p>
+            </div>
+            <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <app-badge color="success">Copy</app-badge>
+                <div style="margin-left: 10px;">
+                    <app-button class="no-margin" fieldClass="no-margin--top"
+                        [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
+                        <ng-container slot="button">Call</ng-container>
+                    </app-button>
+                </div>
+            </div>
+        </div>
+        <div (click)="toggleSideNav('faq')" style="cursor: pointer;"
+            class="card card--small padding--x card--tertiary margin--3x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <p><b>Frequently Asked Questions</b></p>
+            <span class="material-icons">
+                arrow_right
+            </span>
+        </div>
+        <div (click)="toggleSideNav('faq')" style="cursor: pointer;"
+            class="card card--small padding--x card--stroke margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <p><b>Terms and Conditions</b></p>
+            <span class="material-icons">
+                arrow_right
+            </span>
+        </div>
+    </div>
+</app-side-navigation>

@@ -1,5 +1,7 @@
 
-
+#sidenav-hidden{
+    flex-direction: column;
+}
 @media all and (max-width:900px){
     #sidenav-hidden{
         width: 60vw ;

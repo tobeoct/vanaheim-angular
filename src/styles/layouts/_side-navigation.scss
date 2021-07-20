@@ -81,6 +81,59 @@ overflow-y: auto;
     z-index: 99999999;
 }
 
+@media all and (max-width:900px){
+    
+    #sidenav-hidden{
+        width: 60vw ;
+        
+&.left{
+    transform: translateX(-60vw);
+    &.closed{
+    
+        animation: FadeSlideOutLeftMob 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+      
+    }
+   
+}
+&.right{
+    transform: translateX(60vw);
+    &.closed{
+    
+        animation: FadeSlideOutMob 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+      
+    }
+    
+}
+    }
+}
+
+
+@media all and (max-width:900px){
+    
+    #sidenav-hidden{
+        width: 100vw ;
+        
+&.left{
+    transform: translateX(-100vw);
+    &.closed{
+    
+        animation: FadeSlideOutLeftMob2 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+      
+    }
+   
+}
+&.right{
+    transform: translateX(100vw);
+    &.closed{
+    
+        animation: FadeSlideOutMob2 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+      
+    }
+    
+}
+    }
+}
+
 @keyframes FadeIn{
     to{
         opacity: 100;
@@ -109,6 +162,23 @@ overflow-y: auto;
 }
 
 
+@keyframes FadeSlideOutMob{
+    to{
+        transform: translateX(60vw);
+        opacity: 0;
+        display: none;
+    }
+}
+
+@keyframes FadeSlideOutMob2{
+    to{
+        transform: translateX(100vw);
+        opacity: 0;
+        display: none;
+    }
+}
+
+
 @keyframes FadeSlideInLeft{
     to{
         opacity: 100;
@@ -119,6 +189,23 @@ overflow-y: auto;
 @keyframes FadeSlideOutLeft{
     to{
         transform: translateX(-30vw);
+        opacity: 0;
+        display: none;
+    }
+}
+
+@keyframes FadeSlideOutLeftMob{
+    to{
+        transform: translateX(-60vw);
+        opacity: 0;
+        display: none;
+    }
+}
+
+
+@keyframes FadeSlideOutLeftMob2{
+    to{
+        transform: translateX(-100vw);
         opacity: 0;
         display: none;
     }

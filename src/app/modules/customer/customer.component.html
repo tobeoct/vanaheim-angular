@@ -20,9 +20,15 @@
 </div>
 </div>
 
-<app-personal-details *ngIf="(show$|async)=='personal'"></app-personal-details>
 
 <app-side-nav [class]="'left'" *ngIf="(show$|async)=='mainNav'"></app-side-nav>
+
+<app-side-personal *ngIf="(show$|async)=='personal'"></app-side-personal>
+<app-side-nok *ngIf="(show$|async)=='nok'"></app-side-nok>
+<app-side-account *ngIf="(show$|async)=='account'"></app-side-account>
+<app-side-contact *ngIf="(show$|async)=='contact'"></app-side-contact>
+<app-side-password *ngIf="(show$|async)=='password'"></app-side-password>
+<app-side-bvn *ngIf="(show$|async)=='bvn'"></app-side-bvn>
 
 <app-modal *ngIf="showInvalid$|async" (onChange)="closeInvalid()">
   <app-modal-header slot="header"><h3>Oops,Invalid Action</h3></app-modal-header>

@@ -7,12 +7,12 @@
                 <span id="pin" class="material-icons">person_pin</span>
             </div>
             <div>
-                <h4>Tobechukwu Onyema</h4>
-                <p>tobe.onyema@gmail.com</p>
+                <h4>{{user.firstName}} {{user.lastName}}</h4>
+                <p>{{user.username}}</p>
             </div>
         </div>
     </div>
-    <div class="d-flex d-flex_horizontal--space-between margin--3x">
+    <div id="main-content" class="margin--3x">
         <div id="left">
             <div class="card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                 <div class="margin--x">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <app-badge color="success">Copy</app-badge>
-                    <app-button class="no-margin"  fieldClass="no-margin--top" [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'"><ng-container slot="button">Edit</ng-container></app-button>
+                    <div style="margin-left: 10px;"><app-button class="no-margin" (onClick)="toggleSideNav('bvn')"  fieldClass="no-margin--top" [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'"><ng-container slot="button">Edit</ng-container></app-button></div>
                 </div>
             </div>
         </div>
@@ -33,25 +33,25 @@
                         arrow_right
                     </span>
                 </div>
-                <div class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <div  (click)="toggleSideNav('account')" class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Account</b></p>
                     <span class="material-icons">
                         arrow_right
                     </span>
                 </div>
-                <div class="item card--stroke card-stroke--primary margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <div  (click)="toggleSideNav('password')" class="item card--stroke card-stroke--primary margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Password</b></p>
                     <span class="material-icons">
                         arrow_right
                     </span>
                 </div>
-                <div class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <div (click)="toggleSideNav('contact')" class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Contact Us</b></p>
                     <span class="material-icons">
                         arrow_right
                     </span>
                 </div>
-                <div class="item card--stroke margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <div (click)="logout" class="item card--stroke margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Logout</b></p>
                     <span class="material-icons">
                         arrow_right

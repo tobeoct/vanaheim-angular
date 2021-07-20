@@ -48,7 +48,13 @@
         }
     }
 }
-
+&--tertiary{
+    @include background(lightGrey,important);
+    border-color: transparent !important;
+}
+&--small{
+        @include padding(false, "px", 0.15, 0.15, 0.25, 0.25);
+}
 &-stroke, &--stroke {
 
     border-radius: $border-radius;

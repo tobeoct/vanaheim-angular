@@ -53,9 +53,15 @@ export class Utility{
   get $browser() { return $browser()(); }
   get $browserID() { return this.getBrowserID() }
   toggleSideNav=(type:SideNavigationList)=>{
-    this.isSideNavOpenedSubject.next(!this.isSideNavOpenedSubject.value);
+    // if(type!=this.activeNavigationSubject.value){
+    // this.isSideNavOpenedSubject.next(!this.isSideNavOpenedSubject.value);
+    // }
     if(type!= SideNavigationList.close){
+      this.isSideNavOpenedSubject.next(true);
     this.activeNavigationSubject.next(type);
+    }else{
+      
+    this.isSideNavOpenedSubject.next(false);
     }
   }
 

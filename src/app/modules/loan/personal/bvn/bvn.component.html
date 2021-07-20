@@ -1,5 +1,5 @@
- <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
-        <div class=" content box-shadow" style="box-sizing: border-box; ">
+ <div id="form" class="{{side?'':'theme_col-5'}}  animate__animated animate__fadeInUp animate__fast">
+        <div class=" content {{!side?'box-shadow':''}} {{!side?'':'content--smaller'}}" style="box-sizing: border-box; ">
     <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
    
@@ -15,7 +15,7 @@
 </div>
         <div style="margin-top: 60px;">
             <small>I have read, understood and accept all the terms and conditions & privacy policy for Vanir Capital LLC.</small>
-            <app-button [form]="form">Next</app-button>
+            <app-button [form]="form">{{side?'Save':'Next'}}</app-button>
         </div>
     </app-form>
     </div>

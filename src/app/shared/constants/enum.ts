@@ -16,7 +16,9 @@ export enum ValidationType{
     account="account",
     personal="personal",
     password="password",
+    contact="contact",
     mainNav="mainNav",
+    nok="nok",
     close="close"
   }
 

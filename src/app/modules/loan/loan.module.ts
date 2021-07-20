@@ -5,10 +5,9 @@ import { NavigationComponent } from './layout/navigation/navigation.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { LoanCalculatorComponent } from './shared/loan-calculator/loan-calculator.component';
 import { BVNComponent } from './personal/bvn/bvn.component';
-import { PersonalInfoComponent } from './personal/personal-info/personal-info.component';
+// import { PersonalInfoComponent } from './personal/personal-info/personal-info.component';
 import { EmploymentInfoComponent } from './personal/employment-info/employment-info.component';
 import { AccountInfoComponent } from './shared/account-info/account-info.component';
-import { NOKInfoComponent } from './personal/nok-info/nok-info.component';
 import {  DocumentUploadComponent } from './shared/document-upload/document-upload.component';
 import { PreviewComponent } from './shared/preview/preview.component';
 import { CompanyInfoComponent } from './business/company-info/company-info.component';
@@ -23,12 +22,8 @@ import { DocumentComponent } from './shared/document-upload/document/document.co
   declarations: [
     LoanComponent,
      NavigationComponent,
-    BVNComponent,
     LoanCalculatorComponent,
-    PersonalInfoComponent,
      EmploymentInfoComponent,
-     NOKInfoComponent,
-     AccountInfoComponent,
      DocumentComponent,
      DocumentUploadComponent,
      PreviewComponent,
