@@ -9,7 +9,7 @@ export class RatecardComponent implements OnInit,OnChanges {
   @Input() duration:number;
   rate:number;
   @Input() active:boolean=false;
-  @Input() amount:number|null=250000;
+  @Input() amount:number|null=100000;
   @Output() rateChange = new EventEmitter();
   constructor() { }
 
@@ -30,38 +30,42 @@ export class RatecardComponent implements OnInit,OnChanges {
    
     switch(duration){
         case 3: 
-            if(amount>=250000&&amount<=5000000){
+            if(amount>=100000&&amount<=10000000){
                 r = 16;
-            }else if(amount>5000000&&amount<=20000000){
+            }else if(amount>10000000&&amount<=20000000){
                 r=18;
             }
             break;
         case 6: 
-            if(amount>=250000&&amount<=5000000){
+            if(amount>=100000&&amount<=10000000){
                 r = 18;
-            }else if(amount>5000000&&amount<=20000000){
+            }else if(amount>10000000&&amount<=20000000){
                 r=20;
-            }else if (amount>20000000){
-                r=22;
             }
+            // else if (amount>20000000){
+            //     r=22;
+            // }
         break;
         case 9: 
-            if(amount>=250000&&amount<=5000000){
+            if(amount>=100000&&amount<=10000000){
                 r = 19;
-            }else if(amount>5000000&&amount<=20000000){
-                r=21;
-            }else if (amount>20000000){
-                r=23;
+            }else if(amount>10000000&&amount<=20000000){
+                r=20;
             }
+            // else if (amount>20000000){
+            //     r=23;
+            // }
         break;
         case 12: 
-            if(amount>=250000&&amount<=5000000){
+            if(amount>=100000&&amount<=10000000){
                 r = 20;
-            }else if(amount>5000000&&amount<=20000000){
-                r=22;
-            }else if (amount>20000000){
-                r=24;
+            }else if(amount>10000000&&amount<=20000000){
+                r=20;
             }
+            
+            // else if (amount>20000000){
+            //     r=24;
+            // }
         break;
     }
     return r;

@@ -21,7 +21,7 @@ export class InvestmentFormComponent implements OnInit,AfterViewInit {
   private validationMessages:any = {
     email:'Incorrect email format',
     required:"Please enter an email address",
-    range:"Invalid amount: 50K - 50M"
+    range:"Invalid amount: 100K - 50M"
   }
   investment:InvestmentIndication= new InvestmentIndication;
   form:FormGroup;
@@ -34,7 +34,7 @@ export class InvestmentFormComponent implements OnInit,AfterViewInit {
   showModal:boolean=false;
   modalType:string = 'investment-indication';
   rateDetail:RateDetail;
-minAmount:number = 50000;
+minAmount:number = 100000;
 maxAmount:number = 50000000;
 
 get duration(){
@@ -89,7 +89,7 @@ changed$:Observable<boolean> = this.changedSubject.asObservable();
 
    ngOnInit(): void {
     this.form = this._fb.group({
-      amount: ["250,000",[Validators.required,Validators.minLength(6),Validators.maxLength(10), this._validators.numberRange(this.minAmount,this.maxAmount)]],
+      amount: ["100,000",[Validators.required,Validators.minLength(6),Validators.maxLength(10), this._validators.numberRange(this.minAmount,this.maxAmount)]],
       duration: [0,[Validators.required]],
       maturity:['',[Validators.required]],
       rate:[0,[Validators.required, Validators.min(15)]],

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
-import { catchError, concatMap, filter, map, mergeMap, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, mergeMap, retry, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Store } from '../../helpers/store';
 import { Utility } from '../../helpers/utility.service';
 import { LoanResponse } from '../../poco/loan/loan-response';
@@ -30,6 +30,7 @@ export class LoanService {
   runningLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   runningLoan$: Observable<boolean> = this.runningLoanSubject.asObservable();
 
+  interval = environment.production ? 3000 : 30000;
   constructor(
     private _http: HttpClient,
     private _utility: Utility,
@@ -182,15 +183,14 @@ export class LoanService {
     return false;
   }
   getLatest = () => {
-
-    return timer(0, 300000)
-      .pipe(take(1), concatMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
+    return timer(0, this.interval)
+      .pipe(switchMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
         .pipe(map(response => {
           if (response && response.status == true) {
             return Object.keys(response.response).length > 0 ? response.response : null;
           }
           return null;
-        }), shareReplay(1)))
+        }), shareReplay(1))), retry()
       )
   }
 
