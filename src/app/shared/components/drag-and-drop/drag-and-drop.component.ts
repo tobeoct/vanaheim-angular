@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { RequestService } from 'src/app/modules/admin/request/request.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-drag-and-drop',
@@ -11,11 +12,15 @@ import { RequestService } from 'src/app/modules/admin/request/request.service';
 })
 export class DragAndDropComponent implements OnInit {
   nativeElement:any[]=[];
-
+fForm:FormGroup;
   eventSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
   event$:Observable<any> = this.eventSubject.asObservable();
   
-  
+  @Input()
+  control:FormControl;
+  get failureReason() {
+    return this.fForm.get("failureReason") as FormControl || new FormControl();
+  }
   idSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
   classListSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
 
@@ -23,8 +28,11 @@ export class DragAndDropComponent implements OnInit {
   show$:Observable<boolean> = this.showSubject.asObservable();
   @Output()
   onClick:EventEmitter<any> = new EventEmitter<any>();
-  constructor(private _requestService:RequestService) { }
+  constructor(private _requestService:RequestService, private _fb:FormBuilder) { }
   ngOnInit(): void {
+    this.fForm = this._fb.group({
+      failureReason: [""],
+    });
   }
 
   ngOnDestroy(){
@@ -59,9 +67,15 @@ export class DragAndDropComponent implements OnInit {
     }
   }
   confirm(){
+    
+    if (this.getStatus(this.classListSubject.value)!= "NotQualified") {
     let event = this.eventSubject.value;
     this.handleUpdate(event,this.idSubject.value,this.classListSubject.value)();
     this.showSubject.next(false);
+    }else{
+      
+      this.enterFailureSubject.next(true);
+    }
 
   }
   closeModal(){
@@ -83,7 +97,7 @@ export class DragAndDropComponent implements OnInit {
   handleUpdate=(event:any,id:any,classList:any)=>{
     return ()=>{
       
-      this._requestService.updateStatus(id,this._requestService.getStatus(classList)).then(c=>{
+      this._requestService.updateStatus(id,this._requestService.getStatus(classList), this.failureReason.value).then(c=>{
         if(!c || c.requestStatus != this._requestService.getStatus(classList)){
       this.reverse(event)
        }else{
@@ -150,5 +164,26 @@ export class DragAndDropComponent implements OnInit {
 // }
 //  console.log(this.items)
 //   console.log(this.done)
+}
+
+
+enterFailureSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+enterFailure$: Observable<boolean> = this.enterFailureSubject.asObservable();
+
+onFailure(form: FormGroup) {
+  this.proceed();
+  this.enterFailureSubject.next(false);
+}
+closeFailureModal() {
+  this.proceed();
+  this.enterFailureSubject.next(false);
+}
+proceed(){
+  // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
+
+  this.handleUpdate(this.eventSubject.value,this.idSubject.value,this.classListSubject.value)();
+}
+onError(value: any): void {
+  // this.errorMessageSubject.next(value);
 }
 }

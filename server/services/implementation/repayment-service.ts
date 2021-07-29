@@ -1,4 +1,5 @@
 import AppConfig from "@api/config";
+import { LoanRequestStatus } from "@models/helpers/enums/loanrequeststatus";
 import { LoanStatus } from "@models/helpers/enums/loanstatus";
 import { PaymentType } from "@models/helpers/enums/paymenttype";
 import { BaseStatus } from "@models/helpers/enums/status";
@@ -7,6 +8,7 @@ import { LoanRequest } from "@models/loan/loan-request";
 import { Repayment } from "@models/loan/repayment";
 import { IRepaymentRepository } from "@repository/interface/Irepayment-repository";
 import { IDisbursedLoanRepository } from "@repository/interface/loan/Idisbursed-loan-repository";
+import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
 import { ILoanRequestRepository } from "@repository/interface/loan/Iloan-request-repository";
 import { IRepaymentService } from "@services/interfaces/Irepayment-service";
 import moment = require("moment");
@@ -49,7 +51,7 @@ type RepaymentHealth = {
 // Recalculate based on this info. -> If full update status and use default cycle -> else recalculate cycle
 
 export class RepaymentService extends BaseService<Repayment> implements IRepaymentService {
-  constructor(private _db: any, private _templateService: TemplateService, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utilService: UtilService) {
+  constructor(private _db: any, private _templateService: TemplateService, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utilService: UtilService) {
     super(_repaymentRepository)
   }
   getByDisbursedLoanID = (disbursedLoanId: number) => new Promise<any[]>(async (resolve, reject) => {
@@ -65,7 +67,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
 
     try {
       let repayments = await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId) as Repayment[];
-      resolve(this.reducePayments(repayments,moment().add(2,'year')))
+      resolve(this.reducePayments(repayments, moment().add(2, 'year')))
     } catch (err) {
 
     }
@@ -157,6 +159,13 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       if ((totalRepaymentSoFar + amount) >= expectedFullPayment) {
         disbursedLoan.isClosed = true;
         disbursedLoan.loanStatus = LoanStatus.PaidInFull;
+        loanRequest.requestStatus = LoanRequestStatus.Completed;
+        let res = await this._loanRequestLogRepository.search({ requestDate: loanRequest.requestDate, loanRequest: loanRequest.id }, 0, 1);
+        let loanRequestLog = res.rows[0];
+        if (loanRequestLog) {
+          loanRequestLog.requestStatus = LoanRequestStatus.Completed;
+          this._loanRequestLogRepository.update(loanRequestLog);
+        }
         await this._disbursedLoanRepository.update(disbursedLoan);
         resolve({ status: true, data: "Loan has been paid off in full" });
         return;

@@ -30,7 +30,7 @@ export class LoanSummaryComponent implements OnInit {
     this.disbursedLoan$ = this._requestService.loanDetails$;
     this.repayments$ = this._repaymentService.myRepayments$;
     this.latestLoan$.subscribe(l=>{
-      if(l.requestStatus=='Funded'){
+      if(l&&l.requestStatus=='Funded'){
         this._requestService.selectLoan(l.id);
       }
     })

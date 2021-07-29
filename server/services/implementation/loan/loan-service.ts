@@ -162,14 +162,14 @@ export class LoanService implements ILoanService {
 
         let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest ? loanRequest.data?.rows[0]?.id ?? 0 : id);
         let totalRepayment = 0;
-        let documents: Document[]=[];
+        let documents: Document[] = [];
         let response = await this._documentService.getByLoanRequestId(request.id);
         if (response.status) {
           documents = response.data as Document[];
 
         }
         if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-        resolve({ status: true, data: { code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment,documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+        resolve({ status: true, data: { code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
       } else {
         resolve({ status: false, data: "Could not find loan request" });
       }
@@ -195,7 +195,7 @@ export class LoanService implements ILoanService {
     let d: any = denominator == "Months" ? "months" : "days";
     return funded.add(tenure, d);
   }
-  updateStatus = ({ requestStatus, id }: any) => new Promise<any>(async (resolve, reject) => {
+  updateStatus = ({ requestStatus, id, failureReason }: any) => new Promise<any>(async (resolve, reject) => {
     try {
       let loanRequest = await this._loanRequestService.getById(id);
       if (!loanRequest || Object.keys(loanRequest).length == 0) throw "Invalid Loan Request";
@@ -216,7 +216,9 @@ export class LoanService implements ILoanService {
         loanRequestLog.dateApproved = new Date();
       } else if (requestStatus == LoanRequestStatus.NotQualified) {
         loanRequest.dateDeclined = new Date();
+        loanRequest.failureReason = failureReason;
         loanRequestLog.dateDeclined = new Date();
+        loanRequestLog.failureReason = failureReason;
       }
       else if (requestStatus == LoanRequestStatus.Approved) {
         loanRequest.dateDueForDisbursement = new Date();

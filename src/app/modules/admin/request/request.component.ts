@@ -17,6 +17,7 @@ import { RequestService } from './request.service';
 export class RequestComponent implements OnInit {
   loans$: Observable<any[]>;
   notifyForm: FormGroup;
+  fForm: FormGroup;
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
   loanStatuses: any[] = [{ label: "Pending", key: "new" }, { label: "Processing", key: "processing" }, { label: "UpdateRequired", key: "update" }, { label: "Declined", key: "declined" }, { label: "Approved", key: "approved" }, { label: "Funded", key: "funded" }];
   ctrl: FormControl = new FormControl("");
@@ -62,6 +63,8 @@ export class RequestComponent implements OnInit {
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
+  enterFailureSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  enterFailure$: Observable<boolean> = this.enterFailureSubject.asObservable();
   get amount() {
     return this.form.get("amount") as FormControl || new FormControl();
   }
@@ -71,7 +74,10 @@ export class RequestComponent implements OnInit {
   get messageType() {
     return this.notifyForm.get("messageType") as FormControl || new FormControl();
   }
-  constructor(private _fb: FormBuilder, private _notifyService:NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
+  get failureReason() {
+    return this.fForm.get("failureReason") as FormControl || new FormControl();
+  }
+  constructor(private _fb: FormBuilder, private _notifyService: NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
     this.loanDetails$ = this._requestService.loanDetails$;
   }
 
@@ -95,6 +101,9 @@ export class RequestComponent implements OnInit {
       message: ["", [Validators.required]],
       messageType: ["", [Validators.required]]
     });
+    this.fForm = this._fb.group({
+      failureReason: [""],
+    });
   }
   getCriteria(from: any, to: any) {
     return { from: moment(from).startOf("day").toDate(), to: moment(to).endOf("day").toDate() };
@@ -104,8 +113,17 @@ export class RequestComponent implements OnInit {
     this.lastStatusSubject.next(c);
     const indicator = this.loanStatuses.find(l => l.label == c)?.key;
     this.indicatorSubject.next(indicator);
-    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c)
+    console.log("Confirm Value",c)
+    if (c.toLowerCase()!= "notqualified" && c.toLowerCase()!= "declined") {
+      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c,'');
+    } else {
+      this.enterFailureSubject.next(true);
+    }
     setTimeout(() => this.showConfirmSubject.next(false), 0);
+  }
+  proceed(){
+    // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
+    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this.lastStatusSubject.value, this.failureReason.value);
   }
   selectLoan({ id, indicator }: any) {
     this._requestService.selectLoan(id);
@@ -132,7 +150,11 @@ export class RequestComponent implements OnInit {
   }
   closeConfirmModal() {
     this.ctrl.patchValue(this.lastStatusSubject.value);
-    setTimeout(() => this.showConfirmSubject.next(false), 0);
+    setTimeout(() => { this.showConfirmSubject.next(false); }, 0);
+  }
+  closeFailureModal() {
+    this.proceed();
+    this.enterFailureSubject.next(false);
   }
   trackByFn(index: number, item: any) {
     return index;
@@ -167,7 +189,7 @@ export class RequestComponent implements OnInit {
   }
 
 
-  onNotify(form: FormGroup, code: string, customerId:number) {
+  onNotify(form: FormGroup, code: string, customerId: number) {
     console.log("Submitting");
     // stop here if form is invalid
     if (form.invalid) {
@@ -175,9 +197,15 @@ export class RequestComponent implements OnInit {
       return;
     }
 
-    this.notify(this.message.value,this.messageType.value,[customerId],code);
+    this.notify(this.message.value, this.messageType.value, [customerId], code);
 
     this.loadingSubject.next(true);
+  }
+
+
+  onFailure(form: FormGroup) {
+    this.proceed();
+    this.enterFailureSubject.next(false);
   }
 
   repay(disbursedLoanId: number, loanRequestId: number, amount: number) {
@@ -196,8 +224,8 @@ export class RequestComponent implements OnInit {
         });
     this.allSubscriptions.push(sub);
   }
-  notify(message: string, type: string, customerID: number[], code:string) {
-    const sub = this._notifyService.notify({message, type, customerID, code})
+  notify(message: string, type: string, customerID: number[], code: string) {
+    const sub = this._notifyService.notify({ message, type, customerID, code })
       .pipe(first())
       .subscribe(
         response => {

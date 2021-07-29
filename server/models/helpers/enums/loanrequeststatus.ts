@@ -5,5 +5,6 @@ export enum LoanRequestStatus{
     NotQualified="NotQualified",
     Error="Error",
     Funded="Funded",
-    Approved="Approved"
+    Approved="Approved",
+    Completed="Completed"
 }

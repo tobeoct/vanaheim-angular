@@ -198,7 +198,7 @@ export class LoanService {
 
   loans$: Observable<any> = this.search({ pageNumber: 1, maxSize: 10 });
   latestLoan$: Observable<any> = this.getLatest().pipe(tap(c => {
-    if (!c || c.requestStatus == "NotQualified") { this.runningLoanSubject.next(false) } else {
+    if (!c || c.requestStatus == "NotQualified" || c.requestStatus == "Completed") { this.runningLoanSubject.next(false) } else {
       this.runningLoanSubject.next(true)
     }
   }
@@ -233,10 +233,10 @@ export class LoanService {
     let funded = moment(dateFunded);
     let now = moment();
     let d: any = denominator == "Months" ? "months" : "days";
-    let maturityDate = funded.add(tenure,d);
+    let maturityDate = funded.add(tenure, d);
     let diff = now.diff(funded, d);
     let nextMonth = funded.add(diff, d);
-    return nextMonth<maturityDate?nextMonth:maturityDate;
+    return nextMonth < maturityDate ? nextMonth : maturityDate;
   }
   getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
     return this.getNextDueDate(dateFunded, tenure, denominator).format("MMMM Do YYYY");

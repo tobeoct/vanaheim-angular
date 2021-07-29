@@ -98,7 +98,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             const customer = await this._customerRepository.getByUserID(userData.id);
 
             let queryParameters: any = { customerID: customer.id };
-            // queryParameters["requestStatus"] = {$not:"Approved"}; 
+            queryParameters["requestStatus"] = {[this.Op.not]:"Completed"}; 
             // queryParameters["order"]= [['requestDate', 'DESC']]
             let requests = await repo.search({ ...queryParameters }, 0, 1, [['requestDate', 'DESC']]);
             // console.log("Latest Loan Requests",requests)
@@ -130,11 +130,13 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             // this._templateService.generatePDF("Loan Application",[c],"Test");
             let loanRequest = await this.getByCustomerID(customer.id);
             console.log("loan Request", loanRequest)
-            if (loanRequest && loanRequest.requestStatus != LoanRequestStatus.NotQualified && loanRequest.requestStatus != LoanRequestStatus.Approved) {
+            if (loanRequest && loanRequest.requestStatus != LoanRequestStatus.NotQualified && loanRequest.requestStatus != LoanRequestStatus.Completed) {
                 throw "You have a loan that we are currently still processing";
 
             } else {
-                loanRequest = new LoanRequest();
+                if (!loanRequest) {
+                    loanRequest = new LoanRequest();
+                }
 
             }
             const loanApplication = request.loanApplication;

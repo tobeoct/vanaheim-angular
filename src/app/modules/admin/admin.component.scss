@@ -8,7 +8,7 @@
 
 @media all and (max-width:768px){
     #page-content{
-      width: 100%;
-      left: 0;
+      width: 100% !important;
+      left: 0 !important;
     }
   }

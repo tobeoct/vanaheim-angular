@@ -17,7 +17,7 @@
       <app-tab-header>Loans</app-tab-header>
       <app-tab-body>
         <div class="padding--2x">
-          <app-drag-and-drop (onClick)="selectLoan($event)" [items$]="loans$"></app-drag-and-drop>
+          <app-drag-and-drop (onClick)="selectLoan($event)" [control]="failureReason" [items$]="loans$"></app-drag-and-drop>
         </div>
       </app-tab-body>
     </app-tab>
@@ -80,9 +80,9 @@
                 <small>{{d.key}}</small>
                 <p><b>{{d.value}}</b></p>
               </div>
-  
+
             </div>
-  
+
           </div>
         </div>
       </div>
@@ -111,6 +111,32 @@
 
   </ng-container>
 </ng-container>
+
+
+<ng-container *ngIf="(enterFailure$|async)==true">
+  <app-modal [show]="enterFailure$|async" (onChange)="closeFailureModal()">
+    <app-modal-header slot="header">
+      <h3>Enter Failure Reason</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="fForm" (onSubmit)="onFailure($event)" (errorMessageChange)="onError($event)">
+
+        <div class="vc_form-field margin--2x" style="max-width: 500px;">
+          <label for="failureReason">Reason For Failure</label>
+          <textarea id="failureReason" placeholder="Enter failure reason" [formControl]="failureReason" class="form-control">
+
+        </textarea>
+        </div>
+
+        <app-button fieldClass="no-margin--top" [form]="fForm">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
 
 <ng-container *ngIf="showRepayment$|async">
   <app-modal size="large" (onChange)="closeRepayment()">

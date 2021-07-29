@@ -123,8 +123,8 @@ export class RequestService {
         return {};
       }));
   }
-  updateStatus = (id: number, status: string) => {
-    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status })
+  updateStatus = (id: number, status: string, failureReason:string) => {
+    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason })
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;
