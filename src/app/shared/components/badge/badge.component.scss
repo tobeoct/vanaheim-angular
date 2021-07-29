@@ -10,7 +10,7 @@
     
     &--warning{
         @include background(lightYellow);
-        @include color(yellow);
+        @include color(black);
     }
     &--success{
         @include background(lightGreen);

@@ -10,7 +10,7 @@ const LOAN_ROUTES: Routes = [
 const routes: Routes = [
     {path:"loans", component: LoansComponent},
     { path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES },
-    {path:"investments",component:InvestmentsComponent},
+    {path:"earnings",component:InvestmentsComponent},
   {path:"home", component:OnboardingComponent},
   {path:"**", redirectTo:"home"},
 ];

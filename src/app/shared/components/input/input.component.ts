@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output,EventEmitter } from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Component({
@@ -28,6 +28,10 @@ export class InputComponent implements OnInit {
   @Input() loading$:Observable<boolean>;
   @Output() valueChange = new EventEmitter();
   isRequired:boolean= true;
+
+  showPasswordSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showPassword$:Observable<boolean> = this.showPasswordSubject.asObservable();
+
   constructor(private utility:Utility) { 
    
   }
@@ -37,6 +41,10 @@ export class InputComponent implements OnInit {
   
   onChange(event:any){
       this.valueChange.emit(event.target.value);
+  }
+
+  togglePassword(){
+    this.showPasswordSubject.next(!this.showPasswordSubject.value);
   }
 
 }

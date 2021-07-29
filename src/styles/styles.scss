@@ -65,7 +65,10 @@ box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
-
+div#norton-idsafe-field-styling-divId{
+  z-index: 1 !important;
+  opacity: 0.5;
+}
 // .vc_animated{
 //   transform: translateY(0) !important;
 // }

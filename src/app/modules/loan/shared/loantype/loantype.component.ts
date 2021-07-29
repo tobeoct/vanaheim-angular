@@ -6,10 +6,10 @@ import { filter } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { RadioButtonItem } from 'src/app/shared/interfaces/radio-button-item';
 const data:any[] = [
-  {id:"Personal Loans",title:"Personal Loans",frequency:"Monthly",subtitle:"Buy my new phone, fix my car, pay my rent", description:"Get loans between NGN 25,000 and NGN 5 Million. Pay back monthly."},
-  {id:"Business Loans",title:"Business Loans",frequency:"Monthly",subtitle:"Run and grow my business like a boss", description:"Get up to NGN 10 Million. Pay back monthly."},
+  {id:"Personal Loans",title:"Personal Loans", uniqueName:"PayMe",frequency:"Monthly",subtitle:"Buy my new phone, fix my car, pay my rent", description:"Get loans between NGN 25,000 and NGN 5 Million. Pay back monthly."},
+  {id:"Business Loans",title:"Business Loans",uniqueName:"FundMe",frequency:"Monthly",subtitle:"Run and grow my business like a boss", description:"Get up to NGN 10 Million. Pay back monthly."},
   {id:"LPO Financing",title:"LPO Financing",frequency:"Monthly",subtitle:"I am a vendor, I am a contractor?", description:"Get up to NGN 10 Million for your local purchase orders. Payback monthly."},
-  {id:"Float Me",title:"Float Me",frequency:"Daily",subtitle:"Fund my emergencies, I can make payments in less than one month", description:"Access up to NGN 10 Million. Payback daily.", action:"Float Me"},
+  {id:"Float Me",uniqueName:"FloatMe", title:"Emergency/Quick Cash",frequency:"Daily",subtitle:"Fund my emergencies, I can make payments in less than one month", description:"Access up to NGN 10 Million. Payback daily.", action:"Float Me"},
  ]
 @Component({
   selector: 'app-loantype',

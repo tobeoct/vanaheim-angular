@@ -3,7 +3,8 @@
 #document-upload{
     @include paddingVertical(false,"vh",1.5,0);
     #disclaimer{
-        @include color(midGrey);
+        // @include color(midGrey);
+        font-weight: map-get($font-weights, "bold");
         @include marginVertical(false,"px",0,2);
         font-size: 1.2em;
     }

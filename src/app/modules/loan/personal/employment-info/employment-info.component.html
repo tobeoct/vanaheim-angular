@@ -35,7 +35,7 @@
                     <div id="address"  [formGroup]="addressGroup">
                    
                         <app-input id="street" [placeholder]="'Enter your street address'" [control]="street" class="form-control" [error]="(errorMessage$ | async)?.street" >
-                            <label for="street">Street</label>
+                            <label for="street">Address</label>
                         </app-input>
                         <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end" >
                             <div class="theme_col-5">
@@ -68,7 +68,7 @@
                     </div>
                     <div class="theme_col-5">
                         <app-input id="payDay" type="number" [placeholder]="'30 for 30th of the month'" [control]="payDay" class="form-control" [error]="(errorMessage$ | async)?.payDay" >
-                            <label for="payDay">PayDay</label>
+                            <label for="payDay">Salary PayDay</label>
                         </app-input>
                     </div>
                 </div>

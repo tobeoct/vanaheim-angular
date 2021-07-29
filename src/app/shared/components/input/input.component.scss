@@ -2,3 +2,10 @@
     display: flex !important;
     opacity: 1 !important;
 }
+
+.input-group-append{
+    position: absolute;
+    right: 5%;
+    top: 25%;
+    z-index: 99999;
+}
