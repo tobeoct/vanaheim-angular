@@ -1,1 +1,48 @@
-<p>notify works!</p>
+<div class="content content--small">
+    <div class="margin--2x" >
+        <h2>Notify</h2>
+    </div>
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+        <ng-container *ngIf="!notifyAll.value">
+            <div class="margin--2x">
+                <label>Customers</label>
+                <app-dropdown [control]="customerId" [fieldClass]="'no-margin--top'" [id]="'customers'"
+                    aria-placeholder="Add customer">
+                    <app-option *ngFor="let t of (customers$|async); let i =index" [value]="t.id"
+                        label="{{t.firstName}} {{t.lastName}}">{{t.firstName}} {{t.lastName}}</app-option>
+
+                </app-dropdown>
+
+                <ng-container *ngIf="selectedCustomers$|async as customers">
+                    <div class="margin--x" *ngIf="customers.length>0">
+                        <div style="display: inline-block; margin-right: 5px;" *ngFor="let customer of customers">
+                            <app-badge size="small" color="info" (onCancel)="remove(customer)" [canCancel]="true">
+                                {{getCustomerName(customer)}}
+                            </app-badge>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+        <div class="form_group">
+            <app-checkbox [outline]="true" [active]="notifyAll.value" [control]="notifyAll" [value]="'true'">Notify All Customers
+            </app-checkbox>
+        </div>
+
+        <label>Message Type</label>
+        <app-dropdown current="{{messageType.value}}" [control]="messageType" [fieldClass]="'no-margin--top'"
+            [id]="'messageType'" aria-placeholder="Change messageType">
+            <app-option *ngFor="let t of messageTypes; let i =index" [value]="t.label">{{t.label}}</app-option>
+        </app-dropdown>
+        <div class="vc_form-field margin--2x" style="max-width: 500px;">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Enter message" [formControl]="message" class="form-control">
+
+        </textarea>
+        </div>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Notify</app-button>
+
+
+    </app-form>
+</div>

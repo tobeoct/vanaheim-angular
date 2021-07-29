@@ -8,7 +8,7 @@
         @include flex(horizontal,space-between);
         font-weight: map-get($font-weights, "semi-bold" );
     }
-    input{
+    input, textarea{
         @include font(text);
         @include paddingHorizontal(false,"px",0.5,0.5);
         width:100%;
@@ -23,6 +23,10 @@
         // &:[type="checkbox"]{
 
         // }
+   }
+   textarea{
+       height: auto;
+       min-height: 100px;
    }
     input[type="range"] {
         -webkit-appearance: none;  /* Override default CSS styles */

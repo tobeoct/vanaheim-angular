@@ -70,7 +70,7 @@ export class LoansComponent implements OnInit {
   monthlyRepaymentSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   monthlyRepayment$: Observable<number> = this.monthlyRepaymentSubject.asObservable();
   loans$: Observable<any>;
-
+  disbursedLoan$: Observable<any>;
   totalRepaymentSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   totalRepayment$: Observable<number> = this.totalRepaymentSubject.asObservable();
 
@@ -93,20 +93,24 @@ export class LoansComponent implements OnInit {
     private _validators: VCValidators,
     private _loanService: LoanService, private _requestService: RequestService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
-      this.base = x.url + '/';//.replace(/\/[^\/]*$/, '/');
+      this.base = x.url + '/';
     });
   }
 
   ngOnInit(): void {
     this.loanDetails = this._store.loanCalculator as LoanDetails;
     this.loanDetailsFromDb$ = this._requestService.loanLogDetails$;
-    // this.loanDetailsFromDb$.subscribe(c=>console.log("Details",c))
+    this.disbursedLoan$ = this._requestService.loanDetails$;
     this.loanCalculator = this._store.loanCalculator;
     this.loanDetailsSubject.next(this._store.loanCalculator)
     this.latestLoan$ = this._loanService.latestLoan$;
     this.runningLoan$ = this._loanService.runningLoan$;
+    this.latestLoan$.subscribe(l => {
+      if (l.requestStatus == 'Funded') {
+        this._requestService.selectLoan(l.id);
+      }
+    })
     this.loans$ = this._loanService.loanWithFilter$;
-    // this.search()
     let lType = this._store.loanType || "Personal Loans";
     let tenureRange = this._loanService.getTenureRange(lType);
     this.minTenure = tenureRange["min"];
@@ -152,9 +156,6 @@ export class LoansComponent implements OnInit {
     this.activeFilterSubject.next(value);
   }
 
-  // search(){
-  //   this.loans$ = this._loanService.loanWithFilter$;
-  // }
   onSubmit(form: FormGroup) {
 
     // stop here if form is invalid
@@ -182,7 +183,6 @@ export class LoansComponent implements OnInit {
   }
   onNavigate(route: string, params: any = {}): void {
     let r = this.base + route;
-    // console.log(r);
     this._router.navigate([r], { queryParams: params })
   }
   onError(value: any): void {

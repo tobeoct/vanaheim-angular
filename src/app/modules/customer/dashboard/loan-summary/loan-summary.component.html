@@ -2,45 +2,146 @@
     <ng-container *ngIf="!(latestLoan$|async)">
         <div id="no-data">
             <div class="image">
-             <img src="../../../../../assets/icons/bell-spark.svg"/>
+                <img src="../../../../../assets/icons/bell-spark.svg" />
             </div>
-            <h3>You are yet to get the money 
+            <h3>You are yet to get the money
                 you need </h3>
             <p>We are here to provide you with the funds you need quickly and easily</p>
-            
-            <button class="widget_button widget_button--small theme_bg--lightgrey"  (click)="onNavigate('my/loans')">Explore our rates</button>
-        </div> 
+
+            <button class="widget_button widget_button--small theme_bg--lightgrey"
+                (click)="onNavigate('my/loans')">Explore our rates</button>
+        </div>
     </ng-container>
-        <ng-container *ngIf="latestLoan$|async as loan">
-              <div id="in-progress">
-                    <ng-container *ngIf="loan.requestStatus!='Funded'">
-                        <app-loan-status  [loan$]="latestLoan$"></app-loan-status>
-                    </ng-container>
-                    <ng-container *ngIf="loan.requestStatus=='Funded'">
-                        <div id="active-loan" style="width: 100%;">
-                            <small>Active Loan</small>
-                            <div class="content--smaller margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center" id="repayment">
-                                <div>
-                                    <small>Next Payment</small>
-                                    <h1 class="margin--x">{{loan.monthlyPayment|currency:"₦":'symbol':'1.0-2' }}</h1>
-                                    <small>Due on <b>{{getNextDueDateFormatted(loan.dateApproved,loan.tenure,loan.denominator)}}</b></small>
-                                </div>
-                                <div>
-                                    <app-progress-circular [daysLeft]="getDaysLeft(loan.dateApproved,loan.tenure,loan.denominator)"></app-progress-circular>
-                                </div>
+    <ng-container *ngIf="latestLoan$|async as loan">
+        <div id="in-progress">
+            <ng-container *ngIf="loan.requestStatus!='Funded'">
+                <app-loan-status [loan$]="latestLoan$"></app-loan-status>
+            </ng-container>
+            <ng-container *ngIf="loan.requestStatus=='Funded'">
+                <ng-container *ngIf="(disbursedLoan$|async) as details">
+                    <div id="active-loan" *ngIf="!details.disbursedLoan.isClosed" style="width: 100%;">
+                        <small>Active Loan</small>
+                        <div class="content--smaller margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center"
+                            id="repayment">
+                            <div>
+                                <small>Next Payment</small>
+                                <h1 class="margin--x">
+                                    {{details?.disbursedLoan?.nextPayment|currency:"₦":'symbol':'1.0-2' }}</h1>
+                                <small>Due on <b>{{details?.disbursedLoan?.nextRepaymentDate|date:'MMMM d
+                                        YYYY'}}</b></small>
+                            </div>
+                            <div>
+                                <app-progress-circular
+                                    [daysLeft]="getDaysLeft(details?.disbursedLoan?.nextRepaymentDate)">
+                                </app-progress-circular>
                             </div>
                         </div>
-                        <div class="margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-                            <a (click)="onNavigate('my/loans')"><u><b>View History</b></u></a>
-                            <a><u><b>View Repayments</b></u></a>
+                    </div>
+                    <div  class="repaid-loan box-shadow" *ngIf="details.disbursedLoan.isClosed"
+                        style="width: 100%;">
+                        <div class="margin--x"
+                            id="repayment">
+                            <div style="text-align: center;">
+                                <div >
+                                    <span style="font-size:2.5em;" class="material-icons">
+                                        military_tech
+                                    </span>
+                                </div>
+                                
+                                <h2 class="margin--x" style="font-size: 1.5em;">
+                                    {{details?.totalRepayment|currency:"₦":'symbol':'1.0-2' }}</h2>
+                                    <p>Your last loan has been fully repaid</p>
+                            </div>
                         </div>
-                    </ng-container>
-                   <div id="details">
-                        <div class="item"><p>Total Loan Amount</p><p>{{loan.totalRepayment|currency:"₦":'symbol':'1.0-2' }}</p></div>
-                        <div class="item"><p>Account Number</p><p>{{loan.accountNumber}}</p></div>
-                        <div class="item"><p>Monthly Payment</p><p>{{loan.monthlyPayment|currency:"₦":'symbol':'1.0-2'}}</p></div>
-                        <div class="item"><p>Expected Close Date</p><p>{{loan.maturityDate}}</p></div>
-                   </div>
-              </div>
-        </ng-container>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div class="margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                        <a (click)="onNavigate('my/loans')"><u><b>View History</b></u></a>
+                        <a (click)="showRepayment(details.disbursedLoan.id)"><u><b>View Repayments</b></u></a>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <div id="details">
+                <div class="item">
+                    <p>Total Loan Amount</p>
+                    <p>{{loan.totalRepayment|currency:"₦":'symbol':'1.0-2' }}</p>
+                </div>
+                <div class="item">
+                    <p>Account Number</p>
+                    <p>{{loan.accountNumber}}</p>
+                </div>
+                <div class="item">
+                    <p>Monthly Payment</p>
+                    <p>{{loan.monthlyPayment|currency:"₦":'symbol':'1.0-2'}}</p>
+                </div>
+                <div class="item">
+                    <p>Expected Close Date</p>
+                    <p>{{loan.maturityDate}}</p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
 </div>
+
+
+
+<ng-container *ngIf="showRepayment$|async">
+    <app-modal size="large" (onChange)="closeRepayment()">
+
+        <ng-container slot="body">
+            <div style="display: block; width: 100%;">
+
+
+                <ng-container *ngIf="repayments$|async as repayments">
+                    <div style="width: 100%;" id="loan-details">
+
+                        <div class="title">
+                            <h3>Repayment History</h3>
+                        </div>
+
+                    </div>
+                    <app-table>
+                        <ng-container slot="header">
+                            <tr>
+                                <th>Payment Date</th>
+                                <th>Amount Repaid</th>
+                                <th>Status</th>
+                            </tr>
+                        </ng-container>
+                        <ng-container slot="body" *ngIf="repayments$|async as data">
+                            <ng-container *ngIf="data.length==0">
+                                <div class="no-data">
+                                    <span class="material-icons material-icons-outlined">
+                                        info
+                                    </span>
+                                    <h3>No data available</h3>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="data.length>0">
+                                <tr *ngFor="let row of data;trackBy:trackByFn">
+                                    <td>{{row.dateRepaid | date :'MMMM d, y hh:mm:ss'}}</td>
+                                    <td>{{row.amount|currency:'₦'}}</td>
+                                    <td>
+                                        <app-badge [color]="getStatusColor(row.repaymentType)">{{row.repaymentType}}
+                                        </app-badge>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container slot="body" *ngIf="!(repayments$|async)">
+                            <div class="no-data">
+                                <span class="material-icons material-icons-outlined">
+                                    info
+                                </span>
+                                <h3>No repayments yet</h3>
+                            </div>
+                        </ng-container>
+
+                    </app-table>
+                </ng-container>
+            </div>
+        </ng-container>
+    </app-modal>
+</ng-container>

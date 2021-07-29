@@ -6,4 +6,5 @@ export interface IRepaymentService  extends IBaseService<Repayment>{
     processRepayment:({amount,disbursedLoanId }:any)=>Promise<any>;
     getByDisbursedLoanID:(disbursedLoanID:number)=>Promise<Repayment[]>
     getRepaymentHealth: (disbursedLoanId: number) =>Promise<any>;
+    getTotalRepayment: (disbursedLoanId: number) => Promise<number>;
 }

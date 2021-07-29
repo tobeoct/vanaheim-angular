@@ -17,6 +17,7 @@ import { IDisbursedLoanRepository } from "@repository/interface/loan/Idisbursed-
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
 import { IDocumentService } from "@services/interfaces/Idocument-service";
 import { INotificationService } from "@services/interfaces/Inotification-service";
+import { IRepaymentService } from "@services/interfaces/Irepayment-service";
 import { IDisbursedLoanService } from "@services/interfaces/loan/Idisbursed-loan-service";
 import { ILoanRequestLogService } from "@services/interfaces/loan/Iloan-log-request-service";
 import { ILoanRequestService } from "@services/interfaces/loan/Iloan-request-service";
@@ -29,7 +30,7 @@ import { TemplateService } from "../common/template-service";
 import UtilService from "../common/util";
 
 export class LoanService implements ILoanService {
-  constructor(private _db: any, private _appConfig: AppConfig, private _disbursedLoanService: IDisbursedLoanService, private _disbursedLoanRepository: IDisbursedLoanRepository, private _nokRepository: NOKRepository, private _accountRepository: AccountRepository, private _notificationService: INotificationService, private _loanTypeRequirementService: ILoanTypeRequirementService, private _documentService: IDocumentService, private _templateService: TemplateService, private _emailService: EmailService, private _customerRepository: ICustomerRepository, private _loanRequestService: ILoanRequestService, private _utilService: UtilService, private _loanRequestLogService: ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository) {
+  constructor(private _db: any, private _appConfig: AppConfig, private _repaymentService: IRepaymentService, private _disbursedLoanService: IDisbursedLoanService, private _disbursedLoanRepository: IDisbursedLoanRepository, private _nokRepository: NOKRepository, private _accountRepository: AccountRepository, private _notificationService: INotificationService, private _loanTypeRequirementService: ILoanTypeRequirementService, private _documentService: IDocumentService, private _templateService: TemplateService, private _emailService: EmailService, private _customerRepository: ICustomerRepository, private _loanRequestService: ILoanRequestService, private _utilService: UtilService, private _loanRequestLogService: ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository) {
 
   }
   getLoanDetails = (id: number, type = "loanRequest") => new Promise<any>(async (resolve, reject) => {
@@ -157,10 +158,18 @@ export class LoanService implements ILoanService {
           )
           requestDetails = [...requestDetails, ...business];
         }
-        if(type!="loanRequest")  loanRequest = await this._loanRequestService.search({pageNumber:1,maxSize:1,requestId:request.requestId});
-        console.log(loanRequest)
-        let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest?loanRequest.data?.rows[0]?.id??0:id);
-        resolve({ status: true, data: { code: request.code, status: request.requestStatus, details: requestDetails, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+        if (type != "loanRequest") loanRequest = await this._loanRequestService.search({ pageNumber: 1, maxSize: 1, requestId: request.requestId });
+
+        let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest ? loanRequest.data?.rows[0]?.id ?? 0 : id);
+        let totalRepayment = 0;
+        let documents: Document[]=[];
+        let response = await this._documentService.getByLoanRequestId(request.id);
+        if (response.status) {
+          documents = response.data as Document[];
+
+        }
+        if (disbursedLoan?.status == true) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
+        resolve({ status: true, data: { code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment,documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
       } else {
         resolve({ status: false, data: "Could not find loan request" });
       }

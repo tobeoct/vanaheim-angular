@@ -1,3 +1,8 @@
-<div class="badge badge--{{color}}">
+<div class="badge badge--{{color}} d-flex d-flex_vertical--center">
     <ng-content></ng-content>
+    <ng-container *ngIf="canCancel">
+        <div class="cancel" (click)="cancel()" style="margin-right: 5px;">
+            <span class="material-icons">close</span>
+        </div>
+    </ng-container>
 </div>

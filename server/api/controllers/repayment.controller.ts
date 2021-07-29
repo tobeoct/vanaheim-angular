@@ -48,14 +48,14 @@ export default class UserController {
             res.statusCode = 400;
             res.data = "No id provided";
         } else {
-            let response: any = await this._repaymentService.getByDisbursedLoanID(req.body?.disbursedLoanID);
-            if (response.status == true) {
+            let response: any = await this._repaymentService.getByDisbursedLoanID(id);
+            // if (response.status == true) {
                 res.statusCode = 200;
-                res.data = response.data;
-            } else {
-                res.statusCode = 400;
-                res.data = response;
-            }
+                res.data = response;//s.data;
+            // } else {
+            //     res.statusCode = 400;
+            //     res.data = response;
+            // }
         }
 
 

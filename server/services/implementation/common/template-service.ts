@@ -14,6 +14,20 @@ export class TemplateService{
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
+    NOTIFICATION(message:string,type:string, id?:string){
+        if(id){
+        return `${type} -   LOAN ID: ${id} <br/><br/>
+        ${message}<br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;}else{
+            return `<b>${type}</b><br/><br/>
+            ${message}<br/><br/>
+            Kind Regards<br/><br/>
+            <b>Vanir Capital Loans and Capital Finance Team</b>
+            `;
+        }
+    }
     INVESTMENT_CUSTOMER_TEMPLATE=`Welcome to Vanir Capital Limited.<br/><br/>
     We thank you for your interest in our investment service. We are
     resolute in our mission for quality financial service delivery, assured by

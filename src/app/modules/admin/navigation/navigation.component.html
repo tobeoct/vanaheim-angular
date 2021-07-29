@@ -1,9 +1,9 @@
 <div class="sidenav">
     <ul>
-    <li class="sidenav_link" [routerLink]="['/admin/requests']" data-active id="personal" data-order="1"><a class="theme_anchor__disabled"><span>Requests</span></a><span class="material-icons material-icons-round">
+    <li class="sidenav_link" [routerLink]="['/admin/requests']" [routerLinkActive]="'sidenav_link--active'"><a class="theme_anchor__disabled"><span>Requests</span></a><span class="material-icons material-icons-round">
 fiber_manual_record
 </span></li>
-<li class="sidenav_link" [routerLink]="['/admin/notify']" id="account" data-pointable="true" data-order="2"><a class="theme_anchor__disabled"><span>Notify</span></a><span class="material-icons material-icons-round">
+<li class="sidenav_link" [routerLink]="['/admin/notify']" [routerLinkActive]="'sidenav_link--active'" id="account" data-pointable="true" data-order="2"><a class="theme_anchor__disabled"><span>Notify</span></a><span class="material-icons material-icons-round">
 fiber_manual_record
 </span></li>
 <li class="sidenav_link" id="logout" data-order="6" data-pointable="true" (click)="logout()"><a><span>Logout</span></a><span class="material-icons material-icons-round">

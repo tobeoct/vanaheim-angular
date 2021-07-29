@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter, take } from 'rxjs/operators';
+import { delay, filter, first, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { PersonalInfo } from './personal-info';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
@@ -109,6 +109,12 @@ export class PersonalInfoComponent implements OnInit {
   delay$ = from([1]).pipe(delay(1000));
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
+  
+  apiSuccessSubject:Subject<string> = new Subject<string>(); 
+  apiSuccess$:Observable<string> = this.apiSuccessSubject.asObservable();
+  
+  apiErrorSubject:Subject<string> = new Subject<string>(); 
+  apiError$:Observable<string> = this.apiErrorSubject.asObservable();
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
@@ -242,6 +248,20 @@ export class PersonalInfoComponent implements OnInit {
     this._store.setPersonalInfo(personalInfo);
     if (!this.side) {
       this.onNavigate("account-info");
+    }else{
+      this.loadingSubject.next(true);
+      this._customerService.updateCustomer(personalInfo).pipe(first())
+      .subscribe(
+          (data:any) => {
+            this.loadingSubject.next(false);
+            this.apiSuccessSubject.next(data);
+            setTimeout(()=>{this.apiSuccessSubject.next();},5000)
+          },
+          (error:any) => {
+              setTimeout(()=>{this.apiErrorSubject.next("Error: "+error);this.loadingSubject.next(false);},1000)
+              setTimeout(()=>{this.apiErrorSubject.next();},5000)
+              
+          });
     }
   }
   nok() {

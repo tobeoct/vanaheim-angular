@@ -61,6 +61,15 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
 
     }
   });
+  getTotalRepayment = (disbursedLoanId: number) => new Promise<number>(async (resolve, reject) => {
+
+    try {
+      let repayments = await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId) as Repayment[];
+      resolve(this.reducePayments(repayments,moment().add(2,'year')))
+    } catch (err) {
+
+    }
+  });
   processRepayment = ({ amount, disbursedLoanId, loanRequestId, nextPayment, nextRepaymentDate, dateOffset = 0 }: any) => new Promise<Response<string>>(async (resolve, reject) => {
 
     console.log("Amount to repay", amount, dateOffset)
@@ -73,12 +82,19 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
         resolve({ status: false, data: "Invalid request" });
         return;
       }
-      let disbursedLoan = await this._disbursedLoanRepository.getByIdWithInclude(disbursedLoanId, [{
+      let d = await this._disbursedLoanRepository.getByIdWithInclude(disbursedLoanId, [{
         model: this._db.LoanRequestLog,
         required: true
-      }]) as DisbursedLoan;
+      }]);// as DisbursedLoan;
+      let disbursedLoan = new DisbursedLoan();
+      Object.assign(disbursedLoan, d?.dataValues);
+      console.log("Disbursed Loan", disbursedLoan)
       if (!disbursedLoan) {
         resolve({ status: false, data: "Invalid request" });
+        return;
+      }
+      if (disbursedLoan.isClosed) {
+        resolve({ status: true, data: "Loan has been paid off in full" });
         return;
       }
       let loanRequest = await this._loanRequestRepository.getById(loanRequestId) as LoanRequest;
@@ -89,32 +105,32 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       let totalRepaymentSoFar = this.reducePayments(repaymentsSoFar, moment(disbursedLoan.maturityDate));//this.reducePayments(await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId),period.from.add(dateOffset,this.getDenom(loanRequest.denominator)));
       // totalRepayment+=amount;
       console.log("Repayments so far", totalRepaymentSoFar)
-      let expectedFullPayment = disbursedLoan?.LoanRequest?.totalRepayment;
+      let expectedFullPayment = loanRequest.totalRepayment;
       let isPaidInFull = (totalRepaymentSoFar + amount) > expectedFullPayment
-      if (totalRepaymentSoFar == expectedFullPayment) {
-        disbursedLoan.isClosed == true;
-        disbursedLoan.loanStatus = LoanStatus.PaidInFull;
-        await this._disbursedLoanRepository.update(disbursedLoan);
-        resolve({ status: true, data: "Loan has been paid off in full" });
-        return;
-      }
-      if (isPaidInFull) amount = (totalRepaymentSoFar + amount) - expectedFullPayment;
-      let totalRepayment = (currentCycleRepayments + amount);
-      // if ((totalRepayment <= disbursedLoan.nextPayment)) {
-      let repayment = new Repayment();
-      repayment.code = this._utilService.autogenerate({ prefix: "RPY" });
-      repayment.amount = (currentCycleRepayments + amount) > disbursedLoan.nextPayment ? disbursedLoan.nextPayment - currentCycleRepayments : amount;
-      repayment.dateRepaid = dateOffset > 0 ? moment().add(dateOffset, this.getDenom(loanRequest.denominator)).toDate() : new Date();
-      repayment.disbursedLoanID = disbursedLoanId;
-      repayment.loanRequestID = loanRequestId;
-      repayment.status = BaseStatus.Active;
-      repayment.accountNumber = "";
-      repayment.repaymentType = amount < disbursedLoan.nextPayment ? PaymentType.Partial : PaymentType.FullPayment;
-      disbursedLoan.loanStatus = LoanStatus.OnTrack;
-      await this._disbursedLoanRepository.update(disbursedLoan);
+      console.log("Expected Full Payment", expectedFullPayment);
 
-      let repaymentInDb = await this._repaymentRepository.create(repayment);
+      if (isPaidInFull) amount = amount - ((totalRepaymentSoFar + amount) - expectedFullPayment);
+      console.log("True Amount to repay", amount)
+      let totalRepayment = (currentCycleRepayments + amount);
+      console.log("TotalRepayment", totalRepayment);
+      // if ((totalRepayment <= disbursedLoan.nextPayment)) {
+      if (totalRepaymentSoFar != expectedFullPayment) {
+        let repayment = new Repayment();
+        repayment.code = this._utilService.autogenerate({ prefix: "RPY" });
+        repayment.amount = (currentCycleRepayments + amount) > disbursedLoan.nextPayment ? disbursedLoan.nextPayment - currentCycleRepayments : amount;
+        repayment.dateRepaid = dateOffset > 0 ? moment().add(dateOffset, this.getDenom(loanRequest.denominator)).toDate() : new Date();
+        repayment.disbursedLoanID = disbursedLoanId;
+        repayment.loanRequestID = loanRequestId;
+        repayment.status = BaseStatus.Active;
+        repayment.accountNumber = "";
+        repayment.repaymentType = amount < disbursedLoan.nextPayment ? PaymentType.Partial : PaymentType.FullPayment;
+        disbursedLoan.loanStatus = LoanStatus.OnTrack;
+        await this._disbursedLoanRepository.update(disbursedLoan);
+        let repaymentInDb = await this._repaymentRepository.create(repayment);
+      }
       // }
+
+
       if (totalRepayment > disbursedLoan.nextPayment) {
         let rollOver = totalRepayment - disbursedLoan.nextPayment;
         console.log("Amount rolling over ", rollOver);
@@ -137,6 +153,13 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
           resolve(result);
           return;
         }
+      }
+      if ((totalRepaymentSoFar + amount) >= expectedFullPayment) {
+        disbursedLoan.isClosed = true;
+        disbursedLoan.loanStatus = LoanStatus.PaidInFull;
+        await this._disbursedLoanRepository.update(disbursedLoan);
+        resolve({ status: true, data: "Loan has been paid off in full" });
+        return;
       }
       resolve({ status: true, data: "Repayment was successful" });
       return;
@@ -197,7 +220,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       let lastRepayment = this.getLastRepaymentPerCycle(currentRepayments, moment(r.rawDate).subtract(1, "month").toDate(), r.rawDate);
 
       console.log("Cycle " + i, amountRepaid, lastRepayment);
-      let status = moment().toDate() > r.rawDate ? amountRepaid < r.loanRepayment ? "Defaulted" : "Fully Repaid" : (amountRepaid < r.loanRepayment) && this.isWithinCurrentCycle(moment(r.rawDate).subtract(1, "month").toDate(), r.rawDate) ? "Partial" : amountRepaid >= r.loanRepayment ? "Fully Paid" : "Not Yet Due"
+      let status = moment().toDate() > r.rawDate ? amountRepaid < r.loanRepayment ? "Defaulted" : "Fully Repaid" : (amountRepaid < r.loanRepayment) && this.isWithinCurrentCycle(moment(r.rawDate).subtract(1, "month").toDate(), r.rawDate) ? amountRepaid == 0 ? "Awaiting First Payment" : "Partial" : amountRepaid >= r.loanRepayment ? "Fully Paid" : "Not Yet Due"
       return { dueDate: r.paymentDate, rawDate: r.rawDate, expectedPayment: r.loanRepayment, amountRepaid, status, lastPayment: lastRepayment?.amount ?? 0, lastPaymentDate: lastRepayment?.dateRepaid };
     })
 

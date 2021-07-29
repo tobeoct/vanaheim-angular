@@ -1,3 +1,48 @@
-<app-side-navigation title="Account">
-    <app-account-info [side]="true"></app-account-info>
+<app-side-navigation title="Accounts">
+    <ng-container *ngIf="accountsFromDb$|async">
+    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+       
+            <div id="accounts"
+                class="theme_row no-margin--top animate__animated animate__fadeInUp animate__fast"
+                *ngFor="let accountGroup of accountArrayGroups;let i =index">
+              
+                <p><b>Account Details {{i+1}}</b></p>
+                <ng-container [formGroup]="accountGroup">
+                    <app-dropdown [current]="(accountGroup.get('bank')|toControl).value"
+                        [fieldClass]="'no-margin--top'" [id]="'bank'"
+                        [control]="accountGroup.get('bank')|toControl" aria-placeholder="Select your bank">
+                        <ng-container slot="label"><label for="bank">Bank</label></ng-container>
+                        <app-option *ngFor="let t of banks; let i =index" [value]="t.title" [label]="t.title">
+                            {{t.title}}</app-option>
+                    </app-dropdown>
+
+                    <app-input  id="accountNumber" [loading$]="loading$"
+                        [placeholder]="'Enter your account number'"
+                        [control]="accountGroup.get('accountNumber')|toControl" class="form-control"
+                        [error]="(errorMessage$ | async)?.accountNumber">
+                        <label for="accountNumber">Account Number</label>
+
+                    </app-input>
+                    <fieldset [disabled]="(disableInput$|async)">
+                        <app-input id="accountName" [placeholder]="'Enter your account name'"
+                            [control]="accountGroup.get('accountName')|toControl" class="form-control"
+                            [error]="(errorMessage$ | async)?.accountName">
+                            <label for="accountName">Account Name</label>
+                        </app-input>
+                    </fieldset>
+                </ng-container>
+            </div>
+        <div style="margin-top: 60px;">
+            <app-button [form]="form">Save</app-button>
+        </div>
+    </app-form>
+</ng-container>
+
 </app-side-navigation>
+<div class="snackbar_container ">
+    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
+    </div>
+    <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0">{{success}}
+    </div>
+
+</div>

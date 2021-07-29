@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, filter, take } from 'rxjs/operators';
+import { delay, filter, first, take } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { NOKInfo } from './nok-info';
 import { DateRange } from 'src/app/shared/components/date/date';
@@ -77,7 +77,7 @@ export class NOKInfoComponent implements OnInit {
 
   base: string;
   nokFromDb$: Observable<any>;
-  constructor(private _router: Router, private _utility:Utility, private _fb: FormBuilder, private _store: Store,
+  constructor(private _router: Router, private _utility: Utility, private _fb: FormBuilder, private _store: Store,
     private _validators: VCValidators, private _route: ActivatedRoute, private _authService: AuthService, private _customerService: CustomerService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -88,6 +88,12 @@ export class NOKInfoComponent implements OnInit {
   delay$ = from([1]).pipe(delay(1000));
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
+
+  apiSuccessSubject: Subject<string> = new Subject<string>();
+  apiSuccess$: Observable<string> = this.apiSuccessSubject.asObservable();
+
+  apiErrorSubject: Subject<string> = new Subject<string>();
+  apiError$: Observable<string> = this.apiErrorSubject.asObservable();
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
@@ -149,8 +155,22 @@ export class NOKInfoComponent implements OnInit {
     this._store.setNOKInfo(nokInfo);
     if (!this.side) {
       this.onNavigate("upload");
-    }else{
-      this._utility.toggleSideNav(SideNavigationList.personal);
+    } else {
+      this.loadingSubject.next(true);
+      this._customerService.updateNOK(nokInfo).pipe(first())
+        .subscribe(
+          (data: any) => {
+            this.loadingSubject.next(false);
+            this._utility.toggleSideNav(SideNavigationList.personal);
+            this.apiSuccessSubject.next(data);
+            setTimeout(() => { this.apiSuccessSubject.next(); }, 5000)
+          },
+          (error: any) => {
+            setTimeout(() => { this.apiErrorSubject.next("Error: " + error); this.loadingSubject.next(false); }, 1000)
+            setTimeout(() => { this.apiErrorSubject.next(); }, 5000)
+
+          });
+
     }
   }
 

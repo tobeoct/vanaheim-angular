@@ -3,4 +3,5 @@ import { IBaseRepository } from "../Ibase-repository";
 
 export interface IDocumentRepository extends IBaseRepository<Document>{
     getByCustomerID: (customerID:number) => Promise<any[]>
+    getByLoanRequestId:(loanRequestLogId:number)=>Promise<any[]>
 }

@@ -2,9 +2,12 @@
 @import '../../../../styles/themes/_theme-dir';
 .badge{
     border-radius: $border-radius;
+    width: fit-content !important;
+    position: relative;
     @include background(lightGrey);
     @include color(black);
     @include padding(true,"px",0.25);
+    
     &--warning{
         @include background(lightYellow);
         @include color(yellow);

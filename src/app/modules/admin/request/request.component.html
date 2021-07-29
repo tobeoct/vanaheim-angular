@@ -1,118 +1,157 @@
 <div class="content content--smaller">
 
-    <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center margin--2x">
-        <h2>All Requests</h2>
-        <div class="d-flex">
-          <app-input fieldClass="no-margin--top" type="date"  id="fromDate" [control]="fromDate" class="form-control"  >
-          </app-input>
-          <app-input fieldClass="no-margin--top" type="date"  id="toDate" [control]="toDate" class="form-control"  >
-          </app-input>
-            <!-- <app-dropdown [fieldClass]="'no-margin--all'" [class]="'no-margin--all'" [current]="'Today'">
+  <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center margin--2x">
+    <h2>All Requests</h2>
+    <div class="d-flex">
+      <app-input fieldClass="no-margin--top" type="date" id="fromDate" [control]="fromDate" class="form-control">
+      </app-input>
+      <app-input fieldClass="no-margin--top" type="date" id="toDate" [control]="toDate" class="form-control">
+      </app-input>
+      <!-- <app-dropdown [fieldClass]="'no-margin--all'" [class]="'no-margin--all'" [current]="'Today'">
                 <option value="Today">Today</option>
             </app-dropdown> -->
-        </div>
     </div>
-    <app-tabs>
-        <app-tab>
-            <app-tab-header>Loans</app-tab-header>
-            <app-tab-body>
-                <div class="padding--2x"><app-drag-and-drop (onClick)="selectLoan($event)" [items$]="loans$"></app-drag-and-drop></div>
-            </app-tab-body>
-          </app-tab>
-        <app-tab>
-          <app-tab-header>Investment</app-tab-header>
-          <app-tab-body>
-            <div class="padding--2x"><app-drag-and-drop ></app-drag-and-drop></div>
-          </app-tab-body>
-        </app-tab>
-       
-      </app-tabs>
+  </div>
+  <app-tabs>
+    <app-tab>
+      <app-tab-header>Loans</app-tab-header>
+      <app-tab-body>
+        <div class="padding--2x">
+          <app-drag-and-drop (onClick)="selectLoan($event)" [items$]="loans$"></app-drag-and-drop>
+        </div>
+      </app-tab-body>
+    </app-tab>
+    <app-tab>
+      <app-tab-header>Investment</app-tab-header>
+      <app-tab-body>
+        <div class="padding--2x">
+          <app-drag-and-drop></app-drag-and-drop>
+        </div>
+      </app-tab-body>
+    </app-tab>
+
+  </app-tabs>
 </div>
 
 <ng-container *ngIf="show$|async">
-<app-modal size="large" (onChange)="closeModal()">
-  <ng-container slot="body" *ngIf="loanDetails$|async as loanDetails">
-    <div style="width: 100%;" id="loan-details">
-      <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center" style="width: 100%;">
-        <div>
-          <small>Loan Application</small>
-          <h2>{{loanDetails.code}}</h2>
-        </div>
-        <div class="d-flex">
-          <app-button size="small" (onClick)="showRepayment(loanDetails.disbursedLoan?.id)" *ngIf="loanDetails.status=='Funded'"  [class]="'widget_button--fill widget_button--small'"><ng-container slot="button">Repayment</ng-container></app-button>
-          <div style="margin-left: 10px;"><app-button  size="small" color="secondary" [class]="'widget_button--fill widget_button--small'"><ng-container slot="button">Notify</ng-container></app-button></div>
-        </div>
-       
-      </div>
-      <div class="d-flex d-flex_vertical--center margin--2x">
-        <div class="dot {{indicator$|async}}" style="margin-right: 10px;"></div>
-        <div style="margin-right: 10px;"><p><b>Status</b></p></div>
-        <div>
-          <app-dropdown current="{{ctrl.value?ctrl.value:loanDetails.status}}" [control]="ctrl"  [fieldClass]="'no-margin--top'" [id]="'status'"   aria-placeholder="Change loan status">
-            <app-option *ngFor="let t of loanStatuses; let i =index" [value]="t.label">{{t.label}}</app-option>
-        </app-dropdown>
-        </div>
-      </div>
-
-      <div *ngFor="let detail of loanDetails.details">
-        <div class="title"><h3>{{detail.key}}</h3></div>
-        <div class="margin--3x">
-          <div class="detail-card" *ngFor="let d of detail.data">
-            <small>{{d.key}}</small>
-            <p><b>{{d.value}}</b></p>
+  <app-modal size="large" (onChange)="closeModal()">
+    <ng-container slot="body" *ngIf="loanDetails$|async as loanDetails">
+      <div style="width: 100%;" id="loan-details">
+        <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center" style="width: 100%;">
+          <div>
+            <small>Loan Application</small>
+            <h2>{{loanDetails.code}}</h2>
           </div>
-         
-        </div>
-        
-      </div>
-    </div>
-  </ng-container>
-</app-modal>
+          <div class="d-flex">
+            <app-button size="small" (onClick)="showRepayment(loanDetails.disbursedLoan?.id)"
+              *ngIf="loanDetails.status=='Funded'" [class]="'widget_button--fill widget_button--small'">
+              <ng-container slot="button">Repayment</ng-container>
+            </app-button>
+            <div style="margin-left: 10px;">
+              <app-button (onClick)="showNotify()" size="small" color="secondary"
+                [class]="'widget_button--fill widget_button--small'">
+                <ng-container slot="button">Notify</ng-container>
+              </app-button>
+            </div>
+          </div>
 
-<ng-container *ngIf="(showConfirm$|async)==true">
-  <app-modal [show]="showConfirm$|async" (onChange)="closeConfirmModal()">
-    <app-modal-header slot="header">
-      <h3>Change Notice</h3>
-    </app-modal-header>
-    <app-modal-body  slot="body">
-      <p>Are you sure you want to change the status of this loan to <b>{{ctrl.value}}</b>?</p>
-      <div class="d-flex d-flex_horizontal--space-between">
-        <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'" (onClick)="closeConfirmModal()" ><ng-container slot="button">Cancel</ng-container></app-button>
-      <app-button [class]="'no-margin--bottom widget_button--small'" (onClick)="confirm()" ><ng-container slot="button">Continue</ng-container></app-button>
-        
-      </div>
-    </app-modal-body>
-  </app-modal>
+        </div>
+        <ng-container *ngIf="!loanDetails?.disbursedLoan?.isClosed">
+          <div class="d-flex d-flex_vertical--center margin--2x">
+            <div class="dot {{indicator$|async}}" style="margin-right: 10px;"></div>
+            <div style="margin-right: 10px;">
+              <p><b>Status</b></p>
+            </div>
+            <div>
+              <app-dropdown current="{{ctrl.value?ctrl.value:loanDetails.status}}" [control]="ctrl"
+                [fieldClass]="'no-margin--top'" [id]="'status'" aria-placeholder="Change loan status">
+                <app-option *ngFor="let t of loanStatuses; let i =index" [value]="t.label">{{t.label}}</app-option>
+              </app-dropdown>
+            </div>
+          </div>
+        </ng-container>
+        <div class="margin--2x">
+          <div *ngFor="let detail of loanDetails.details">
+            <div class="title">
+              <h3>{{detail.key}}</h3>
+            </div>
+            <div class="margin--3x">
+              <div class="detail-card" *ngFor="let d of detail.data">
+                <small>{{d.key}}</small>
+                <p><b>{{d.value}}</b></p>
+              </div>
   
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </app-modal>
+
+  <ng-container *ngIf="(showConfirm$|async)==true">
+    <app-modal [show]="showConfirm$|async" (onChange)="closeConfirmModal()">
+      <app-modal-header slot="header">
+        <h3>Change Notice</h3>
+      </app-modal-header>
+      <app-modal-body slot="body">
+        <p>Are you sure you want to change the status of this loan to <b>{{ctrl.value}}</b>?</p>
+        <div class="d-flex d-flex_horizontal--space-between">
+          <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'"
+            (onClick)="closeConfirmModal()">
+            <ng-container slot="button">Cancel</ng-container>
+          </app-button>
+          <app-button [class]="'no-margin--bottom widget_button--small'" (onClick)="confirm()">
+            <ng-container slot="button">Continue</ng-container>
+          </app-button>
+
+        </div>
+      </app-modal-body>
+    </app-modal>
+
   </ng-container>
 </ng-container>
 
 <ng-container *ngIf="showRepayment$|async">
   <app-modal size="large" (onChange)="closeRepayment()">
-    
-    <ng-container  slot="body">
+
+    <ng-container slot="body">
       <div style="display: block; width: 100%;">
         <div class="margin--3x no-margin--top">
           <small>Loan Application</small>
           <h2>{{(loanDetails$|async).code}}</h2>
         </div>
-        
+
         <ng-container *ngIf="loanDetails$|async as loanDetails">
           <div style="margin:auto">
-            <app-form [form]="form" (onSubmit)="onSubmit($event,loanDetails?.disbursedLoan?.id)" (errorMessageChange) = "onError($event)">
-                      
-              <app-input fieldClass="no-margin--top" [focus$]="focus$" id="amount" placeholder="Enter repayment amount"  [control]="amount" class="form-control" [error]="(errorMessage$ | async)?.amount" >
+            <ng-container *ngIf="!loanDetails?.disbursedLoan?.isClosed">
+              <app-form [form]="form" (onSubmit)="onSubmit($event,loanDetails?.disbursedLoan?.id)"
+                (errorMessageChange)="onError($event)">
+
+                <app-input fieldClass="no-margin--top" [focus$]="focus$" id="amount"
+                  placeholder="Enter repayment amount" [control]="amount" class="form-control"
+                  [error]="(errorMessage$ | async)?.amount">
                   <label for="amount">Repayment Amount</label>
-              </app-input>
-          
-            <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form" >Repay</app-button>
-    
-                     
+                </app-input>
+
+                <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Repay</app-button>
+
+
               </app-form>
+            </ng-container>
+            <ng-container *ngIf="loanDetails?.disbursedLoan?.isClosed==true">
+              <div class="margin--auto margin--3x">
+                <h3 class="d-flex d-flex_vertical--center" style="text-align: center;">Loan has been <app-badge
+                    color="success">Fully Paid</app-badge>
+                </h3>
+              </div>
+            </ng-container>
           </div>
           <div style="width: 100%;" id="loan-details">
             <div *ngIf="loanDetails.details[0] as detail">
-              <div class="title"><h3>{{detail.key}}</h3></div>
+              <div class="title">
+                <h3>{{detail.key}}</h3>
+              </div>
               <div class="margin--3x">
                 <ng-container *ngFor="let d of detail.data;let i =index">
                   <div class="detail-card" *ngIf="i>3">
@@ -121,67 +160,109 @@
                   </div>
                 </ng-container>
               </div>
-              
+
             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="repayments$|async as repayments">
           <div style="width: 100%;" id="loan-details">
-            
-            <div class="title"><h3>Repayment History</h3></div>
-          
+
+            <div class="title">
+              <h3>Repayment History</h3>
             </div>
-            <app-table  >
-              <ng-container slot="header">
-                  <tr>
-                      <th>Payment Date</th>
-                      <th>Expected Payment</th>
-                      <th>Amount Repaid</th>
-                      <th>Status</th>
-                      <!-- <th>Tenure</th>
+
+          </div>
+          <app-table>
+            <ng-container slot="header">
+              <tr>
+                <th>Payment Date</th>
+                <th>Expected Payment</th>
+                <th>Amount Repaid</th>
+                <th>Status</th>
+                <!-- <th>Tenure</th>
                       <th>Status</th>
                       <th>Action</th> -->
-                  </tr>
+              </tr>
+            </ng-container>
+            <ng-container slot="body" *ngIf="repayments$|async as data">
+              <ng-container *ngIf="data.length==0">
+                <div class="no-data">
+                  <span class="material-icons material-icons-outlined">
+                    info
+                  </span>
+                  <h3>No data available</h3>
+                </div>
               </ng-container>
-              <ng-container slot="body" *ngIf="repayments$|async as data">
-                      <ng-container *ngIf="data.length==0">
-                              <div class="no-data">
-                              <span class="material-icons material-icons-outlined">
-                                  info
-                                  </span>
-                              <h3>No data available</h3>
-                          </div>
-                      </ng-container>
-                      <ng-container *ngIf="data.length>0">
-                          <tr *ngFor="let row of data;trackBy:trackByFn">
-                              <td>{{row.dueDate | date :'MMMM d, y'}}</td>
-                              <td>{{row.expectedPayment|currency:'₦'}}</td>
-                              <td>{{row.amountRepaid|currency:'₦'}}</td>
-                              <td><app-badge [color]="getStatusColor(row.status)">{{row.status}}</app-badge></td>
-                              <!-- <td>{{row.tenure}} {{row.denominator}}</td>
+              <ng-container *ngIf="data.length>0">
+                <tr *ngFor="let row of data;trackBy:trackByFn">
+                  <td>{{row.dueDate | date :'MMMM d, y'}}</td>
+                  <td>{{row.expectedPayment|currency:'₦'}}</td>
+                  <td>{{row.amountRepaid|currency:'₦'}}</td>
+                  <td>
+                    <app-badge [color]="getStatusColor(row.status)">{{row.status}}</app-badge>
+                  </td>
+                  <!-- <td>{{row.tenure}} {{row.denominator}}</td>
                               <td>{{row.requestStatus}}</td>
                               <td><app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td> -->
-                          </tr>
-                      </ng-container>
-                  </ng-container>
-                  <ng-container slot="body" *ngIf="!(repayments$|async)">
-                      <div class="no-data">
-                          <span class="material-icons material-icons-outlined">
-                              info
-                              </span>
-                          <h3>No data available</h3>
-                      </div>
+                </tr>
               </ng-container>
-              
+            </ng-container>
+            <ng-container slot="body" *ngIf="!(repayments$|async)">
+              <div class="no-data">
+                <span class="material-icons material-icons-outlined">
+                  info
+                </span>
+                <h3>No data available</h3>
+              </div>
+            </ng-container>
+
           </app-table>
         </ng-container>
       </div>
-  </ng-container>
+    </ng-container>
   </app-modal>
-  </ng-container>
-  <div class="snackbar_container ">
-    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
-    </div>
-    <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0">{{success}}
-    </div>
-    </div>
+</ng-container>
+
+
+
+<ng-container *ngIf="showNotify$|async">
+  <app-modal size="large" (onChange)="closeNotify()">
+
+    <ng-container slot="body">
+      <div style="display: block; width: 100%;" *ngIf="(loanDetails$|async) as loanDetails">
+        <div class="margin--3x no-margin--top">
+          <small>Loan Application</small>
+          <h2>{{loanDetails.code}}</h2>
+        </div>
+
+        <div style="margin:auto">
+          <app-form [form]="notifyForm" (onSubmit)="onNotify($event,loanDetails.code, loanDetails.customerId)"
+            (errorMessageChange)="onError($event)">
+            <app-dropdown current="{{messageType.value}}" [control]="messageType" [fieldClass]="'no-margin--top'"
+              [id]="'messageType'" aria-placeholder="Change messageType">
+              <app-option *ngFor="let t of messageTypes; let i =index" [value]="t.label">{{t.label}}</app-option>
+            </app-dropdown>
+            <div class="vc_form-field margin--2x" style="max-width: 500px;">
+              <label for="message">Message</label>
+              <textarea id="message" placeholder="Enter message" [formControl]="message" class="form-control">
+
+              </textarea>
+            </div>
+
+            <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="notifyForm">Notify</app-button>
+
+
+          </app-form>
+        </div>
+
+
+      </div>
+    </ng-container>
+  </app-modal>
+</ng-container>
+<div class="snackbar_container ">
+  <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
+  </div>
+  <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0">{{success}}
+  </div>
+</div>

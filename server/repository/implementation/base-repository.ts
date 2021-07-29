@@ -13,6 +13,7 @@ export class BaseRepository<T> implements IBaseRepository<T>{
           { ...data },
           { where: { id: data.id } }
         );
+        console.log("Update Response",response);
       // let dataValues = response?.dataValues as T;
       resolve(response)
     });

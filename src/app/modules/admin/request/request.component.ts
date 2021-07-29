@@ -6,6 +6,7 @@ import { delay, first } from 'rxjs/operators';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { DisbursedLoanService } from 'src/app/shared/services/loan/disbursedLoan/disbursed-loan.service';
 import { RepaymentService } from 'src/app/shared/services/repayment/repayment.service';
+import { NotifyService } from '../notify/notify.service';
 import { RequestService } from './request.service';
 
 @Component({
@@ -15,7 +16,8 @@ import { RequestService } from './request.service';
 })
 export class RequestComponent implements OnInit {
   loans$: Observable<any[]>;
-
+  notifyForm: FormGroup;
+  messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
   loanStatuses: any[] = [{ label: "Pending", key: "new" }, { label: "Processing", key: "processing" }, { label: "UpdateRequired", key: "update" }, { label: "Declined", key: "declined" }, { label: "Approved", key: "approved" }, { label: "Funded", key: "funded" }];
   ctrl: FormControl = new FormControl("");
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
@@ -31,6 +33,9 @@ export class RequestComponent implements OnInit {
 
   showConfirmSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showConfirm$: Observable<boolean> = this.showConfirmSubject.asObservable();
+
+  showNotifySubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showNotify$: Observable<boolean> = this.showNotifySubject.asObservable();
 
   indicatorSubject: BehaviorSubject<string> = new BehaviorSubject<string>("");
   indicator$: Observable<string> = this.indicatorSubject.asObservable();
@@ -60,15 +65,19 @@ export class RequestComponent implements OnInit {
   get amount() {
     return this.form.get("amount") as FormControl || new FormControl();
   }
-  constructor(private _fb: FormBuilder, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
+  get message() {
+    return this.notifyForm.get("message") as FormControl || new FormControl();
+  }
+  get messageType() {
+    return this.notifyForm.get("messageType") as FormControl || new FormControl();
+  }
+  constructor(private _fb: FormBuilder, private _notifyService:NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
     this.loanDetails$ = this._requestService.loanDetails$;
   }
 
   ngOnInit(): void {
 
     this.loans$ = this._requestService.filteredRequests$;
-    // this._repaymentService.selectLoan(2);
-    // this._repaymentService.repayments$.subscribe(c=>console.log(c))
     this.repayments$ = this._repaymentService.repayments$;
     this.ctrl.valueChanges.subscribe(c => {
       this.showConfirmSubject.next(true);
@@ -81,6 +90,10 @@ export class RequestComponent implements OnInit {
     })
     this.form = this._fb.group({
       amount: ["", [Validators.required]]
+    });
+    this.notifyForm = this._fb.group({
+      message: ["", [Validators.required]],
+      messageType: ["", [Validators.required]]
     });
   }
   getCriteria(from: any, to: any) {
@@ -96,7 +109,6 @@ export class RequestComponent implements OnInit {
   }
   selectLoan({ id, indicator }: any) {
     this._requestService.selectLoan(id);
-    // this._disbursedLoanService.selectLoan(id);
     this.indicatorSubject.next(indicator);
     this.showSubject.next(true);
     this.lastStatusSubject.next(this.ctrl.value);
@@ -112,6 +124,12 @@ export class RequestComponent implements OnInit {
   closeRepayment() {
     this.showRepaymentSubject.next(false);
   }
+  showNotify() {
+    this.showNotifySubject.next(true);
+  }
+  closeNotify() {
+    this.showNotifySubject.next(false);
+  }
   closeConfirmModal() {
     this.ctrl.patchValue(this.lastStatusSubject.value);
     setTimeout(() => this.showConfirmSubject.next(false), 0);
@@ -120,7 +138,7 @@ export class RequestComponent implements OnInit {
     return index;
   }
   getStatusColor(status: string) {
-    if (status == "Paid In Full") return 'success';
+    if (status == "Paid In Full" || status == "Fully Paid") return 'success';
     return status == "Defaulted" ? 'danger' : status == 'Partial' ? 'info' : '';
   }
 
@@ -148,14 +166,44 @@ export class RequestComponent implements OnInit {
     this.loadingSubject.next(true);
   }
 
+
+  onNotify(form: FormGroup, code: string, customerId:number) {
+    console.log("Submitting");
+    // stop here if form is invalid
+    if (form.invalid) {
+      console.log("Form Invalid");
+      return;
+    }
+
+    this.notify(this.message.value,this.messageType.value,[customerId],code);
+
+    this.loadingSubject.next(true);
+  }
+
   repay(disbursedLoanId: number, loanRequestId: number, amount: number) {
     const sub = this._repaymentService.repay(disbursedLoanId, loanRequestId, amount)
       .pipe(first())
       .subscribe(
         response => {
           this.loadingSubject.next(false);
-          this.apiSuccessSubject.next(response.data);
+          this.apiSuccessSubject.next(response);
           this._repaymentService.selectLoan(disbursedLoanId)
+          setTimeout(() => { this.apiSuccessSubject.next(); }, 5000)
+        },
+        error => {
+          setTimeout(() => { this.apiErrorSubject.next("Error: " + error); this.loadingSubject.next(false); }, 1000)
+          setTimeout(() => { this.apiErrorSubject.next(); }, 5000)
+        });
+    this.allSubscriptions.push(sub);
+  }
+  notify(message: string, type: string, customerID: number[], code:string) {
+    const sub = this._notifyService.notify({message, type, customerID, code})
+      .pipe(first())
+      .subscribe(
+        response => {
+          this.loadingSubject.next(false);
+          this.apiSuccessSubject.next(response);
+          setTimeout(() => { this.apiSuccessSubject.next(); }, 5000)
         },
         error => {
           setTimeout(() => { this.apiErrorSubject.next("Error: " + error); this.loadingSubject.next(false); }, 1000)
