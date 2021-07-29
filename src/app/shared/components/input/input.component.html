@@ -19,7 +19,7 @@
             <ng-content select="[slot=button]"></ng-content>
         </div>
         <ng-container *ngIf="type=='password'">
-            <div class="input-group-append" (click)="togglePassword()">
+            <div class="input-group-append" style="cursor: pointer;" (click)="togglePassword()">
                 <span class="material-icons">
                     {{(showPassword$|async)?'visibility':'visibility_off'}}
                 </span>
