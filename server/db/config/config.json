@@ -4,7 +4,7 @@
     "password": null,
     "database": "vanaheim-dev",
     "host": "127.0.0.1",
-    "port":5432,
+    "port": 5432,
     "dialect": "postgres"
   },
   "test": {
@@ -12,14 +12,19 @@
     "password": null,
     "database": "vanaheim-dev",
     "host": "127.0.0.1",
-    "port":5432,
+    "port": 5432,
     "dialect": "postgres"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "database": "vanaheim",
+    "dialect": "postgres",
+    "use_env_variable": "DATABASE_URL",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }
