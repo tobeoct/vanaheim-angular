@@ -4,6 +4,7 @@ import moment = require('moment');
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, first } from 'rxjs/operators';
 import { Utility } from 'src/app/shared/helpers/utility.service';
+import { DocumentService } from 'src/app/shared/services/document/document.service';
 import { DisbursedLoanService } from 'src/app/shared/services/loan/disbursedLoan/disbursed-loan.service';
 import { RepaymentService } from 'src/app/shared/services/repayment/repayment.service';
 import { NotifyService } from '../notify/notify.service';
@@ -77,7 +78,7 @@ export class RequestComponent implements OnInit {
   get failureReason() {
     return this.fForm.get("failureReason") as FormControl || new FormControl();
   }
-  constructor(private _fb: FormBuilder, private _notifyService: NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
+  constructor(private _fb: FormBuilder, private _documentService:DocumentService, private _notifyService: NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
     this.loanDetails$ = this._requestService.loanDetails$;
   }
 
@@ -241,5 +242,8 @@ export class RequestComponent implements OnInit {
   }
   onError(value: any): void {
     this.errorMessageSubject.next(value);
+  }
+  download(url:string,filename:string){
+    this._documentService.download(url,filename)
   }
 }
