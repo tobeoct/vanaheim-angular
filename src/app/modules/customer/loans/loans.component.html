@@ -119,13 +119,14 @@
                             id="repayment">
                             <div>
                                 <small>Next Payment</small>
-                                <h2 class="margin--x">{{loan.monthlyPayment|currency:"₦":'symbol':'1.0-2' }}</h2>
-                                <small>Due on
-                                    <b>{{getNextDueDateFormatted(loan.dateApproved,loan.tenure,loan.denominator)}}</b></small>
+                                <h1 class="margin--x">
+                                    {{details?.disbursedLoan?.nextPayment|currency:"₦":'symbol':'1.0-2' }}</h1>
+                                <small>Due on <b>{{details?.disbursedLoan?.nextRepaymentDate|date:'MMMM d
+                                        YYYY'}}</b></small>
                             </div>
                             <div>
                                 <app-progress-circular
-                                    [daysLeft]="getDaysLeft(loan.dateApproved,loan.tenure,loan.denominator)">
+                                    [daysLeft]="getDaysLeft(details?.disbursedLoan?.nextRepaymentDate)">
                                 </app-progress-circular>
                             </div>
                         </div>

@@ -11,6 +11,7 @@ import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanDetails } from '../../loan/shared/loan-calculator/loan-details';
 import { RequestService } from '../../admin/request/request.service';
+import moment = require('moment');
 
 @Component({
   selector: 'app-loans',
@@ -199,11 +200,16 @@ export class LoansComponent implements OnInit {
   close() {
     this.showSubject.next(false);
   }
+  
+  getDaysLeft(date:any){
+    console.log(date);
+    let d = moment(date);
+    let now = moment();
+    return d.diff(now, "days");
+  }
 
   getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
     return this._loanService.getNextDueDateFormatted(dateFunded, tenure, denominator);
   }
-  getDaysLeft(dateFunded: any, tenure: number, denominator: string) {
-    return this._loanService.getDaysLeft(dateFunded, tenure, denominator);
-  }
+ 
 }

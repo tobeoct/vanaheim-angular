@@ -37,7 +37,6 @@ export class LoanSummaryComponent implements OnInit {
     
   }
   getDaysLeft(date:any){
-    console.log(date);
     let d = moment(date);
     let now = moment();
     return d.diff(now, "days");
