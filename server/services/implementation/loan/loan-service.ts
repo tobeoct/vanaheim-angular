@@ -168,7 +168,7 @@ export class LoanService implements ILoanService {
           documents = response.data as Document[];
 
         }
-        if (disbursedLoan?.status == true) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
+        if (disbursedLoan?.status == true) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.dataValues?.id)
         resolve({ status: true, data: { code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment,documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
       } else {
         resolve({ status: false, data: "Could not find loan request" });
