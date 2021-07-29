@@ -12,3 +12,5 @@ PGPASSWORD=mypassword pg_dump -Fc --no-acl --no-owner -h localhost -U myuser myd
 heroku pg:backups:restore '<SIGNED URL>' DATABASE_URL
 
 https://vanaheim-bucket.s3.us-east-2.amazonaws.com/livedb.dump
+
+npx sequelize-cli db:migrate --env production
