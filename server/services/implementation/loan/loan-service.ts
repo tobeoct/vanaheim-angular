@@ -250,6 +250,7 @@ export class LoanService implements ILoanService {
       }
       let notification = new WebNotification();
       notification.body = `Your loan request status for LOAN ID:${loanRequest.requestId} has been updated to ${requestStatus}`;
+      if(failureReason)  notification.body+=`<br/><br/> Reason for Failure: ${failureReason}`;
       notification.title = `Vanaheim: Loan Status Update`
       notification.data = new WebNotData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
