@@ -47,7 +47,6 @@ base="welcome/loans/apply/";
   onNavigate(route:string,params:any={}):void{
     if(this.base =="/welcome/") this.base = "/welcome/loans/apply/"
     const r =this.base+route;
-    console.log(r)
     this._router.navigate([r],{queryParams: params})
   }
 }
