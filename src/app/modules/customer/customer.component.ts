@@ -25,7 +25,6 @@ export class CustomerComponent implements OnInit {
 
   showInvalid$: Observable<boolean>;
   timerSubscription: Subscription;
-  pollingSubscription:Subscription;
   constructor(private swPush: SwPush, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
     try {
       this.showInvalid$ = this._utility.showLoanInvalid$;
@@ -49,14 +48,11 @@ export class CustomerComponent implements OnInit {
   }
   ngOnDestroy() {
     if (this.timerSubscription) this.timerSubscription.unsubscribe();
-    if(this.pollingSubscription) this.pollingSubscription.unsubscribe();
   }
   ngOnInit(): void {
     const sideNavSub = this._utility.activeNavigation$.subscribe(r => {
       this.showSubject.next(r.toString());
     })
-    this.pollingSubscription= this._loanService.getLatest().subscribe(c=>{
-    });
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
   }

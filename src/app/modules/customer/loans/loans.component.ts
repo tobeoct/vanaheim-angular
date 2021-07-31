@@ -1,8 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
-import { BehaviorSubject, Observable, from, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, from, Subject, Subscription } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
 import { AssetPath } from 'src/app/shared/constants/variables';
 import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
@@ -20,7 +20,7 @@ import { DocumentService } from 'src/app/shared/services/document/document.servi
   templateUrl: './loans.component.html',
   styleUrls: ['./loans.component.scss']
 })
-export class LoansComponent implements OnInit {
+export class LoansComponent implements OnInit, OnDestroy {
 
   @ViewChild('applyNow') applyNow: ElementRef;
   form: FormGroup;
@@ -85,23 +85,27 @@ export class LoansComponent implements OnInit {
   pagingSubject: BehaviorSubject<any>;
   latestLoan$: Observable<any>;
   runningLoan$: Observable<any>;
-  repayments$:Observable<any[]>;
-  
+  repayments$: Observable<any[]>;
+
   showRepaymentSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showRepayment$: Observable<boolean> = this.showRepaymentSubject.asObservable();
   tenureDenominatorSubject: BehaviorSubject<string> = new BehaviorSubject<string>("Mos");
   tenureDenominator$: Observable<string> = this.tenureDenominatorSubject.asObservable();
 
-
+  latestLoanSubscription: Subscription;
   activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
-  constructor(private _fb: FormBuilder, private _documentService:DocumentService, private _repaymentService: RepaymentService, private _store: Store, private _utility: Utility,
+  constructor(private _fb: FormBuilder, private _documentService: DocumentService, private _repaymentService: RepaymentService, private _store: Store, private _utility: Utility,
     private _router: Router,
     private _validators: VCValidators,
     private _loanService: LoanService, private _requestService: RequestService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url + '/';
     });
+  }
+  ngOnDestroy(): void {
+
+    if (this.latestLoanSubscription) this.latestLoanSubscription.unsubscribe()
   }
 
   ngOnInit(): void {
@@ -113,7 +117,7 @@ export class LoansComponent implements OnInit {
     this.latestLoan$ = this._loanService.latestLoan$;
     this.runningLoan$ = this._loanService.runningLoan$;
     this.repayments$ = this._repaymentService.myRepayments$;
-    this.latestLoan$.subscribe(l => {
+    this.latestLoanSubscription = this.latestLoan$.subscribe(l => {
       if (l.requestStatus == 'Funded') {
         this._requestService.selectLoan(l.id);
       }
@@ -233,9 +237,9 @@ export class LoansComponent implements OnInit {
   getLoanStatusColor(status: string) {
     if (status == "Approved" || status == "Funded" || status == "Completed") return 'success';
     if (status == "NotQualified" || status == "Declined" || status == "Defaulting") return 'danger';
-    return status == "Processing" ? '' :'info' ;
+    return status == "Processing" ? '' : 'info';
   }
-  download(url:string,filename:string){
-    this._documentService.download(url,filename)
+  download(url: string, filename: string) {
+    this._documentService.download(url, filename)
   }
 }

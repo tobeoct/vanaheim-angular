@@ -27,7 +27,7 @@ export class CustomerService {
         return throwError(err);
       }));
   }
-  
+
 
   customers = () => {
     return this._http.get<any>(`${environment.apiUrl}/customer/all`)
@@ -96,6 +96,15 @@ export class CustomerService {
         return throwError(err);
       }));
   }
+  updateBVN = (bvn: string) => {
+    return this._http.put<any>(`${environment.apiUrl}/customer/updateCustomerBVN`, {bvn})
+      .pipe(map(response => {
+        if (response.status == true) { return response.response; } else return null;
+      }), catchError(err => {
+        console.error(err);
+        return throwError(err);
+      }));
+  }
   updateCustomer = (personalInfo: PersonalInfo) => {
     return this._http.put<any>(`${environment.apiUrl}/customer/update`, personalInfo)
       .pipe(map(response => {
@@ -115,7 +124,7 @@ export class CustomerService {
       }));
   }
   updateAccounts = (accountInfos: AccountInfo[]) => {
-    return this._http.post<any>(`${environment.apiUrl}/account/updateAccounts`, {accounts:accountInfos})
+    return this._http.post<any>(`${environment.apiUrl}/account/updateAccounts`, { accounts: accountInfos })
       .pipe(map(response => {
         if (response.status == true) { return response.response; } else return null;
       }), catchError(err => {

@@ -35,6 +35,7 @@ export const authRoutes = [
   { path: '/api/customer/employers', method: 'GET' },
   { path: '/api/customer/companies', method: 'GET' },
   { path: '/api/customer/nok', method: 'GET' },
+  { path: '/api/customer/updateCustomerBVN', method: 'PUT' },
   { path: '/api/customer/collaterals', method: 'GET' },
   { path: '/api/customer/update', method: 'PUT' },
   { path: '/api/customer/updateNOK', method: 'PUT' },

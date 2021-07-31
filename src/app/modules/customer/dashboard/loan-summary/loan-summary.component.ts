@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import moment = require('moment');
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { RequestService } from 'src/app/modules/admin/request/request.service';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { RepaymentService } from 'src/app/shared/services/repayment/repayment.service';
@@ -12,40 +12,43 @@ import { RepaymentService } from 'src/app/shared/services/repayment/repayment.se
   styleUrls: ['./loan-summary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoanSummaryComponent implements OnInit {
+export class LoanSummaryComponent implements OnInit, OnDestroy {
 
-  latestLoan$:Observable<any>;
-  runningLoan$:Observable<boolean>;
-  disbursedLoan$:Observable<any>;
-  repayments$:Observable<any[]>;
-  
+  latestLoan$: Observable<any>;
+  runningLoan$: Observable<boolean>;
+  disbursedLoan$: Observable<any>;
+  repayments$: Observable<any[]>;
+
   showRepaymentSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showRepayment$: Observable<boolean> = this.showRepaymentSubject.asObservable();
-
-  constructor(private _router:Router,private _repaymentService:RepaymentService, private _loanService:LoanService, private _requestService:RequestService) { }
+  latestLoanSubscription: Subscription;
+  constructor(private _router: Router, private _repaymentService: RepaymentService, private _loanService: LoanService, private _requestService: RequestService) { }
+  ngOnDestroy(): void {
+    if (this.latestLoanSubscription) this.latestLoanSubscription.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.latestLoan$ = this._loanService.latestLoan$;
-    this.runningLoan$ =this._loanService.runningLoan$;
+    this.runningLoan$ = this._loanService.runningLoan$;
     this.disbursedLoan$ = this._requestService.loanDetails$;
     this.repayments$ = this._repaymentService.myRepayments$;
-    this.latestLoan$.subscribe(l=>{
-      if(l&&l.requestStatus=='Funded'){
+    this.latestLoanSubscription = this.latestLoan$.subscribe(l => {
+      if (l && l.requestStatus == 'Funded') {
         this._requestService.selectLoan(l.id);
       }
     })
-    
+
   }
-  getDaysLeft(date:any){
+  getDaysLeft(date: any) {
     let d = moment(date);
     let now = moment();
     return d.diff(now, "days");
   }
-  onNavigate(route:string,params:any={}):void{
-    this._router.navigate([route],{queryParams: params})
+  onNavigate(route: string, params: any = {}): void {
+    this._router.navigate([route], { queryParams: params })
   }
-  getNextDueDateFormatted(dateFunded:any,tenure:number,denominator:string){
-  return this._loanService.getNextDueDateFormatted(dateFunded,tenure,denominator);
+  getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
+    return this._loanService.getNextDueDateFormatted(dateFunded, tenure, denominator);
   }
   // getDaysLeft(dateFunded:any,tenure:number,denominator:string){
   //   return this._loanService.getDaysLeft(dateFunded,tenure,denominator);

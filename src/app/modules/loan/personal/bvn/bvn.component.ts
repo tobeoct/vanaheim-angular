@@ -3,10 +3,11 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
-import { catchError, delay, filter, map } from 'rxjs/operators';
+import { catchError, delay, filter, first, map } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { BVN } from './bvn';
 import { CommonService } from 'src/app/shared/services/common/common.service';
+import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 const data: any[] = [
   { title: "PayDay Loans", allowedApplicant: ["Salary Earner", "Business Owner"], allowedTypes: ["Personal Loans", "Float Me - Personal"], description: "Spread your loan payment, repay when you get your salary" },
   { title: "Personal Line Of Credit", allowedApplicant: ["Salary Earner", "Business Owner"], allowedTypes: ["Personal Loans", "Float Me - Personal"], description: "Spread your loan payment, repay when you get your salary" },
@@ -45,7 +46,7 @@ export class BVNComponent implements OnInit {
 
   base: string;
   constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,
-    private _validators: VCValidators, private _route: ActivatedRoute, private _commonService: CommonService) {
+    private _validators: VCValidators, private _route: ActivatedRoute, private _customerService: CustomerService, private _commonService: CommonService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
     });
@@ -75,8 +76,8 @@ export class BVNComponent implements OnInit {
     const bvn = this._store.bvn as BVN;
     this.form = this._fb.group({
       bvn: [bvn.bvn ? bvn.bvn : "", [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
-      tc: [bvn.tc ? bvn.tc : "", [Validators.required]],
-      privacy: [bvn.privacy ? bvn.privacy : "", [Validators.required]]
+      tc: [this.side ? "true" : bvn.tc ? bvn.tc : "", [Validators.required]],
+      privacy: [this.side ? "true" : bvn.privacy ? bvn.privacy : "", [Validators.required]]
     });
     let d = data.filter(d => d.allowedTypes.includes(this.lType) && d.allowedApplicant.includes(this.applyingAs));
     this.dataSelectionSubject.next(d);
@@ -133,9 +134,22 @@ export class BVNComponent implements OnInit {
     });
   }
   onSubmit = (event: any) => {
-    this._store.setBvn({ bvn: this.bvn.value, tc: this.tc.value, privacy: this.privacy.value });
     if (!this.side) {
+      this._store.setBvn({ bvn: this.bvn.value, tc: this.tc.value, privacy: this.privacy.value });
       this.onNavigate("personal-info");
+    } else {
+      this._customerService.updateBVN(this.bvn.value).pipe(first())
+      .subscribe(
+          (data:any) => {
+            this.loadingSubject.next(false);
+            this.apiSuccessSubject.next(data);
+            setTimeout(()=>{this.apiSuccessSubject.next();},5000)
+          },
+          (error:any) => {
+              setTimeout(()=>{this.apiErrorSubject.next("Error: "+error);this.loadingSubject.next(false);},1000)
+              setTimeout(()=>{this.apiErrorSubject.next();},5000)
+              
+          });
     }
   }
   onNavigate(route: string, params: any = {}): void {

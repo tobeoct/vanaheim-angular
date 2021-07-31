@@ -1,33 +1,48 @@
- <div id="form" class="{{side?'':'theme_col-5'}}  animate__animated animate__fadeInUp animate__fast">
-        <div class=" content {{!side?'box-shadow':''}} {{!side?'':'content--smaller'}}" style="box-sizing: border-box; ">
-    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
-    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-   
-        <app-input  [loading$]="loading$" [focus$]="focus$" fieldClass="no-margin--top" id="bvn" [placeholder]="'Enter your bank verification number'" [control]="bvn" class="form-control" [error]="(errorMessage$ | async)?.bvn" >
-            <label for="bvn">BVN</label>
-        </app-input>
-        <p>Can't remember your BVN? <b>Dial *565*0#</b></p>
+<div id="form" class="{{side?'':'theme_col-5'}}  animate__animated animate__fadeInUp animate__fast">
+    <div class=" content {{!side?'box-shadow':''}} {{!side?'':'content--smaller'}}" style="box-sizing: border-box; ">
+        <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+        <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
 
-        
-        <div style="margin-top: 30px;">
-<app-checkbox [outline]="true" [active]="tc.value!=''" [control]="tc" [value]="'I accept'"><span class="theme_color--grey">I accept the </span><a href="./assets/documents/Vanir Capital Terms & Conditions.pdf" target="_blank" class="theme_color--yellow theme_text--anchor">Terms & Conditions</a></app-checkbox>
-<app-checkbox [outline]="true" [active]="privacy.value!=''" [control]="privacy" [value]="'I accept'"><span class="theme_color--grey">I have read the </span><a href="./assets/documents/Vanir Capital Privacy Policy.pdf" class="theme_color--yellow theme_text--anchor">Privacy Policy</a></app-checkbox>
-</div>
-        <div style="margin-top: 60px;">
-            <small>I have read, understood and accept all the terms and conditions & privacy policy for Vanir Capital LLC.</small>
-            <app-button [form]="form">{{side?'Save':'Next'}}</app-button>
-        </div>
-    </app-form>
+            <app-input [loading$]="loading$" [focus$]="focus$" fieldClass="no-margin--top" id="bvn"
+                [placeholder]="'Enter your bank verification number'" [control]="bvn" class="form-control"
+                [error]="(errorMessage$ | async)?.bvn">
+                <label for="bvn">BVN</label>
+            </app-input>
+            <p>Can't remember your BVN? <b>Dial *565*0#</b></p>
+
+
+            <ng-container *ngIf="!side">
+                <div style="margin-top: 30px;">
+                    <app-checkbox [outline]="true" [active]="tc.value!=''" [control]="tc" [value]="'I accept'"><span
+                            class="theme_color--grey">I accept the </span><a
+                            href="./assets/documents/Vanir Capital Terms & Conditions.pdf" target="_blank"
+                            class="theme_color--yellow theme_text--anchor">Terms & Conditions</a></app-checkbox>
+                    <app-checkbox [outline]="true" [active]="privacy.value!=''" [control]="privacy"
+                        [value]="'I accept'"><span class="theme_color--grey">I have read the </span><a
+                            href="./assets/documents/Vanir Capital Privacy Policy.pdf"
+                            class="theme_color--yellow theme_text--anchor">Privacy Policy</a></app-checkbox>
+                </div>
+
+            </ng-container>
+            <div style="margin-top: 60px;">
+                <ng-container *ngIf="!side">
+                    <small>I have read, understood and accept all the terms and conditions & privacy policy for Vanir
+                        Capital LLC.</small>
+                </ng-container>
+                <app-button [form]="form">{{side?'Update':'Next'}}</app-button>
+            </div>
+        </app-form>
     </div>
 </div>
 
 
 
 <div class="snackbar_container ">
-    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0 animate__animated animate__fadeInUp">{{error}}
+    <div *ngIf="apiError$|async as error"
+        class="snackbar snackbar-danger mt-3 mb-0 animate__animated animate__fadeInUp">{{error}}
     </div>
-    <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0 animate__animated animate__fadeInUp">{{success}}
+    <div *ngIf="apiSuccess$|async as success"
+        class="snackbar snackbar-success mt-3 mb-0 animate__animated animate__fadeInUp">{{success}}
     </div>
-    
-    </div>
-                            
+
+</div>

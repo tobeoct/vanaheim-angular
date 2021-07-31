@@ -53,7 +53,7 @@ export default class CustomerController {
       let user = req.session?.userData;
       if (user) {
         let customers: any = await this._customerRepository.getAll();
-       
+
         res.statusCode = 200;
         res.data = customers;
       } else {
@@ -81,6 +81,39 @@ export default class CustomerController {
         }
         res.statusCode = 200;
         res.data = customer.BVN;
+      } else {
+        res.statusCode = 400;
+        res.data = { status: false, message: "Invalid user" }
+
+      }
+    }
+    catch (err) {
+      res.statusCode = 400;
+      res.data = { status: false, message: "Failed to get customer info" }
+    }
+    next();
+  }
+
+  @route('/updateCustomerBVN')
+  @PUT()
+  updateCustomerBVN = async (req: any, res: any, next: any) => {
+    try {
+      let user = req.session?.userData;
+      let bvn = this.sanitizer.escape(req.body.bvn);
+      if (user && bvn) {
+        if (bvn.length != 11) {
+          res.statusCode = 400;
+          res.data = { status: false, message: "Invalid request" }
+
+        }
+        let customer: any = await this._customerRepository.getByUserID(user.id);
+        if (customer) {
+          customer = customer.dataValues as Customer;
+          customer.BVN = bvn;
+          await this._customerRepository.update(customer);
+        }
+        res.statusCode = 200;
+        res.data =  "Updated successfully";
       } else {
         res.statusCode = 400;
         res.data = { status: false, message: "Invalid user" }
@@ -225,7 +258,7 @@ export default class CustomerController {
           this._nokRepository.update(nok);
         }
         res.statusCode = 200;
-        res.data =  "Updated successfully";
+        res.data = "Updated successfully";
 
       } else {
         res.statusCode = 400;
