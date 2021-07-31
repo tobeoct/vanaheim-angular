@@ -18,7 +18,4 @@ export class SideContactComponent implements OnInit {
     type = type as SideNavigationList;
     this._utility.toggleSideNav(type);
   }
-  copy(text: string) {
-    this._utility.copyToClipboard(text);
-  }
 }

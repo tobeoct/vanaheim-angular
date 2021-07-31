@@ -32,6 +32,7 @@ import { RadioComponent } from './radio/radio.component';
 import { LoadingComponent } from './loading/loading.component';
 import { ProgressCircularComponent } from './progress/circular/circular.component';
 import { BadgeComponent } from './badge/badge.component';
+import { CopyComponent } from './copy/copy.component';
 
 export function playerFactory() {
   return player;
@@ -66,7 +67,8 @@ export function playerFactory() {
     RadioComponent,
     LoadingComponent,
     ProgressCircularComponent,
-    BadgeComponent
+    BadgeComponent,
+    CopyComponent
   ],
   imports: [
     BaseModule, 
@@ -102,7 +104,8 @@ export function playerFactory() {
     ProgressComponent,
     LoadingComponent,
     ProgressCircularComponent,
-    BadgeComponent
+    BadgeComponent,
+    CopyComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })

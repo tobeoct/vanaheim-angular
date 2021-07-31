@@ -93,7 +93,6 @@ copyToClipboard(val: string){
   selBox.select();
   document.execCommand('copy');
   document.body.removeChild(selBox);
-  alert("Copied");
 }
 getFileExtension=(filename:string)=>{
   let ext = filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
