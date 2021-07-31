@@ -2,20 +2,19 @@
     <div class="d-flex d-flex_horizontal--center d-flex_vertical--center">
         <div style="text-align: center;">
             <h3>Your Profile</h3>
-            <div class="image"
+            <div class="image animate__animated animate__fadeIn"
                 style="width: 100px; height:100px; border-radius: 100px; margin: auto; margin-top: 10px;">
-                <!-- <img src="" alt="your profile picture"/> -->
                 <span id="pin" class="material-icons">person_pin</span>
             </div>
             <div>
-                <h4>{{user.firstName}} {{user.lastName}}</h4>
-                <p>{{user.username}}</p>
+                <h4 class="animate__animated animate__fadeInUp ">{{user.firstName}} {{user.lastName}}</h4>
+                <p class="animate__animated animate__fadeInUp ">{{user.username}}</p>
             </div>
         </div>
     </div>
     <div id="main-content" class="margin--3x">
         <div id="left">
-            <div class="card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <div class="card card--stroke animate__animated animate__fadeInUp padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                 <div class="margin--x">
                     <small class="no-margin--all">BVN</small>
                     <p class="no-margin--all"><b>{{bvn$|async|hash:2:6}}</b></p>
@@ -33,37 +32,37 @@
             </div>
         </div>
         <div id="right">
-            <div id="card" style="width: 100%;" class="box-shadow content--small padding--2x">
+            <div id="card" style="width: 100%;" class="box-shadow content--small animate__animated animate__fadeIn padding--2x">
                 <div (click)="toggleSideNav('personal')"
-                    class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    class="item animate__animated animate__fadeInUp margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Personal Details</b></p>
                     <span class="material-icons">
                         arrow_right
                     </span>
                 </div>
                 <div (click)="toggleSideNav('account')"
-                    class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    class="item animate__animated animate__fadeInUp  margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Account</b></p>
                     <span class="material-icons">
                         arrow_right
                     </span>
                 </div>
                 <div (click)="toggleSideNav('password')"
-                    class="item card--stroke card-stroke--primary margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    class="item animate__animated animate__fadeInUp  card--stroke card-stroke--primary margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Password</b></p>
                     <span class="material-icons">
                         arrow_right
                     </span>
                 </div>
                 <div (click)="toggleSideNav('contact')"
-                    class="item margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    class="item animate__animated animate__fadeInUp  margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Contact Us</b></p>
                     <span class="material-icons">
                         arrow_right
                     </span>
                 </div>
                 <div (click)="logout()"
-                    class="item card--stroke margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    class="item animate__animated animate__fadeInUp  card--stroke margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>Logout</b></p>
                     <span class="material-icons">
                         arrow_right

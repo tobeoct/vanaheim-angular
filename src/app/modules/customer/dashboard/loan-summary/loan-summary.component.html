@@ -1,6 +1,6 @@
 <div id="main-content">
     <ng-container *ngIf="!(latestLoan$|async)">
-        <div id="no-data">
+        <div id="no-data" class="animate__animated animate__fadeIn">
             <div class="image">
                 <img src="../../../../../assets/icons/bell-spark.svg" />
             </div>
@@ -8,12 +8,12 @@
                 you need </h3>
             <p>We are here to provide you with the funds you need quickly and easily</p>
 
-            <button class="widget_button widget_button--small theme_bg--lightgrey"
+            <button class="widget_button widget_button--small theme_bg--lightgrey animate__animated animate__fadeInUp"
                 (click)="onNavigate('my/loans')">Explore our rates</button>
         </div>
     </ng-container>
     <ng-container *ngIf="latestLoan$|async as loan">
-        <div id="in-progress">
+        <div id="in-progress"  class="animate__animated animate__fadeIn">
             <ng-container *ngIf="loan.requestStatus!='Funded'">
                 <app-loan-status [loan$]="latestLoan$"></app-loan-status>
             </ng-container>

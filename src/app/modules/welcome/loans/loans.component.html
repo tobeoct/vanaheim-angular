@@ -1,43 +1,44 @@
+<app-header [myclass]="headerclass"></app-header>
 
-  
-    <app-header [myclass]="headerclass"></app-header>
+<div class="loan_content theme_inline-block">
+    <div class="theme_row" style=" padding-top: 2.5%;">
+        <div class="main_container grid-padding-3x" style="padding-bottom: 0 !important;">
+            <app-navigation [type]="mobile"></app-navigation>
+            <div class=" theme_row" style="position: relative; display: flex;">
+                <app-navigation [type]="desktop"></app-navigation>
+                <div class="theme_col-5 theme_color" style="padding-right: 5%;padding-top: 7%; z-index: 1;">
 
-    <div class="loan_content theme_inline-block" >
-        <div class="theme_row" style=" padding-top: 2.5%;">
-            <div class="main_container grid-padding-3x" style="padding-bottom: 0 !important;">
-                <app-navigation [type]="mobile"></app-navigation>
-                <div class=" theme_row" style="position: relative; display: flex;">
-                    <app-navigation [type]="desktop"></app-navigation>
-                    <div class="theme_col-5 theme_color" style="padding-right: 5%;padding-top: 7%; z-index: 1;" >
-                    
-                        <div class="copy" style="overflow-x: hidden; margin-top: 0;">
-                            <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span>Low rates, Flexible Payments, </span><span class="theme_color--yellow">Peace of mind</span></p>
-                            <div class="animate__animated animate__fadeIn" style="width: 90%; max-width: 200px; margin-bottom: 30px;">
+                    <div class="copy" style="overflow-x: hidden; margin-top: 0;">
+                        <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span>Low rates, Flexible
+                                Payments, </span><span class="theme_color--yellow">Peace of mind</span></p>
+                        <div class="animate__animated animate__fadeIn"
+                            style="width: 90%; max-width: 200px; margin-bottom: 30px;">
                             <app-lottie [assetPath]="assetPaths.loan"></app-lottie>
-                            </div>
                         </div>
                     </div>
-                    <div class="theme_col-7" style=" padding-top: 2%; padding-bottom: 5%;" > 
-                        
-    <app-loan-header></app-loan-header>
-                        <ng-container *ngIf="(page$|async)=='loan-type'||(page$|async)==''">
-                            <app-loantype></app-loantype>
-                        </ng-container>
-                        <ng-container *ngIf="(page$|async)=='applying-as'">
-                            <app-applying-as></app-applying-as>
-                        </ng-container>
-                        <ng-container *ngIf="(page$|async)=='loan-product'||((page$|async)!='applying-as' && (page$|async)!='loan-type' && (page$|async)!='')">
-                            <app-loan-product></app-loan-product>
-                        </ng-container>
-                    </div>
                 </div>
-                <app-footer></app-footer>
+                <div class="theme_col-7" style=" padding-top: 2%; padding-bottom: 5%;">
+
+                    <app-loan-header></app-loan-header>
+                    <ng-container *ngIf="(page$|async)=='loan-type'||(page$|async)==''">
+                        <app-loantype></app-loantype>
+                    </ng-container>
+                    <ng-container *ngIf="(page$|async)=='applying-as'">
+                        <app-applying-as></app-applying-as>
+                    </ng-container>
+                    <ng-container
+                        *ngIf="(page$|async)=='loan-product'||((page$|async)!='applying-as' && (page$|async)!='loan-type' && (page$|async)!='')">
+                        <app-loan-product></app-loan-product>
+                    </ng-container>
+                </div>
             </div>
+            <app-footer></app-footer>
         </div>
     </div>
+</div>
 
 
-    <!-- <div class="investment_content theme_inline-block  grid-padding-3x" >
+<!-- <div class="investment_content theme_inline-block  grid-padding-3x" >
         <div class="theme_row" style=" padding-top: 2.5%;">
             <div class="main_container" style="padding-bottom: 0 !important;">
                 <div>

@@ -1,39 +1,41 @@
+<div id="dashboard-content" class="grid-padding-2x">
+  <div id="main-content">
+    <div class="item ">
 
+      <app-tabs>
+        <app-tab>
+          <app-tab-header>Loans</app-tab-header>
+          <app-tab-body>
+            <app-loan-summary></app-loan-summary>
+          </app-tab-body>
+        </app-tab>
+        <app-tab>
+          <app-tab-header>Earnings</app-tab-header>
+          <app-tab-body>
+            <app-investment-summary></app-investment-summary>
+          </app-tab-body>
+        </app-tab>
 
-<div id="dashboard-content" class="grid-padding-2x" >
-    <div id="main-content">
-        <div class="item ">
-     
-        <app-tabs>
-            <app-tab>
-                <app-tab-header>Loans</app-tab-header>
-                <app-tab-body>
-                    <app-loan-summary></app-loan-summary>
-                </app-tab-body>
-              </app-tab>
-            <app-tab>
-              <app-tab-header>Earnings</app-tab-header>
-              <app-tab-body>
-                <app-investment-summary></app-investment-summary>
-              </app-tab-body>
-            </app-tab>
-           
-          </app-tabs>
-        </div>
-        <div class="item box-shadow">
-          <div class="heading" style="text-align: center;">
-            <h3>{{(latestLoan$|async)?"Thanks for coming back":"Let's get you started"}}</h3>
-          </div>
-              <ng-container *ngTemplateOutlet="templates.LoanCard">
-              <!-- [appTemplatePortalOutlet]="'LoanCard'"> -->
-
-              </ng-container>
-              <ng-container *ngTemplateOutlet="templates.InvestmentCard">
-                <!-- [appTemplatePortalOutlet]="'LoanCard'"> -->
-  
-                </ng-container>
-            </div>
+      </app-tabs>
     </div>
+    <div class="item box-shadow animate__animated animate__fadeIn">
+      <div class="heading" style="text-align: center;">
+        <h3>{{(latestLoan$|async)?"Thanks for coming back":"Let's get you started"}}</h3>
+      </div>
+      <div class="animate__animated animate__fadeInUp ">
+        <ng-container *ngTemplateOutlet="templates.LoanCard">
+          <!-- [appTemplatePortalOutlet]="'LoanCard'"> -->
+
+        </ng-container>
+      </div>
+      <div class="animate__animated animate__fadeInUp ">
+        <ng-container *ngTemplateOutlet="templates.InvestmentCard">
+          <!-- [appTemplatePortalOutlet]="'LoanCard'"> -->
+
+        </ng-container>
+      </div>
+    </div>
+  </div>
 </div>
 
 <app-template #templates></app-template>

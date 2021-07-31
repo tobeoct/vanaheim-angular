@@ -1,9 +1,9 @@
 <div id="customer-header">
     <div class="d-flex d-flex_vertical--center">
-<span id="menu-bar" style="cursor: pointer;" class="material-icons" (click)="toggleSideNav('mainNav')">
+<span id="menu-bar" style="cursor: pointer; font-size: 2em;" class="material-icons" (click)="toggleSideNav('mainNav')">
     menu
 </span>
-    <div id="greetings" (click)="onNavigate('/')">
+    <div id="greetings" style="cursor: pointer;" (click)="onNavigate('/')">
         <div style="width: 17.5px; height: 17.5px;"><img src="../../../../assets/icons/{{emoji$|async}}.svg"/></div>
         <div><small>{{greeting$|async}}</small><p style="margin:0;font-weight: 700;"><b>{{user.firstName}}</b></p></div>
     </div>
