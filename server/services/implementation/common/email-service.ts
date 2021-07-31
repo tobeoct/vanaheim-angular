@@ -63,7 +63,7 @@ getFileName=(path:string)=>{
       subject = toCustomer?'Vanir Capital: Your Repayment Plan':'A Customer Requested For A Repayment Plan';
       break;
       case "investment":
-      subject = toCustomer?'Vanir Capital: Investment Indication':'Investment Indication';
+      subject = toCustomer?'Vanir Capital: Earnings Indication':'Earnings Indication';
       transporterOptions.auth = {
           user: this._appConfig.INVESTMENT_EMAIL,
           pass:this._appConfig.INVESTMENT_EMAIL_PASS
@@ -116,7 +116,7 @@ getFileName=(path:string)=>{
   else{
    // mailOptions['cc']= CC_EMAIL;
     if(!this._utilService.hasValue(html)){
-      mailOptions["html"]+=`Hello, <br/> <h1>Thanks for choosing Vanir Capital</h1> <br/><br/> We would get in touch with you shortly <br/><br/> <p class="theme_color--grey">If you are looking to invest? <span class="theme_color--yellow"><a href="http://vanircapital.org/investment.html" target="_blank"><u>Click here</u></a></span></p>
+      mailOptions["html"]+=`Hello, <br/> <h1>Thanks for choosing Vanir Capital</h1> <br/><br/> We would get in touch with you shortly <br/><br/> <p class="theme_color--grey">If you are looking to earn more? <span class="theme_color--yellow"><a href="http://vanircapital.org/investment.html" target="_blank"><u>Click here</u></a></span></p>
     `;}
     else{
       mailOptions["html"]+=html;

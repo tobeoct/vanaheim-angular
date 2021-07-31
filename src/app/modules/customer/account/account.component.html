@@ -17,10 +17,10 @@
             <div class="card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                 <div class="margin--x">
                     <small class="no-margin--all">BVN</small>
-                    <p class="no-margin--all"><b>{{bvn$|async}}</b></p>
+                    <p class="no-margin--all"><b>{{bvn$|async|hash:2:6}}</b></p>
                 </div>
                 <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-                    <app-badge color="success">Copy</app-badge>
+                    <ng-container *ngIf="bvn$|async as bvn"><app-badge color="success" (click)="copy(bvn)">Copy</app-badge></ng-container>
                     <div style="margin-left: 10px;"><app-button class="no-margin" (onClick)="toggleSideNav('bvn')"  fieldClass="no-margin--top" [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'"><ng-container slot="button">Edit</ng-container></app-button></div>
                 </div>
             </div>

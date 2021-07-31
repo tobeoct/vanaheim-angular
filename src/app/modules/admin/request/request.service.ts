@@ -34,7 +34,7 @@ export class RequestService {
   // loanLogDetailsSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
   loanLogDetails$: Observable<any>; //= this.loanLogDetailsSubject.asObservable();
   constructor(private _http: HttpClient, private _disbursedLoanService: DisbursedLoanService) {
-    this.loanDetails$ = this.selectedId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getLoanDetails(id)), shareReplay(1), tap(console.log),
+    this.loanDetails$ = this.selectedId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getLoanDetails(id)), shareReplay(1),
       map(value => ({ id: this.selectedIdSubject.value, ...value })),
       catchError(err => {
         console.error(err);
@@ -45,7 +45,7 @@ export class RequestService {
       this.selectedLogId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getLoanDetails(id, "log").pipe(catchError(err => {
         console.error(err);
         return EMPTY;
-      }))), tap(console.log),
+      }))),
         map(value => ({ id: this.selectedIdSubject.value, ...value })),
       )//.subscribe(c=>this.loanLogDetailsSubject.next(c));
 

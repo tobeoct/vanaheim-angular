@@ -13,14 +13,14 @@ export class RepaymentService {
   repayments$: Observable<any>
   myRepayments$: Observable<any>
   constructor(private _http: HttpClient) {
-    this.repayments$ = this.selectedDisbId$.pipe(mergeMap((id) => this.getRepaymentHealth(id)), shareReplay(1), tap(console.log),
+    this.repayments$ = this.selectedDisbId$.pipe(mergeMap((id) => this.getRepaymentHealth(id)), shareReplay(1),
       map(value => value),
       catchError(err => {
         console.error(err);
         return EMPTY;
       })
     );
-    this.myRepayments$ = this.selectedDisbId$.pipe(mergeMap((id) => this.getRepayment(id)), shareReplay(1), tap(console.log),
+    this.myRepayments$ = this.selectedDisbId$.pipe(mergeMap((id) => this.getRepayment(id)), shareReplay(1),
       map(value => value),
       catchError(err => {
         console.error(err);

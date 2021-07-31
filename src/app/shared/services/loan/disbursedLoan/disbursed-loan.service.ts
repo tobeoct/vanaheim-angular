@@ -14,7 +14,7 @@ export class DisbursedLoanService {
   
   disbursedLoanDetail$: Observable<any>
   constructor(private _http:HttpClient) { 
-    this.disbursedLoanDetail$ = this.selectedLoanId$.pipe(mergeMap((id) =>this.getDisbursedLoan(id)),shareReplay(1),tap(console.log),
+    this.disbursedLoanDetail$ = this.selectedLoanId$.pipe(mergeMap((id) =>this.getDisbursedLoan(id)),shareReplay(1),
     map(value=>value), 
     catchError(err => {
         console.error(err);

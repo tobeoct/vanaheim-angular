@@ -21,7 +21,7 @@ export class FaqComponent implements OnInit {
     in the money lending sector.`
             }, {
                 question: "What services do Vanir Capital Offer ?",
-                answer: `We offer consumer and capital finance solutions, we also provide investment for investors looking to earn passive income.`
+                answer: `We offer consumer and capital finance solutions, we also provide earning for earners looking to earn passive income.`
             }, {
                 question: "Is Vanir Capital Licensed ?",
                 answer: `Vanir Capital LLC is a registered financial Institution with the CAC, and a licensed money lending company with the Ministry of Home Affairs, Nigeria.`
@@ -167,25 +167,25 @@ export class FaqComponent implements OnInit {
                 answer: "There are no hidden charges on our loans. The rates are clearly stated in the offer letters sent to customers."
             }
                 , {
-                question: "Are there fees on investments?",
-                answer: `A one-off fee of 0.5% Flat on Total Principal Amount managed by Vanir Capital. This is charged on rollovers, investment top-ups and new investments and charged upfront. <br/>
+                question: "Are there fees on earnings?",
+                answer: `A one-off fee of 0.5% Flat on Total Principal Amount managed by Vanir Capital. This is charged on rollovers, earning top-ups and new earnings and charged upfront. <br/>
   This fee is the cost of having your portfolio professionally managed by Vanir Capital.<br/>
     
   
-   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div> MANAGEMENT FEE:<br/><br/> A one-off fee of 0.5% Flat on Total Principal Amount managed by Vanir Capital. This is charged on rollovers, investment top-ups and new investments and charged upfront. <br/><br/>
+   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div> MANAGEMENT FEE:<br/><br/> A one-off fee of 0.5% Flat on Total Principal Amount managed by Vanir Capital. This is charged on rollovers, earning top-ups and new earnings and charged upfront. <br/><br/>
   This fee is the cost of having your portfolio professionally managed by Vanir Capital.</div></li>
                   
                     
                     
    <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div> STATUTORY TAX (With-Holding Tax):<br/><br/> 10% On Accrued Interest monthly. This charge is mandatory and fixed by government.<br/> <br/>This is WHT (With-Holding
-  Tax) which is 10% flat of every income as directed by law, and will be deducted from your monthly interest and remitted to the FIRS (Federal Inland Revenue Service).<br/><br/> Your Tax Identification Number which is a requirement for tax remittances would need to be provided and a tax credit note will be provided to all investors at the end of the year.</div></li>
+  Tax) which is 10% flat of every income as directed by law, and will be deducted from your monthly interest and remitted to the FIRS (Federal Inland Revenue Service).<br/><br/> Your Tax Identification Number which is a requirement for tax remittances would need to be provided and a tax credit note will be provided to all earners at the end of the year.</div></li>
                  
-    <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>PREMATURE LIQUIDATION FEE:<br/><br/> The Pre-Liquidation charge is a penal charge implemented upon early liquidation (Part or Full) of investments. For full liquidations, One-month notice and forfeiture of interest due for the month. <br/><br/>
+    <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>PREMATURE LIQUIDATION FEE:<br/><br/> The Pre-Liquidation charge is a penal charge implemented upon early liquidation (Part or Full) of earnings. For full liquidations, One-month notice and forfeiture of interest due for the month. <br/><br/>
   For part liquidations, One-month notice and 1% of liquidated amount.<br/><br/>
-  This charge is calculated and deducted before the requested investment principals or returns are paid.</div></li>`
+  This charge is calculated and deducted before the requested earning principals or returns are paid.</div></li>`
             }, {
-                question: "Are there tax obligations on loans or investments?",
-                answer: `Our loans are not taxed; however, the investment returns have a charge of 10% flat which would be deducted from your monthly interest and remitted to the FIRS (Federal Inland Revenue Service).`
+                question: "Are there tax obligations on loans or earnings?",
+                answer: `Our loans are not taxed; however, the earning returns have a charge of 10% flat which would be deducted from your monthly interest and remitted to the FIRS (Federal Inland Revenue Service).`
             }
             ]
         }, {
@@ -215,86 +215,86 @@ export class FaqComponent implements OnInit {
             }
             ]
         }, {
-            title: "Investments and Returns",
+            title: "Earnings and Returns",
             data: [
                 {
-                    question: "How do I invest?",
-                    answer: `Kindly visit the <a href='https://app.vanircapital.org/investment' class="theme_color--yellow"><u>Investment Page</u></a> or <br/><br/>
-            <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Send a mail indicating interest to invest and request for the investment
-  account opening package to investments@VanirCapital.org or call +234
+                    question: "How do I earn?",
+                    answer: `Kindly visit the <a href='https://app.vanircapital.org/investment' class="theme_color--yellow"><u>Earning Page</u></a> or <br/><br/>
+            <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Send a mail indicating interest to earn and request for the earning
+  account opening package to earnings@VanirCapital.org or call +234
   818 027 9270 for more information</div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Scan and email signed documents to us at
-  investments@VanirCapital.org</div></li>
+  earnings@VanirCapital.org</div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>After all forms have been received and approved, a transaction notice
   will be sent from a designated relationship manager indicating Vanir 
-  Capital’s readiness to receive investment funds which will be paid into
+  Capital’s readiness to receive earning funds which will be paid into
   the organizations corporate account</div></li>
   
             `
                 },
                 {
-                    question: "As an existing investor I would like to change my order, how do I go about it?",
-                    answer: `<li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div> Send a mail requesting for a "Change Order" investments@VanirCapital.org or
+                    question: "As an existing earnor I would like to change my order, how do I go about it?",
+                    answer: `<li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div> Send a mail requesting for a "Change Order" earnings@VanirCapital.org or
   call +234 818 027 9270</div></li>
   
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div> In your communication, specify the required changes to amount and tenor</div></li>
   
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>After the request have been received and approved, an updated letter of
-  investment and/or investment projection will be provided to you.</div></li>
+  earning and/or earning projection will be provided to you.</div></li>
   `
                 }, {
-                    question: "How much can I invest?",
-                    answer: `Qualifying investment amounts starts from ₦250,000 to ₦50,000,000.`
+                    question: "How much can I earn?",
+                    answer: `Qualifying earning amounts starts from ₦250,000 to ₦50,000,000.`
                 }, {
                     question: "How is interest calculated?",
-                    answer: `Interest rates are calculated based on the applicable investment tenor. The longer the investment period, the higher your rates.`
+                    answer: `Interest rates are calculated based on the applicable earning tenor. The longer the earning period, the higher your rates.`
                 }, {
-                    question: "Can I have more than one investment plan? ",
-                    answer: `Yes. At any point in time, you can have several investment plans with us at Vanir Capital.`
+                    question: "Can I have more than one earning plan? ",
+                    answer: `Yes. At any point in time, you can have several earning plans with us at Vanir Capital.`
                 }, {
-                    question: "Can I top up an existing investment?",
-                    answer: `YES. You can make additional investments on an existing plan by sending a request
+                    question: "Can I top up an existing earning?",
+                    answer: `YES. You can make additional earnings on an existing plan by sending a request
   to Vanir Capital and further information will be provided.`
                 }, {
-                    question: "Is there a fee to setup an investment account?",
-                    answer: `Not at all. It is absolutely Free to opt in and earn guaranteed interest on your investment, once you place the funds.`
+                    question: "Is there a fee to setup an earning account?",
+                    answer: `Not at all. It is absolutely Free to opt in and earn guaranteed interest on your earning, once you place the funds.`
                 }, {
                     question: "What is a maturity date?",
-                    answer: `This is the beautiful day when your investment has completed the agreed time period, and you receive your full principal and/or interest pay-out to your account.`
+                    answer: `This is the beautiful day when your earning has completed the agreed time period, and you receive your full principal and/or interest pay-out to your account.`
                 }, {
                     question: "How is my money protected?",
-                    answer: `Vanir Capital investments are protected through our comfort cheques, Internal processes and guidelines, fund provisioning, and external Insurance.`
+                    answer: `Vanir Capital earnings are protected through our comfort cheques, Internal processes and guidelines, fund provisioning, and external Insurance.`
                 }, {
-                    question: "How do I monitor my investments?",
-                    answer: `With Vanir Capital, you have full visibility on how your investment is growing via monthly notifications on your current earnings and Vanir Capital's MPRs. 
+                    question: "How do I monitor my earnings?",
+                    answer: `With Vanir Capital, you have full visibility on how your earning is growing via monthly notifications on your current earnings and Vanir Capital's MPRs. 
   
   The monthly statements provide the following information:
   <ul>
-  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Balance: a sum of your current invested principal + any domiciled returns</div></li>
-  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Lifetime Returns: The total amount of returns you've earned since investing in Vanir capital </div></li>
+  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Balance: a sum of your current earned principal + any domiciled returns</div></li>
+  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Lifetime Returns: The total amount of returns you've earned since earning in Vanir capital </div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Current Returns: Returns earned during the concluded cycle</div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Projected Returns: The expected returns for future months</div></li></ul>`
                 }, {
                     question: "Can I Opt-out of the scheme at any time?",
-                    answer: `Yes. Ideally a one-month notice is required for a liquidation of investments, however, Vanir Capital is willing to liquidate investments on demand at an administrative fee.`
+                    answer: `Yes. Ideally a one-month notice is required for a liquidation of earnings, however, Vanir Capital is willing to liquidate earnings on demand at an administrative fee.`
                 }, {
                     question: "How do I Opt-out?",
                     answer: `Opting out is quite simple and require a one-month notice or payment of an early liquidation fee. To initiate an opt-out, follow the following these steps: <br/><br/>
   <ul>
-  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Send an email to investments@vanircapital.org</div></li>
-  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Title your email "Investment Liquidation Request</div></li>
+  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Send an email to earnings@vanircapital.org</div></li>
+  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Title your email "Earning Liquidation Request</div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>State the specifics of your liquidation request</div></li>
-  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>State the investment Plan you would like to Liquidate</div></li>
+  <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>State the earning Plan you would like to Liquidate</div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>State the amount to be liquidated if not full liquidation</div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Specify account for funds transfer if different from account on file</div></li>
   <li><div><i class="fas fa-dot-circle theme_color--yellow "></i></div><div>Send request</div></li></ul>`
                 }, {
-                    question: "Do I get a Certificate of Investment?",
-                    answer: `Yes. A Letter of Investment is provided, sealed and signed.`
+                    question: "Do I get a Certificate of Earning?",
+                    answer: `Yes. A Letter of Earning is provided, sealed and signed.`
                 }, {
-                    question: "How long can I invest for? ",
-                    answer: `Currently, available investment tenors are 3, 6 or 12 months. You can also re-invest
-  after an investment has matured.`
+                    question: "How long can I earn for? ",
+                    answer: `Currently, available earning tenors are 3, 6 or 12 months. You can also re-earn
+  after an earning has matured.`
                 }
             ]
         }

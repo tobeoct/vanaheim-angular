@@ -81,7 +81,20 @@ export class Utility{
     return convertString;
     
 }
-
+copyToClipboard(val: string){
+  const selBox = document.createElement('textarea');
+  selBox.style.position = 'fixed';
+  selBox.style.left = '0';
+  selBox.style.top = '0';
+  selBox.style.opacity = '0';
+  selBox.value = val;
+  document.body.appendChild(selBox);
+  selBox.focus();
+  selBox.select();
+  document.execCommand('copy');
+  document.body.removeChild(selBox);
+  alert("Copied");
+}
 getFileExtension=(filename:string)=>{
   let ext = filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
   return ext;//filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);//filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename

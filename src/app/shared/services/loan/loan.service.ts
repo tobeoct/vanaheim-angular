@@ -224,7 +224,6 @@ export class LoanService {
         from(loans.rows)
           .pipe(
             mergeMap(loans => this.search({ pageNumber: 1, maxSize: 10 })),
-            tap(suppliers => console.log('product suppliers', JSON.stringify(suppliers)))
           )
       )
     );

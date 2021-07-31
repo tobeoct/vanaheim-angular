@@ -12,6 +12,8 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanDetails } from '../../loan/shared/loan-calculator/loan-details';
 import { RequestService } from '../../admin/request/request.service';
 import moment = require('moment');
+import { RepaymentService } from 'src/app/shared/services/repayment/repayment.service';
+import { DocumentService } from 'src/app/shared/services/document/document.service';
 
 @Component({
   selector: 'app-loans',
@@ -83,13 +85,17 @@ export class LoansComponent implements OnInit {
   pagingSubject: BehaviorSubject<any>;
   latestLoan$: Observable<any>;
   runningLoan$: Observable<any>;
+  repayments$:Observable<any[]>;
+  
+  showRepaymentSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showRepayment$: Observable<boolean> = this.showRepaymentSubject.asObservable();
   tenureDenominatorSubject: BehaviorSubject<string> = new BehaviorSubject<string>("Mos");
   tenureDenominator$: Observable<string> = this.tenureDenominatorSubject.asObservable();
 
 
   activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
-  constructor(private _fb: FormBuilder, private _store: Store, private _utility: Utility,
+  constructor(private _fb: FormBuilder, private _documentService:DocumentService, private _repaymentService: RepaymentService, private _store: Store, private _utility: Utility,
     private _router: Router,
     private _validators: VCValidators,
     private _loanService: LoanService, private _requestService: RequestService) {
@@ -106,6 +112,7 @@ export class LoansComponent implements OnInit {
     this.loanDetailsSubject.next(this._store.loanCalculator)
     this.latestLoan$ = this._loanService.latestLoan$;
     this.runningLoan$ = this._loanService.runningLoan$;
+    this.repayments$ = this._repaymentService.myRepayments$;
     this.latestLoan$.subscribe(l => {
       if (l.requestStatus == 'Funded') {
         this._requestService.selectLoan(l.id);
@@ -200,9 +207,8 @@ export class LoansComponent implements OnInit {
   close() {
     this.showSubject.next(false);
   }
-  
-  getDaysLeft(date:any){
-    console.log(date);
+
+  getDaysLeft(date: any) {
     let d = moment(date);
     let now = moment();
     return d.diff(now, "days");
@@ -211,5 +217,25 @@ export class LoansComponent implements OnInit {
   getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
     return this._loanService.getNextDueDateFormatted(dateFunded, tenure, denominator);
   }
- 
+
+  showRepayment(id: number) {
+    this.showRepaymentSubject.next(true);
+    this._repaymentService.selectLoan(id);
+  }
+  closeRepayment() {
+    this.showRepaymentSubject.next(false);
+  }
+  getStatusColor(status: string) {
+    if (status == "Paid In Full" || status == "FullPayment") return 'success';
+    return status == "Defaulted" ? 'danger' : status == 'Partial' ? 'info' : '';
+  }
+
+  getLoanStatusColor(status: string) {
+    if (status == "Approved" || status == "Funded" || status == "Completed") return 'success';
+    if (status == "NotQualified" || status == "Declined" || status == "Defaulting") return 'danger';
+    return status == "Processing" ? '' :'info' ;
+  }
+  download(url:string,filename:string){
+    this._documentService.download(url,filename)
+  }
 }

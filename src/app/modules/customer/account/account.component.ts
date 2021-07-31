@@ -28,4 +28,7 @@ export class AccountComponent implements OnInit {
   logout(){
     this._authService.logout();
   }
+  copy(text:string){
+    this._utility.copyToClipboard(text);
+  }
 }

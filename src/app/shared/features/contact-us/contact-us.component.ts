@@ -8,15 +8,17 @@ import { Utility } from '../../helpers/utility.service';
 })
 export class SideContactComponent implements OnInit {
 
-  constructor(private _utility:Utility) { }
+  constructor(private _utility: Utility) { }
 
   ngOnInit(): void {
-     
+
   }
-  
-  toggleSideNav=(type:any)=>{
+
+  toggleSideNav = (type: any) => {
     type = type as SideNavigationList;
     this._utility.toggleSideNav(type);
   }
-
+  copy(text: string) {
+    this._utility.copyToClipboard(text);
+  }
 }

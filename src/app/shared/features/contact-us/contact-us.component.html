@@ -7,11 +7,27 @@
                 <p class="no-margin--all"><b>support@vanircapital.org</b></p>
             </div>
             <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-                <app-badge color="success">Copy</app-badge>
+                <app-badge color="success" (click)="copy('support@vanircapital.org')">Copy</app-badge>
                 <div style="margin-left: 10px;">
                     <app-button class="no-margin" fieldClass="no-margin--top"
                         [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
-                        <ng-container slot="button">Email</ng-container>
+                        <ng-container slot="button"><a href="mailto:support@vanircapital.org">Email</a></ng-container>
+                    </app-button>
+                </div>
+            </div>
+        </div>
+        <div
+            class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <div class="margin--x">
+                <small class="no-margin--all">Email</small>
+                <p class="no-margin--all"><b>loans@vanircapital.org</b></p>
+            </div>
+            <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <app-badge color="success" (click)="copy('loans@vanircapital.org')">Copy</app-badge>
+                <div style="margin-left: 10px;">
+                    <app-button class="no-margin" fieldClass="no-margin--top"
+                        [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
+                        <ng-container slot="button"><a href="mailto:loans@vanircapital.org">Email</a></ng-container>
                     </app-button>
                 </div>
             </div>
@@ -23,7 +39,8 @@
                 <p class="no-margin--all"><b>08180279270</b></p>
             </div>
             <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-                <app-badge color="success">Copy</app-badge>
+
+                <app-badge color="success" (click)="copy('08180279270')">Copy</app-badge>
                 <div style="margin-left: 10px;">
                     <app-button class="no-margin" fieldClass="no-margin--top"
                         [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
