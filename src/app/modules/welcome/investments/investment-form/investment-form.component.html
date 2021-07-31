@@ -7,7 +7,7 @@
         <app-investment-card [maturity]="maturity.value" [amount]="amount.value" [payout]="payout.value" *ngIf="changed$|async"></app-investment-card>
         <div class="theme_row" style="padding: 5%; padding-top: 0;"> 
               <app-input [focus$]="focus$" id="amountId" placeholder="Enter savings amount"  [control]="amount" class="form-control" [error]="(errorMessage$ | async)?.amount" >
-                <label for="amountId">How much do you want to save (50K - 50M)</label>
+                <label for="amountId">How much do you want to save (100K - 50M)</label>
             </app-input>
 
               <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="durationId" [control]="duration" class="form-control"  >
