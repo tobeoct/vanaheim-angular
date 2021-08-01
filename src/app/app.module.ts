@@ -35,7 +35,7 @@ import { FeaturesModule } from './shared/features/features.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,BaseModule,FeaturesModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production,registrationStrategy: "registerImmediately" })
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
