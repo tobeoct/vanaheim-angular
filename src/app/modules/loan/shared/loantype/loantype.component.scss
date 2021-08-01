@@ -9,7 +9,7 @@
     @include paddingVertical(true, "px", 0.5);
     @include paddingHorizontal(true, "px", 1);
     position: relative;
-    height: 190px;
+    min-height: 190px;
     box-sizing: border-box;
     display: inline-block;
     vertical-align: top;

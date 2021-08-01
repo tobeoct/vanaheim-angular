@@ -9,15 +9,21 @@
                 <div class="theme_col-5 theme_color" style="padding-right: 5%;padding-top: 7%; z-index: 1;">
 
                     <div class="copy" style="overflow-x: hidden; margin-top: 0;">
-                        <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span>Low rates, Flexible
-                                Payments, </span><span class="theme_color--yellow">Peace of mind</span></p>
+                        <!-- <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span>Low rates, Flexible
+                                Payments, </span><span class="theme_color--yellow">Peace of mind</span></p> -->
+                                <ul style="font-size: 2em; line-height: 1em;" class="theme_text--heading2 animate__animated animate__fadeInLeft">
+                                    <li>Affordable Interest Rates</li>
+                                       <li> Flexible Repayment Plans</li>
+                                        <li>No Hidden Charges</li>
+                                        <li class="theme_color--yellow">Peace of Mind</li>
+                                </ul>
                         <div class="animate__animated animate__fadeIn"
                             style="width: 90%; max-width: 200px; margin-bottom: 30px;">
                             <app-lottie [assetPath]="assetPaths.loan"></app-lottie>
                         </div>
                     </div>
                 </div>
-                <div class="theme_col-7" style=" padding-top: 2%; padding-bottom: 5%;">
+                <div class="theme_col-7" style="padding-bottom: 5%;">
 
                     <app-loan-header></app-loan-header>
                     <ng-container *ngIf="(page$|async)=='loan-type'||(page$|async)==''">

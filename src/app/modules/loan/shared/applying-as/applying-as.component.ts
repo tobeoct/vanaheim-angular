@@ -5,10 +5,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 const data:any[] = [
-  {title:"Salary Earner",allowedTypes:["Personal Loans", "Float Me (Personal)"], description:"I work in an organisation and get paid a salary"},
-  {title:"Business Owner",allowedTypes:["Personal Loans","Business Loans", "Float Me (Business)", "LPO Financing"], description:"I work in an organisation and get paid a salary"},
-  {title:"Corporate",allowedTypes:["Business Loans", "Float Me (Business)", "LPO Financing"], description:"I work in an organisation and get paid a salary"},
-  {title:"Contractor",allowedTypes:["Business Loans", "Float Me (Business)", "LPO Financing"], description:"I work in an organisation and get paid a salary"},
+  {title:"Salary Earner",allowedTypes:["PayMe Loan", "FloatMe (Personal)"], description:"I work in an organisation and get paid a salary"},
+  {title:"Business Owner",allowedTypes:["PayMe Loan","FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"I work in an organisation and get paid a salary"},
+  {title:"Corporate",allowedTypes:["FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"I work in an organisation and get paid a salary"},
+  {title:"Contractor",allowedTypes:["FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"I work in an organisation and get paid a salary"},
 ]
 @Component({
   selector: 'app-applying-as',

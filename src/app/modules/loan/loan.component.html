@@ -17,7 +17,7 @@
 <div id="loan-content" class="content" style="box-sizing:border-box;" [ngClass]="{'loggedIn':isLoggedIn}" >
     
 <app-loan-navigation theme="light" *ngIf="isLoggedIn"></app-loan-navigation>
-<app-banner [class]="'banner--small margin--3x no-margin--top'" color="info" *ngIf="!isLoggedIn"><ng-container slot="content"><a href="/auth/account"><b><u>Sign up required</u> </b></a> to be able to submit your application or upload documents</ng-container></app-banner>        
+<app-banner [class]="'banner--small margin--3x no-margin--top'" color="tertiary" *ngIf="!isLoggedIn"><ng-container slot="content"><a href="/auth/account"><b><u>Sign up required</u> </b></a> to be able to submit your application or upload documents</ng-container></app-banner>        
     <app-loan-header></app-loan-header>
     <div id="main-content">
         <div id="loan-calculator" >

@@ -1,10 +1,9 @@
-
-
-    <div id="calculator" >
-    <div class="theme_col-5" style="margin-top: 30px; display: flex; flex-direction: column; justify-content: space-between;">
+<div id="loan-summary"></div>
+<div id="calculator">
+    <div class="theme_col-5" style="margin-top: 30px; margin-right: 30px; display: flex; flex-direction: column; justify-content: space-between;">
         <div id="loan-details-summary" class="content--small animate__animated animate__fadeIn" >
             <div class="details">
-                <p>Monthly Payment</p>
+                <p>{{lType.includes('Float')?'Daily':'Monthly'}} Payment</p>
                 <h1>{{monthlyRepayment$|async|currency:'₦':'symbol':'1.0-2'}}</h1>
             </div>
             <div class="details">
@@ -27,38 +26,44 @@
             </app-form>
         </div>
     </div>
-    <div id="form" class="theme_col-6 animate__animated animate__fadeInUp animate__fast">
+    <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
         <div class=" content box-shadow" style="box-sizing: border-box; margin-top: 30px;">
-    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
-    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-   
-        <app-input [focus$]="focus$" fieldClass="no-margin--top" id="loanAmount" [control]="loanAmount" class="form-control" [error]="(errorMessage$|async)?.loanAmount" >
-            <label for="loanAmount">Loan Amount ({{range.minString}}-{{range.maxString}})</label>
-        </app-input>
+            <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+            <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
 
-        <app-slider id="tenure" [denominator$]="tenureDenominator$" [control]="tenure" [min]="minTenure" [max]="maxTenure" class="form-control" [error]="(errorMessage$|async)?.tenure" >
-            <label for="tenure">Tenure</label>
-        </app-slider>
+                <app-input [focus$]="focus$" fieldClass="no-margin--top" id="loanAmount" [control]="loanAmount"
+                    class="form-control" [error]="(errorMessage$|async)?.loanAmount">
+                    <label for="loanAmount">Loan Amount ({{range.minString}}-{{range.maxString}})</label>
+                </app-input>
 
-        <app-dropdown [current]="purpose.value" [fieldClass]="'margin--large no-margin--bottom'" [id]="'purpose'" [control]="purpose"  aria-placeholder="What is the purpose of your loan">
-            <ng-container slot="label"><label for="purpose">Purpose of the loan</label></ng-container>
-            <app-option *ngFor="let purpose of loanPurposes; let i =index" [value]="purpose" [label]="purpose">{{purpose}}</app-option>
-        </app-dropdown>
-        <div style="margin-top: 60px;">
-            <app-button [form]="form" [loading$]="loading$">Next</app-button>
+                <app-slider id="tenure" [denominator$]="tenureDenominator$" [control]="tenure" [min]="minTenure"
+                    [max]="maxTenure" class="form-control" [error]="(errorMessage$|async)?.tenure">
+                    <label for="tenure">Tenure</label>
+                </app-slider>
+
+                <app-dropdown [current]="purpose.value" [fieldClass]="'margin--large no-margin--bottom'"
+                    [id]="'purpose'" [control]="purpose" aria-placeholder="What is the purpose of your loan">
+                    <ng-container slot="label"><label for="purpose">Purpose of the loan</label></ng-container>
+                    <app-option *ngFor="let purpose of loanPurposes; let i =index" [value]="purpose" [label]="purpose">
+                        {{purpose}}</app-option>
+                </app-dropdown>
+                <div style="margin-top: 60px;">
+                    <app-button [form]="form" [loading$]="loading$">Next</app-button>
+                </div>
+            </app-form>
         </div>
-    </app-form>
     </div>
-</div>
+ 
+  
 </div>
 
 
 <div class="snackbar_container ">
-    <div *ngIf="apiError$|async" class="snackbar snackbar-danger mt-3 mb-0 animate__animated animate__fadeInUp">{{apiError$|async}}
+    <div *ngIf="apiError$|async" class="snackbar snackbar-danger mt-3 mb-0 animate__animated animate__fadeInUp">
+        {{apiError$|async}}
     </div>
-    <div *ngIf="apiSuccess$|async" class="snackbar snackbar-success mt-3 mb-0 animate__animated animate__fadeInUp">{{apiSuccess$|async}}
+    <div *ngIf="apiSuccess$|async" class="snackbar snackbar-success mt-3 mb-0 animate__animated animate__fadeInUp">
+        {{apiSuccess$|async}}
     </div>
-    
-    </div>
-                            
-                      
+
+</div>

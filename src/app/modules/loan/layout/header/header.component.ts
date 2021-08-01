@@ -11,42 +11,42 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./header.component.scss']
 })
 export class LoanHeaderComponent implements OnInit, OnChanges {
-title$:Observable<string>;
-loanType$:Observable<string>;
-loanProduct$:Observable<string>;
-applyingAs$:Observable<string>;
-isLoggedIn:boolean;
-base="welcome/loans/apply/";
-  constructor(private _store:Store, private _router:Router, private _route:ActivatedRoute,private _location: Location, private _authService:AuthService) {
+  title$: Observable<string>;
+  loanType$: Observable<string>;
+  loanProduct$: Observable<string>;
+  applyingAs$: Observable<string>;
+  isLoggedIn: boolean;
+  base = "welcome/loans/apply/";
+  constructor(private _store: Store, private _router: Router, private _route: ActivatedRoute, private _location: Location, private _authService: AuthService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
-     });
-   }
+    });
+  }
 
   ngOnInit(): void {
     this.title$ = this._store.title$;
     this.applyingAs$ = this._store.applyingAs$;
     this.loanProduct$ = this._store.loanProduct$;
-    this.loanType$= this._store.loanType$;
+    this.loanType$ = this._store.loanType$;
     this.isLoggedIn = this._authService.isLoggedIn();
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.isLoggedIn = this._authService.isLoggedIn();
   }
 
-  back=()=>{
-  
+  back = () => {
+
     this._store.back();
-    
-    if(this._router.url!="/welcome/loans"){
+
+    if (this._router.url != "/welcome/loans") {
       this._location.back();
-    // this.onNavigate(this._store.previousSubject.value);
+      // this.onNavigate(this._store.previousSubject.value);
+    }
   }
-  }
-  onNavigate(route:string,params:any={}):void{
-    if(this.base =="/welcome/") this.base = "/welcome/loans/apply/"
-    const r =this.base+route;
-    this._router.navigate([r],{queryParams: params})
+  onNavigate(route: string, params: any = {}): void {
+    if (this.base == "/welcome/") this.base = "/welcome/loans/apply/"
+    const r = this.base + route;
+    this._router.navigate([r], { queryParams: params })
   }
 }

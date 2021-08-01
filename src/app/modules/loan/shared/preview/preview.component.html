@@ -1,383 +1,538 @@
-    <div style="max-width: 500px;" >
-        <div class="preview-container" *ngIf="loanApplication['loanType']">
-            <div class="preview-title"><h3>Loan Type</h3>
-            <app-button (onClick)="onNavigate('loan-type')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>
-            <div class="preview-items">
-                    <div class="preview-item" > 
-                            <div ><p>{{loanApplication['loanType']}}</p></div>
-                    </div>
-            </div>
+<div style="max-width: 500px;">
+    <div class="preview-container" *ngIf="loanApplication['loanType']">
+        <div class="preview-title">
+            <h3>Loan Type</h3>
+            <app-button (onClick)="onNavigate('loan-type')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
         </div>
-        <div class="preview-container" *ngIf="loanApplication['applyingAs']" >
-            <div class="preview-title"><h3>Applying As</h3>
-        <app-button (onClick)="onNavigate('applying-as')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>
         <div class="preview-items">
-                    <div class="preview-item" > 
-                            <div ><p>{{loanApplication['applyingAs']}}</p></div>
-                    </div>
+            <div class="preview-item">
+                <div>
+                    <p>{{loanApplication['loanType']}}</p>
+                </div>
             </div>
         </div>
-        <div class="preview-container" *ngIf="loanApplication['loanProduct']" >
-            <div class="preview-title"><h3>Loan Product</h3>
-            <app-button (onClick)="onNavigate('loan-product')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div><div class="preview-items">
-                    <div class="preview-item" > 
-                            <div ><p>{{loanApplication['loanProduct']}}</p></div>
-                    </div>
+    </div>
+    <div class="preview-container" *ngIf="loanApplication['applyingAs']">
+        <div class="preview-title">
+            <h3>Applying As</h3>
+            <app-button (onClick)="onNavigate('applying-as')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="preview-items">
+            <div class="preview-item">
+                <div>
+                    <p>{{loanApplication['applyingAs']}}</p>
+                </div>
             </div>
         </div>
+    </div>
+    <div class="preview-container" *ngIf="loanApplication['loanProduct']">
+        <div class="preview-title">
+            <h3>Loan Product</h3>
+            <app-button (onClick)="onNavigate('loan-product')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="preview-items">
+            <div class="preview-item">
+                <div>
+                    <p>{{loanApplication['loanProduct']}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="preview-container" *ngIf="loanApplication['loanCalculator']">
-            <div class="preview-title"><h3>Loan Details</h3>
-            <app-button (onClick)="onNavigate('loan-calculator')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div><div class="preview-items">
-                    <div class="preview-item" > 
-                                <p><span><b>Loan Amount</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["loanAmount"]}}</span></p>
-                    </div>
-                    
-                    <div class="preview-item" > 
-                    <p><span><b>Tenure</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["tenure"]}} {{toJson(loanApplication['loanCalculator'])["denominator"]}}</span></p>
-                    </div>
-                    
-                    <!-- <div class="preview-item" > 
+    <div class="preview-container" *ngIf="loanApplication['loanCalculator']">
+        <div class="preview-title">
+            <h3>Loan Details</h3>
+            <app-button (onClick)="onNavigate('loan-calculator')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="preview-items">
+            <div class="preview-item">
+                <p><span><b>Loan
+                            Amount</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["loanAmount"]}}</span>
+                </p>
+            </div>
+
+            <div class="preview-item">
+                <p><span><b>Tenure</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["tenure"]}}
+                        {{toJson(loanApplication['loanCalculator'])["denominator"]}}</span></p>
+            </div>
+
+            <!-- <div class="preview-item" > 
                     <p><span><b>Loan Amount</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["loanAmount"]}}</span></p>
                     </div> -->
-                    
-                    <div class="preview-item" > 
-                    <p><span><b>Monthly Reayment</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["monthlyPayment"]}}</span></p>
-                    </div>
-                    
-                    <div class="preview-item" > 
-                    <p><span><b>Total Repayment</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["totalRepayment"]}}</span></p>
-                    </div>
-      
+
+            <div class="preview-item">
+                <p><span><b>Monthly
+                            Repayment</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["monthlyPayment"]}}</span>
+                </p>
             </div>
+
+            <div class="preview-item">
+                <p><span><b>Total
+                            Repayment</b></span>:<span>{{toJson(loanApplication['loanCalculator'])["totalRepayment"]}}</span>
+                </p>
+            </div>
+
         </div>
-        <ng-container *ngIf="loanApplication['accountInfo']">
-            <div class="preview-container" *ngFor="let acc of toJson(loanApplication['accountInfo']);let i=index">
-                <div class="preview-title"><h3>Account {{i+1}}</h3>
-         <app-button (onClick)="onNavigate('account')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>       
-         <div class="preview-items">
-                        <div class="preview-item" > 
-                            <p><span><b>Bank</b></span>:<span>{{acc["bank"]}}</span></p>
-                        </div>
-                        <div class="preview-item" >
-                            <p><span><b>Account Number</b></span>:<span>{{acc["accountNumber"]}}</span></p>
-                        </div>
-                        <div class="preview-item" >
-                            <p><span><b>Account Name</b></span>:<span>{{acc["accountName"]}}</span></p>
-                        </div>
-                </div>
-            </div>
-        </ng-container>
-
-        <ng-container *ngIf="category=='personal'">
-            <ng-container *ngIf="loanApplication['bvn']">
-                <div class="preview-container">
-                    <div class="preview-title"><h3>BVN</h3>
-                    <app-button (onClick)="onNavigate('bvn-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>
-                    <div class="preview-items">
-                            <div class="preview-item" > 
-                                        <p><span><b>Bank Verification Number</b></span>:<span>{{toJson(loanApplication['bvn'])["bvn"]}}</span></p>
-                            </div>
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="loanApplication['personalInfo']">
-                <div class="preview-container">
-                    <div class="preview-title"><h3>Personal Information</h3>
-    <app-button (onClick)="onNavigate('personal-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>                
-    <div class="preview-items">
-                            <div class="preview-item" > 
-                                        <p><span><b>Name</b></span>:<span>{{toJson(loanApplication['personalInfo'])["title"]}} {{toJson(loanApplication['personalInfo'])["firstName"]}} {{toJson(loanApplication['personalInfo'])["otherNames"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Date Of Birth</b></span>:<span>{{toJson(loanApplication['personalInfo'])["dob"]["day"]}} {{toJson(loanApplication['personalInfo'])["dob"]["month"]}}, {{toJson(loanApplication['personalInfo'])["dob"]["year"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Gender</b></span>:<span>{{toJson(loanApplication['personalInfo'])["gender"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Marital Status</b></span>:<span>{{toJson(loanApplication['personalInfo'])["maritalStatus"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Phone Number</b></span>:<span>{{toJson(loanApplication['personalInfo'])["phoneNumber"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Email Address</b></span>:<span>{{toJson(loanApplication['personalInfo'])["email"]}}</span></p>
-                                </div>
-                                <div class="preview-item" > 
-                                    <p><span><b>Address</b></span>:<span>{{toJson(loanApplication['personalInfo'])["address"]["street"]}} {{toJson(loanApplication['personalInfo'])["address"]["city"]}}, {{toJson(loanApplication['personalInfo'])["address"]["state"]}}</span></p>
-                                    </div>
-            
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="loanApplication['employmentInfo']">
-                <div class="preview-container">
-                    <div class="preview-title"><h3>Employment Information</h3>
-  <app-button (onClick)="onNavigate('employment-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>                  
-  <div class="preview-items">
-                            <div class="preview-item" > 
-                                        <p><span><b>Employer</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["employer"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Business Sector</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["businessSector"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Net Monthly Salary</b></span>:<span>{{toJson(loanApplication['employmentInfo'])['netMonthlySalary']}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>PayDay</b></span>:<span>{{toJson(loanApplication['employmentInfo'])['payDay']}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Phone Number</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["phoneNumber"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Email Address</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["email"]}}</span></p>
-                                </div>
-                                <div class="preview-item" > 
-                                    <p><span><b>Address</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["address"]["street"]}} {{toJson(loanApplication['employmentInfo'])["address"]["city"]}}, {{toJson(loanApplication['employmentInfo'])["address"]["state"]}}</span></p>
-                                    </div>
-            
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="loanApplication['nokInfo']">
-                <div class="preview-container">
-                    <div class="preview-title"><h3>Next Of Kin Information</h3>
- <app-button (onClick)="onNavigate('nok-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>                   
- <div class="preview-items">
-                            <div class="preview-item" > 
-                                        <p><span><b>Name</b></span>:<span>{{toJson(loanApplication['nokInfo'])["title"]}} {{toJson(loanApplication['nokInfo'])["otherNames"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Date Of Birth</b></span>:<span>{{toJson(loanApplication['nokInfo'])["dob"]["day"]}} {{toJson(loanApplication['nokInfo'])["dob"]["month"]}}, {{toJson(loanApplication['nokInfo'])["dob"]["year"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Relationship</b></span>:<span>{{toJson(loanApplication['nokInfo'])["relationship"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Phone Number</b></span>:<span>{{toJson(loanApplication['nokInfo'])["phoneNumber"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Email Address</b></span>:<span>{{toJson(loanApplication['nokInfo'])["email"]}}</span></p>
-                                </div>
-                                
-                    </div>
-                </div>
-            </ng-container>
-        </ng-container>
-        <ng-container *ngIf="category=='business'">
-            <ng-container *ngIf="loanApplication['additionalInfo']">
-                <div class="preview-container">
-                    <div class="preview-title"><h3>Preferred Contact Details</h3><app-button (onClick)="onNavigate('additional-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div> 
-                    <div class="preview-items">
-                            <div class="preview-item" > 
-                                        <p><span><b>Name</b></span>:<span>{{toJson(loanApplication['additionalInfo'])["preferredName"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Phone Number</b></span>:<span>{{toJson(loanApplication['additionalInfo'])["preferredPhoneNumber"]}}</span></p>
-                    </div>
-                            <div class="preview-item" > 
-                            <p><span><b>Email Address</b></span>:<span>{{toJson(loanApplication['additionalInfo'])["preferredEmail"]}}</span></p>
-                            </div>
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="loanApplication['companyInfo']">
-                <div class="preview-container">
-                    <div class="preview-title"><h3>Company Information</h3>
-     <app-button (onClick)="onNavigate('company-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>               <div class="preview-items">
-                            <div class="preview-item" > 
-                                        <p><span><b>Company Name</b></span>:<span>{{toJson(loanApplication['companyInfo'])["companyName"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>RC. No</b></span>:<span>{{toJson(loanApplication['companyInfo'])["companyRCNo"]}}</span></p>
-                    </div>
-                            <div class="preview-item" > 
-                            <p><span><b>Date Of Incorporation</b></span>:<span>{{toJson(loanApplication['companyInfo'])["dateOfIncorporation"]["day"]}} {{toJson(loanApplication['companyInfo'])["dateOfIncorporation"]["month"]}}, {{toJson(loanApplication['companyInfo'])["dateOfIncorporation"]["year"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Nature Of Business</b></span>:<span>{{toJson(loanApplication['companyInfo'])["natureOfBusiness"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Time Of Business</b></span>:<span>{{toJson(loanApplication['companyInfo'])["timeInBusiness"]}}</span></p>
-                                </div>
-                            <div class="preview-item" > 
-                            <p><span><b>Phone Number</b></span>:<span>{{toJson(loanApplication['companyInfo'])["phoneNumber"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Email Address</b></span>:<span>{{toJson(loanApplication['companyInfo'])["email"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Address</b></span>:<span>{{toJson(loanApplication['companyInfo'])["address"]["street"]}} {{toJson(loanApplication['companyInfo'])["address"]["city"]}}, {{toJson(loanApplication['companyInfo'])["address"]["state"]}}</span></p>
-                            </div>    
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="loanApplication['shareholderInfo']">
-                <div class="preview-container" *ngFor="let shareholder of toJson(loanApplication['shareholderInfo']);let i=index">
-                    <div class="preview-title"><h3>Shareholder {{i+1}}</h3>
-     <app-button (onClick)="onNavigate('shareholder-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>               <div class="preview-items">
-                                        <div class="preview-item" > 
-                                                    <p><span><b>Name</b></span>:<span>{{shareholder["title"]}} {{shareholder["firstName"]}} {{shareholder["otherNames"]}}</span></p>
-                                        </div>
-                                        
-                                        <div class="preview-item" > 
-                                        <p><span><b>Date Of Birth</b></span>:<span>{{shareholder["dob"]["day"]}} {{shareholder["dob"]["month"]}}, {{shareholder["dob"]["year"]}}</span></p>
-                                        </div>
-                                        
-                                        <div class="preview-item" > 
-                                        <p><span><b>Gender</b></span>:<span>{{shareholder["gender"]}}</span></p>
-                                        </div>
-                                        
-                                        <div class="preview-item" > 
-                                        <p><span><b>Marital Status</b></span>:<span>{{shareholder["maritalStatus"]}}</span></p>
-                                        </div>
-                                        <div class="preview-item" > 
-                                            <p><span><b>Educational Qualification</b></span>:<span>{{shareholder["educationalQualification"]}}</span></p>
-                                            </div>
-                                            
-                                            <div class="preview-item" > 
-                                            <p><span><b>Designation</b></span>:<span>{{shareholder["designation"]}}</span></p>
-                                            </div>
-                                            
-                                        <div class="preview-item" > 
-                                        <p><span><b>Phone Number</b></span>:<span>{{shareholder["phoneNumber"]}}</span></p>
-                                        </div>
-                                        <div class="preview-item" > 
-                                            <p><span><b>Email Address</b></span>:<span>{{shareholder["email"]}}</span></p>
-                                            </div>
-                                            <div class="preview-item" > 
-                                                <p><span><b>Address</b></span>:<span>{{shareholder["address"]["street"]}} {{shareholder["address"]["city"]}}, {{shareholder["address"]["state"]}}</span></p>
-                                                </div>
-                        
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="loanApplication['collateralInfo']">
-                <div class="preview-container">
-                    <div class="preview-title"><h3>Collateral Information</h3>
-  <app-button (onClick)="onNavigate('collateral-info')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div>                  <div class="preview-items">
-                            <div class="preview-item" > 
-                                        <p><span><b>Type</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["type"]}}</span></p>
-                            </div>
-                            <div class="preview-item" > 
-                                <p><span><b>Description</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["description"]}}</span></p>
-                    </div>
-                            <div class="preview-item" > 
-                            <p><span><b>Valuation</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["valuation"]}}</span></p>
-                            </div>
-                            
-                            <div class="preview-item" > 
-                            <p><span><b>Owner</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["owner"]}}</span></p>
-                            </div>
-                               
-                    </div>
-                </div>
-            </ng-container>
-        </ng-container>
-
-        <ng-container *ngIf="loanApplication['documents']">
-            <div class="preview-container" >
-                <div class="preview-title"><h3>Documents</h3>
-               <app-button (onClick)="onNavigate('upload')" [class]="'widget_button--small'"><ng-container slot="button">Edit</ng-container></app-button></div> <div class="preview-items">
-                        <div class="preview-item" *ngFor="let doc of toJson(loanApplication['documents']);let i=index" > 
-                            <p><span><b>{{doc.label}}</b></span>:<span>{{doc.name}}</span></p>
-                        </div>
-                       
-                </div>
-            </div>
-        </ng-container>
     </div>
-    <div>
-
-    <app-form [form]="form" (onSubmit)="submitApplication($event)" >
-        <div #button>
-            <app-button  [autoClick]="(autoClick$|async)||false"  [form]="form" [loading$]="loading$" fieldClass="theme_col-3 no-margin--top  widget_button--wide">Submit Application</app-button>
+    <ng-container *ngIf="loanApplication['accountInfo']">
+        <div class="preview-container" *ngFor="let acc of toJson(loanApplication['accountInfo']);let i=index">
+            <div class="preview-title">
+                <h3>Account {{i+1}}</h3>
+                <app-button (onClick)="onNavigate('account')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="preview-items">
+                <div class="preview-item">
+                    <p><span><b>Bank</b></span>:<span>{{acc["bank"]}}</span></p>
+                </div>
+                <div class="preview-item">
+                    <p><span><b>Account Number</b></span>:<span>{{acc["accountNumber"]}}</span></p>
+                </div>
+                <div class="preview-item">
+                    <p><span><b>Account Name</b></span>:<span>{{acc["accountName"]}}</span></p>
+                </div>
+            </div>
         </div>
-</app-form>
+    </ng-container>
+
+    <ng-container *ngIf="category=='personal'">
+        <ng-container *ngIf="loanApplication['bvn']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>BVN</h3>
+                    <app-button (onClick)="onNavigate('bvn-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Bank Verification
+                                    Number</b></span>:<span>{{toJson(loanApplication['bvn'])["bvn"]}}</span></p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="loanApplication['personalInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Personal Information</h3>
+                    <app-button (onClick)="onNavigate('personal-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Name</b></span>:<span>{{toJson(loanApplication['personalInfo'])["title"]}}
+                                {{toJson(loanApplication['personalInfo'])["firstName"]}}
+                                {{toJson(loanApplication['personalInfo'])["otherNames"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Date Of
+                                    Birth</b></span>:<span>{{toJson(loanApplication['personalInfo'])["dob"]["day"]}}
+                                {{toJson(loanApplication['personalInfo'])["dob"]["month"]}},
+                                {{toJson(loanApplication['personalInfo'])["dob"]["year"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Gender</b></span>:<span>{{toJson(loanApplication['personalInfo'])["gender"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Marital
+                                    Status</b></span>:<span>{{toJson(loanApplication['personalInfo'])["maritalStatus"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(loanApplication['personalInfo'])["phoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(loanApplication['personalInfo'])["email"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Address</b></span>:<span>{{toJson(loanApplication['personalInfo'])["address"]["street"]}}
+                                {{toJson(loanApplication['personalInfo'])["address"]["city"]}},
+                                {{toJson(loanApplication['personalInfo'])["address"]["state"]}}</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="loanApplication['employmentInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Employment Information</h3>
+                    <app-button (onClick)="onNavigate('employment-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Employer</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["employer"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Business
+                                    Sector</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["businessSector"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Net Monthly
+                                    Salary</b></span>:<span>{{toJson(loanApplication['employmentInfo'])['netMonthlySalary']}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>PayDay</b></span>:<span>{{toJson(loanApplication['employmentInfo'])['payDay']}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["phoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["email"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Address</b></span>:<span>{{toJson(loanApplication['employmentInfo'])["address"]["street"]}}
+                                {{toJson(loanApplication['employmentInfo'])["address"]["city"]}},
+                                {{toJson(loanApplication['employmentInfo'])["address"]["state"]}}</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="loanApplication['nokInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Next Of Kin Information</h3>
+                    <app-button (onClick)="onNavigate('nok-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Name</b></span>:<span>{{toJson(loanApplication['nokInfo'])["title"]}}
+                                {{toJson(loanApplication['nokInfo'])["otherNames"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Date Of Birth</b></span>:<span>{{toJson(loanApplication['nokInfo'])["dob"]["day"]}}
+                                {{toJson(loanApplication['nokInfo'])["dob"]["month"]}},
+                                {{toJson(loanApplication['nokInfo'])["dob"]["year"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Relationship</b></span>:<span>{{toJson(loanApplication['nokInfo'])["relationship"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(loanApplication['nokInfo'])["phoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(loanApplication['nokInfo'])["email"]}}</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="category=='business'">
+        <ng-container *ngIf="loanApplication['additionalInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Preferred Contact Details</h3>
+                    <app-button (onClick)="onNavigate('additional-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Name</b></span>:<span>{{toJson(loanApplication['additionalInfo'])["preferredName"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(loanApplication['additionalInfo'])["preferredPhoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(loanApplication['additionalInfo'])["preferredEmail"]}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="loanApplication['companyInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Company Information</h3>
+                    <app-button (onClick)="onNavigate('company-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Company
+                                    Name</b></span>:<span>{{toJson(loanApplication['companyInfo'])["companyName"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>RC.
+                                    No</b></span>:<span>{{toJson(loanApplication['companyInfo'])["companyRCNo"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Date Of
+                                    Incorporation</b></span>:<span>{{toJson(loanApplication['companyInfo'])["dateOfIncorporation"]["day"]}}
+                                {{toJson(loanApplication['companyInfo'])["dateOfIncorporation"]["month"]}},
+                                {{toJson(loanApplication['companyInfo'])["dateOfIncorporation"]["year"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Nature Of
+                                    Business</b></span>:<span>{{toJson(loanApplication['companyInfo'])["natureOfBusiness"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Time Of
+                                    Business</b></span>:<span>{{toJson(loanApplication['companyInfo'])["timeInBusiness"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(loanApplication['companyInfo'])["phoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(loanApplication['companyInfo'])["email"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Address</b></span>:<span>{{toJson(loanApplication['companyInfo'])["address"]["street"]}}
+                                {{toJson(loanApplication['companyInfo'])["address"]["city"]}},
+                                {{toJson(loanApplication['companyInfo'])["address"]["state"]}}</span></p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="loanApplication['shareholderInfo']">
+            <div class="preview-container"
+                *ngFor="let shareholder of toJson(loanApplication['shareholderInfo']);let i=index">
+                <div class="preview-title">
+                    <h3>Shareholder {{i+1}}</h3>
+                    <app-button (onClick)="onNavigate('shareholder-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Name</b></span>:<span>{{shareholder["title"]}} {{shareholder["firstName"]}}
+                                {{shareholder["otherNames"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Date Of Birth</b></span>:<span>{{shareholder["dob"]["day"]}}
+                                {{shareholder["dob"]["month"]}}, {{shareholder["dob"]["year"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Gender</b></span>:<span>{{shareholder["gender"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Marital Status</b></span>:<span>{{shareholder["maritalStatus"]}}</span></p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Educational
+                                    Qualification</b></span>:<span>{{shareholder["educationalQualification"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Designation</b></span>:<span>{{shareholder["designation"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Phone Number</b></span>:<span>{{shareholder["phoneNumber"]}}</span></p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email Address</b></span>:<span>{{shareholder["email"]}}</span></p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Address</b></span>:<span>{{shareholder["address"]["street"]}}
+                                {{shareholder["address"]["city"]}}, {{shareholder["address"]["state"]}}</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="loanApplication['collateralInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Collateral Information</h3>
+                    <app-button (onClick)="onNavigate('collateral-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Type</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["type"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Description</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["description"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Valuation</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["valuation"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Owner</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["owner"]}}</span>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="loanApplication['documents']">
+        <div class="preview-container">
+            <div class="preview-title">
+                <h3>Documents</h3>
+                <app-button (onClick)="onNavigate('upload')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="preview-items">
+                <div class="preview-item" *ngFor="let doc of toJson(loanApplication['documents']);let i=index">
+                    <p><span><b>{{doc.label}}</b></span>:<span>{{doc.name}}</span></p>
+                </div>
+
+            </div>
+        </div>
+    </ng-container>
+</div>
+<div>
+
+    <app-form [form]="form" (onSubmit)="submitApplication($event)">
+        <div #button>
+            <app-button [autoClick]="(autoClick$|async)||false" [form]="form" [loading$]="loading$"
+                fieldClass="theme_col-3 no-margin--top  widget_button--wide">Submit Application</app-button>
+        </div>
+    </app-form>
 </div>
 
 
 
 <app-modal *ngIf="(show$|async)==true && !isLoggedIn" (onChange)="close()">
-    <app-modal-header slot="header"><h1 id="req-icon"><span class="material-icons">
-        info
-        </span>
-        </h1><h3>Sign In Required</h3></app-modal-header>
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Sign In Required</h3>
+    </app-modal-header>
     <app-modal-body slot="body">
-        <p style="text-align: center; margin: auto;">Don't worry, your application would be submitted automatically once you've signed in.</p>
+        <p style="text-align: center; margin: auto;">Don't worry, your application would be submitted automatically once
+            you've signed in.</p>
         <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
-        <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="login()">Login</button>
-    </div>
+            <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;"
+                (click)="login()">Login</button>
+        </div>
     </app-modal-body>
 </app-modal>
 <!-- <ng-template [ngForIn]="loanApplication | keyvalue"></ng-template> -->
 
-<app-modal  *ngIf="(show2$|async)==true" (onChange)="close2()">
+<app-modal *ngIf="(show2$|async)==true" (onChange)="close2()">
     <app-modal-header slot="header">
         <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
-            <app-lottie  assetPath="vanir-capital-badge" ></app-lottie>
-            
+            <app-lottie assetPath="vanir-capital-badge"></app-lottie>
+
         </div>
     </app-modal-header>
     <app-modal-body slot="body">
-            
-               <div class="modal_content" style="text-align: center;">
-                        <h1>All Done</h1>
-                    <div class="form_group">
-                        <p class="theme_text--heading theme_text--heading3">You have successfully applied for a loan.</p>
-                        <p>Request ID: {{apiSuccess$|async}}</p>
-                    </div>
-                    <div class="form_group">
-                        <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You would be notified as your request is processed. </p>
-                        <button (click)="close2()" class="widget_button" id="submit" type="submit" style="margin: 5px auto;" tabindex="0" data-next="modal_ratings"><div>Done</div></button>
-                        <p class="theme_color--grey">Are you looking to invest? <span class="theme_color--yellow"><a href="/investment" target="_blank" ><u>Go to investments</u></a></span></p>
-        
-                    </div>
-                   
-               </div>
-          
-        
+
+        <div class="modal_content" style="text-align: center;">
+            <h1>All Done</h1>
+            <div class="form_group">
+                <p class="theme_text--heading theme_text--heading3">You have successfully applied for a loan.</p>
+                <p>Request ID: {{apiSuccess$|async}}</p>
+            </div>
+            <div class="form_group">
+                <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You
+                    would be notified as your request is processed. </p>
+                <button (click)="close2()" class="widget_button" id="submit" type="submit" style="margin: 5px auto;"
+                    tabindex="0" data-next="modal_ratings">
+                    <div>Done</div>
+                </button>
+                <p class="theme_color--grey">Are you looking to invest? <span class="theme_color--yellow"><a
+                            href="/investment" target="_blank"><u>Go to investments</u></a></span></p>
+
+            </div>
+
+        </div>
+
+
     </app-modal-body>
 </app-modal>
 
 
 
-<app-modal  *ngIf="(show3$|async)==true" (onChange)="close3()">
+<app-modal *ngIf="(show3$|async)==true" (onChange)="close3()">
     <app-modal-header slot="header">
         <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
-            <app-lottie assetPath="vanir-capital-error" ></app-lottie>
-            
+            <app-lottie assetPath="vanir-capital-error"></app-lottie>
+
         </div>
     </app-modal-header>
     <app-modal-body slot="body">
-            
-               <div class="modal_content" style="text-align: center;">
-                   
-                        <h1>Oops</h1>
-                    <div class="form_group">
-                        <p class="theme_text--heading theme_text--heading3">There seems to be a problem</p>
-                    </div>
-                    <div class="form_group" id="submit-button" >
-                        <p class="theme_color--grey">{{apiError$|async}} </p>
-                        <app-button  (onClick)="close3()"><ng-container slot="button" >Close</ng-container ></app-button>
-                       
-                    </div>
-               </div>
-          
-        
+
+        <div class="modal_content" style="text-align: center;">
+
+            <h1>Oops</h1>
+            <div class="form_group">
+                <p class="theme_text--heading theme_text--heading3">There seems to be a problem</p>
+            </div>
+            <div class="form_group" id="submit-button">
+                <p class="theme_color--grey">{{apiError$|async}} </p>
+                <app-button (onClick)="close3()">
+                    <ng-container slot="button">Close</ng-container>
+                </app-button>
+
+            </div>
+        </div>
+
+
     </app-modal-body>
 </app-modal>
