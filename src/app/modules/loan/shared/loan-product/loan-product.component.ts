@@ -7,9 +7,11 @@ import { Store } from 'src/app/shared/helpers/store';
 const data:any[] = [
   {title:"PayMe Loan",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["PayMe Loan", "FloatMe (Personal)"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["PayMe Loan", "FloatMe (Personal)"], description:"Spread your loan payment, repay when you get your salary"},
+  {title:"LPO Financing",allowedApplicant:["Business Owner", "Corporate", "Vendor/Supplier"],allowedTypes:["FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"Spread your loan payment, repay when you get your salary"},
+  {title:"Business Loans",allowedApplicant:["Business Owner", "Corporate", "Vendor/Supplier"],allowedTypes:["FundMe Loan", "FloatMe (Business)"], description:"Spread your loan payment, repay when you get your salary"},
+  {title:"Business Line Of Credit",allowedApplicant:["Business Owner", "Corporate", "Vendor/Supplier"],allowedTypes:["FundMe Loan", "FloatMe (Business)"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"LPO Financing",allowedApplicant:["Business Owner", "Corporate", "Contractor"],allowedTypes:["FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"Spread your loan payment, repay when you get your salary"},
-  {title:"Business Loans",allowedApplicant:["Business Owner", "Corporate", "Contractor"],allowedTypes:["FundMe Loan", "FloatMe (Business)"], description:"Spread your loan payment, repay when you get your salary"},
-  {title:"Business Line Of Credit",allowedApplicant:["Business Owner", "Corporate", "Contractor"],allowedTypes:["FundMe Loan", "FloatMe (Business)"], description:"Spread your loan payment, repay when you get your salary"},
+  
 ]
 @Component({
   selector: 'app-loan-product',

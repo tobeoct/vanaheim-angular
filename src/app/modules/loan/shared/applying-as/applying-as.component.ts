@@ -8,7 +8,8 @@ const data:any[] = [
   {title:"Salary Earner",allowedTypes:["PayMe Loan", "FloatMe (Personal)"], description:"I work in an organisation and get paid a salary"},
   {title:"Business Owner",allowedTypes:["PayMe Loan","FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"I work in an organisation and get paid a salary"},
   {title:"Corporate",allowedTypes:["FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"I work in an organisation and get paid a salary"},
-  {title:"Contractor",allowedTypes:["FundMe Loan", "FloatMe (Business)", "LPO Finance"], description:"I work in an organisation and get paid a salary"},
+  {title:"Vendor/Supplier",allowedTypes:["FundMe Loan", "FloatMe (Business)"], description:"I work in an organisation and get paid a salary"},
+  {title:"Contractor",allowedTypes:[ "LPO Finance"], description:"I work in an organisation and get paid a salary"},
 ]
 @Component({
   selector: 'app-applying-as',
