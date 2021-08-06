@@ -5,6 +5,18 @@
         // @include flex(horizontal,space-between);
         @include marginVertical(false,"px",1,0);
     }
+    #req-icon{
+        @include color(yellow);
+        span{
+          font-size: 1em;
+        }
+    }
+    .req{
+        @include flex(vertical,center);
+        span{
+            margin-right: 10px;
+        }
+    }
 .applyingAs{
     @include paddingVertical(false,"px",0.5,1.2);
     @include paddingHorizontal(true,"px",1);
@@ -13,6 +25,7 @@
     position: relative;
     // height: 190px;
     box-sizing: border-box;
+    margin-bottom: map-get($sizings, "px") ;
     text-align: left;
     width: 47.5%;
     background: transparent;

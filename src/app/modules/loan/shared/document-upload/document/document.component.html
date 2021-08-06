@@ -1,42 +1,52 @@
 <div class="vc_form-field form_group {{fieldClass}}">
-<ng-content></ng-content>
-<div class="document_content animate__animated animate__fadeInUp" [ngClass]="{'active':control.value}">
-    <div class="heading" *ngIf="title||description">
-        <h3 class="title" *ngIf="title"><b>{{title}}</b></h3>
-        <small *ngIf="description">{{description}}</small>
-    </div>
-    <div class="uploader" [ngClass]="{ 'is-invalid':((control).touched || (control).dirty) && !(control).valid  }">
-        <ng-container *ngIf="!control.value">
-            <div class="icon">
-                    <span class="material-icons material-icons-two-tone">
-                    perm_media
-                    </span>
-            </div>
-            <p>Drag and drop files here</p>
-        </ng-container>
-        <div class="animate__animated animate__fadeInUp" *ngIf="control.value">
-            <h3>{{control.value}}</h3>
+    <ng-content></ng-content>
+    <div class="document_content animate__animated animate__fadeInUp" [ngClass]="{'active':control.value}">
+        <div class="heading" *ngIf="title||description">
+            <h3 class="title" *ngIf="title"><b>{{title}}</b></h3>
+            <small *ngIf="description">{{description}}</small>
         </div>
-        <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="document_{{index}}" [control]="control"  class="form-control"  >
-        </app-input>
-        <input type="file" (change)="onFileChange($event)"  alt="Upload your bank statement"/>
-        <div class="action animate__animated animate__zoomIn" *ngIf="control.value && control.valid">
-            <div class="upload theme_dropshadow theme_dropshadow--tint"  [ngClass]="{'active':(uploaded$|async)==true}" (click)="uploadDocument()">
+        <div class="uploader" [ngClass]="{ 'is-invalid':((control).touched || (control).dirty) && !(control).valid  }">
+            <ng-container *ngIf="!control.value">
+                <div class="icon">
+                    <span class="material-icons material-icons-two-tone">
+                        perm_media
+                    </span>
+                </div>
+                <p>Drag and drop files here</p>
+            </ng-container>
+            <div class="animate__animated animate__fadeInUp" *ngIf="control.value">
+                <h3>{{control.value}}</h3>
+            </div>
+            <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="document_{{index}}" [control]="control"
+                class="form-control">
+            </app-input>
+            <input type="file" (click)="click($event)" (change)="onFileChange($event)"
+                alt="Upload your bank statement" />
+            <div class="action animate__animated animate__zoomIn" *ngIf="control.value && control.valid">
+
+                <!-- <ng-container *ngIf="showTooltip$|async"> -->
+                <div class=" animate__animated animate__fadeInUp tooltip box-shadow">
+                    <small>Click on the yellow icon to upload</small>
+                </div>
+                <!-- </ng-container> -->
+                <div class="upload theme_dropshadow theme_dropshadow--tint"
+                    [ngClass]="{'active':(uploaded$|async)==true}" (click)="uploadDocument()">
                     <ng-container *ngIf="(loading$|async)==false">
 
                         <span class="material-icons" *ngIf="(uploaded$|async)==false">
                             cloud_upload
-                            </span>
-                            <span class="material-icons" *ngIf="(uploaded$|async)==true">
-                                check
-                                </span>
-                   </ng-container>
-                   <ng-container *ngIf="(loading$|async)==true">
-                        <div class="image" style="width: 40px; height: 40px;"><img src="../../../../../../assets/button-loader.gif"/></div>
-                   </ng-container>
-            </div>
+                        </span>
+                        <span class="material-icons" *ngIf="(uploaded$|async)==true">
+                            check
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="(loading$|async)==true">
+                        <div class="image" style="width: 40px; height: 40px;"><img
+                                src="../../../../../../assets/button-loader.gif" /></div>
+                    </ng-container>
+                </div>
 
+            </div>
         </div>
     </div>
-</div>
 </div>

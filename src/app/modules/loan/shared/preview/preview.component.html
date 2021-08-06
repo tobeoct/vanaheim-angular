@@ -1,7 +1,7 @@
 <div style="max-width: 500px;">
     <div class="preview-container" *ngIf="loanApplication['loanType']">
         <div class="preview-title">
-            <h3>Loan Type</h3>
+            <h3>Loan Product</h3>
             <app-button (onClick)="onNavigate('loan-type')" [class]="'widget_button--small'">
                 <ng-container slot="button">Edit</ng-container>
             </app-button>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="preview-container" *ngIf="loanApplication['loanProduct']">
+    <!-- <div class="preview-container" *ngIf="loanApplication['loanProduct']">
         <div class="preview-title">
             <h3>Loan Product</h3>
             <app-button (onClick)="onNavigate('loan-product')" [class]="'widget_button--small'">
@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="preview-container" *ngIf="loanApplication['loanCalculator']">
         <div class="preview-title">

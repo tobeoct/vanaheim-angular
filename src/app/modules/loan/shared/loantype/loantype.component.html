@@ -65,11 +65,11 @@
     </div>
   </div>
 
-  <app-form [form]="form" (onSubmit)="next($event)">
+  <app-form [form]="form" >
     <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="loanTypeId" [control]="loanType"
       class="form-control">
     </app-input>
-    <app-button [form]="form" fieldClass="theme_col-3 no-margin--top">Next</app-button>
+    <!-- <app-button [form]="form" fieldClass="theme_col-3 no-margin--top">Next</app-button> -->
   </app-form>
 </div>
 
@@ -96,7 +96,7 @@
         <app-radio [outline]="true" [control]="choice" [items]="items">For Individual</app-radio>
       </div>
     </div>
-    <app-button [class]="'no-margin--bottom'" (onClick)="close()">
+    <app-button [class]="'no-margin--bottom'" (onClick)="next()">
       <ng-container slot="button">Continue</ng-container>
     </app-button>
 

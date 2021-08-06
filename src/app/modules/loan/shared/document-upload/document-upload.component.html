@@ -9,7 +9,7 @@
             </app-badge>
         </div>
         <div class="list" *ngFor="let req of requirements;let i =index">
-            <app-document title="{{req.title}}" fieldClass="document no-margin--top" description="{{req.description}}"
+            <app-document (onClick)="onClick($event)" title="{{req.title}}" fieldClass="document no-margin--top" description="{{req.description}}"
                 [control]="documentControls[i]|toControl" (onChange)="onFileChange($event,i)">
 
             </app-document>

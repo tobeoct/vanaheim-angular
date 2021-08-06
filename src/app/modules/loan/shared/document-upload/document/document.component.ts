@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { DocumentService } from 'src/app/shared/services/document/document.service';
 import { Document, DocumentUpload } from '../document';
 let autoIndex = 0;
-
+let showTooltipCount=0;
 const MAXFILEUPLOADSIZE=2;
 @Component({
   selector: 'app-document',
@@ -29,6 +29,8 @@ fieldClass:string;
 index:number;
 @Output()
 onChange = new EventEmitter<any>();
+@Output()
+onClick = new EventEmitter<any>();
 
 @Input()
 allowedExtensions =
@@ -37,6 +39,9 @@ docToUpload:any;
 allSubscriptions:Subscription[]=[];
 loadingSubject:BehaviorSubject<boolean>= new BehaviorSubject<boolean>(false);
 loading$:Observable<boolean> = this.loadingSubject.asObservable();
+
+showTooltipSubject:BehaviorSubject<boolean>= new BehaviorSubject<boolean>(false);
+showTooltip$:Observable<boolean> = this.showTooltipSubject.asObservable();
 
 uploadedSubject:BehaviorSubject<boolean>= new BehaviorSubject<boolean>(false);
 uploaded$:Observable<boolean> = this.uploadedSubject.asObservable();
@@ -53,6 +58,12 @@ uploaded$:Observable<boolean> = this.uploadedSubject.asObservable();
     }
   }
   onFileChange(event:any){
+    // if(showTooltipCount==0){
+    //   this.showTooltipSubject.next(true);
+    //   showTooltipCount+=1;
+
+    //   setTimeout(c=>)
+    // }
     let reader = new FileReader();
    
     if(event.target.files && event.target.files.length) {
@@ -106,5 +117,9 @@ uploadDocument(){
   });
 
   this.allSubscriptions.push(sub);
+}
+
+click(event:any){
+  this.onClick.emit(event);
 }
 }

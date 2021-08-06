@@ -1,6 +1,13 @@
 @import '../../../../../../styles/abstracts/_abstracts-dir';
 @import '../../../../../../styles/themes/_theme-dir';
-
+.tooltip{
+    @include background(info);
+    color: map-get($colors, white) !important;
+    position: absolute;
+    top:-100%;
+    border-radius: $border-radius;
+    @include padding(true,"px",0.25);
+}
 .document_content{
     text-align: center;
     width: 100%;

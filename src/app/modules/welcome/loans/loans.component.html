@@ -29,13 +29,13 @@
                     <ng-container *ngIf="(page$|async)=='loan-type'||(page$|async)==''">
                         <app-loantype></app-loantype>
                     </ng-container>
-                    <ng-container *ngIf="(page$|async)=='applying-as'">
+                    <ng-container *ngIf="(page$|async)=='applying-as' ||  ((page$|async)!='loan-type' && (page$|async)!='')">
                         <app-applying-as></app-applying-as>
                     </ng-container>
-                    <ng-container
+                    <!-- <ng-container
                         *ngIf="(page$|async)=='loan-product'||((page$|async)!='applying-as' && (page$|async)!='loan-type' && (page$|async)!='')">
                         <app-loan-product></app-loan-product>
-                    </ng-container>
+                    </ng-container> -->
                 </div>
             </div>
             <app-footer></app-footer>
