@@ -1,8 +1,21 @@
-
 <app-page>
     <app-contact></app-contact>
-<router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 </app-page>
 <app-faq *ngIf="(show$|async)=='faq'"></app-faq>
 <app-notification *ngIf="(show$|async)=='notification'"></app-notification>
-<app-toaster [show]="updateAvailable"></app-toaster> 
+<app-toaster [show]="updateAvailable"></app-toaster>
+
+<ng-container *ngIf="showLogout$|async">
+    
+<div class="modal animate__animated animate__fadeIn" >
+    <div class="animate__animated animate__fadeInDown timeout-modal padding--3x box-shadow">
+        <h3><b>You would get logged out in about 2 mins.</b></h3>
+        <p>Your progress in any application would be lost if you get logged out</p>
+        <div class="d-flex d-flex_horizontal--space-between margin--2x">
+            <button><ng-container slot="button"><b>Stay</b></ng-container></button>
+            <button (click)="logout()"><ng-container slot="button"><b>Logout</b></ng-container></button>
+        </div>
+    </div> 
+</div>
+</ng-container>

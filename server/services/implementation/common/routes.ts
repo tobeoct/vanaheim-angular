@@ -4,6 +4,7 @@ export const newSessionRoutes = [{ path: '/api/auth/login', method: 'POST' }, { 
 { path: '/api/investments/apply', method: 'POST' },
 { path: '/api/account/enquiry', method: 'POST' }, { path: '/api/common/validatebvn', method: 'POST' }, { path: '/api/auth/verify', method: 'POST' }, { path: '/api/auth/resetpassword', method: 'POST' }];
 export const authRoutes = [
+  { path: "/api/auth/refresh-session", method: "GET" },
   { path: '/api/auth/password', method: 'PUT' },
   { path: '/api/notification/send', method: 'POST' },
   { path: '/api/notification/sendtomultiple', method: 'POST' },

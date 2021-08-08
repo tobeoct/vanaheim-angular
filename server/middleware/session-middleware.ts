@@ -11,10 +11,10 @@ export default class SessionMiddleware{
         return this.expressSession({
                 store: this._redis.getRedisStore(),
                 secret: this._appConfig.SESSION_SECRET_KEY,
-                resave: false,
-                saveUninitialized: false,
+                resave: true,
+                saveUninitialized: true,
                 cookie: {
-                    secure: false, // if true only transmit cookie over https
+                    secure: true, // if true only transmit cookie over https
                     httpOnly: true, // if true prevent client side JS from reading the cookie 
                     maxAge: 1000 * 60 *5 *12 //* 60 * 10, 300 // session max age in miliseconds
                 }

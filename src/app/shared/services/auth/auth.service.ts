@@ -90,8 +90,6 @@ export class AuthService {
         // console.log(username)
         return this._http.post<any>(`${environment.apiUrl}/auth/verify`, { username })
             .pipe(map(response => {
-                // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-
                 if (response && response.status == true) {
                     // console.log(response);
                     return response.response;
@@ -103,8 +101,17 @@ export class AuthService {
         // console.log(username)
         return this._http.post<any>(`${environment.apiUrl}/auth/resetpassword`, { username })
             .pipe(map(response => {
-                // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-
+                if (response && response.status == true) {
+                    // console.log(response);
+                    return response.response;
+                }
+                return null;
+            }));
+    }
+    stay = () => {
+        // console.log(username)
+        return this._http.get<any>(`${environment.apiUrl}/auth/refresh-session`)
+            .pipe(map(response => {
                 if (response && response.status == true) {
                     // console.log(response);
                     return response.response;
@@ -116,8 +123,7 @@ export class AuthService {
         return this._http.put<any>(`${environment.apiUrl}/auth/passwordChange`, { oldPassword,newPassword })
             .pipe(map(response => {
                 if (response && response.status == true) {
-                    // console.log(response);
-                    return response.response;
+                     return response.response;
                 }
                 return null;
             }));
@@ -132,25 +138,14 @@ export class AuthService {
         localStorage.removeItem("expires_at");
         localStorage.removeItem("page");
         localStorage.removeItem("previous");
+        localStorage.removeItem("loan-application");
         this.userSubject.next(new User());
         this.isLoggedInSubject.next(false);
         this.timeoutSubscription.unsubscribe();
         if (this._router.url.includes("admin")) { this._router.navigate(['admin/auth/login']); } else { this._router.navigate(['/login']); }
         return this._http.get<any>(`${environment.apiUrl}/auth/logout`)
             .pipe(map(() => {
-                //         localStorage.removeItem('user');
-                // localStorage.removeItem('session_token');
-                // localStorage.removeItem("expires_at");
-
-                // this.userSubject.next(new User());
-                // this._router.navigate(['/login']);
             }), catchError((err: any) => {
-                // localStorage.removeItem('user');
-                // localStorage.removeItem('session_token');
-                // localStorage.removeItem("expires_at");
-                // localStorage.clear();
-                // this.userSubject.next(new User());
-                // this._router.navigate(['/login']);
                 return EMPTY;
             }))
     }
@@ -187,7 +182,7 @@ export class AuthService {
         return '1234567890';
     }
 
-    private getExpiration() {
+    getExpiration() {
         if (!localStorage.getItem("expires_at")) return undefined;
         const expiration: string = localStorage.getItem("expires_at") || '{}';
         const expiresAt = JSON.parse(expiration);

@@ -145,7 +145,19 @@ export default class AuthController {
       next(e)
     }
   }
+  @route("/refresh-session")
+  @GET()
+  refreshToken = async (req: any, res: any, next: any) => {
+    try {
+      req.session.touch();
+      res.statusCode = 200;
+      res.data = "Session refreshed"
+      next();
+    } catch (err) {
+      next();
 
+    }
+  }
   @route('/passwordChange')
   @PUT()
   passwordChange = async (req: any, res: any, next: any) => {
@@ -160,7 +172,7 @@ export default class AuthController {
       let pwd: any = await this._encryption.generateHash(oldPwd);
       let uname = req.session.userData.username;
       let userDetails = await this._userService.getByUserName(uname);
-      console.log(pwd,userDetails.passwordHash)
+      console.log(pwd, userDetails.passwordHash)
       if (pwd.hash !== userDetails.passwordHash) {
         res.statusCode = 400;
         res.data = { status: false, message: "Old Password doesn't match" }
@@ -174,7 +186,7 @@ export default class AuthController {
       }
       next();
     } catch (e) {
-      next(e)
+      next()
     }
   }
 
