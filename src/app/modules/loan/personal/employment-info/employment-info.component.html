@@ -45,10 +45,10 @@
                             </div>
                         
                             <div class="theme_col-5">
-                                <app-dropdown [current]="state.value"  [id]="'state'" [control]="state"  aria-placeholder="What is your state of birth">
+                                <app-type-ahead [current]="state.value"  [id]="'state'" [control]="state"  aria-placeholder="What is your state of birth">
                                     <ng-container slot="label"><label for="state">State</label></ng-container>
-                                    <app-option *ngFor="let state of states; let i =index" [value]="state"  [label]="state">{{state}}</app-option>
-                                </app-dropdown>
+                                    <app-type-ahead-option *ngFor="let state of states; let i =index" [value]="state"  [label]="state">{{state}}</app-type-ahead-option>
+                                </app-type-ahead>
                             </div>
                         </div>
                         <div *ngIf="addressGroup.errors">

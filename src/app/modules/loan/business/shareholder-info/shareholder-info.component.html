@@ -1,120 +1,182 @@
- <div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
-        <div class=" content box-shadow" style="box-sizing: border-box;">
-            <ng-container *ngIf="!(dataLoading$|async)">
-    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-       
-        <ng-container *ngIf="isLoggedIn">
-            <ng-container *ngIf="(shareholdersFromDb$|async) && !(showForm$|async) ">
-                <div *ngFor="let shareholderGroup of shareholderArrayGroups;let i =index" >
-                    <h3 class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><b>Director/Shareholder {{i+1}}</b> <b style="cursor: pointer;" class="d-flex d-flex_vertical--center" *ngIf="i>0" (click)="removeFromFormArray(i)"><span class="material-icons"><span class="material-icons">
-                    remove_circle
-                    </span></span></b></h3>
-                <app-dropdown  current="{{(shareholderGroup.get('surname')|toControl).value}} {{(shareholderGroup.get('otherNames')|toControl).value}}"  [fieldClass]="'no-margin--top'" [id]="'shareholder_{{i}}'" [control]="(shareholderGroup.get('id')|toControl)"  aria-placeholder="Select a shareholder">
-                    <ng-container slot="label"><label for="salary-accounts"></label></ng-container>
-                    <app-option *ngFor="let t of (shareholdersFromDb$|async); let i =index" [value]="t.id" label="{{t.surname}} {{t.otherNames}}">{{t.surname}} {{t.otherNames}}</app-option>
-                </app-dropdown>
-                <p class="text-button" (click)="showForm()">Enter a different Shareholder</p>
-            </div>
-            </ng-container>
-        </ng-container>
-        <ng-container *ngIf="!(shareholdersFromDb$|async) || (showForm$|async)">
-        <div id="accounts" [ngClass]="{'no-margin--top':i==0}" class="theme_row form_group  animate__animated animate__fadeInUp animate__fast" *ngFor="let shareholderGroup of shareholderArrayGroups;let i =index">
-            <h3 class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><b>Director/Shareholder {{i+1}}</b> <b style="cursor: pointer;" class="d-flex d-flex_vertical--center" *ngIf="i>0" (click)="removeFromFormArray(i)"><span class="material-icons"><span class="material-icons">
-                remove_circle
-                </span></span></b></h3>
-            <ng-container  [formGroup]="shareholderGroup">
-        <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-            <div class="theme_col-4">
-                <app-dropdown [current]="(shareholderGroup.get('title')|toControl).value"  [id]="'title'" [control]="shareholderGroup.get('title')|toControl"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
-                    <ng-container slot="label"><label for="title">Title</label></ng-container>
-                    <app-option *ngFor="let t of titles; let i =index" [value]="t" [label]="t">{{t}}</app-option>
-                </app-dropdown>
-            </div>
-            <div class="theme_col-7">
-                <app-input [focus$]="focus$" id="surname" [placeholder]="'Enter your surname'" [control]="shareholderGroup.get('surname')|toControl" class="form-control" [error]="(errorMessage$ | async)?.surname" >
-                    <label for="surname">Surname</label>
-                </app-input>
-            </div>
-        </div>
-        <app-input id="otherNames" [placeholder]="'Enter your other names'" [control]="shareholderGroup.get('otherNames')|toControl" class="form-control" [error]="(errorMessage$ | async)?.otherNames" >
-            <label for="otherNames">Other Names</label>
-        </app-input>    
+<div id="form" class="theme_col-5 animate__animated animate__fadeInUp animate__fast">
+    <div class=" content box-shadow" style="box-sizing: border-box;">
+        <ng-container *ngIf="!(dataLoading$|async)">
+            <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
 
-        <div class="theme_row d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-            <div class="theme_col-5">
-                <app-dropdown [current]="(shareholderGroup.get('gender')|toControl).value" [id]="'gender'" [control]="shareholderGroup.get('gender')|toControl"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
-                    <ng-container slot="label"><label for="gender">Gender</label></ng-container>
-                    <app-option *ngFor="let t of genders; let i =index" [value]="t" [label]="t">{{t}}</app-option>
-                </app-dropdown>
-            </div>
-            <div class="theme_col-5">
-                <app-dropdown [current]="(shareholderGroup.get('maritalStatus')|toControl).value" [id]="'maritalStatus'" [control]="shareholderGroup.get('maritalStatus')|toControl"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
-                    <ng-container slot="label"><label for="maritalStatus">Marital Status</label></ng-container>
-                    <app-option *ngFor="let t of maritalStatuses; let i =index" [value]="t" [label]="t">{{t}}</app-option>
-                </app-dropdown>
-            </div>
-        </div>
-
-        <app-input id="educationalQualification" [placeholder]="'Enter name of educational qualification'" [control]="shareholderGroup.get('educationalQualification')|toControl" class="form-control" [error]="(errorMessage$ | async)?.educationalQualification" >
-            <label for="educationalQualification">Educational Qualification</label>
-        </app-input>     
-        <app-dropdown [current]="(shareholderGroup.get('designation')|toControl).value"  [id]="'designation'" [control]="shareholderGroup.get('designation')|toControl"  aria-placeholder="What is your designation">
-            <ng-container slot="label"><label for="designation">Designation</label></ng-container>
-            <app-option *ngFor="let designation of designations; let i =index" [value]="designation">{{designation}}</app-option>
-        </app-dropdown>
-        <app-date [class]="'no-margin--top'" [dateGroup]="shareholderGroup.get('dobGroup')|toGroup" [month]="shareholderGroup.get('dobGroup.month')|toControl" [day]="shareholderGroup.get('dobGroup.day')|toControl" [year]="shareholderGroup.get('dobGroup.year')|toControl">Date of Birth(18+)</app-date>
-       
-        <p style="margin-top: 30px;"><b>Contact Details</b></p>
-                <div id="contact" class="theme_row no-margin--top"  [formGroup]="shareholderGroup.get('contactGroup')|toGroup">
-                    <app-input id="email" [placeholder]="'Enter your email'" [control]="shareholderGroup.get('contactGroup.email')|toControl" class="form-control" [error]="(errorMessage$ | async)?.email" >
-                        <label for="email">Email</label>
-                    </app-input>
-                    
-                    <app-input id="phone" [placeholder]="'Enter your phone number'" [control]="shareholderGroup.get('contactGroup.phone')|toControl" class="form-control" [error]="(errorMessage$ | async)?.phone" >
-                        <label for="phone">Phone Number</label>
-                    </app-input>
-
-                    <div id="address"  [formGroup]="shareholderGroup.get('contactGroup.addressGroup')|toGroup">
-                   
-                        <app-input id="street" [placeholder]="'Enter your street address'" [control]="shareholderGroup.get('contactGroup.addressGroup.street')|toControl" class="form-control" [error]="(errorMessage$ | async)?.street" >
-                            <label for="street">Address</label>
-                        </app-input>
-                        <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end" >
-                            <div class="theme_col-5">
-                                <app-input id="city" type="text" errorType="left"  [control]="shareholderGroup.get('contactGroup.addressGroup.city')|toControl" class="form-control" [error]="(errorMessage$ | async)?.city" >
-                                    <label for="city">City</label>
-                                </app-input>
-                            </div>
-                        
-                            <div class="theme_col-5">
-                                <app-dropdown [current]="(shareholderGroup.get('contactGroup.addressGroup.state')|toControl).value"  [id]="'state'" [control]="shareholderGroup.get('contactGroup.addressGroup.state')|toControl"  aria-placeholder="What is your state of birth">
-                                    <ng-container slot="label"><label for="state">State</label></ng-container>
-                                    <app-option *ngFor="let state of states; let i =index" [value]="state"  [label]="state">{{state}}</app-option>
-                                </app-dropdown>
-                            </div>
+                <ng-container *ngIf="isLoggedIn">
+                    <ng-container *ngIf="(shareholdersFromDb$|async) && !(showForm$|async) ">
+                        <div *ngFor="let shareholderGroup of shareholderArrayGroups;let i =index">
+                            <h3 class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                                <b>Director/Shareholder {{i+1}}</b> <b style="cursor: pointer;"
+                                    class="d-flex d-flex_vertical--center" *ngIf="i>0"
+                                    (click)="removeFromFormArray(i)"><span class="material-icons"><span
+                                            class="material-icons">
+                                            remove_circle
+                                        </span></span></b></h3>
+                            <app-dropdown
+                                current="{{(shareholderGroup.get('surname')|toControl).value}} {{(shareholderGroup.get('otherNames')|toControl).value}}"
+                                [fieldClass]="'no-margin--top'" [id]="'shareholder_{{i}}'"
+                                [control]="(shareholderGroup.get('id')|toControl)"
+                                aria-placeholder="Select a shareholder">
+                                <ng-container slot="label"><label for="salary-accounts"></label></ng-container>
+                                <app-option *ngFor="let t of (shareholdersFromDb$|async); let i =index" [value]="t.id"
+                                    label="{{t.surname}} {{t.otherNames}}">{{t.surname}} {{t.otherNames}}</app-option>
+                            </app-dropdown>
+                            <p class="text-button" (click)="showForm()">Enter a different Shareholder</p>
                         </div>
-                        <div *ngIf="(shareholderGroup.get('contactGroup.addressGroup')|toGroup)?.errors">
-                            <div *ngIf="(shareholderGroup.get('contactGroup.addressGroup')|toGroup)?.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
-                        </div>
-                    </div>
-                   
-                    <div *ngIf="(shareholderGroup.get('contactGroup')|toGroup)?.errors">
-                        <div *ngIf="(shareholderGroup.get('contactGroup')|toGroup)?.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
-                    </div>
-                </div>
+                    </ng-container>
                 </ng-container>
-                
-        </div>
-        
+                <ng-container *ngIf="!(shareholdersFromDb$|async) || (showForm$|async)">
+                    <div id="accounts" [ngClass]="{'no-margin--top':i==0}"
+                        class="theme_row form_group  animate__animated animate__fadeInUp animate__fast"
+                        *ngFor="let shareholderGroup of shareholderArrayGroups;let i =index">
+                        <h3 class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                            <b>Director/Shareholder {{i+1}}</b> <b style="cursor: pointer;"
+                                class="d-flex d-flex_vertical--center" *ngIf="i>0"
+                                (click)="removeFromFormArray(i)"><span class="material-icons"><span
+                                        class="material-icons">
+                                        remove_circle
+                                    </span></span></b></h3>
+                        <ng-container [formGroup]="shareholderGroup">
+                            <div
+                                class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                                <div class="theme_col-4">
+                                    <app-dropdown [current]="(shareholderGroup.get('title')|toControl).value"
+                                        [id]="'title'" [control]="shareholderGroup.get('title')|toControl"
+                                        aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                                        <ng-container slot="label"><label for="title">Title</label></ng-container>
+                                        <app-option *ngFor="let t of titles; let i =index" [value]="t" [label]="t">{{t}}
+                                        </app-option>
+                                    </app-dropdown>
+                                </div>
+                                <div class="theme_col-7">
+                                    <app-input [focus$]="focus$" id="surname" [placeholder]="'Enter your surname'"
+                                        [control]="shareholderGroup.get('surname')|toControl" class="form-control"
+                                        [error]="(errorMessage$ | async)?.surname">
+                                        <label for="surname">Surname</label>
+                                    </app-input>
+                                </div>
+                            </div>
+                            <app-input id="otherNames" [placeholder]="'Enter your other names'"
+                                [control]="shareholderGroup.get('otherNames')|toControl" class="form-control"
+                                [error]="(errorMessage$ | async)?.otherNames">
+                                <label for="otherNames">Other Names</label>
+                            </app-input>
+
+                            <div class="theme_row d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                                <div class="theme_col-5">
+                                    <app-dropdown [current]="(shareholderGroup.get('gender')|toControl).value"
+                                        [id]="'gender'" [control]="shareholderGroup.get('gender')|toControl"
+                                        aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                                        <ng-container slot="label"><label for="gender">Gender</label></ng-container>
+                                        <app-option *ngFor="let t of genders; let i =index" [value]="t" [label]="t">
+                                            {{t}}</app-option>
+                                    </app-dropdown>
+                                </div>
+                                <div class="theme_col-5">
+                                    <app-dropdown [current]="(shareholderGroup.get('maritalStatus')|toControl).value"
+                                        [id]="'maritalStatus'"
+                                        [control]="shareholderGroup.get('maritalStatus')|toControl"
+                                        aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                                        <ng-container slot="label"><label for="maritalStatus">Marital Status</label>
+                                        </ng-container>
+                                        <app-option *ngFor="let t of maritalStatuses; let i =index" [value]="t"
+                                            [label]="t">{{t}}</app-option>
+                                    </app-dropdown>
+                                </div>
+                            </div>
+
+                            <app-input id="educationalQualification"
+                                [placeholder]="'Enter name of educational qualification'"
+                                [control]="shareholderGroup.get('educationalQualification')|toControl"
+                                class="form-control" [error]="(errorMessage$ | async)?.educationalQualification">
+                                <label for="educationalQualification">Educational Qualification</label>
+                            </app-input>
+                            <app-dropdown [current]="(shareholderGroup.get('designation')|toControl).value"
+                                [id]="'designation'" [control]="shareholderGroup.get('designation')|toControl"
+                                aria-placeholder="What is your designation">
+                                <ng-container slot="label"><label for="designation">Designation</label></ng-container>
+                                <app-option *ngFor="let designation of designations; let i =index"
+                                    [value]="designation">{{designation}}</app-option>
+                            </app-dropdown>
+                            <app-date [class]="'no-margin--top'" [dateGroup]="shareholderGroup.get('dobGroup')|toGroup"
+                                [month]="shareholderGroup.get('dobGroup.month')|toControl"
+                                [day]="shareholderGroup.get('dobGroup.day')|toControl"
+                                [year]="shareholderGroup.get('dobGroup.year')|toControl">Date of Birth(18+)</app-date>
+
+                            <p style="margin-top: 30px;"><b>Contact Details</b></p>
+                            <div id="contact" class="theme_row no-margin--top"
+                                [formGroup]="shareholderGroup.get('contactGroup')|toGroup">
+                                <app-input id="email" [placeholder]="'Enter your email'"
+                                    [control]="shareholderGroup.get('contactGroup.email')|toControl"
+                                    class="form-control" [error]="(errorMessage$ | async)?.email">
+                                    <label for="email">Email</label>
+                                </app-input>
+
+                                <app-input id="phone" [placeholder]="'Enter your phone number'"
+                                    [control]="shareholderGroup.get('contactGroup.phone')|toControl"
+                                    class="form-control" [error]="(errorMessage$ | async)?.phone">
+                                    <label for="phone">Phone Number</label>
+                                </app-input>
+
+                                <div id="address"
+                                    [formGroup]="shareholderGroup.get('contactGroup.addressGroup')|toGroup">
+
+                                    <app-input id="street" [placeholder]="'Enter your street address'"
+                                        [control]="shareholderGroup.get('contactGroup.addressGroup.street')|toControl"
+                                        class="form-control" [error]="(errorMessage$ | async)?.street">
+                                        <label for="street">Address</label>
+                                    </app-input>
+                                    <div
+                                        class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end">
+                                        <div class="theme_col-5">
+                                            <app-input id="city" type="text" errorType="left"
+                                                [control]="shareholderGroup.get('contactGroup.addressGroup.city')|toControl"
+                                                class="form-control" [error]="(errorMessage$ | async)?.city">
+                                                <label for="city">City</label>
+                                            </app-input>
+                                        </div>
+
+                                        <div class="theme_col-5">
+                                            <app-type-ahead
+                                                [current]="(shareholderGroup.get('contactGroup.addressGroup.state')|toControl).value"
+                                                [id]="'state'"
+                                                [control]="shareholderGroup.get('contactGroup.addressGroup.state')|toControl"
+                                                aria-placeholder="What is your state of birth">
+                                                <ng-container slot="label"><label for="state">State</label>
+                                                </ng-container>
+                                                <app-type-ahead-option *ngFor="let state of states; let i =index" [value]="state"
+                                                    [label]="state">{{state}}</app-type-ahead-option>
+                                            </app-type-ahead>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="(shareholderGroup.get('contactGroup.addressGroup')|toGroup)?.errors">
+                                        <div *ngIf="(shareholderGroup.get('contactGroup.addressGroup')|toGroup)?.errors?.match"
+                                            class="snackbar snackbar-danger">Passwords dont match</div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="(shareholderGroup.get('contactGroup')|toGroup)?.errors">
+                                    <div *ngIf="(shareholderGroup.get('contactGroup')|toGroup)?.errors?.match"
+                                        class="snackbar snackbar-danger">Passwords dont match</div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                    </div>
+
+                </ng-container>
+                <app-button *ngIf="shareholderArrayGroups.length !== 4" (onClick)="addShareholder()"
+                    [class]="'widget_button--small widget_button--fill'">
+                    <ng-container slot="button">Add Shareholder</ng-container>
+                </app-button>
+                <div style="margin-top: 60px;">
+                    <app-button [form]="form" [loading$]="loading$">Next</app-button>
+                </div>
+            </app-form>
         </ng-container>
-        <app-button *ngIf="shareholderArrayGroups.length !== 4" (onClick)="addShareholder()" [class]="'widget_button--small widget_button--fill'"><ng-container slot="button">Add Shareholder</ng-container></app-button>
-        <div style="margin-top: 60px;">
-            <app-button [form]="form" [loading$]="loading$">Next</app-button>
-        </div>
-    </app-form>
-    </ng-container>
-    <ng-container *ngIf="(dataLoading$|async) && !(shareholdersFromDb$|async)">
-        <app-loading></app-loading>
-    </ng-container>
+        <ng-container *ngIf="(dataLoading$|async) && !(shareholdersFromDb$|async)">
+            <app-loading></app-loading>
+        </ng-container>
     </div>
-</div>                
+</div>

@@ -33,6 +33,8 @@ import { LoadingComponent } from './loading/loading.component';
 import { ProgressCircularComponent } from './progress/circular/circular.component';
 import { BadgeComponent } from './badge/badge.component';
 import { CopyComponent } from './copy/copy.component';
+import { TypeAheadComponent } from './type-ahead/type-ahead.component';
+import { TypeAheadOptionComponent } from './type-ahead/option/option.component';
 
 export function playerFactory() {
   return player;
@@ -68,7 +70,9 @@ export function playerFactory() {
     LoadingComponent,
     ProgressCircularComponent,
     BadgeComponent,
-    CopyComponent
+    CopyComponent,
+    TypeAheadComponent,
+    TypeAheadOptionComponent
   ],
   imports: [
     BaseModule, 
@@ -105,7 +109,9 @@ export function playerFactory() {
     LoadingComponent,
     ProgressCircularComponent,
     BadgeComponent,
-    CopyComponent
+    CopyComponent,
+    TypeAheadComponent,
+    TypeAheadOptionComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })
