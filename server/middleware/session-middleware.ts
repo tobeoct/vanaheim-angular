@@ -12,7 +12,7 @@ export default class SessionMiddleware{
                 store: this._redis.getRedisStore(),
                 secret: this._appConfig.SESSION_SECRET_KEY,
                 resave: true,
-                saveUninitialized: true,
+                saveUninitialized: false,
                 cookie: {
                     secure: true, // if true only transmit cookie over https
                     httpOnly: true, // if true prevent client side JS from reading the cookie 
