@@ -81,7 +81,7 @@ export default class App {
     }
     app.use("/api", inject(authoriseResponse))
 
-    app.get('*',app.use(httpsRedirect()), function (req: any, res: any) {
+    app.get('*', function (req: any, res: any) {
       res.setHeader('Cache-Control', 'public, max-age=5000');
       let p = _this._appConfig.environment == "production" ? "" : "dist/";
       let b = _this._appConfig.environment == "production" ? "../" : "../";
