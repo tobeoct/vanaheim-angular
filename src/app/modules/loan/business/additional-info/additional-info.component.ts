@@ -67,7 +67,7 @@ export class AdditionalInfoComponent implements OnInit {
   });
     let d = data.filter(d=>d.allowedTypes.includes(this.lType)&&d.allowedApplicant.includes(this.applyingAs));
     this.dataSelectionSubject.next(d);
-    this._store.titleSubject.next("Additional Information");
+    this._store.titleSubject.next("Contact Information");
   }
 
   allSubscriptions:Subscription[]=[];

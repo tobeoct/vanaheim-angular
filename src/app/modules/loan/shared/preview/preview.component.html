@@ -29,6 +29,17 @@
             </div>
         </div>
     </div>
+    <ng-container *ngIf="!loanApplication['applyingAs']">
+        <div class="preview-title">
+            <h3>Applying As</h3>
+            <app-button (onClick)="onNavigate('applying-as')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="missing">
+            Select who you are applying as
+        </div>
+    </ng-container>
     <!-- <div class="preview-container" *ngIf="loanApplication['loanProduct']">
         <div class="preview-title">
             <h3>Loan Product</h3>
@@ -82,6 +93,17 @@
 
         </div>
     </div>
+    <ng-container *ngIf="!loanApplication['loanCalculator']">
+        <div class="preview-title">
+            <h3>Loan Details</h3>
+            <app-button (onClick)="onNavigate('loan-calculator')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="missing">
+            Loan details are required
+        </div>
+    </ng-container>
     <ng-container *ngIf="loanApplication['accountInfo']">
         <div class="preview-container" *ngFor="let acc of toJson(loanApplication['accountInfo']);let i=index">
             <div class="preview-title">
@@ -103,7 +125,17 @@
             </div>
         </div>
     </ng-container>
-
+    <ng-container *ngIf="!loanApplication['accountInfo']">
+        <div class="preview-title">
+            <h3>Account Info</h3>
+            <app-button (onClick)="onNavigate('account')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="missing">
+            Provide your account information
+        </div>
+    </ng-container>
     <ng-container *ngIf="category=='personal'">
         <ng-container *ngIf="loanApplication['bvn']">
             <div class="preview-container">
@@ -119,6 +151,17 @@
                                     Number</b></span>:<span>{{toJson(loanApplication['bvn'])["bvn"]}}</span></p>
                     </div>
                 </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!loanApplication['bvn']">
+            <div class="preview-title">
+                <h3>BVN</h3>
+                <app-button (onClick)="onNavigate('bvn-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Verify</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Verify your BVN
             </div>
         </ng-container>
         <ng-container *ngIf="loanApplication['personalInfo']">
@@ -173,6 +216,17 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="!loanApplication['personalInfo']">
+            <div class="preview-title">
+                <h3>Personal Information</h3>
+                <app-button (onClick)="onNavigate('personal-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Personal Information
+            </div>
+        </ng-container>
         <ng-container *ngIf="loanApplication['employmentInfo']">
             <div class="preview-container">
                 <div class="preview-title">
@@ -223,6 +277,17 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="!loanApplication['employmentInfo']">
+            <div class="preview-title">
+                <h3>Employment Information</h3>
+                <app-button (onClick)="onNavigate('employment-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Employment Information
+            </div>
+        </ng-container>
         <ng-container *ngIf="loanApplication['nokInfo']">
             <div class="preview-container">
                 <div class="preview-title">
@@ -261,12 +326,23 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="!loanApplication['nokInfo']">
+            <div class="preview-title">
+                <h3>NOK Information</h3>
+                <app-button (onClick)="onNavigate('employment-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Next Of Kin Information
+            </div>
+        </ng-container>
     </ng-container>
     <ng-container *ngIf="category=='business'">
         <ng-container *ngIf="loanApplication['additionalInfo']">
             <div class="preview-container">
                 <div class="preview-title">
-                    <h3>Preferred Contact Details</h3>
+                    <h3>Contact Information</h3>
                     <app-button (onClick)="onNavigate('additional-info')" [class]="'widget_button--small'">
                         <ng-container slot="button">Edit</ng-container>
                     </app-button>
@@ -287,6 +363,17 @@
                         </p>
                     </div>
                 </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!loanApplication['additionalInfo']">
+            <div class="preview-title">
+                <h3>Contact Information</h3>
+                <app-button (onClick)="onNavigate('additional-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Contact Information
             </div>
         </ng-container>
         <ng-container *ngIf="loanApplication['companyInfo']">
@@ -343,6 +430,17 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="!loanApplication['companyInfo']">
+            <div class="preview-title">
+                <h3>Company Information</h3>
+                <app-button (onClick)="onNavigate('company-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Company Information
+            </div>
+        </ng-container>
         <ng-container *ngIf="loanApplication['shareholderInfo']">
             <div class="preview-container"
                 *ngFor="let shareholder of toJson(loanApplication['shareholderInfo']);let i=index">
@@ -394,6 +492,17 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="!loanApplication['shareholderInfo']">
+            <div class="preview-title">
+                <h3>Shareholder Information</h3>
+                <app-button (onClick)="onNavigate('shareholder-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Shareholder Information
+            </div>
+        </ng-container>
         <ng-container *ngIf="loanApplication['collateralInfo']">
             <div class="preview-container">
                 <div class="preview-title">
@@ -422,6 +531,17 @@
                     </div>
 
                 </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!loanApplication['collateralInfo']">
+            <div class="preview-title">
+                <h3>Collateral Information</h3>
+                <app-button (onClick)="onNavigate('collateral-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide Collateral Information
             </div>
         </ng-container>
     </ng-container>

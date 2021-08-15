@@ -1,36 +1,44 @@
-
 <div class="theme_row">
-    <div class="applyingAs animate__animated animate__fadeIn" *ngFor="let d of dataSelection$|async as data" (click)="activate(d.title)" [ngClass]="{'active':(activeTab$|async)==d.title}">
+    <div class="applyingAs animate__animated animate__fadeIn" *ngFor="let d of dataSelection$|async as data"
+        (click)="activate(d.title)" [ngClass]="{'active':(activeTab$|async)==d.title}">
         <div class="heading">
             <h2>{{d.title}}</h2>
             <!-- <div><small  style="font-weight: 800;">Monthly</small></div> -->
         </div>
         <div class="subtitle">{{d.description}}</div>
-        <div style="max-width: fit-content; float: right;" class="widget_button widget_button--small margin--3x" (click)="toggle(d.title)">View Requirements</div>
-    
+        <div style="max-width: fit-content; float: right;" class="widget_button widget_button--small margin--3x"
+            (click)="toggle(d.title)">View Requirements</div>
+
     </div>
-    
+
 </div>
-<app-form [form]="form"  >
-<app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="applyingAsId" [control]="applyingAs" class="form-control"  >
-</app-input>
+<app-form [form]="form">
+    <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="applyingAsId" [control]="applyingAs"
+        class="form-control">
+    </app-input>
 </app-form>
-                    
+
 
 <app-modal *ngIf="(show$|async)" (onChange)="close()">
-    <app-modal-header slot="header"><h1 id="req-icon"><span class="material-icons">
-        info
-        </span>
-        </h1><h3>Requirements for {{applyingAs.value}}</h3></app-modal-header>
-    <app-modal-body slot="body">
-       <div *ngFor="let req of requirements$|async;let i =index">
-          <div class="req"><span class="material-icons">
-            source
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
             </span>
-            <p>{{req.title}} {{req.description}}</p></div>
-       </div>
-       <app-button (onClick)="next()" fieldClass="theme_col-3 no-margin--top"><ng-container slot="button">{{applyingAs.value?'Next':'Start'}}</ng-container></app-button>
-   
+        </h1>
+        <h3>Requirements for {{applyingAs.value}}</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+        <app-button (onClick)="next()" fieldClass="theme_col-3 no-margin--top max-width" [class]="'no-margin--top '">
+            <ng-container slot="button">{{applyingAs.value?'Next':'Start'}}</ng-container>
+        </app-button>
+
+        <div *ngFor="let req of requirements$|async;let i =index">
+            <div class="req"><span class="material-icons">
+                    source
+                </span>
+                <p>{{req.title}} {{req.description}}</p>
+            </div>
+        </div>
+
     </app-modal-body>
 </app-modal>
-                            

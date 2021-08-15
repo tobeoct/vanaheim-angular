@@ -78,7 +78,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         (data: any) => {
-          this.loadingSubject.next(true);
+          this.loadingSubject.next(false);
           if (data.verified == true) { this.onNavigate('auth/login', { username: username }) }
           else { this.onNavigate('auth/register', { email: username }) }
         },

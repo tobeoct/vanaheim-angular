@@ -9,6 +9,7 @@ import { CompanyInfo } from './company-info';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 import moment = require('moment');
+import { DateRange } from 'src/app/shared/components/date/date';
 @Component({
   selector: 'app-company-info',
   templateUrl: './company-info.component.html',
@@ -25,7 +26,7 @@ export class CompanyInfoComponent implements OnInit {
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
-  
+  range:DateRange = DateRange.all;
   base:string;
 
   isLoggedIn:boolean;

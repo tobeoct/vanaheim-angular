@@ -77,72 +77,73 @@ export class Store {
     title: "PayMe Loan",
     applyingAs: [{
       title: "Salary Earner",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." }, { title: "Work Identity card", description: "" },  { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." }, { title: "Work Identity card", description: "" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
     },
     {
       title: "Business Owner",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },{ title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "CAC Form", description: "showing particulars of Directors" },  { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "CAC Form", description: "showing particulars of Directors" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
     }
-  
-  ]
-  
+
+    ]
+
   }, {
     id: 2,
     title: "FundMe Loan",
     applyingAs: [{
       title: "Business/SME",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." },{ title: "Business account statement", description: " for the last twelve (12) months till date" },{ title: "Directors' account statement", description: " for the last twelve (12) months till date" },{ title: "Loan Application letter", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Loan Application letter", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
     },
     {
       title: "Corporate Organisation",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },{ title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "CAC Form", description: "showing particulars of Directors" },  { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "CAC Form", description: "showing particulars of Directors" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
     }
-  
-  ]
- }, {
+
+    ]
+  }, {
     id: 3,
     title: "LPO Finance",
     applyingAs: [{
       title: "Contractor/Vendor/Supplier",
-      requirements: [ { title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." },{ title: "Account statement (Business or Personal)", description: " for the last twelve (12) months till date" },{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },{ title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" },{ title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },{ title: "Signed MOUs", description: " on current contract" },{ title: "Supplier Invoices on current contract", description: "" }, { title: "Terms & Conditions", description: " of contract (Full contract)" },  { title: "Postdated cheque", description: "For the loan repayment" },{ title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },{ title: "Loan application Letter", description: "" },{title:"Filled Guarantors Form", description:""}]
+      requirements: [{ title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." }, { title: "Account statement (Business or Personal)", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Signed MOUs", description: " on current contract" }, { title: "Supplier Invoices on current contract", description: "" }, { title: "Terms & Conditions", description: " of contract (Full contract)" }, { title: "Postdated cheque", description: "For the loan repayment" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Loan application Letter", description: "" }, { title: "Filled Guarantors Form", description: "" }]
     },
     {
       title: "Corporate Organisation",
-      requirements: [ { title: "Valid means of Identity", description: " of two directors (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." },{ title: "Business account statement", description: " for the last twelve (12) months till date" },{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },{ title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" },{ title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },{ title: "Signed MOUs", description: " on current contract" },{ title: "Supplier Invoices on current contract", description: "" }, { title: "Terms & Conditions", description: " of contract (Full contract)" },  { title: "Postdated cheque", description: "For the loan repayment" },{ title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },{ title: "Board resolution for loan application", description: "on company letterhead" },{title:"Filled Guarantors Form", description:" for at least two directors"}]
+      requirements: [{ title: "Valid means of Identity", description: " of two directors (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Signed MOUs", description: " on current contract" }, { title: "Supplier Invoices on current contract", description: "" }, { title: "Terms & Conditions", description: " of contract (Full contract)" }, { title: "Postdated cheque", description: "For the loan repayment" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Board resolution for loan application", description: "on company letterhead" }, { title: "Filled Guarantors Form", description: " for at least two directors" }]
     }]
   }, {
     id: 4,
     title: "FloatMe Loan (Individual)",
     applyingAs: [{
       title: "Salary Earner",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: "" }, { title: "Work Identity card", description: "" },  { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: "" }, { title: "Work Identity card", description: "" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
     }
-  
-  ]  }, {
+
+    ]
+  }, {
     id: 5,
     title: "FloatMe Loan (Business)",
     applyingAs: [{
       title: "Business/SME",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." },{ title: "Business account statement", description: " for the last twelve (12) months till date" },{ title: "Directors' account statement", description: " for the last twelve (12) months till date" },{ title: "Loan Application letter", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Loan Application letter", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
     },
     {
       title: "Corporate Organisation",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." },{ title: "Business account statement", description: " for the last twelve (12) months till date" },{ title: "Directors' account statement", description: " for the last twelve (12) months till date" },{ title: "Board resolution for loan application", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
-    
-     }]
-    }, {
+      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Board resolution for loan application", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+
+    }]
+  }, {
     id: 6,
     title: "Line Of Credit",
     applyingAs: [{
       title: "Personal Line Of Credit",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: "" }, { title: "Work Identity card", description: "" },  { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" },  { title: "Executed Line Of Credit Agreement", description: "" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: "" }, { title: "Work Identity card", description: "" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }, { title: "Executed Line Of Credit Agreement", description: "" }]
     },
     {
       title: "Business Line Of Credit",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." },{ title: "Business account statement", description: " for the last twelve (12) months till date" },{ title: "Directors' account statement", description: " for the last twelve (12) months till date" },{ title: "Board Resolution", description: " for line of credit facility application on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Board Resolution", description: " for line of credit facility application on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }, { title: "Executed Line Of Credit Agreement", description: "" }]
     }
-  ] 
-     }];
+    ]
+  }];
   timeInBusiness: string[] = [
     "Less than 6 months",
     " 6-12 Months",
@@ -318,16 +319,16 @@ export class Store {
   get loanType() { return this.getFromCurrentApplication("loanType") || ''; }
   setLoanType(value: string) {
 
-    if (value != this.loanType) {  this.setApplyingAs(''); this.setLoanProduct(''); this.clear(this.loanCategory); }
+    if (value != this.loanType) { this.setApplyingAs(''); this.setLoanProduct(''); this.clear(this.loanCategory); }
 
     this.loanTypeSubject.next(value);
-    if (value.toLowerCase().includes("individual")||this.applyingAs.toLowerCase().includes("personal") || value.toLowerCase().includes("payme")) {
+    if (value.toLowerCase().includes("individual") || this.applyingAs.toLowerCase().includes("personal") || value.toLowerCase().includes("payme")) {
       this.setLoanCategory("personal");
     }
     else {
       this.setLoanCategory("business");
     }
-  
+
     this.updateCurrentApplication('loanType', value);
     this.setPrevious("loan-type");
     this.setPage("applying-as");

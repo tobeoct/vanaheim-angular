@@ -54,8 +54,9 @@ export class TypeAheadComponent implements OnInit {
 
     this.filteredDropDownItems$ = combineLatest([this.dropdownItems$, this.control.valueChanges]).pipe(map(([items, value]) => {
       let itms: any[] = [];
+      console.log(items)
       Object.assign(itms, items);
-      return !value ? itms : itms.filter(i => (i.label.includes(value.toLowerCase()) || i.value.includes(value.toLowerCase())));
+      return !value ? itms : itms.filter(i => (i.label.toString()?.toLowerCase().includes(value.toLowerCase()) || i.value.toString()?.toLowerCase().includes(value.toLowerCase())));
 
     }))
   }
