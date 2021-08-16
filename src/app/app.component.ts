@@ -32,7 +32,8 @@ export class AppComponent implements OnChanges, OnInit {
   timeoutId: any;
   userInactive: Subject<any> = new Subject();
   checkTimeOut() {
-    let buffer =120000;
+    if(this.timeoutWarningId || this.timeoutId) return;
+    let buffer = 120000;
     let timeout = this.authenticationService.getExpiration()?.subtract(2, "minutes").diff(moment(), "milliseconds");
     this.timeoutWarningId = setTimeout(
 
@@ -43,22 +44,24 @@ export class AppComponent implements OnChanges, OnInit {
 
 
   }
-  logout(){
+  logout() {
     this.authenticationService.logout();
-    clearTimeout(this.timeoutId); 
-    clearTimeout(this.timeoutWarningId); 
+    clearTimeout(this.timeoutId);
+    clearTimeout(this.timeoutWarningId);
     this.showLogoutSubject.next(false);
   }
   stay() {
-    this.authenticationService.stay().subscribe(c=>{
+    this.authenticationService.stay().subscribe(c => {
 
       this.showLogoutSubject.next(false);
       clearTimeout(this.timeoutWarningId);
       clearTimeout(this.timeoutId);
-      if(this.isLoggedIn){
-      this.checkTimeOut();
+      this.timeoutWarningId = undefined;
+      this.timeoutId = undefined;
+      if (this.isLoggedIn) {
+        this.checkTimeOut();
       }
-    },(error: any) => {
+    }, (error: any) => {
 
     })
   }

@@ -1,4 +1,5 @@
 import AppConfig from "@api/config";
+import { Customer } from "@models/customer";
 import { LoanRequestStatus } from "@models/helpers/enums/loanrequeststatus";
 import { LoanStatus } from "@models/helpers/enums/loanstatus";
 import { PaymentType } from "@models/helpers/enums/paymenttype";
@@ -6,6 +7,7 @@ import { BaseStatus } from "@models/helpers/enums/status";
 import { DisbursedLoan } from "@models/loan/disbursed-loan";
 import { LoanRequest } from "@models/loan/loan-request";
 import { Repayment } from "@models/loan/repayment";
+import { CustomerRepository } from "@repository/implementation/customer-repository";
 import { IRepaymentRepository } from "@repository/interface/Irepayment-repository";
 import { IDisbursedLoanRepository } from "@repository/interface/loan/Idisbursed-loan-repository";
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
@@ -51,7 +53,7 @@ type RepaymentHealth = {
 // Recalculate based on this info. -> If full update status and use default cycle -> else recalculate cycle
 
 export class RepaymentService extends BaseService<Repayment> implements IRepaymentService {
-  constructor(private _db: any, private _templateService: TemplateService, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utilService: UtilService) {
+  constructor(private _db: any, private _customerRepository:CustomerRepository, private _templateService: TemplateService, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utilService: UtilService) {
     super(_repaymentRepository)
   }
   getByDisbursedLoanID = (disbursedLoanId: number) => new Promise<any[]>(async (resolve, reject) => {
@@ -177,16 +179,19 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       return;
     }
   });
-  processRepaymentPlan = ({ email, tenure, denominator, loanType, purpose, rate, loanAmount, monthlyRepayment }: any) => new Promise<any>(async (resolve, reject) => {
+  processRepaymentPlan = ({ email, tenure, denominator, loanType, purpose, rate, loanAmount, monthlyRepayment }: any,userData:any) => new Promise<any>(async (resolve, reject) => {
 
     try {
-
-      const fileName = `Repayment Plan - ${Date.now()}`;
+      let customer = await this._customerRepository.getByUserID(userData.id);
+      if (customer && Object.keys(customer).length > 0) {
+        customer= Object.assign(customer.dataValues as Customer, new Customer());
+      }
+       const fileName = `Repayment Plan - ${Date.now()}`;
       let t = this.getRepaymentTemplate({ tenure: tenure + ' ' + denominator, loanType, purpose, rate, loanAmount, monthlyRepayment });
       let { path }: any = await this._templateService.generatePDF("Repayment Plan", [], "repayments/" + fileName, t);
 
       let sent = await this._emailService.SendEmail({ type: 'repayment', to: this._appConfig.ADMIN_EMAIL, attachment: path, filePaths: null, html: t, toCustomer: false })
-      await this._emailService.SendEmail({ type: 'repayment', to: email, attachment: path, filePaths: null, html: this._templateService.LOAN_CUSTOMER_TEMPLATE, toCustomer: true })
+      await this._emailService.SendEmail({ type: 'repayment', to: email, attachment: path, filePaths: null, html: this._templateService.REPAYMENT_PLAN_TEMPLATE(customer? (customer?.firstName+''+customer?.lastName):"Customer"), toCustomer: true })
       resolve({ status: true, data: { message: "Sent successfully" } })
 
     } catch (err) {

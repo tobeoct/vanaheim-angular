@@ -12,8 +12,9 @@ import { LoginType } from "@models/helpers/enums/logintype";
 import EmailService from "./common/email-service";
 import { Staff } from "@models/staff";
 import { IStaffRepository } from "@repository/interface/Istaff-repository";
+import { TemplateService } from "./common/template-service";
 class UserService extends BaseService<User> implements IUserService {
-  constructor(private _userRepository: IUserRepository, private _emailService: EmailService, private _utilService: UtilService, private _staffRepository: IStaffRepository, private _customerRepository: ICustomerRepository, private _encryption: Encryption) {
+  constructor(private _userRepository: IUserRepository, private _templateService:TemplateService, private _emailService: EmailService, private _utilService: UtilService, private _staffRepository: IStaffRepository, private _customerRepository: ICustomerRepository, private _encryption: Encryption) {
     super(_userRepository);
   }
   convertToModel = (modelInDb: any) => {
@@ -252,21 +253,9 @@ class UserService extends BaseService<User> implements IUserService {
             let customerInDb = await this._customerRepository.create(customer);
             user.customer.id = customerInDb.id;
             if (customerInDb) {
-              const template = `
-    <div style="width:100% !important;  margin-top:20px;"><p>Hello ${customer.firstName},<br/><br/>
-    Welcome to Vanir Capital LLC.<br/><br/>
-    Congratulations! You are on your way to financial freedom and information.<br/><br/>
-    We are so happy to have you onboard and elated that you have chosen us as partners.<br/><br/>
-    Vanir Capital LLC continuously provides efficient financial services and products to individuals and
-    organizations operating in developed and emerging markets. We are a money lending company and we
-    also create investment opportunities. The goal is to help you advance financially and guide you to a
-    future of financial freedom and security. <br/> <br/>
-    Visit our website www.vaircapital.org for more information and contact us on +234 818 027 9270. If you have any questions for us, please don’t hesitate to visit our FAQ page or send us an email at support@vanircapital.org
-    </div><br/><br/>
-    
-    `;
+              ;
               try {
-                let response = await this._emailService.SendEmail({ subject: "WELCOME TO VANIR CAPITAL LLC", to: user.email, html: template, toCustomer: true })
+                let response = await this._emailService.SendEmail({ subject: "WELCOME TO VANIR CAPITAL LLC", to: user.email, html: this._templateService.NEW_CUSTOMER_TEMPLATE(customer?(customer.firstName+' '+customer.lastName):"Customer"), toCustomer: true })
                 // resolve({status:true,data:user}); 
 
               }

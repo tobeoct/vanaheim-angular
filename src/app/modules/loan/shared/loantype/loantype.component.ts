@@ -10,7 +10,7 @@ const data: any[] = [
   { id: "PayMe Loan", title: "Salary Earners' Loans", uniqueName: "PayMe Loan", frequency: "Monthly", description: "Need a loan for house rent, to buy a new phone or to fix your car?.Take personal loans between NGN 25,000 to NGN 5M and pay back monthly." },
   { id: "FundMe Loan", title: "Business (SME) Loan", uniqueName: "FundMe Loan", frequency: "Monthly", description: "Need a loan to grow your business?.Get business loans up to NGN 5M with no application fees at affordable interest rates." },
   { id: "LPO Finance", title: "Local Purchase Order", uniqueName: "LPO Finance", frequency: "Monthly", description: "Are you a contractor, vendor or a supplier in need of funding to execute a project?.Get access to loans up to NGN 5M for your local purchase order projects." },
-  { id: "FloatMe Loan", uniqueName: "FloatMe Loan", title: "Emergency/Quick Cash", frequency: "Daily", description: "Dealing with emergency expenses at mid-month?.Get loans up to NGN 5M naira and pay back daily or weekly in."},
+  { id: "FloatMe Loan", uniqueName: "FloatMe Loan", title: "Emergency/Quick Cash", frequency: "Daily", description: "Dealing with emergency expenses at mid-month?.Get loans up to NGN 5M naira and pay back daily or weekly in." },
   { id: "Line Of Credit", uniqueName: "Line Of Credit", title: "Line Of Credit", frequency: "Monthly", description: "Get access to personal/business loans, withdraw by instalment as needed and repay as agreed." },
 
 ]
@@ -63,12 +63,12 @@ export class LoantypeComponent implements OnInit {
   }
   activate = (id: string) => {
     this.activeTabSubject.next(id);
-    
+
     this.loanType.patchValue(id);
     if (id == "FloatMe Loan") {
       this.showSubject.next(true);
-    }else{
-    this.next()
+    } else {
+      this.next()
     }
   }
 
@@ -100,10 +100,10 @@ export class LoantypeComponent implements OnInit {
     this.showSubject.next(false);
   }
   onNavigate(route: string, params: any = {}): void {
+    let url = this.base;
     console.log("Loan Type", this.base)
-    if (this.base == "/my/loans/") this.base += "apply/"
-    const r = this.base + route;
-    console.log(r);
-    this._router.navigate([r], { queryParams: params })
+    if (url == "/my/loans/") url += "apply/"
+    url += route;
+    this._router.navigate([url], { queryParams: params })
   }
 }

@@ -42,105 +42,237 @@ export class Store {
     { code: "035", title: "Wema Bank" },
     { code: "057", title: "Zenith Bank" }
   ]
-  loanTypes2: any[] = [{
-    id: 1,
-    title: "PayDay Loans",
-    requirements: [{ title: "Salary account statement", description: " for the last Six (6) months till date" }, { title: "Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." }, { title: "Work Identity card", description: "" }, { title: "Valid Government Issued ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount" }]
-  }, {
-    id: 2,
-    title: "Business Loans",
-    requirements: [{ title: "Copy ofbusiness registration documents", description: " from CAC" }, { title: "Business account statement", description: " for the last Six (6) months till date" }, { title: "Personal account statement", description: " for the last six (6) months till date" }, { title: "Business brief or Corporate Profile", description: "" }, { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" }, { title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" }, { title: "Postdated cheque", description: "s issued to the tune of the monthly repayment amount  (to be provided post the application process)" }]//}, {title:"Remita Direct Debit mandate", description:" (to be provided post the application process)"]
-  }, {
-    id: 3,
-    title: "LPO Financing",
-    requirements: [{ title: "Application letter", description: " on company letterhead" }, { title: "Business registration / incorporation", description: " details and documents" }, { title: "Board resolution for loan request", description: "" }, { title: "Valid means of Identity", description: " of two directors (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." }, { title: "Business account bank statement", description: " for the last Six (6) months till date." }, { title: "Personal account statement", description: " for two directors for the last six (6) months till date" }, { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount." }, { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }, { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" }, { title: "Signed MOUs", description: " on current contract" }, { title: "Supplier Invoices on current contract", description: "" }, { title: "Terms & Conditions", description: " of contract (Full contract)" }]
-  }, {
-    id: 4,
-    title: "Float Loans (Individual)",
-    requirements: [{ title: "Personal account statement", description: " for the last Six (6) months till date." }, { title: "Employment offer/Confirmation letter.", description: "" }, { title: "Work Identity card", description: "" }, { title: "Valid ID card", description: " (Driver’s License, international passport, National ID card or Voter’s card)." }, { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount (to be provided post the application process)" }, { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
-  }, {
-    id: 5,
-    title: "Float Loans (Business)",
-    requirements: [{ title: "Copy of your business registration documents", description: " from CAC" }, { title: "Business account statement", description: " for the last Six (6) months till date" }, { title: "Personal account statement", description: " for the last six (6) months till date" }, { title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" }, { title: "Postdated cheque", description: "s issued to the tune of the monthly repayment amount" }, { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" }, { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
-  }, {
-    id: 6,
-    title: "Personal Line Of Credit",
-    requirements: [{ title: "Salary account statement", description: " for the last Six (6) months till date" }, { title: "Other Personal account statement", description: " for the last six (6) months till date" }, { title: " Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." }, { title: "Work Identity card", description: "" }, { title: "Valid Government Issued ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount" }]
-  }, {
-    id: 7,
-    title: "Business Line Of Credit",
-    requirements: [{ title: "Copy of your business registration documents", description: " from CAC" }, { title: "Business brief or Corporate Profile", description: "" }, { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" }, { title: "Business account statement", description: " for the last Six (6) months till date" }, { title: "Personal account statement", description: " for two directors for the last six (6) months till date" }, { title: "Valid means of Identity", description: " for both directors (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" }, { title: "Postdated cheques", description: " issued to the tune of the monthly repayment amount" }, { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
-  }];
+  // loanTypes2: any[] = [{
+  //   id: 1,
+  //   title: "PayDay Loans",
+  //   requirements: [
+  //     { title: "Salary account statement", description: " for the last Six (6) months till date" },
+  //    { title: "Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." },
+  //    { title: "Work Identity card", description: "" },
+  //    { title: "Valid Government Issued ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },
+  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount" }]
+  // },
+  //  {
+  //   id: 2,
+  //   title: "Business Loans",
+  //   requirements: [{ title: "Copy ofbusiness registration documents", description: " from CAC" },
+  //    { title: "Business account statement", description: " for the last Six (6) months till date" },
+  //    { title: "Personal account statement", description: " for the last six (6) months till date" },
+  //    { title: "Business brief or Corporate Profile", description: "" },
+  //    { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" },
+  //    { title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" },
+  //    { title: "Postdated cheque", description: "s issued to the tune of the monthly repayment amount  (to be provided post the application process)" }]
+  // },
+  //  {
+  //   id: 3,
+  //   title: "LPO Financing",
+  //   requirements: [{ title: "Application letter", description: " on company letterhead" },
+  //    { title: "Business registration / incorporation", description: " details and documents" },
+  //    { title: "Board resolution for loan request", description: "" },
+  //    { title: "Valid means of Identity", description: " of two directors (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." },
+  //    { title: "Business account bank statement", description: " for the last Six (6) months till date." },
+  //    { title: "Personal account statement", description: " for two directors for the last six (6) months till date" },
+  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount." },
+  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" },
+  //    { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" },
+  //    { title: "Signed MOUs", description: " on current contract" },
+  //    { title: "Supplier Invoices on current contract", description: "" },
+  //    { title: "Terms & Conditions", description: " of contract (Full contract)" }]
+  // },
+  //  {
+  //   id: 4,
+  //   title: "Float Loans (Individual)",
+  //   requirements: [{ title: "Personal account statement", description: " for the last Six (6) months till date." },
+  //    { title: "Employment offer/Confirmation letter.", description: "" },
+  //    { title: "Work Identity card", description: "" },
+  //    { title: "Valid ID card", description: " (Driver’s License, international passport, National ID card or Voter’s card)." },
+  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount (to be provided post the application process)" },
+  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
+  // },
+  //  {
+  //   id: 5,
+  //   title: "Float Loans (Business)",
+  //   requirements: [{ title: "Copy of your business registration documents", description: " from CAC" },
+  //    { title: "Business account statement", description: " for the last Six (6) months till date" },
+  //    { title: "Personal account statement", description: " for the last six (6) months till date" },
+  //    { title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" },
+  //    { title: "Postdated cheque", description: "s issued to the tune of the monthly repayment amount" },
+  //    { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" },
+  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
+  // },
+  //  {
+  //   id: 6,
+  //   title: "Personal Line Of Credit",
+  //   requirements: [{ title: "Salary account statement", description: " for the last Six (6) months till date" },
+  //    { title: "Other Personal account statement", description: " for the last six (6) months till date" },
+  //    { title: " Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." },
+  //    { title: "Work Identity card", description: "" },
+  //    { title: "Valid Government Issued ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },
+  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount" }]
+  // },
+  //  {
+  //   id: 7,
+  //   title: "Business Line Of Credit",
+  //   requirements: [{ title: "Copy of your business registration documents", description: " from CAC" },
+  //    { title: "Business brief or Corporate Profile", description: "" },
+  //    { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" },
+  //    { title: "Business account statement", description: " for the last Six (6) months till date" },
+  //    { title: "Personal account statement", description: " for two directors for the last six (6) months till date" },
+  //    { title: "Valid means of Identity", description: " for both directors (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" },
+  //    { title: "Postdated cheques", description: " issued to the tune of the monthly repayment amount" },
+  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
+  // }];
 
   loanTypes: any[] = [{
     id: 1,
     title: "PayMe Loan",
     applyingAs: [{
       title: "Salary Earner",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." }, { title: "Work Identity card", description: "" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },
+      { title: "Valid ID card", description: " (Driver’s License, International Passport, National ID card or Voter’s Card)." },
+      { title: "Employment offer / Confirmation Letter", description: "" },
+      { title: "Work Identity card", description: "" },
+      { title: "Postdated cheque", description: "for the monthly repayment amount or direct debit mandate (subject to evaluation) " }]
     },
     {
       title: "Business Owner",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "CAC Form", description: "showing particulars of Directors" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },
+      { title: "Valid ID card", description: " (Driver’s License, International Passport, National ID card or Voter’s Card)." },
+      { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
+      { title: "CAC Form", description: " showing particulars of Directors" },
+      { title: "Postdated cheque", description: " for the monthly repayment amount or direct debit mandate (subject to evaluation)" }]
     }
 
     ]
 
-  }, {
+  },
+  {
     id: 2,
     title: "FundMe Loan",
     applyingAs: [{
       title: "Business/SME",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Loan Application letter", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [{ title: "Valid ID card", description: "(National ID, Valid Driver’s License or Valid International Passport or Voter’s Card) for the Director." },
+      { title: "Business account statement", description: " for the last 12 months till date" },
+      { title: "Directors' account statement", description: " for the last 12 months till date" },
+      { title: "Loan Application letter", description: "" },
+      { title: "Postdated cheque", description: "issued to the tune of the monthly repayment amount." },
+      { title: "Business Profile", description: " and the reason for accessing the loan" },
+      { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
+      { title: "CAC Form", description: " showing particulars of Directors" },
+      ]
     },
     {
       title: "Corporate Organisation",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "CAC Form", description: "showing particulars of Directors" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [
+        { title: "Valid ID card", description: " (National ID, Valid Driver’s License or Valid International Passport or Voter’s Card) for each Director" },
+        { title: "Business account statement", description: " for the last 12 months till date" },
+        { title: "Directors account statement", description: " for the last 12 months till date" },
+        { title: "Loan Application Letter", description: " on company letterhead" }, ,
+        { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount." },
+        { title: "Business Profile", description: " and the reason for accessing the loan" },
+        { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
+        { title: "CAC Form", description: "showing particulars of Directors" }]
     }
 
     ]
-  }, {
+  },
+  {
     id: 3,
     title: "LPO Finance",
     applyingAs: [{
       title: "Contractor/Vendor/Supplier",
-      requirements: [{ title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." }, { title: "Account statement (Business or Personal)", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Signed MOUs", description: " on current contract" }, { title: "Supplier Invoices on current contract", description: "" }, { title: "Terms & Conditions", description: " of contract (Full contract)" }, { title: "Postdated cheque", description: "For the loan repayment" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Loan application Letter", description: "" }, { title: "Filled Guarantors Form", description: "" }]
+      requirements: [{ title: "Valid means of Identity", description: " Voter’s Card, National ID Card, Valid Driver’s License, or Valid International Passport)." },
+      { title: "Account statement (Business or Personal)", description: " for the last twelve (12) months till date" },
+      { title: "Postdated cheque", description: " for loan repayment" },
+      { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" },
+      { title: "Business registration documents", description: " from CAC (Certificate of Incorporation and Particulars of Directors page)" },
+      { title: "Signed MOUs", description: " on current contract" },
+      { title: "Supplier Invoices on current contract", description: "" },
+      { title: "T&Cs", description: " of contract (Full contract)" },
+      { title: "Loan application Letter", description: "" },
+      { title: "Filled Guarantors Form", description: " (if applicable)" }]
     },
     {
       title: "Corporate Organisation",
-      requirements: [{ title: "Valid means of Identity", description: " of two directors (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Signed MOUs", description: " on current contract" }, { title: "Supplier Invoices on current contract", description: "" }, { title: "Terms & Conditions", description: " of contract (Full contract)" }, { title: "Postdated cheque", description: "For the loan repayment" }, { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" }, { title: "Board resolution for loan application", description: "on company letterhead" }, { title: "Filled Guarantors Form", description: " for at least two directors" }]
+      requirements: [
+        { title: "Valid means of Identity", description: " of two directors Voter’s Card, National ID Card, Valid Driver’s License, or Valid International Passport)." },
+        { title: "Business account statement", description: " for the last twelve (12) months till date" },
+        { title: "Postdated cheque", description: " for loan repayment" },
+
+        { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" },
+        { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
+        { title: "Signed MOUs", description: " on current contract" },
+        { title: "Supplier Invoices on current contract", description: "" },
+        { title: "T&Cs", description: " of contract (Full contract)" },
+        { title: "Board resolution for loan application", description: "on company letterhead" },
+        { title: "Filled Guarantors Form", description: " for at least two directors" }]
     }]
-  }, {
+  },
+  {
     id: 4,
     title: "FloatMe Loan (Individual)",
     applyingAs: [{
       title: "Salary Earner",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: "" }, { title: "Work Identity card", description: "" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },
+      { title: "Valid ID card", description: " (Driver’s License, International Passport, National ID Card or Voter’s Card)." },
+      { title: "Employment offer / Confirmation Letter", description: "" },
+      { title: "Work Identity card", description: "" },
+      { title: "Postdated cheque", description: " for the repayment amount or direct debit mandate (subject to evaluation)." }]
     }
 
     ]
-  }, {
+  },
+  {
     id: 5,
     title: "FloatMe Loan (Business)",
     applyingAs: [{
       title: "Business/SME",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Loan Application letter", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [{ title: "Valid means of Identity ", description: " (Voter’s card, National ID card, Valid Driver’s License or Valid International passport) for the director." },
+      { title: "Business account statement", description: " for the last 12 months till date" },
+      { title: "Directors' account statement", description: " for the last 12 months till date" },
+      { title: "Loan Application letter", description: "" },
+      { title: "Postdated cheque", description: " for the repayment amount" },
+      { title: "Business Profile", description: " and the reason for accessing the loan" },
+      { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
+      { title: "CAC Form", description: " showing particulars of Directors" }
+      ]
     },
     {
       title: "Corporate Organisation",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Board resolution for loan application", description: " on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }]
+      requirements: [{ title: "Valid means of Identity Card", description: " (National ID, Valid Driver’s License, Valid International Passport or Voter’s Card) for each Director." },
+      { title: "Business account statement", description: " for the last 12 months till date" },
+      { title: "Directors' account statement", description: " for the last 12 months till date" },
+      { title: "Board resolution for loan application", description: " on company letterhead" },
+      { title: "Postdated cheque", description: " for the repayment amount" },
+      { title: "Business Profile", description: " providing reason for accessing the loan" },
+      { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
+      { title: "CAC Form", description: " showing particulars of Directors" }
+      ]
 
     }]
-  }, {
+  },
+  {
     id: 6,
     title: "Line Of Credit",
     applyingAs: [{
       title: "Personal Line Of Credit",
-      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" }, { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." }, { title: "Employment offer / Confirmation Letter", description: "" }, { title: "Work Identity card", description: "" }, { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate" }, { title: "Executed Line Of Credit Agreement", description: "" }]
+      requirements: [{ title: "Salary account statement", description: " for the last twelve (12) months till date" },
+      { title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },
+      { title: "Employment offer / Confirmation Letter", description: "" },
+      { title: "Work Identity card", description: "" },
+      { title: "Postdated cheque", description: "For the monthly repayment amount or direct debit mandate (subject to evaluation)." },
+      { title: "Executed Line Of Credit Agreement", description: "" }]
     },
     {
       title: "Business Line Of Credit",
-      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." }, { title: "Business account statement", description: " for the last twelve (12) months till date" }, { title: "Directors' account statement", description: " for the last twelve (12) months till date" }, { title: "Board Resolution", description: " for line of credit facility application on company letterhead" }, { title: "Business Profile", description: " providing reason for accessing the loan" }, { title: "Postdated cheque", description: "For the monthly repayment amount" }, { title: "Executed Line Of Credit Agreement", description: "" }]
+      requirements: [{ title: "Valid ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card) for each director." },
+      { title: "Business account statement", description: " for the last 12 months till date" },
+      { title: "Directors' account statement", description: " for the last 12 months till date" },
+      { title: "Board Resolution", description: " for line of credit facility application on company's letterhead" },
+      { title: "Postdated cheque", description: " for loan repayment" },
+      { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
+      { title: "CAC Form", description: " showing particulars of Directors" },
+      { title: "Executed Line Of Credit Agreement", description: "" }]
     }
     ]
   }];

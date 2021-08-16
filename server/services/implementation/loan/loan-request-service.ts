@@ -98,7 +98,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             const customer = await this._customerRepository.getByUserID(userData.id);
 
             let queryParameters: any = { customerID: customer.id };
-            queryParameters["requestStatus"] = {[this.Op.not]:"Completed"}; 
+            queryParameters["requestStatus"] = { [this.Op.not]: "Completed" };
             // queryParameters["order"]= [['requestDate', 'DESC']]
             let requests = await repo.search({ ...queryParameters }, 0, 1, [['requestDate', 'DESC']]);
             // console.log("Latest Loan Requests",requests)
@@ -195,7 +195,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
                     account1 = Object.assign(accountInDb, new Account());
                 }
             } else {
-                let a: any = this._accountRepository.getById(accountInfo[0].id);
+                let a: any = await this._accountRepository.getById(accountInfo[0].id);
                 if (!a || Object.keys(a).length == 0) throw "Invalid account";
                 account1 = Object.assign(a.dataValues as Account, new Account());
             }
@@ -221,7 +221,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
 
                 }
                 else {
-                    let a: any = this._accountRepository.getById(accountInfo[1].id);
+                    let a: any = await this._accountRepository.getById(accountInfo[1].id);
                     if (!a || Object.keys(a).length == 0) throw "Invalid account";
                     account2 = Object.assign(a.dataValues as Account, new Account());
                 }

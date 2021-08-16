@@ -5,7 +5,7 @@
             <ng-container slot="label"><label for="month"><ng-content></ng-content></label></ng-container>
             <app-option *ngFor="let month of months; let i =index" [value]="month">{{month}}</app-option>
         </app-dropdown>
-    </div> <div class="theme_col-2">
+    </div> <div class="theme_col-3">
         <app-input id="day" type="number" errorType="right" [control]="day" class="form-control" [error]="(errorMessage$ | async)?.day" >
             
         </app-input>

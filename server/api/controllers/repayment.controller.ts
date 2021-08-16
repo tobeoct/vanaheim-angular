@@ -11,7 +11,7 @@ export default class UserController {
     @POST()
     repaymentPlan = async (req: any, res: any, next: any) => {
         console.log("Repayment Plan")
-        let response: any = await this._repaymentService.processRepaymentPlan(req.body);
+        let response: any = await this._repaymentService.processRepaymentPlan(req.body,req.session?.userData);
         if (response.status == true) {
             res.statusCode = 200;
             res.data = response.data;

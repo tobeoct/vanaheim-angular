@@ -93,13 +93,13 @@ export class DocumentUploadComponent implements OnInit {
   onError(value: any): void {
     this.errorMessageSubject.next(value);
   }
-onClick(event:any){
-  event.preventDefault();
-  event.stopPropagation();
-  if(!this.isLoggedIn){
-    this.showSubject.next(true);
+  onClick(event: any) {
+    if (!this.isLoggedIn) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.showSubject.next(true);
+    }
   }
-}
   onFileChange(result: any, id: number) {
     if (result.error) {
       if (result.message == "Invalid file type") { this.show2Subject.next(true) } else { this.showSubject.next(true); }

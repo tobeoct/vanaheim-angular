@@ -2,6 +2,10 @@
 
 module.exports = (sequelize:any, DataTypes:any) => {
     const NOK = sequelize.define('NOK', {
+      title:{
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       firstName:{
         type: DataTypes.STRING,
         allowNull: false,

@@ -22,7 +22,7 @@
             <app-option *ngFor="let t of businessSectors; let i =index" [value]="t" [label]="t">{{t}}</app-option>
         </app-dropdown>  
             
-            
+            <h3 class="margin--x">Employer Contact Details</h3>
                 <div id="contact" class="theme_row no-margin--top"  [formGroup]="contactGroup">
                     <app-input id="email" [placeholder]="'Enter your email'" [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
                         <label for="email">Email</label>
