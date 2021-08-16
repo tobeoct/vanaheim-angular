@@ -181,7 +181,6 @@ export class SideAccountComponent implements OnInit {
     })
 
     group.get("id")?.valueChanges.subscribe(v => {
-      console.log("ID", v);
       let id = group.get("id")?.value;
       if (id && id > 0) {
         let a = this.accounts.value.find(c => c.id == id);
@@ -214,10 +213,8 @@ export class SideAccountComponent implements OnInit {
     const accounts: any[] = form.value["accountArray"];
 
     let accountInfo: AccountInfo[] = []
-    console.log("Accounts", accounts)
     accounts.forEach((group: any, i) => {
       let info = new AccountInfo();
-      console.log("Group", group)
       info.id = group["id"];
       info.bank = group["bank"];
       info.accountName = group["accountName"];
@@ -259,7 +256,6 @@ export class SideAccountComponent implements OnInit {
         });
   }
   onValidate(accountNumber: string, bank: string, accountName: FormControl) {
-    console.log("validating");
     this.loadingSubject.next(true);
     this.valid.setErrors({
       validating: true
@@ -269,7 +265,6 @@ export class SideAccountComponent implements OnInit {
     if (bankCode) {
       let data = { bankcode: bankCode, accountnumber: accountNumber };
       this._commonService.accountEnquiry(data).pipe(map(r => {
-        console.log(r)
         if (r.status == true) { accountName.patchValue(r.response.data); accountName.updateValueAndValidity(); this.displayMessage(true) } else {
           this.displayMessage(false)
         }
@@ -280,7 +275,6 @@ export class SideAccountComponent implements OnInit {
         return EMPTY;
       })).subscribe(c => {
 
-        console.log("Response", c);
 
       });
     } else {

@@ -90,7 +90,6 @@ ngOnDestroy(): void {
   }
   onNavigate(route:string,params:any={}):void{
     const r =this.base+route;
-    console.log(r);
     this._router.navigate([r],{queryParams: params})
   }
   onError(value:any):void{

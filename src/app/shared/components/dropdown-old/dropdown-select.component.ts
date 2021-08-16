@@ -68,8 +68,6 @@ export class DropdownSelectComponent implements AfterViewInit, ControlValueAcces
   private keyManager: ActiveDescendantKeyManager<DropdownSelectOptionComponent>;
 
   constructor(private dropdownService: DropdownService) {
-    console.log(this.displayText)
-    console.log(this.controlName)
     this.dropdownService.register(this);
    
   }

@@ -101,7 +101,6 @@ export class LoantypeComponent implements OnInit {
   }
   onNavigate(route: string, params: any = {}): void {
     let url = this.base;
-    console.log("Loan Type", this.base)
     if (url == "/my/loans/") url += "apply/"
     url += route;
     this._router.navigate([url], { queryParams: params })

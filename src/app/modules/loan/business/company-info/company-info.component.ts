@@ -271,7 +271,6 @@ ngOnDestroy(): void {
 
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
-    console.log(this.companyId.value)
     const companyInfo:CompanyInfo ={id:this.companyId.value,timeInBusiness:this.timeInBusiness.value, companyRCNo: this.companyRCNo.value, companyName: this.companyName.value, natureOfBusiness: this.natureOfBusiness.value, email: this.email.value, phoneNumber:this.phone.value, dateOfIncorporation:{day:this.day.value, month: this.month.value, year:this.year.value},address:{street:this.street.value, city:this.city.value, state:this.state.value}};
      this._store.setCompanyInfo(companyInfo);
     this.onNavigate("shareholder-info");

@@ -33,6 +33,6 @@ export class LottieComponent implements OnInit, OnChanges {
   }
 
   animationCreated(animationItem: AnimationItem): void {
-    console.log(animationItem);
+    // console.log(animationItem);
   }
 }

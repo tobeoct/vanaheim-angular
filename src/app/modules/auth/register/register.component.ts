@@ -103,7 +103,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       const sub = this.socialAuthService.authState.subscribe((user) => {
           this.socialUser = user;
           this.isLoggedin = (user != null);
-          console.log(this.socialUser);
           if(this.isLoggedin){
               this.register({type:LoginType.Social, socialUser:user});
           }else{
@@ -131,7 +130,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
           data => {
-              console.log("Registered ", data)
               this.apiSuccessSubject.next("Registration was successful");
               if(this.isLoggedin){
                 setTimeout(()=> this.onNavigate(this.returnUrl),2000);

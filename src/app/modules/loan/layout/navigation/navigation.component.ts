@@ -7,7 +7,7 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 const data:any = {
   business:[{title:"Loan Details", id:"loan-calculator",url:"loan-calculator"},
-  {title:"Additional", id:"additional-info",url:"additional-info"},
+  {title:"Contact", id:"contact-info",url:"contact-info"},
   {title:"Company", id:"company-info",url:"company-info"},
   {title:"Shareholder", id:"shareholder-info",url:"shareholder-info"},
   {title:"Collateral", id:"collateral-info",url:"collateral-info"},
@@ -67,7 +67,6 @@ show$:Observable<boolean> = this.showSubject.asObservable();
   ngOnInit(): void {
     this.isLoggedIn = this._authService.isLoggedIn();
     let sub = this._store.loanCategory$.subscribe((c:string)=>{
-      console.log(c)
       if(data[c]){
       let links = data[c].filter((d:any)=>{
         if(c=="personal") return true;

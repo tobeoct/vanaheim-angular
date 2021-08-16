@@ -114,7 +114,6 @@ export class RequestComponent implements OnInit {
     this.lastStatusSubject.next(c);
     const indicator = this.loanStatuses.find(l => l.label == c)?.key;
     this.indicatorSubject.next(indicator);
-    console.log("Confirm Value",c)
     if (c.toLowerCase()!= "notqualified" && c.toLowerCase()!= "declined") {
       this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c,'');
     } else {
@@ -178,10 +177,8 @@ export class RequestComponent implements OnInit {
     this.allSubscriptions.forEach(sub => sub.unsubscribe());
   }
   onSubmit(form: FormGroup, id: number) {
-    console.log("Submitting");
     // stop here if form is invalid
     if (form.invalid) {
-      console.log("Form Invalid");
       return;
     }
     this.repay(id, this._requestService.selectedIdSubject.value, this._utilityService.convertToPlainNumber(this.amount.value));
@@ -191,10 +188,9 @@ export class RequestComponent implements OnInit {
 
 
   onNotify(form: FormGroup, code: string, customerId: number) {
-    console.log("Submitting");
+    
     // stop here if form is invalid
     if (form.invalid) {
-      console.log("Form Invalid");
       return;
     }
 

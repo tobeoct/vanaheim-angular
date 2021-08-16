@@ -18,5 +18,5 @@ export const personalRoutes:Routes = [
   {path:"company-info", component:CompanyInfoComponent,canActivate:[PathGuard]},
   {path:"shareholder-info", component:ShareholderInfoComponent,canActivate:[PathGuard]},
   {path:"collateral-info", component:CollateralInfoComponent,canActivate:[PathGuard]},
-  {path:"additional-info", component:AdditionalInfoComponent,canActivate:[PathGuard]}
+  {path:"contact-info", component:AdditionalInfoComponent,canActivate:[PathGuard]}
     ];

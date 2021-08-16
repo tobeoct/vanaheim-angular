@@ -86,7 +86,6 @@ export class SidePasswordComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          console.log("Registered ", data)
           this.apiSuccessSubject.next("Registration was successful");
 
         },

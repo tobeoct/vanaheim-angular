@@ -30,7 +30,6 @@ export class NavigationComponent implements OnInit {
   }
 
   logout(){
-    console.log("Logging Out")
     this.logoutSub = this.authenticationService.logout().subscribe()
   }
 }

@@ -41,7 +41,6 @@ active$:Observable<string>;
   }
 
   logout(){
-    console.log("Logging Out")
     this.logoutSub = this.authenticationService.logout().subscribe()
   }
 

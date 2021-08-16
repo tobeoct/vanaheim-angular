@@ -78,7 +78,6 @@ export class DocumentUploadComponent implements OnInit {
     if (!form.valid) return;
     let documents: any = [];
     let f = form.value["documentArray"] as any[];
-    console.log(f)
     this.docsToUpload.forEach((doc, i) => {
       documents.push({ name: doc.name, id: doc.id, label: doc.requirement })
     });

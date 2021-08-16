@@ -81,10 +81,8 @@ export class NotifyComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(form: FormGroup) {
-    console.log("Submitting");
     // stop here if form is invalid
     if (form.invalid) {
-      console.log("Form Invalid");
       return;
     }
     let customerIds = this.customersSubject.value;

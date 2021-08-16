@@ -81,7 +81,6 @@ export class TemplateComponent implements OnInit {
   }
  
 onNavigate():void{
-  console.log("Latest Loan",this.path);
   this._router.navigate([this.path])
 }
 

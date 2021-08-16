@@ -129,7 +129,6 @@ export class BVNComponent implements OnInit {
       return EMPTY;
     })).subscribe(c => {
 
-      console.log("Response", c);
 
     });
   }

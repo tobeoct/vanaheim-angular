@@ -120,7 +120,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   click(event: any) {
-    console.log(event)
     this.onClick.emit(event);
   }
 }

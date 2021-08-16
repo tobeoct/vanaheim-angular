@@ -41,7 +41,7 @@ export class TypeAheadComponent implements OnInit {
   activeOption: TypeAheadOptionComponent;
   ngOnInit(): void {
     this.currentSubject.next(this.current ? this.current : this.placeholder);
-    this.control.valueChanges.subscribe(c => console.log(c))
+    this.control.valueChanges.subscribe()
   }
   ngOnChanges() {
     this.currentSubject.next(this.current ? this.current : this.placeholder);
@@ -54,7 +54,6 @@ export class TypeAheadComponent implements OnInit {
 
     this.filteredDropDownItems$ = combineLatest([this.dropdownItems$, this.control.valueChanges]).pipe(map(([items, value]) => {
       let itms: any[] = [];
-      console.log(items)
       Object.assign(itms, items);
       return !value ? itms : itms.filter(i => (i.label.toString()?.toLowerCase().includes(value.toLowerCase()) || i.value.toString()?.toLowerCase().includes(value.toLowerCase())));
 

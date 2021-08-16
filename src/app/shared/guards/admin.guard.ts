@@ -12,20 +12,12 @@ export class AdminGuard implements CanActivate {
     private authenticationService: AuthService
 ) { }
 
-  // canActivate(
-  //   route: ActivatedRouteSnapshot,
-  //   state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-  //   return true;
-  // }
-
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const user = this.authenticationService.userValue;
-    console.log("Admin Guard")
     if (this.authenticationService.isLoggedIn()) {
     // not logged in so redirect to login page with the return url
     // this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     if(user.category== UserCategory.Staff){
-        console.log("Admin Route")
         return true;
         }
 }

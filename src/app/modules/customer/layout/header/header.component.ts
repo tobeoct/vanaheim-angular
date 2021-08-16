@@ -26,7 +26,6 @@ emoji$:Observable<string> = this.emojiSubject.asObservable();
 
   toggleSideNav=(type:any)=>{
     type = type as SideNavigationList;
-    console.log(type);
     this._utility.toggleSideNav(type);
   }
   onNavigate(route:string){

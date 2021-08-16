@@ -93,7 +93,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       } else {
         alert("Error logging in")
       }
-      console.log(this.socialUser);
     });
 
 
