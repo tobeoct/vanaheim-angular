@@ -102,7 +102,6 @@ export class CollateralInfoComponent implements OnInit {
     this._store.titleSubject.next("Collateral Information");
     this.types = this._store.collateralTypes;
     this.hasDocument.valueChanges.subscribe(d=>{
-      console.log(d)
       if(this.hasDocument.value=="true"){
         this.document.setValidators(Validators.required);
       }else{
