@@ -162,7 +162,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
         disbursedLoan.isClosed = true;
         disbursedLoan.loanStatus = LoanStatus.PaidInFull;
         loanRequest.requestStatus = LoanRequestStatus.Completed;
-        let res = await this._loanRequestLogRepository.search({ requestDate: loanRequest.requestDate, loanRequest: loanRequest.id }, 0, 1);
+        let res = await this._loanRequestLogRepository.search({ requestDate: loanRequest.requestDate, loanRequest: loanRequest?.id }, 0, 1);
         let loanRequestLog = res.rows[0];
         if (loanRequestLog) {
           loanRequestLog.requestStatus = LoanRequestStatus.Completed;
@@ -182,10 +182,13 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
   processRepaymentPlan = ({ email, tenure, denominator, loanType, purpose, rate, loanAmount, monthlyRepayment }: any,userData:any) => new Promise<any>(async (resolve, reject) => {
 
     try {
-      let customer = await this._customerRepository.getByUserID(userData.id);
+      let customer;
+      if(userData){
+       customer = await this._customerRepository.getByUserID(userData.id);
       if (customer && Object.keys(customer).length > 0) {
         customer= Object.assign(customer.dataValues as Customer, new Customer());
       }
+    }
        const fileName = `Repayment Plan - ${Date.now()}`;
       let t = this.getRepaymentTemplate({ tenure: tenure + ' ' + denominator, loanType, purpose, rate, loanAmount, monthlyRepayment });
       let { path }: any = await this._templateService.generatePDF("Repayment Plan", [], "repayments/" + fileName, t);
