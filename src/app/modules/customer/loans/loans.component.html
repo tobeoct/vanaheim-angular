@@ -32,7 +32,8 @@
                     </div>
                 </div>
             </ng-container>
-            <div id="loan-history" class="animate__animated animate__fadeInUp" [ngClass]="{'no-margin--top':totalLoans.length==0}">
+            <div id="loan-history" class="animate__animated animate__fadeInUp"
+                [ngClass]="{'no-margin--top':totalLoans.length==0}">
                 <div class="heading">
                     <h3>Loan History</h3>
                 </div>
@@ -77,7 +78,8 @@
                                 <td>{{row.loanProduct}}</td>
                                 <td>{{row.tenure}} {{row.denominator}}</td>
                                 <td>
-                                    <app-badge [color]="getLoanStatusColor(row.requestStatus)">{{row.requestStatus}}</app-badge>
+                                    <app-badge [color]="getLoanStatusColor(row.requestStatus)">{{row.requestStatus}}
+                                    </app-badge>
                                 </td>
                                 <td>
                                     <app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)"
@@ -196,11 +198,11 @@
                         <app-dropdown fieldClass="no-margin--top" [current]="loanType.value"
                             [fieldClass]="'no-margin--top'" [id]="'loanType'" [control]="loanType"
                             aria-placeholder="Are you a Mr, Master, Mrs or Ms">
-                            <ng-container slot="label"><label for="loanType">Loan Type</label></ng-container>
-                            <app-option [value]="'Personal Loans'">Personal Loans</app-option>
-                            <app-option [value]="'Business Loans'">Business Loans</app-option>
-                            <app-option [value]="'LPO Financing'">LPO Financing</app-option>
-                            <app-option [value]="'Float Me'">Float Me</app-option>
+                            <ng-container slot="label"><label for="loanType">Loan Products</label></ng-container>
+                            <app-option [value]="product.id" *ngFor="let product of loanProducts">
+                                {{product.uniqueName}}
+                            </app-option>
+
                         </app-dropdown>
                         <app-input id="loanAmount" [control]="loanAmount" class="form-control"
                             [error]="(errorMessage$ | async)?.loanAmount">
@@ -264,51 +266,55 @@
         </ng-container>
         <ng-container slot="body">
             <ng-container *ngIf="(loanDetailsFromDb$|async) as loanDetails">
-            <div style="width: 100%;" id="loan-details">
-                <div class="d-flex d-flex_vertical--center d-flex_horizontal--space-between margin--2x">
-                    <div class="d-flex d-flex_vertical--center">
-                        <div style="margin-right: 10px;">
-                            <p><b>Status</b></p>
+                <div style="width: 100%;" id="loan-details">
+                    <div class="d-flex d-flex_vertical--center d-flex_horizontal--space-between margin--2x">
+                        <div class="d-flex d-flex_vertical--center">
+                            <div style="margin-right: 10px;">
+                                <p><b>Status</b></p>
+                            </div>
+                            <div>
+                                <app-badge [color]="getLoanStatusColor(loanDetails?.status)">
+                                    <b>{{loanDetails?.status}}</b></app-badge>
+                            </div>
                         </div>
-                        <div>
-                            <app-badge [color]="getLoanStatusColor(loanDetails?.status)"><b>{{loanDetails?.status}}</b></app-badge>
-                        </div>
+                        <a (click)="showRepayment(loanDetails?.disbursedLoan.id)"><u><b>View Repayments</b></u></a>
                     </div>
-                    <a (click)="showRepayment(loanDetails?.disbursedLoan.id)"><u><b>View Repayments</b></u></a>
+                    <div *ngFor="let detail of loanDetails?.details">
+                        <div class="title">
+                            <h3>{{detail.key}}</h3>
+                        </div>
+                        <div class="margin--3x">
+                            <div class="detail-card" *ngFor="let d of detail.data">
+                                <small>{{d.key}}</small>
+                                <p><b>{{d.value}}</b></p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <ng-container *ngIf="loanDetails.documents">
+                        <div class="margin--2x">
+                            <div class="title">
+                                <h3>Documents</h3>
+                            </div>
+                            <div class="margin--3x">
+                                <div class="detail-card d-flex d-flex_horizontal--space-between"
+                                    *ngFor="let doc of loanDetails.documents">
+                                    <div>
+                                        <small>{{doc.requirement}}</small>
+                                        <p><b>{{doc.name}}</b></p>
+                                    </div>
+                                    <app-button (onClick)="download(doc.url,doc.fileName)" size="small">
+                                        <ng-container slot="button"> Download</ng-container>
+                                    </app-button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
-                <div *ngFor="let detail of loanDetails?.details">
-                    <div class="title">
-                        <h3>{{detail.key}}</h3>
-                    </div>
-                    <div class="margin--3x">
-                        <div class="detail-card" *ngFor="let d of detail.data">
-                            <small>{{d.key}}</small>
-                            <p><b>{{d.value}}</b></p>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <ng-container *ngIf="loanDetails.documents">
-                    <div class="margin--2x">
-                      <div class="title">
-                        <h3>Documents</h3>
-                      </div>
-                      <div class="margin--3x">
-                        <div class="detail-card d-flex d-flex_horizontal--space-between" *ngFor="let doc of loanDetails.documents">
-                          <div>
-                            <small>{{doc.requirement}}</small>
-                            <p><b>{{doc.name}}</b></p>
-                          </div>
-                          <app-button (onClick)="download(doc.url,doc.fileName)" size="small"><ng-container slot="button"> Download</ng-container></app-button>
-                        </div>
-          
-                      </div>
-                    </div>
-                  </ng-container>
-            </div>
-        </ng-container>
+            </ng-container>
         </ng-container>
         <!-- </ng-container> -->
     </app-modal>

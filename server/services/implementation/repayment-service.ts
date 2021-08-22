@@ -194,7 +194,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       let { path }: any = await this._templateService.generatePDF("Repayment Plan", [], "repayments/" + fileName, t);
 
       let sent = await this._emailService.SendEmail({ type: 'repayment', to: this._appConfig.ADMIN_EMAIL, attachment: path, filePaths: null, html: t, toCustomer: false })
-      await this._emailService.SendEmail({ type: 'repayment', to: email, attachment: path, filePaths: null, html: this._templateService.REPAYMENT_PLAN_TEMPLATE(customer? (customer?.firstName+''+customer?.lastName):"Customer"), toCustomer: true })
+      await this._emailService.SendEmail({ type: 'repayment', to: email, attachment: path, filePaths: null, html: this._templateService.REPAYMENT_PLAN_TEMPLATE(customer? (customer?.firstName+' '+customer?.lastName):"Customer"), toCustomer: true })
       resolve({ status: true, data: { message: "Sent successfully" } })
 
     } catch (err) {

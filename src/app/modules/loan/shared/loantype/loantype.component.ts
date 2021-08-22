@@ -6,14 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { RadioButtonItem } from 'src/app/shared/interfaces/radio-button-item';
-const data: any[] = [
-  { id: "PayMe Loan", title: "Salary Earners' Loans", uniqueName: "PayMe Loan", frequency: "Monthly", description: "Need a loan for house rent, to buy a new phone or to fix your car?.Take personal loans between NGN 25,000 to NGN 5M and pay back monthly." },
-  { id: "FundMe Loan", title: "Business (SME) Loan", uniqueName: "FundMe Loan", frequency: "Monthly", description: "Need a loan to grow your business?.Get business loans up to NGN 5M with no application fees at affordable interest rates." },
-  { id: "LPO Finance", title: "Local Purchase Order", uniqueName: "LPO Finance", frequency: "Monthly", description: "Are you a contractor, vendor or a supplier in need of funding to execute a project?.Get access to loans up to NGN 5M for your local purchase order projects." },
-  { id: "FloatMe Loan", uniqueName: "FloatMe Loan", title: "Emergency/Quick Cash", frequency: "Daily", description: "Dealing with emergency expenses at mid-month?.Get loans up to NGN 5M naira and pay back daily or weekly in." },
-  { id: "Line Of Credit", uniqueName: "Line Of Credit", title: "Line Of Credit", frequency: "Monthly", description: "Get access to personal/business loans, withdraw by instalment as needed and repay as agreed." },
 
-]
 @Component({
   selector: 'app-loantype',
   templateUrl: './loantype.component.html',
@@ -55,7 +48,7 @@ export class LoantypeComponent implements OnInit {
       choice: ['FloatMe Loan (Individual)', [Validators.required]]
     })
     // let d = data.filter(d=>d.allowedTypes.includes(this.loanType));
-    let d = data.map(c => {
+    let d = this._store.loanProducts.map(c => {
       if (c.id == "FloatMe Loan" && this._store.loanType.includes("FloatMe")) c.title = this._store.loanType;
       return c;
     });
@@ -92,7 +85,7 @@ export class LoantypeComponent implements OnInit {
 
   close() {
     this.show2Subject.next(false);
-    let d = data.map(c => {
+    let d = this._store.loanProducts.map(c => {
       if (c.id == "FloatMe Loan") c.title = this.choice.value;
       return c;
     });

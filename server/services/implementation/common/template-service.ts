@@ -44,40 +44,79 @@ export class TemplateService {
     <b>Vanir Capital Earnings Team</b>`;
 
     SUCCESSFUL_LOAN_TEMPLATE = (customerName: string) => `<div style="width:100% !important;  margin-top:20px;"><p>Dear ${customerName},<br/><br/>
-    Thank you for your interest in Vanir Capital Limited's loan services.We are pleased to inform you that your application for a loan has been received. It will be processed upon review of all required documents.<br/><br/>
- 
-    It is important to state that all required documents will be checked and verified before the requested loan amount is disbursed. If you have any queries or concerns, please feel free to contact us on +234 818 027 9270 or send us an email at loans@vanircapital.org<br/><br/>
-    An update will be provided soon.<br/><br/>
-    Thank you for your patronage.<br/><br/>
-     Best regards,<br><br><b>Vanir Loans Team</b></p><div>`
+    Thank you for your interest in Vanir Capital Limited's loan services.​<br/><br/>
+​
+We are pleased to inform you that your application for a loan has been received. It will be processed upon review of all required documents.​<br/><br/>
 
-    REPAYMENT_PLAN_TEMPLATE = (customerName: string) => `<div style="margin-top:50px;"><p>Dear ${customerName},<br/><br/> 
-    Thank you for your indication of interest in Vanir Capital Limited's loan services.<br/><br/> 
-    Kindly find attached a copy of your loan repayment plan as requested. <br/><br/> 
+​
 
-To fully apply for the loan, kindly go back to the platform and complete your application process. If you have any queries or concerns, please feel free to contact us on +234 818 027 9270 or send us an email at loans@vanircapital.org.<br/><br/> 
-Thank you for your patronage.<br/><br/> 
-Best regards,<br/><br/> 
+It is important to state that all required documents will be checked and verified before the requested loan amount is disbursed. If you have any queries or concerns, please feel free to contact us on +234 818 027 9270 or send us an email at loans@vanircapital.org​<br/><br/>
+
+​
+An update will be provided soon.​<br/><br/>
+​
+Thank you for your patronage.​<br/><br/>
+​
+Best regards,​<br/><br/>
+
 
 The Vanir Loans’ Team
+</p><div>`
 
+    REPAYMENT_PLAN_TEMPLATE = (customerName: string) => `<div style="margin-top:50px;"><p>Dear ${customerName},<br/><br/> 
+    Thank you for your indication of interest in Vanir Capital Limited's loan services.​<br/><br/>
+​
+Kindly find attached a copy of your loan repayment plan as requested. ​<br/><br/>
+
+​
+
+To fully apply for the loan, kindly go back to the platform and complete your application process. If you have any queries or concerns, please feel free to contact us on +234 818 027 9270 or send us an email at loans@vanircapital.org​<br/><br/>
+
+​
+Thank you for your patronage.​<br/><br/>
+​
+Best regards,​<br/><br/>
+
+​
+
+The Vanir Loans’ Team
        </p> 
        
        </div>
         
         `;
-        NEW_CUSTOMER_TEMPLATE=(customerName:string)=>{
-            return `<div style="width:100% !important;  margin-top:20px;"><p>Hello ${customerName},<br/><br/>
+    NEW_CUSTOMER_TEMPLATE = (customerName: string) => {
+        return `<div style="width:100% !important;  margin-top:20px;"><p>Hello ${customerName},<br/><br/>
             Welcome to Vanir Capital LLC.<br/><br/>
-            Congratulations! You are on your way to financial freedom and information.<br/><br/>
-            We are so happy to have you onboard and elated that you have chosen us as partners.<br/><br/>
-            Vanir Capital LLC continuously provides efficient financial services and products to individuals and
-            organizations operating in developed and emerging markets. We are a money lending company and we
-            also create investment opportunities. The goal is to help you advance financially and guide you to a
-            future of financial freedom and security. <br/> <br/>
-            Visit our website www.vanircapital.org for more information and contact us on +234 818 027 9270. If you have any questions for us, please don’t hesitate to visit our FAQ page or send us an email at support@vanircapital.org
+            
+            Congratulations! You are on your way to receiving financial information and freedom.​<br/><br/>
+            
+            ​
+            
+            We are so happy to have you onboard and elated that you have chosen to partner with us.​<br/><br/>
+            
+            ​
+            
+            Vanir Capital LLC continuously provides efficient financial services and products to individuals and organizations operating in developed and emerging markets. We are a money lending company and we also create opportunities that enables you to earn more. The goal is to help you advance financially and guide you to a future of financial freedom and security.​<br/><br/>
+            
+            ​
+            
+            Visit our website www.vaircapital.org for more information and contact us on +234 818 027 9270. If you have any questions for us, please don’t hesitate to visit our FAQ page https://vanircapital.org/FAQ/ or send us an email at support@vanircapital.org  ​<br/><br/>
+            
+            ​
+            
+            Follow us on all our social media platforms​<br/><br/>
+            
+            Instagram: https://instagram.com/vanircapital?utm_medium=copy_link ​<br/>
+            
+            Facebook: https://www.facebook.com/VanirCapital  ​<br/>
+            
+            LinkedIn: https://www.linkedin.com/company/vanircapitalllc  <br/><br/><br/>
+
+            Best regards,​<br/><br/>
+            The Vanir Loans’ Team
             </div><br/><br/>`
-        }
+    }
     private generateRow(label: string, value: string) {
         return `<tr class="item" style="border: 2px solid #E0E0E0;width:100% !important;  color:#6B6B6B; padding:10px 2.5%; margin-top:10px;">
                 <td style="border: 2px solid #E0E0E0; padding-top:10px;padding-bottom:10px; padding-left:20px;">

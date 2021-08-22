@@ -43,7 +43,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   }
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
-
+loanProducts:any[]
   loanDetailsSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loanDetails$: Observable<any> = this.loanDetailsSubject.asObservable();
   loanDetailsFromDb$: Observable<any>
@@ -102,6 +102,7 @@ export class LoansComponent implements OnInit, OnDestroy {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url + '/';
     });
+    this.loanProducts = this._store.loanProducts;
   }
   ngOnDestroy(): void {
 

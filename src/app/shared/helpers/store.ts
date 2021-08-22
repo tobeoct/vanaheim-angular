@@ -42,6 +42,14 @@ export class Store {
     { code: "035", title: "Wema Bank" },
     { code: "057", title: "Zenith Bank" }
   ]
+ loanProducts: any[] = [
+    { id: "PayMe Loan", title: "Salary Earners' Loans", uniqueName: "PayMe Loan", frequency: "Monthly", description: "Need a loan for house rent, to buy a new phone or to fix your car?.Take personal loans between NGN 25,000 to NGN 5M and pay back monthly." },
+    { id: "FundMe Loan", title: "Business (SME) Loan", uniqueName: "FundMe Loan", frequency: "Monthly", description: "Need a loan to grow your business?.Get business loans up to NGN 5M with no application fees at affordable interest rates." },
+    { id: "LPO Finance", title: "Local Purchase Order", uniqueName: "LPO Finance", frequency: "Monthly", description: "Are you a contractor, vendor or a supplier in need of funding to execute a project?.Get access to loans up to NGN 5M for your local purchase order projects." },
+    { id: "FloatMe Loan", uniqueName: "FloatMe Loan", title: "Emergency/Quick Cash", frequency: "Daily", description: "Dealing with emergency expenses at mid-month?.Get loans up to NGN 5M naira and pay back daily or weekly in." },
+    { id: "Line Of Credit", uniqueName: "Line Of Credit", title: "Line Of Credit", frequency: "Monthly", description: "Get access to personal/business loans, withdraw by instalment as needed and repay as agreed." },
+  
+  ]
   // loanTypes2: any[] = [{
   //   id: 1,
   //   title: "PayDay Loans",
@@ -167,11 +175,11 @@ export class Store {
         { title: "Valid ID card", description: " (National ID, Valid Driver’s License or Valid International Passport or Voter’s Card) for each Director" },
         { title: "Business account statement", description: " for the last 12 months till date" },
         { title: "Directors account statement", description: " for the last 12 months till date" },
-        { title: "Loan Application Letter", description: " on company letterhead" }, ,
+        { title: "Loan Application Letter", description: " on company letterhead" }, 
         { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount." },
         { title: "Business Profile", description: " and the reason for accessing the loan" },
         { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
-        { title: "CAC Form", description: "showing particulars of Directors" }]
+        { title: "CAC Form", description: " showing particulars of Directors" }]
     }
 
     ]
