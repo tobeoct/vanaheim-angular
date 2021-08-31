@@ -70,11 +70,11 @@ export default class App {
     // app.use(helmet.permittedCrossDomainPolicies());
     // app.use(helmet.referrerPolicy());
     // app.use(helmet.xssFilter());
+    app.use(compression());
     app.use(express.static('dist/vanaheim'));
     app.use(morgan("combined"))
     app.use(express.json({ limit: '100mb' }))
     app.use(express.urlencoded({ extended: true }))
-    app.use(compression());
     app.use(timeout('120s'));
     app.use(expAutoSan.all)
     app.use(cors())
