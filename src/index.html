@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="en" class="light">
+
 <head>
   <meta charset="utf-8">
   <title>Vanaheim</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.png">
-  <link rel="canonical" href="https://app.vanircapital.org"/>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="canonical" href="https://app.vanircapital.org" />
   <link rel="preload" href="./assets/fonts/Manrope/Manrope-Bold.ttf" as="font">
   <link rel="preload" href="./assets/fonts/Manrope/Manrope-Light.ttf" as="font">
   <link rel="preload" href="./assets/fonts/Manrope/Manrope-Regular.ttf" as="font">
@@ -15,21 +16,73 @@
   <link rel="preload" href="./assets/fonts/Manrope/Manrope-ExtraBold.ttf" as="font">
   <link rel="preload" href="./assets/fonts/BruumFY-Bold.otf" as="font">
   <link rel="preload" href="./assets/fonts/BruumFY-Regular.otf" as="font">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://unpkg.com" rel="preconnect">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" >
-  <link rel="shortcut icon" type="image/png" href="/favicon.png" a/>
-  <meta name="description" content="Vanaheim is Vanir Capital's application portal for loans and investments for Nigerian individuals and businesses. They offer various loan products for corporate, business owners, individual, contractors">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="/favicon.png" a />
+  <meta name="description"
+    content="Vanaheim is Vanir Capital's application portal for loans and investments for Nigerian individuals and businesses. They offer various loan products for corporate, business owners, individual, contractors">
   <meta name="keywords" content="Quick Loans|Loans|Fast Loans|Nigerian Loans|Easy Loans|Low Interest Rate">
   <meta name="author" content="Tobechukwu Onyema">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#1976d2">
+  <style>
+    /*Styling preloader*/
+    .preloader {
+      /*
+        Making the preloader floating over other elements.
+        The preloader is visible by default. 
+        */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999999999999;
+      background: rgba(0, 0, 0, .9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color:white;
+      text-align: center;
+    }
+    .preloader img{
+      max-width: 50px;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="preloader">
+    <div>
+      <img src="favicon.png"/>
+      <p>Welcome to Vanaheim ...</p>
+    </div>
+  </div>
+
   <app-root></app-root>
-  <script src="https://kit.fontawesome.com/cf9f6989be.js" defer></script>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
+  <script> //after window is loaded completely 
+    window.onload = function () {
+      //hide the preloader
+      let fadeTarget = document.querySelector(".preloader");
+      let multiplier = 1.05;
+      let fadeEffect = setInterval(function () {
+        if (!fadeTarget.style.opacity) {
+          fadeTarget.style.opacity = 1;
+        }
+        if (fadeTarget.style.opacity > 0) {
+          fadeTarget.style.opacity -= (0.1 + (multiplier*fadeTarget.style.opacity));
+        } else {
+          clearInterval(fadeEffect);
+          fadeTarget.style.display = "none";
+        }
+      }, 200);
+    }</script>
+  <script src="https://kit.fontawesome.com/cf9f6989be.js" defer></script>
 </body>
 
 </html>

@@ -38,10 +38,11 @@ export default class AccountController {
         let body = { bankCode: req.body.bankcode, accountNumber: req.body.accountnumber };
         accountNumber = body.accountNumber;
         const key = `${body.bankCode}-${body.accountNumber}`;
+        console.log(accountList, accountList[key])
         if (!this._utilService.hasValue(accountList[key])) {
           let result = await this.accountEnquiryInstance.post(url, body);
 
-          console.log("Fetch Result");
+          console.log("Fetch Result",result);
           if (this._utilService.hasValue(result.data["inquiry"]) && result.data["inquiry"]["status"] == "00") {
 
             accountList[key] = result.data["inquiry"];
@@ -58,7 +59,7 @@ export default class AccountController {
 
         }
         else {
-          console.log("Cached Result");
+          console.log("Cached Result",accountList[key]);
           res.data = { message: "Account Enquiry was successful", data: this.getAccountName(accountList[key]) };
           res.statusCode = 200;
         }

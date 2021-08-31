@@ -6,22 +6,23 @@ const cors = require('cors');
 const http = require('http');
 const https = require('https');
 const express = require('express');
-const serverless = require('serverless-http');
+// const serverless = require('serverless-http');
 const compression = require('compression');
 // const bodyParser = require('body-parser');
 const timeout = require('connect-timeout')
 const expAutoSan = require('express-autosanitizer');
 const httpsRedirect = require('express-https-redirect');
 const morgan = require('morgan')
-const parseurl = require('parseurl');
+// const parseurl = require('parseurl');
 const path = require('path');
-const expressValidator = require('express-validator');
+// const expressValidator = require('express-validator');
 const cookieParser = require('cookie-parser');
 // This serves static files from the specified directory
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
 import AppConfig from '@config';
 import { inject, loadControllers, scopePerRequest } from 'awilix-express';
+import helmet = require('helmet');
 import { authoriseRequest, clientApiKeyValidation, authoriseResponse, sessionRequestAuthorisation, sessionResponseAuthorisation } from './middleware/authorise-middleware';
 import SessionMiddleware from './middleware/session-middleware';
 
@@ -55,6 +56,20 @@ export default class App {
   _create(container: any) {
     let _this = this;
     const app = express();
+    app.use(helmet({
+      contentSecurityPolicy: false,
+    }))
+    // app.use(helmet.contentSecurityPolicy());
+    // app.use(helmet.dnsPrefetchControl());
+    // app.use(helmet.expectCt());
+    // app.use(helmet.frameguard());
+    // app.use(helmet.hidePoweredBy());
+    // app.use(helmet.hsts());
+    // app.use(helmet.ieNoOpen());
+    // app.use(helmet.noSniff());
+    // app.use(helmet.permittedCrossDomainPolicies());
+    // app.use(helmet.referrerPolicy());
+    // app.use(helmet.xssFilter());
     app.use(express.static('dist/vanaheim'));
     app.use(morgan("combined"))
     app.use(express.json({ limit: '100mb' }))
