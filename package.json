@@ -45,7 +45,7 @@
     "serverless-http": "^2.7.0",
     "template-pdf-generator": "^1.0.2",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1100.7",
