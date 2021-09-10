@@ -64,7 +64,7 @@ export default class AccountController {
           res.statusCode = 200;
         }
       }
-      catch (err) {
+      catch (err:any) {
         res.data = { message: "Account Enquiry was not successful" };
         res.statusCode = 500;
         console.log(err);
@@ -93,7 +93,7 @@ export default class AccountController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get accounts" }
     }
@@ -121,7 +121,7 @@ export default class AccountController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get accounts" }
     }

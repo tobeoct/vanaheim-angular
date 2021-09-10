@@ -1,84 +1,92 @@
-
-<div class="snackbar_container ">
-<div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
-</div>
-<div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0">{{success}}
-</div>
-
-</div>
 <div id="login" class="grid-padding-2x">
     <div class="container">
-       
+
         <div class="content box-shadow animate__animated animate__fadeInUp">
             <div class="container-header text-center">
                 <h3 class="title">Create your account</h3>
                 <p>Become a member and access greater wealth</p>
                 <small>Sign up with</small>
                 <div id="social-login">
-                        <div class="item" (click)="loginWithFacebook()">
-                            <p><b>Facebook</b></p>
-                        </div>
-                        <div class="item"  (click)="loginWithGoogle()">
-                            <p><b>Google</b></p>
-                        </div>
+                    <div class="item" (click)="loginWithFacebook()">
+                        <p><b>Facebook</b></p>
+                    </div>
+                    <div class="item" (click)="loginWithGoogle()">
+                        <p><b>Google</b></p>
+                    </div>
                 </div>
             </div>
-                <app-form [form]="form" (onSubmit)="onSubmit($event)"  (errorMessageChange) = "onError($event)">
-                    <div id="name" class="theme_row grid-2x1">
-                        <div class="theme_col-6">
-                            <app-input fieldClass="no-margin--top" id="firstName"  errorType="left" placeholder="Enter your first name"  [control]="firstName" class="form-control" [error]="(errorMessage$ | async)?.firstName" autocomplete="name"  >
-                                <label for="firstName">First Name</label>
-                            </app-input>
-                        </div>
-                        <div class="theme_col-6">
-                            <app-input fieldClass="no-margin--top" id="lastName" errorType="right" placeholder="Enter your surname"  [control]="lastName" class="form-control" [error]="(errorMessage$ | async)?.lastName" autocomplete="family-name" >
-                                <label for="lastName">Last Name</label>
-                            </app-input>
-                        </div>
+            <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+                <div id="name" class="theme_row grid-2x1">
+                    <div class="theme_col-6">
+                        <app-input fieldClass="no-margin--top" id="firstName" errorType="left"
+                            placeholder="Enter your first name" [control]="firstName" class="form-control"
+                            [error]="(errorMessage$ | async)?.firstName" autocomplete="name">
+                            <label for="firstName">First Name</label>
+                        </app-input>
                     </div>
+                    <div class="theme_col-6">
+                        <app-input fieldClass="no-margin--top" id="lastName" errorType="right"
+                            placeholder="Enter your surname" [control]="lastName" class="form-control"
+                            [error]="(errorMessage$ | async)?.lastName" autocomplete="family-name">
+                            <label for="lastName">Last Name</label>
+                        </app-input>
+                    </div>
+                </div>
 
-                    <div class="theme_row grid-2x1">
-                        <div class="theme_col-6">
-                            <app-input type="email" id="email" errorType="left" placeholder="Enter your email"  [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" autocomplete="email" >
-                                <label for="email">Email Address</label>
-                            </app-input>
-                        </div>
-                        <div class="theme_col-6">
-                            <app-input id="phone" type="tel" errorType="right" placeholder="Enter your phone number"  [control]="phone" class="form-control" [error]="(errorMessage$ | async)?.phone" autocomplete="tel" >
-                                <label for="phone">Phone Number</label>
-                            </app-input>
-                        </div>
+                <div class="theme_row grid-2x1">
+                    <div class="theme_col-6">
+                        <app-input type="email" id="email" errorType="left" placeholder="Enter your email"
+                            [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email"
+                            autocomplete="email">
+                            <label for="email">Email Address</label>
+                        </app-input>
                     </div>
+                    <div class="theme_col-6">
+                        <app-input id="phone" type="tel" errorType="right" placeholder="Enter your phone number"
+                            [control]="phone" class="form-control" [error]="(errorMessage$ | async)?.phone"
+                            autocomplete="tel">
+                            <label for="phone">Phone Number</label>
+                        </app-input>
+                    </div>
+                </div>
 
-                    <div class="theme_row grid-2x1"  [formGroup]="passwordGroup">
-                        <div class="theme_col-6">
-                            <app-input id="password" type="password" errorType="left" placeholder="Enter your password"  [control]="password" class="form-control" [error]="(errorMessage$ | async)?.password" autocomplete="tel" >
-                                <label for="password">Password</label>
-                            </app-input>
-                        </div>
-                        <div class="theme_col-6">
-                            <app-input id="confirmPassword" type="password" errorType="right" placeholder="Enter your password again"  [control]="confirmPassword" class="form-control" [error]="(errorMessage$ | async)?.confirmPassword" autocomplete="tel" >
-                                <label for="confirmPassword">Confirm Password</label>
-                            </app-input>
-                        </div>
-                        <div *ngIf="passwordGroup.errors">
-                            <div *ngIf="passwordGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+                <div class="theme_row grid-2x1" [formGroup]="passwordGroup">
+                    <div class="theme_col-6">
+                        <app-input id="password" type="password" errorType="left" placeholder="Enter your password"
+                            [control]="password" class="form-control" [error]="(errorMessage$ | async)?.password"
+                            autocomplete="tel">
+                            <label for="password">Password</label>
+                        </app-input>
+                    </div>
+                    <div class="theme_col-6">
+                        <app-input id="confirmPassword" type="password" errorType="right"
+                            placeholder="Enter your password again" [control]="confirmPassword" class="form-control"
+                            [error]="(errorMessage$ | async)?.confirmPassword" autocomplete="tel">
+                            <label for="confirmPassword">Confirm Password</label>
+                        </app-input>
+                    </div>
+                    <div *ngIf="passwordGroup.errors">
+                        <div *ngIf="passwordGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match
                         </div>
                     </div>
-                    <app-dropdown [current]="channel.value" [id]="'channel'" [control]="channel"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
-                        <ng-container slot="label"><label for="channel">How did you get to know about us?</label></ng-container>
-                        <app-option [value]="'Instagram'">Instagram</app-option>
-                        <app-option [value]="'Friend'">Friend</app-option>
-                        <app-option [value]="'Twitter'">Twitter</app-option>
-                    </app-dropdown>
-                        <app-button [form]="form" fieldClass="no-margin--top" [loading$]="loading$">Register</app-button>
-                        <div class="form_group" style="margin-top: 0; display: flex; justify-content: center;">
-                            <div style=" display: flex; ">
-                            <p><b>Already have an account?</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;" (click)="onNavigate('auth/login')">Login</button>
-                        </div>
-                        </div>
-                    
-                </app-form>
+                </div>
+                <app-dropdown [current]="channel.value" [id]="'channel'" [control]="channel"
+                    aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                    <ng-container slot="label"><label for="channel">How did you get to know about us?</label>
+                    </ng-container>
+                    <app-option [value]="'Instagram'">Instagram</app-option>
+                    <app-option [value]="'Friend'">Friend</app-option>
+                    <app-option [value]="'Twitter'">Twitter</app-option>
+                </app-dropdown>
+                <app-button [form]="form" fieldClass="no-margin--top" [loading$]="loading$">Register</app-button>
+                <div class="form_group" style="margin-top: 0; display: flex; justify-content: center;">
+                    <div style=" display: flex; ">
+                        <p><b>Already have an account?</b></p> <button class="widget_button widget_button--small"
+                            style="margin-left: 10px;" (click)="onNavigate('auth/login')">Login</button>
+                    </div>
+                </div>
+
+            </app-form>
         </div>
     </div>
 </div>

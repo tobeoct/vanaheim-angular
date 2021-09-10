@@ -7,5 +7,5 @@ export interface IDocumentService extends IBaseService<Document>{
     getByCustomerID: (customerID:number) => Promise<any>;
     processDocument:(documentUpload:DocumentUpload,customer:Customer)=>Promise<any>
     getBVNDocument:(bvn:string,customerCode:string)=>Promise<any>
-    getByLoanRequestId:(loanRequestLogId:number)=>Promise<any>
+    getByLoanRequestId:(loanRequestId:number)=>Promise<any>
 }

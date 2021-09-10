@@ -14,7 +14,6 @@ import { CompanyInfoComponent } from './business/company-info/company-info.compo
 import { AdditionalInfoComponent } from './business/additional-info/additional-info.component';
 import { ShareholderInfoComponent } from './business/shareholder-info/shareholder-info.component';
 import { CollateralInfoComponent } from './business/collateral-info/collateral-info.component';
-import { DocumentComponent } from './shared/document-upload/document/document.component';
 
 
 
@@ -24,7 +23,6 @@ import { DocumentComponent } from './shared/document-upload/document/document.co
      NavigationComponent,
     LoanCalculatorComponent,
      EmploymentInfoComponent,
-     DocumentComponent,
      DocumentUploadComponent,
      PreviewComponent,
      CompanyInfoComponent,

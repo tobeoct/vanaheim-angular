@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
@@ -18,7 +18,8 @@ import { DocumentService } from 'src/app/shared/services/document/document.servi
 @Component({
   selector: 'app-loans',
   templateUrl: './loans.component.html',
-  styleUrls: ['./loans.component.scss']
+  styleUrls: ['./loans.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoansComponent implements OnInit, OnDestroy {
 
@@ -28,6 +29,9 @@ export class LoansComponent implements OnInit, OnDestroy {
   activeLoan: boolean = false;
   totalLoans: any[] = [];
   loanCalculator: any;
+  requirements: any
+  uploadedDocument: FormControl = new FormControl();
+  requirementCtrl: FormControl = new FormControl();
   get loanType() {
     return this.form.get("loanType") as FormControl || new FormControl();
   }
@@ -43,7 +47,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   }
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
-loanProducts:any[]
+  loanProducts: any[]
   loanDetailsSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loanDetails$: Observable<any> = this.loanDetailsSubject.asObservable();
   loanDetailsFromDb$: Observable<any>
@@ -92,6 +96,12 @@ loanProducts:any[]
   tenureDenominatorSubject: BehaviorSubject<string> = new BehaviorSubject<string>("Mos");
   tenureDenominator$: Observable<string> = this.tenureDenominatorSubject.asObservable();
 
+  showUploadSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showUpload$: Observable<boolean> = this.showUploadSubject.asObservable();
+  loanRequestID: number
+
+  requirementSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  requirement$: Observable<any> = this.requirementSubject.asObservable();
   latestLoanSubscription: Subscription;
   activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
@@ -118,6 +128,11 @@ loanProducts:any[]
     this.latestLoan$ = this._loanService.latestLoan$;
     this.runningLoan$ = this._loanService.runningLoan$;
     this.repayments$ = this._repaymentService.myRepayments$;
+
+    this.requirementCtrl.valueChanges.subscribe(c => {
+      this.requirementSubject.next(this.requirements[+c])
+      console.log(this.requirementSubject.value)
+    })
     this.latestLoanSubscription = this.latestLoan$.subscribe(l => {
       if (l.requestStatus == 'Funded') {
         this._requestService.selectLoan(l.id);
@@ -243,4 +258,31 @@ loanProducts:any[]
   download(url: string, filename: string) {
     this._documentService.download(url, filename)
   }
+
+  documentUpload(loanType: string, applyingAs: string, loanRequestID: number) {
+    this.showUploadSubject.next(true)
+    this.getRequirements(loanType, applyingAs)
+    this.loanRequestID = loanRequestID
+  }
+  closeUpload() {
+    this.showUploadSubject.next(false)
+  }
+
+  getRequirements(loanType: string, applyingAs: string) {
+    let loanTypes: any = this._store.loanTypes.find(type => type.title == loanType);
+    this.requirements = loanTypes?.applyingAs?.find((type: any) => type.title == applyingAs)?.requirements || [];
+    console.log(this.requirements)
+  }
+
+  onChange(result: any) {
+    this._documentService.attachDocument(result.id, this.loanRequestID).subscribe(c => {
+      this._utility.setSuccess("Document Uploaded successfully")
+      this.showUploadSubject.next(false);
+      this.showSubject.next(false);
+    }, error => {
+      this._utility.setError("Error:"+error)
+    })
+  }
+
+
 }

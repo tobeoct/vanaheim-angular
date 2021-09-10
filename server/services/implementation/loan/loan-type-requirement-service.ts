@@ -62,7 +62,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
         }))
       }
       resolve(requirement);
-    } catch (err) {
+    } catch (err:any) {
       reject(err);
     }
   })
@@ -291,7 +291,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
       }
 
       resolve(loanTypeRequirements);
-    } catch (err) {
+    } catch (err:any) {
       reject(err)
     }
   });

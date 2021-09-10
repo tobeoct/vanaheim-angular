@@ -31,9 +31,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
 
-  apiErrorSubject: Subject<string> = new Subject<string>();
-  apiError$: Observable<string> = this.apiErrorSubject.asObservable();
-
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
   constructor(private _fb: FormBuilder, private _utility: Utility, private _router: Router, private _validators: VCValidators,
@@ -83,12 +80,7 @@ export class AccountComponent implements OnInit, OnDestroy {
           else { this.onNavigate('auth/register', { email: username }) }
         },
         (error: any) => {
-          // this.error = error;
-          // let err = "Small wahala dey with connectivity, abeg retry"
-          // if(error=="Not Found")
-          // console.log(error)
-          setTimeout(() => { this.apiErrorSubject.next("Error: " + error); this.loadingSubject.next(false); }, 1000)
-          setTimeout(() => { this.apiErrorSubject.next(); }, 5000)
+          this._utility.setError("Error: " + error); this.loadingSubject.next(false);
 
         });
 

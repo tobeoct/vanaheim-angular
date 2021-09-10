@@ -194,7 +194,7 @@ The Vanir Loans’ Team
 
             });
 
-        } catch (err) {
+        } catch (err:any) {
             reject(err);
         }
     });

@@ -152,7 +152,7 @@ export default class EmailService {
           console.log("---------------DONE SENDING EMAIL---------------");
         });
       }
-      catch (err) {
+      catch (err:any) {
         console.log(err);
         throw new Error("Error Sending Email");
       }
@@ -181,12 +181,12 @@ export default class EmailService {
       }
       reader.onerror = (error: any) => {
         console.log(error);
-        this.toBase64(file).then((f) => resolve(f)).catch(err => reject(err));
+        this.toBase64(file).then((f) => resolve(f)).catch((err:any) => reject(err));
         // reject(error);
       }
     } catch (error) {
       console.log(error);
-      this.toBase64(file).then((f) => resolve(f)).catch(err => reject(err));
+      this.toBase64(file).then((f) => resolve(f)).catch((err:any) => reject(err));
 
     }
   });

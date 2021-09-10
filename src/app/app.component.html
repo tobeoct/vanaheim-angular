@@ -25,3 +25,9 @@
 </ng-container>
 
 
+<div class="snackbar_container ">
+    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger animate__animated animate__fadeInUp mt-3 mb-0">{{error}}
+    </div>
+    <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success animate__animated animate__fadeInUp mt-3 mb-0">{{success}}
+    </div>
+</div>

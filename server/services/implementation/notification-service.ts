@@ -84,7 +84,7 @@ class NotificationService extends BaseService<any> implements INotificationServi
                     await this.sendNotification({ notification, token: JSON.parse(sub.token), pushNotification: pushNot });
                     resolve(pushNot);
                 }
-            } catch (err) {
+            } catch (err:any) {
                 resolve(new PushNotification())
             }
         });
@@ -116,7 +116,7 @@ class NotificationService extends BaseService<any> implements INotificationServi
                 }
 
                 resolve(pushNots);
-            } catch (err) {
+            } catch (err:any) {
                 resolve(err)
             }
         });
@@ -154,7 +154,7 @@ class NotificationService extends BaseService<any> implements INotificationServi
                     await this.updatePushNotification(pushNot);
                     resolve(response);
                 }
-            } catch (err) {
+            } catch (err:any) {
                 await this.updatePushNotification(pushNot);
                 console.log(err);
                 reject("Notification failed to send" + err);
@@ -224,7 +224,7 @@ class NotificationService extends BaseService<any> implements INotificationServi
                 } else {
                     reject("Device Registration Failed")
                 }
-            } catch (err) {
+            } catch (err:any) {
                 console.log("Error while subscribing", err);
                 reject("Subscription Failed");
             }

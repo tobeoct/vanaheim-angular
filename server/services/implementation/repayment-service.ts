@@ -61,7 +61,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
     try {
       let repayments = await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId) as Repayment[];
       resolve(repayments);
-    } catch (err) {
+    } catch (err:any) {
 
     }
   });
@@ -70,7 +70,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
     try {
       let repayments = await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId) as Repayment[];
       resolve(this.reducePayments(repayments, moment().add(2, 'year')))
-    } catch (err) {
+    } catch (err:any) {
 
     }
   });
@@ -174,7 +174,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       }
       resolve({ status: true, data: "Repayment was successful" });
       return;
-    } catch (err) {
+    } catch (err:any) {
       resolve({ status: false, data: "Repayment was not successful" });
       return;
     }
@@ -197,7 +197,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       await this._emailService.SendEmail({ type: 'repayment', to: email, attachment: path, filePaths: null, html: this._templateService.REPAYMENT_PLAN_TEMPLATE(customer? (customer?.firstName+' '+customer?.lastName):"Customer"), toCustomer: true })
       resolve({ status: true, data: { message: "Sent successfully" } })
 
-    } catch (err) {
+    } catch (err:any) {
       console.log(err)
       resolve({ status: false, message: "Failed" })
     }
@@ -286,7 +286,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       let remainingCycles = this.generateRepaymentCycle({ dateFunded: moment(dateApproved).add(lastPeriod, this.getDenom(denominator)), tenure: t, denominator, rate: rate / 100, loanAmount, monthlyRepayment: this.calculateMonthlyRepayment(loanAmount, t, loanType) });
       let idealCycles = [...pastCycles, ...remainingCycles];
       resolve({ status: true, data: this.generateHealth(idealCycles, currentRepayments) });
-    } catch (err) {
+    } catch (err:any) {
       console.log(err)
       resolve({ status: true, data: [] });
     }

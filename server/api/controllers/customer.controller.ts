@@ -39,7 +39,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get customer info" }
     }
@@ -62,7 +62,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get customer info" }
     }
@@ -87,7 +87,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get customer info" }
     }
@@ -120,7 +120,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get customer info" }
     }
@@ -157,7 +157,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to update your info" }
     }
@@ -177,7 +177,7 @@ export default class CustomerController {
       res.data = customer;
 
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get customer info" }
     }
@@ -201,7 +201,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get employers info" }
     }
@@ -229,7 +229,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get Next Of Kin info" }
     }
@@ -266,7 +266,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to update Next Of Kin info" }
     }
@@ -291,7 +291,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get Company info" }
     }
@@ -320,7 +320,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get Shareholders info" }
     }
@@ -344,7 +344,7 @@ export default class CustomerController {
 
       }
     }
-    catch (err) {
+    catch (err:any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get Collateral info" }
     }

@@ -56,7 +56,7 @@ export class LoanService implements ILoanService {
             data: [
               { key: "Loan Type", value: request.loanType },
               { key: "Applying As", value: request.applyingAs },
-              { key: "Loan Product", value: request.loanProduct },
+              // { key: "Loan Product", value: request.loanProduct },
               { key: "Loan Purpose", value: request.loanPurpose },
               { key: "Loan Amount", value: this._utilService.currencyFormatter(request.amount) },
               { key: "Monthly Repayment", value: this._utilService.currencyFormatter(request.monthlyPayment) },
@@ -85,7 +85,7 @@ export class LoanService implements ILoanService {
             ]
           }
         ];
-        if (request.loanType.toLowerCase().includes("personal")) {
+        if (["PayMe Loan","FloatMe Loan (Individual)"].includes(request.loanType) ){
 
           let personal = [
             {
@@ -163,17 +163,17 @@ export class LoanService implements ILoanService {
         let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest ? loanRequest.data?.rows[0]?.id ?? 0 : id);
         let totalRepayment = 0;
         let documents: Document[] = [];
-        let response = await this._documentService.getByLoanRequestId(request.id);
+        let response = await this._documentService.getByLoanRequestId(loanRequest.data?.rows[0]?.id);
         if (response.status) {
           documents = response.data as Document[];
 
         }
         if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-        resolve({ status: true, data: { code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+        resolve({ status: true, data: {id:request.id, loanRequestID:loanRequest.data?.rows[0]?.id, loanType:request.loanType, applyingAs: request.applyingAs ,code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
       } else {
         resolve({ status: false, data: "Could not find loan request" });
       }
-    } catch (err) {
+    } catch (err:any) {
       reject(err);
     }
   })
@@ -185,7 +185,7 @@ export class LoanService implements ILoanService {
     try {
       let request = await this._loanRequestService.update(loanRequest);
       resolve(request);
-    } catch (err) {
+    } catch (err:any) {
       reject(err);
     }
   })
@@ -257,7 +257,7 @@ export class LoanService implements ILoanService {
       await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
       await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
       resolve({ status: true, data: loanRequest });
-    } catch (err) {
+    } catch (err:any) {
       console.log(err)
       resolve({ status: false })
     }
@@ -286,11 +286,11 @@ export class LoanService implements ILoanService {
           const d = documents[key];
           let docInDb: any = await this._documentService.getById(d.id);
           if (docInDb && Object.keys(docInDb).length > 0) {
-            let doc: Document = new Document();
-            Object.assign(doc, docInDb.dataValues as Document)
-            documentPath.push(doc.url);
-            doc.loanRequestID = loanRequest.id;
-            this._documentService.update(doc)
+            // let doc: Document = new Document();
+            // Object.assign(doc, docInDb.dataValues as Document)
+            documentPath.push(docInDb.url);
+            docInDb.loanRequestID = loanRequest.id;
+            await this._documentService.update(docInDb)
           }
         }
       }
@@ -314,7 +314,7 @@ export class LoanService implements ILoanService {
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
       await this._notificationService.sendNotificationToMany({ customerIds: [customer.id], notification })
       resolve({ status: true, data: { loanRequestId: loanRequest.requestId } });
-    } catch (err) {
+    } catch (err:any) {
       console.log(err);
       resolve({ status: false, message: err instanceof Object ? err.message : err });
     }

@@ -42,7 +42,7 @@ instance = axios.create({
             res.data = { message: bvnList[body.bvn]===null?"BVN Verification Failed":"BVN Verified" };
         }
     }
-    catch (err) {
+    catch (err:any) {
         console.log(err);
         res.statusCode = 500;
         res.data = err;

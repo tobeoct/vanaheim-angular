@@ -274,7 +274,8 @@
                             </div>
                             <div>
                                 <app-badge [color]="getLoanStatusColor(loanDetails?.status)">
-                                    <b>{{loanDetails?.status}}</b></app-badge>
+                                    <b>{{loanDetails?.status}}</b>
+                                </app-badge>
                             </div>
                         </div>
                         <a (click)="showRepayment(loanDetails?.disbursedLoan.id)"><u><b>View Repayments</b></u></a>
@@ -295,9 +296,17 @@
 
                     <ng-container *ngIf="loanDetails.documents">
                         <div class="margin--2x">
-                            <div class="title">
+                            <div class="title d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                                 <h3>Documents</h3>
+                                <!-- <ng-container *ngIf="loanDetails?.status=='UpdateRequired'"> -->
+                                <app-button fieldClass="no-margin--all"
+                                    (onClick)="documentUpload(loanDetails?.loanType, loanDetails?.applyingAs, loanDetails?.loanRequestID)"
+                                    [class]="'widget_button--small no-margin--all'" class="no-margin--all">
+                                    <ng-container slot="button">Upload</ng-container>
+                                </app-button>
+                                <!-- </ng-container> -->
                             </div>
+
                             <div class="margin--3x">
                                 <div class="detail-card d-flex d-flex_horizontal--space-between"
                                     *ngFor="let doc of loanDetails.documents">
@@ -306,7 +315,7 @@
                                         <p><b>{{doc.name}}</b></p>
                                     </div>
                                     <app-button (onClick)="download(doc.url,doc.fileName)" size="small">
-                                        <ng-container slot="button"> Download</ng-container>
+                                        <ng-container slot="button">Download</ng-container>
                                     </app-button>
                                 </div>
 
@@ -375,6 +384,36 @@
                         </ng-container>
 
                     </app-table>
+                </ng-container>
+            </div>
+        </ng-container>
+    </app-modal>
+</ng-container>
+<ng-container *ngIf="showUpload$|async">
+    <app-modal (onChange)="closeUpload()">
+        <ng-container slot="header">
+            Upload a document
+        </ng-container>
+        <ng-container slot="body">
+            <div style="min-height: 200px;">
+                <div>
+                    <p><b>Select a Requirement</b></p>
+                    <app-dropdown [control]="requirementCtrl" [fieldClass]="'no-margin--top'" [id]="'requirement'"
+                        aria-placeholder="Select requirement">
+                        <app-option *ngFor="let t of requirements; let i =index" [value]="i.toString()"
+                            label="{{t.title}}">{{t.title}}
+                        </app-option>
+
+                    </app-dropdown>
+                </div>
+                <ng-container *ngIf="requirement$|async as requirement">
+                    <div class="margin--3x">
+                        <app-document (onChange)="onChange($event)" title="{{requirement.title}}"
+                            fieldClass="document no-margin--top" description="{{requirement.description}}"
+                            [control]="uploadedDocument">
+
+                        </app-document>
+                    </div>
                 </ng-container>
             </div>
         </ng-container>

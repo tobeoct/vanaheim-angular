@@ -14,7 +14,7 @@ export default class Encryption {
                 resolve({salt,hash});
             });
         });
-    }catch(err:any){
+    }catch(err){
         reject(err)
     }
     });

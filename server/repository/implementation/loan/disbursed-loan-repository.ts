@@ -18,7 +18,7 @@ export class DisbursedLoanRepository extends BaseRepository<DisbursedLoan> imple
       });
       // let dataValues = response?.dataValues as DisbursedLoan;
       resolve(response);
-    } catch (err) {
+    } catch (err:any) {
       console.log(err)
       reject(err);
     }
@@ -34,7 +34,7 @@ export class DisbursedLoanRepository extends BaseRepository<DisbursedLoan> imple
       });
       let dataValues = response?.dataValues as DisbursedLoan;
       resolve(dataValues);
-    } catch (err) {
+    } catch (err:any) {
       console.log(err)
       reject(err);
     }

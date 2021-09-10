@@ -49,7 +49,7 @@ post(endpoint:string, body:any, headers:any){
             headers: messageHeaders
         }).then(validateResponse).then((response) => readResponseAsJSON(response)).then(result => {
             resolve(result);
-        }).catch((err) => {
+        }).catch((err:any) => {
             reject(err);
             logError(err);
         });

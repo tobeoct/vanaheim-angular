@@ -46,7 +46,7 @@ export default class NotificationController {
           const template = this._templateService.NOTIFICATION(message, type, code);
           let emailResponse = await this._emailService.SendEmail({ subject: type.toString(), to: customer.email, html: template, toCustomer: true });
         }
-        catch (err) {
+        catch (err:any) {
           console.log(err);
           errorList.push("Notification Failed to send to " + name);
         }
@@ -54,7 +54,7 @@ export default class NotificationController {
       res.statusCode = 200;
       res.data = errorList.length > 0 ? errorList.join("; ") : "Notification was successful";
       next();
-    } catch (err) {
+    } catch (err:any) {
       res.statusCode = 400;
       res.data = "Notification Failed to send to " + name;
       next();
@@ -68,7 +68,7 @@ export default class NotificationController {
       res.statusCode = 200;
       res.data = response;
       next();
-    }).catch(err => {
+    }).catch((err:any) => {
       res.statusCode = 400;
       res.data = "Notification Failed to send";
       next();
@@ -83,7 +83,7 @@ export default class NotificationController {
       res.statusCode = 200;
       res.data = response;
       next();
-    }).catch(err => {
+    }).catch((err:any) => {
       res.statusCode = 400;
       res.data = "Notification Failed to send";
       next();
@@ -99,7 +99,7 @@ export default class NotificationController {
       res.statusCode = 200;
       res.data = response;
       next();
-    }).catch(err => {
+    }).catch((err:any) => {
       res.statusCode = 400;
       res.data = "Failed to subscribe";
       next();

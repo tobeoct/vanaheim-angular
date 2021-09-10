@@ -20,7 +20,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             let repo = this._baseRepository as IDocumentRepository;
             let documents = await repo.getByLoanRequestId(loanRequestId);
             resolve({ status: true, data: documents });
-        } catch (err) {
+        } catch (err:any) {
             console.log(err.message);
             resolve({ status: false, data: err });
         }
@@ -32,7 +32,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             let repo = this._baseRepository as IDocumentRepository;
             let documents = await repo.getByCustomerID(customerID);
             resolve({ status: true, data: documents });
-        } catch (err) {
+        } catch (err:any) {
             console.log(err.message);
             resolve({ status: false, data: err });
         }
@@ -53,7 +53,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             } else {
                 resolve({ name, extension, path: filePath })
             }
-        } catch (err) {
+        } catch (err:any) {
             console.log(err);
             reject(err);
         }
@@ -83,7 +83,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
                 documentInDb = await repo.create(document);
             }
             resolve({ status: true, data: documentInDb });
-        } catch (err) {
+        } catch (err:any) {
             console.log(err.message);
             resolve({ status: false, data: "Error uploading document" });
         }
@@ -100,7 +100,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             else {
                 resolve({ status: false });
             }
-        } catch (err) {
+        } catch (err:any) {
             console.log(err)
             resolve({ status: false });
         }

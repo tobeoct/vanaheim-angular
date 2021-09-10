@@ -46,7 +46,7 @@ export class CustomerComponent implements OnInit {
           if (this.isGranted) this.submitNotification();
         })
       }
-    } catch (err) {
+    } catch (err:any) {
       console.log(err);
       this.pwaAble = false;
     }
@@ -72,7 +72,7 @@ export class CustomerComponent implements OnInit {
       if (Notification) {
         this.isGranted = Notification.permission === 'granted';
       }
-    } catch (err) {
+    } catch (err:any) {
       console.log(err);
       this.pwaAble = false;
     }

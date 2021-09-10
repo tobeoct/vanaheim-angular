@@ -32,6 +32,11 @@ export class AppComponent implements OnChanges, OnInit {
   timeoutWarningId: any;
   timeoutId: any;
   userInactive: Subject<any> = new Subject();
+
+  apiSuccess$: Observable<string> 
+  apiError$: Observable<string>
+
+
   checkTimeOut() {
     if(this.timeoutWarningId || this.timeoutId) return;
     let buffer = 120000;
@@ -100,7 +105,7 @@ export class AppComponent implements OnChanges, OnInit {
           this.updateAvailable = true;
         });
       }
-    } catch (err) {
+    } catch (err:any) {
       console.log(err);
     }
 
@@ -123,14 +128,15 @@ export class AppComponent implements OnChanges, OnInit {
       }
     })
     this.allSubscriptions.push(authSub)
-
+    this.apiError$ = this._utility.apiErrorSubject.asObservable();
+    this.apiSuccess$ = this._utility.apiSuccessSubject.asObservable()
   }
   ngOnChanges(): void {
     try {
       if (Notification) {
         this.isGranted = Notification.permission === 'granted';
       }
-    } catch (err) {
+    } catch (err:any) {
       console.log(err);
     }
 

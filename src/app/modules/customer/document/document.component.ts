@@ -6,11 +6,11 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 import { DocumentService } from 'src/app/shared/services/document/document.service';
 
 @Component({
-  selector: 'app-document',
+  selector: 'app-documents',
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss']
 })
-export class DocumentComponent implements OnInit, OnDestroy {
+export class DocumentsComponent implements OnInit, OnDestroy {
 
   allSubscriptions:Subscription[]=[];
   documents$:Observable<any[]>

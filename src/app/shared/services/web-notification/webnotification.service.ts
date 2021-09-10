@@ -27,7 +27,7 @@ export class WebNotificationService {
       .then(sub => {
         this.sendToServer(sub)
       })
-      .catch(err => console.error('Could not subscribe to notifications', err));
+      .catch((err:any) => console.error('Could not subscribe to notifications', err));
     }
     }
     sendToServer(params: any) {

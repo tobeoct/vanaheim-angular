@@ -44,6 +44,7 @@ export const authRoutes = [
   { path: '/api/document/upload', method: 'POST' },
   { path: '/api/document/download', method: 'POST' },
   { path: '/api/document/getAll', method: 'GET' },
+  { path: '/api/document/attachLoan', method: 'GET' },
   { path: '/api/files/merge_chunks', method: 'POST' }
 ];
 

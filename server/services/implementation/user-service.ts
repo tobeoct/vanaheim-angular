@@ -96,7 +96,7 @@ class UserService extends BaseService<User> implements IUserService {
             resolve(await this.loginCustomer({ type, socialUser, browserID, uname, pwd }));
             break;
         }
-      } catch (err) {
+      } catch (err:any) {
         console.log(err);
         resolve({ status: false, message: "Oops, there seems to be an issue with your request" });
       }
@@ -182,7 +182,7 @@ class UserService extends BaseService<User> implements IUserService {
                 // resolve({status:true,data:user}); 
 
               }
-              catch (err) {
+              catch (err:any) {
                 console.log("We were able to register the user but could not send you an email.");
                 console.log(err);
               }
@@ -259,7 +259,7 @@ class UserService extends BaseService<User> implements IUserService {
                 // resolve({status:true,data:user}); 
 
               }
-              catch (err) {
+              catch (err:any) {
                 console.log("We were able to register the user but could not send you an email.");
                 console.log(err);
               }
@@ -418,7 +418,7 @@ Best Regards,<div>
           //   resolve({status:true,data:user});
           //  })
           //  .
-          catch (err) {
+          catch (err:any) {
             resolve({ status: false, message: "We were able to reset your password, but could not send you an email. Kindly " });
 
           }

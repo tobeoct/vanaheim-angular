@@ -25,7 +25,7 @@ export class BaseRepository<T> implements IBaseRepository<T>{
           .create(data)
         let dataValues = response?.dataValues as T;
         resolve(dataValues)
-      } catch (err) {
+      } catch (err:any) {
         console.log(err)
         reject(err)
       }

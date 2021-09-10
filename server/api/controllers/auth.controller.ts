@@ -36,7 +36,7 @@ export default class AuthController {
       try {
         console.log("Registering Device after login");
         await this._notificationService.registerDevice({ browserID: req.body.browserID, customerID: response.userData.customer.id });
-      } catch (err) {
+      } catch (err:any) {
         console.log("Error Registering device", err, req.body.browserID);
       }
       res.statusCode = 200;
@@ -58,7 +58,7 @@ export default class AuthController {
       try {
         console.log("Registering Device after registration");
         await this._notificationService.registerDevice({ browserID: req.body.browserID, customerID: req.body.registerAs == "Admin" ? response.userData.staff.id : response.userData.customer.id });
-      } catch (err) {
+      } catch (err:any) {
         console.log("Error Registering device", err, req.body.browserID);
       }
 
@@ -153,7 +153,7 @@ export default class AuthController {
       res.statusCode = 200;
       res.data = "Session refreshed"
       next();
-    } catch (err) {
+    } catch (err:any) {
       next();
 
     }

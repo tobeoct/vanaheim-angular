@@ -36,6 +36,16 @@ filter$:Observable<string> = this.filterSubject.asObservable();
     }));
     }
 
+    attachDocument(documentID:number,loanRequestID:number):Observable<any>{
+      return this._http.get<any>(`${environment.apiUrl}/document/attachLoan?documentID=${documentID}&loanRequestID=${loanRequestID}`)
+      .pipe(map(response => {
+        if(response && response.status==true){
+           return response.response
+        }
+        return null;
+    }));
+    }
+
     getAllDocuments():Observable<any[]>{
       return this._http.get<any>(`${environment.apiUrl}/document/getAll`)
       .pipe(map(response => {
@@ -53,7 +63,7 @@ filter$:Observable<string> = this.filterSubject.asObservable();
     .then(blob => {
         saveAs(blob, fileName); 
     })
-    .catch(err => console.error("download error = ", err))
+    .catch((err:any) => console.error("download error = ", err))
     }
 
     // MD5 = function(d:any){let r = M(V(Y(X(d),8*d.length)));return r.toLowerCase()};

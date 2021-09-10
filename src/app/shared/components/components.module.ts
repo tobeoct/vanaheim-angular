@@ -35,6 +35,7 @@ import { BadgeComponent } from './badge/badge.component';
 import { CopyComponent } from './copy/copy.component';
 import { TypeAheadComponent } from './type-ahead/type-ahead.component';
 import { TypeAheadOptionComponent } from './type-ahead/option/option.component';
+import { DocumentComponent } from 'src/app/modules/loan/shared/document-upload/document/document.component';
 
 export function playerFactory() {
   return player;
@@ -72,7 +73,8 @@ export function playerFactory() {
     BadgeComponent,
     CopyComponent,
     TypeAheadComponent,
-    TypeAheadOptionComponent
+    TypeAheadOptionComponent,
+    DocumentComponent
   ],
   imports: [
     BaseModule, 
@@ -111,7 +113,8 @@ export function playerFactory() {
     BadgeComponent,
     CopyComponent,
     TypeAheadComponent,
-    TypeAheadOptionComponent
+    TypeAheadOptionComponent,
+    DocumentComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })

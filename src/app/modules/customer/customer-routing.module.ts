@@ -4,7 +4,7 @@ import { FlowGuard } from 'src/app/shared/guards/loan/flow.guard';
 import { LoanComponent } from '../loan/loan.component';
 import { AccountComponent } from './account/account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { DocumentComponent } from './document/document.component';
+import { DocumentsComponent } from './document/document.component';
 import { LoansComponent } from './loans/loans.component';
 const LOAN_ROUTES: Routes = [
   {path:"",loadChildren:()=>import('../loan/loan.module').then(m=>m.LoanModule)}
@@ -14,7 +14,7 @@ const routes: Routes = [
 {path:"dashboard", component:DashboardComponent},
 {path:"loans", component:LoansComponent},
 { path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES, canActivate:[FlowGuard] },
-{path:"documents", component:DocumentComponent},
+{path:"documents", component:DocumentsComponent},
 {path:"profile", component:AccountComponent},
 {path:"**", redirectTo:"dashboard"},
 ];

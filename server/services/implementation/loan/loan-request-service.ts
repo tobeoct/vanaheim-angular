@@ -84,7 +84,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             resolve({ status: true, data: { count: requests.count, rows } });
 
         }
-        catch (err) {
+        catch (err:any) {
             console.error(err);
             resolve({ status: false, data: err });
         }
@@ -104,7 +104,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             // console.log("Latest Loan Requests",requests)
             resolve({ status: true, data: requests ? requests["rows"][0] ? requests["rows"][0] : {} : {} });
         }
-        catch (err) {
+        catch (err:any) {
             console.error(err);
             resolve({ status: false, message: err });
         }
@@ -116,7 +116,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             // console.log("Loan Request",request);
             resolve(request);
         }
-        catch (err) {
+        catch (err:any) {
             console.error(err);
             reject(err);
         }
@@ -258,7 +258,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             }
             console.log(templates);
             resolve({ loanRequest, templates });
-        } catch (err) {
+        } catch (err:any) {
             console.log(err);
             reject(err);
             // resolve({status:false, data:err.message});

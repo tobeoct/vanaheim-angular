@@ -18,7 +18,7 @@ import { BaseRepository } from "./base-repository";
       });
       // let dataValues = response?.dataValues as DisbursedLoan;
       resolve(response);
-    } catch (err) {
+    } catch (err:any) {
       console.log(err)
       reject(err);
     }

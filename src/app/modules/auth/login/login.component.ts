@@ -11,6 +11,7 @@ import { Subject, Observable, Subscription, BehaviorSubject, from } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { LoginType } from '@models/helpers/enums/logintype';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Component({
   selector: 'app-login',
@@ -40,12 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
 
-  apiSuccessSubject: Subject<string> = new Subject<string>();
-  apiSuccess$: Observable<string> = this.apiSuccessSubject.asObservable();
-
-  apiErrorSubject: Subject<string> = new Subject<string>();
-  apiError$: Observable<string> = this.apiErrorSubject.asObservable();
-
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
@@ -57,7 +52,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authenticationService: AuthService,
     private socialAuthService: SocialAuthService,
     private _router: Router,
-    private _validators: VCValidators
+    private _validators: VCValidators,
+    private _utility:Utility
   ) {
     this.loginAs = this._router.url.includes("admin") ? "Admin" : "Customer";
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -123,12 +119,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.loadingSubject.next(false);
-          this.apiSuccessSubject.next("Welcome back " + data?.firstName);
+          this._utility.setSuccess("Welcome back " + data?.firstName);
           setTimeout(() => this.onNavigate(this.returnUrl), 2000);
         },
         error => {
-          setTimeout(() => { this.apiErrorSubject.next("Error: " + error); this.loadingSubject.next(false); }, 1000)
-          setTimeout(() => { this.apiErrorSubject.next(); }, 5000)
+         this._utility.setError("Error: " + error); this.loadingSubject.next(false); 
         });
     this.allSubscriptions.push(sub);
   }

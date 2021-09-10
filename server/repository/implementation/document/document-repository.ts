@@ -6,11 +6,11 @@ import { BaseRepository } from "../base-repository";
   constructor(_db:any){
     super(_db.Document)
   }
-   getByLoanRequestId= (loanRequestLogId: number) => {
+   getByLoanRequestId= (loanRequestId: number) => {
     return new Promise<any[]>(async (resolve, reject) =>{
       resolve(await this._db.findAll({
         where: {
-          loanRequestID: loanRequestLogId.toString()
+          loanRequestID: loanRequestId?.toString()
         },
         order:[["updatedAt","DESC"]]
       }));
