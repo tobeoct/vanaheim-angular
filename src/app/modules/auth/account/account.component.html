@@ -1,32 +1,33 @@
+<!-- <app-auth-navigation></app-auth-navigation> -->
+<div class="snackbar_container ">
+    <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
+    </div>
+</div>
+<div id="account" class="grid-padding-2x">
 
-    <!-- <app-auth-navigation></app-auth-navigation> -->
-    <div class="snackbar_container ">
-        <div *ngIf="apiError$|async as error" class="snackbar snackbar-danger mt-3 mb-0">{{error}}
-        </div>
-        </div>
-    <div id="account"  class="grid-padding-2x">
-       
-        <div class="container" id="thumbnail" style="overflow: hidden;">
-            <p class="title animate__animated animate__fadeInLeft">
-                Access to greater wealth has never been this easy
-            </p>
-            <div class="image animate__animated animate__fadeIn">
-                <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
-            </div>
-        </div>
-        <div class="container">
-            <div class="content box-shadow  animate__animated animate__fadeInUp">
-            <h3 class="text-center"><b>Welcome to Vanaheim</b></h3>
-            <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)" >
-               
-                    <app-input [focus$]="focus$" fieldClass="no-margin--top" id="username" placeholder="Enter your email or phone number"  [control]="username" class="form-control" [error]="(errorMessage$ | async)?.username" >
-                        <label for="username">Email or Phone number</label>
-                    </app-input>
-                
-                  <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form" >Log into your account</app-button>
-                 
-                </app-form>
-            </div>
+    <div class="container" id="thumbnail" style="overflow: hidden;">
+        <p class="title animate__animated animate__fadeInLeft">
+            Access to greater wealth has never been this easy
+        </p>
+        <div class="image animate__animated animate__fadeIn">
+            <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
         </div>
     </div>
-       
+    <div class="container">
+        <div class="content box-shadow  animate__animated animate__fadeInUp">
+            <h3 class="text-center"><b>Welcome to Vanaheim</b></h3>
+            <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+
+                <app-input [focus$]="focus$" fieldClass="no-margin--top" id="username"
+                    placeholder="Enter your email or phone number" [control]="username" class="form-control"
+                    [error]="(errorMessage$ | async)?.username">
+                    <label for="username">Email or Phone number</label>
+                </app-input>
+
+                <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Log into your account
+                </app-button>
+
+            </app-form>
+        </div>
+    </div>
+</div>

@@ -10,6 +10,7 @@ import { environment } from '@environments/environment';
 import { UpdatesService } from './shared/services/web-notification/update.service';
 import { WebNotificationService } from './shared/services/web-notification/webnotification.service';
 import moment = require('moment');
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -73,7 +74,7 @@ export class AppComponent implements OnChanges, OnInit {
       this.stay();
     }
   }
-  constructor(private authenticationService: AuthService, private _utility: Utility, private swPush: SwPush, private webNotificationService: WebNotificationService, private swUpdate: SwUpdate, private _authenticationService: AuthService) {
+  constructor(private authenticationService: AuthService,private _router:Router, private _utility: Utility, private swPush: SwPush, private webNotificationService: WebNotificationService, private swUpdate: SwUpdate, private _authenticationService: AuthService) {
     try {
       this.authenticationService.isLoggedIn$.subscribe(c => {
         if (c == true) {
@@ -122,6 +123,7 @@ export class AppComponent implements OnChanges, OnInit {
       }
     })
     this.allSubscriptions.push(authSub)
+
   }
   ngOnChanges(): void {
     try {

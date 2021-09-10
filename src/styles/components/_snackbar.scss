@@ -1,18 +1,17 @@
-.snackbar{
-    @include paddingHorizontal(true,"px",0.5);
-    @include paddingVertical(true,"px",0.5);
-    &_container{
-        @include flex(true,center);
+.snackbar {
+    @include paddingHorizontal(true, "px", 0.5);
+    @include paddingVertical(true, "px", 0.5);
+    &_container {
+        @include flex(true, center);
         position: fixed;
         bottom: 2vh;
         width: 100%;
         left: 0;
         z-index: 999999999999;
         opacity: 0;
-        
-    transform: translateY(-10vh);
+
+        transform: translateY(-10vh);
         animation: FadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
-   
     }
     width: auto;
     max-width: 300px;
@@ -22,19 +21,22 @@
     border-radius: 2px;
     text-align: center;
     // transform: translateY(10px);
-    
-  
-    &-danger{
-        background:  rgb(252, 78, 113);
-    color: rgb(255, 240, 234);
+
+    &-danger {
+        background: rgb(252, 78, 113);
+        color: rgb(255, 240, 234);
     }
-    &-success{
-        background:  map-get($colors, green );
-    color:  map-get($colors, lightGreen );
+    &-warning {
+        background: map-get($colors, yellow);
+        color: map-get($colors, black);
+    }
+    &-success {
+        background: map-get($colors, green);
+        color: map-get($colors, lightGreen);
     }
 }
-@keyframes FadeIn{
-    to{
+@keyframes FadeIn {
+    to {
         opacity: 1;
         transform: translateY(0);
         // bottom:3vh;

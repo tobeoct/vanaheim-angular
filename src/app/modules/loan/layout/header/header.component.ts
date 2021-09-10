@@ -48,5 +48,6 @@ export class LoanHeaderComponent implements OnInit, OnChanges {
     if (this.base == "/welcome/") this.base = "/welcome/loans/apply/"
     const r = this.base + route;
     this._router.navigate([r], { queryParams: params })
+    this._store.setPage(route)
   }
 }

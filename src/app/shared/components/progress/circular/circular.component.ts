@@ -8,10 +8,10 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 export class ProgressCircularComponent implements OnInit, OnChanges {
 
   @Input()
-  daysLeft:number=30;
+  daysLeft: number = 30;
 
-  daysR:string;
-  daysL:string;
+  daysR: string;
+  daysL: string;
   constructor() { }
   ngOnChanges(): void {
     this.calculateLR();
@@ -21,12 +21,12 @@ export class ProgressCircularComponent implements OnInit, OnChanges {
     // this.calculateLR();
   }
 
-  calculateLR(){
-    let days = 30 -this.daysLeft;
-    let r = days>15? ((days -15)/15)*180:0;
-    let l = days<=15? (days/15)*180:0;
-    l = l==0&&days>0?180:l;
-this.daysR =r+"deg";
-this.daysL =l+"deg";
+  calculateLR() {
+    let days = 30 - this.daysLeft;
+    let r = days > 15 ? ((days - 15) / 15) * 180 : 0;
+    let l = days <= 15 ? (days / 15) * 180 : 0;
+    l = l == 0 && days > 0 ? 180 : l;
+    this.daysR = r + "deg";
+    this.daysL = l + "deg";
   }
 }

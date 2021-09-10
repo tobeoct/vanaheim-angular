@@ -6,6 +6,8 @@ import { environment } from '@environments/environment';
 import { BehaviorSubject, Observable, Subject, Subscription, timer } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
+import { Router } from '@angular/router';
+import { Store } from 'src/app/shared/helpers/store';
 
 @Component({
   selector: 'app-customer',
@@ -23,9 +25,13 @@ export class CustomerComponent implements OnInit {
   show$: Observable<string> = this.showSubject.asObservable();
 
 
+  activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  activeLoan$: Observable<boolean> = this.activeLoanSubject.asObservable();
+
+
   showInvalid$: Observable<boolean>;
   timerSubscription: Subscription;
-  constructor(private swPush: SwPush, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
+  constructor(private swPush: SwPush, private _store:Store, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
     try {
       this.showInvalid$ = this._utility.showLoanInvalid$;
       if (environment.production) {
@@ -54,6 +60,7 @@ export class CustomerComponent implements OnInit {
       this.showSubject.next(r.toString());
     })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
+    if (localStorage.getItem("page")) this.activeLoanSubject.next(true)
 
   }
 
@@ -76,5 +83,16 @@ export class CustomerComponent implements OnInit {
 
   reload() {
     document.location.reload();
+  }
+  routeToPage() {
+    let currentPage = this._store.getItem("page");
+    let endpoint = "/loans/apply/" + currentPage;
+    let baseUrl = "my"
+    if (!this.isLoggedIn) {
+      baseUrl = "welcome"
+    }
+    let url = baseUrl + endpoint
+    this._router.navigate([url]);
+    this.activeLoanSubject.next(false)
   }
 }
