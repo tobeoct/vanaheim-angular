@@ -298,13 +298,13 @@
                         <div class="margin--2x">
                             <div class="title d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                                 <h3>Documents</h3>
-                                <!-- <ng-container *ngIf="loanDetails?.status=='UpdateRequired'"> -->
-                                <app-button fieldClass="no-margin--all"
-                                    (onClick)="documentUpload(loanDetails?.loanType, loanDetails?.applyingAs, loanDetails?.loanRequestID)"
-                                    [class]="'widget_button--small no-margin--all'" class="no-margin--all">
-                                    <ng-container slot="button">Upload</ng-container>
-                                </app-button>
-                                <!-- </ng-container> -->
+                                <ng-container *ngIf="loanDetails?.status=='UpdateRequired'">
+                                    <app-button fieldClass="no-margin--all"
+                                        (onClick)="documentUpload(loanDetails?.loanType, loanDetails?.applyingAs, loanDetails?.loanRequestID)"
+                                        [class]="'widget_button--small no-margin--all'" class="no-margin--all">
+                                        <ng-container slot="button">Upload</ng-container>
+                                    </app-button>
+                                </ng-container>
                             </div>
 
                             <div class="margin--3x">
