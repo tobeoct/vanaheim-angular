@@ -25,9 +25,11 @@ import { ILoanTypeRequirementService } from "@services/interfaces/loan/Iloan-typ
 import { ILoanService } from "@services/interfaces/loan/Iloanservice";
 import moment = require("moment");
 import { BVN } from "src/app/modules/loan/personal/bvn/bvn";
+import { BaseResponse } from "../base-service";
 import EmailService from "../common/email-service";
 import { TemplateService } from "../common/template-service";
 import UtilService from "../common/util";
+import { SearchResponse } from "./loan-request-service";
 
 export class LoanService implements ILoanService {
   constructor(private _db: any, private _appConfig: AppConfig, private _repaymentService: IRepaymentService, private _disbursedLoanService: IDisbursedLoanService, private _disbursedLoanRepository: IDisbursedLoanRepository, private _nokRepository: NOKRepository, private _accountRepository: AccountRepository, private _notificationService: INotificationService, private _loanTypeRequirementService: ILoanTypeRequirementService, private _documentService: IDocumentService, private _templateService: TemplateService, private _emailService: EmailService, private _customerRepository: ICustomerRepository, private _loanRequestService: ILoanRequestService, private _utilService: UtilService, private _loanRequestLogService: ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository) {
@@ -44,6 +46,7 @@ export class LoanService implements ILoanService {
         required: true
       }]);
       if (request) {
+        let loanRequestResponse: BaseResponse<SearchResponse<any[]>>;
         let loanRequest;
         request.loanTypeRequirements = await this._loanTypeRequirementService.getByIdExtended(request.loanTypeRequirementID);
         request.Customer.NOK = await this._nokRepository.getByCustomerID(request.customerID);
@@ -85,7 +88,7 @@ export class LoanService implements ILoanService {
             ]
           }
         ];
-        if (["PayMe Loan","FloatMe Loan (Individual)"].includes(request.loanType) ){
+        if (["PayMe Loan", "FloatMe Loan (Individual)"].includes(request.loanType)) {
 
           let personal = [
             {
@@ -158,22 +161,32 @@ export class LoanService implements ILoanService {
           )
           requestDetails = [...requestDetails, ...business];
         }
-        if (type != "loanRequest") loanRequest = await this._loanRequestService.search({ pageNumber: 1, maxSize: 1, requestId: request.requestId });
-
-        let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest ? loanRequest.data?.rows[0]?.id ?? 0 : id);
-        let totalRepayment = 0;
-        let documents: Document[] = [];
-        let response = await this._documentService.getByLoanRequestId(loanRequest.data?.rows[0]?.id);
-        if (response.status) {
-          documents = response.data as Document[];
-
+        if (type != "loanRequest") {
+          loanRequestResponse = await this._loanRequestService.search({ pageNumber: 1, maxSize: 1, requestId: request.requestId });
+          loanRequest = loanRequestResponse.data?.rows[0]
+        } else {
+          loanRequest = request;
         }
-        if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-        resolve({ status: true, data: {id:request.id, loanRequestID:loanRequest.data?.rows[0]?.id, loanType:request.loanType, applyingAs: request.applyingAs ,code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+        if (loanRequest) {
+          let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest.id);
+          let totalRepayment = 0;
+          let documents: Document[] = [];
+          let response = await this._documentService.getByLoanRequestId(loanRequest.id);
+          if (response.status) {
+            documents = response?.data as Document[];
+
+          }
+          if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
+          resolve({ status: true, data: { id: request.id, loanRequestID: loanRequest.data?.rows[0]?.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+
+        } else {
+
+          resolve({ status: false, data: "Could not find loan request" });
+        }
       } else {
         resolve({ status: false, data: "Could not find loan request" });
       }
-    } catch (err:any) {
+    } catch (err: any) {
       reject(err);
     }
   })
@@ -185,7 +198,7 @@ export class LoanService implements ILoanService {
     try {
       let request = await this._loanRequestService.update(loanRequest);
       resolve(request);
-    } catch (err:any) {
+    } catch (err: any) {
       reject(err);
     }
   })
@@ -250,14 +263,14 @@ export class LoanService implements ILoanService {
       }
       let notification = new WebNotification();
       notification.body = `Your loan request status for LOAN ID:${loanRequest.requestId} has been updated to ${requestStatus}`;
-      if(failureReason)  notification.body+=`<br/><br/> Reason for Failure: ${failureReason}`;
+      if (failureReason) notification.body += `<br/><br/> Reason for Failure: ${failureReason}`;
       notification.title = `Vanaheim: Loan Status Update`
       notification.data = new WebNotData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
       await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
       await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
       resolve({ status: true, data: loanRequest });
-    } catch (err:any) {
+    } catch (err: any) {
       console.log(err)
       resolve({ status: false })
     }
@@ -304,7 +317,7 @@ export class LoanService implements ILoanService {
       }
       let { path, template }: any = await this._templateService.generatePDF("Loan Application", templates, customer.code + "/" + loanRequest.requestId)
       let sent = await this._emailService.SendEmail({ type: 'form', to: this._appConfig.ADMIN_EMAIL, attachment: path, filePaths: documentPath, html: template, toCustomer: false })
-      await this._emailService.SendEmail({ type: 'form', to: customer.email, attachment: path, filePaths: null, html: this._templateService.SUCCESSFUL_LOAN_TEMPLATE(c?(c.firstName+' '+c.lastName):"Customer"), toCustomer: true })
+      await this._emailService.SendEmail({ type: 'form', to: customer.email, attachment: path, filePaths: null, html: this._templateService.SUCCESSFUL_LOAN_TEMPLATE(c ? (c.firstName + ' ' + c.lastName) : "Customer"), toCustomer: true })
       let notification: WebNotification = new WebNotification();
       notification.title = "Vanaheim by Vanir Capital";
       notification.body = "Your have successfully applied for a loan";
@@ -314,7 +327,7 @@ export class LoanService implements ILoanService {
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
       await this._notificationService.sendNotificationToMany({ customerIds: [customer.id], notification })
       resolve({ status: true, data: { loanRequestId: loanRequest.requestId } });
-    } catch (err:any) {
+    } catch (err: any) {
       console.log(err);
       resolve({ status: false, message: err instanceof Object ? err.message : err });
     }

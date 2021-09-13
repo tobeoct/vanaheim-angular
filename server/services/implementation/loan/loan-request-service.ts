@@ -14,8 +14,13 @@ import { ILoanRequestService } from "@services/interfaces/loan/Iloan-request-ser
 import { ILoanTypeRequirementService } from "@services/interfaces/loan/Iloan-type-requirement-service";
 import { AccountInfo } from "src/app/modules/loan/shared/account-info/account-info";
 import { LoanDetails } from "src/app/modules/loan/shared/loan-calculator/loan-details";
-import { BaseService } from "../base-service";
+import { BaseResponse, BaseService } from "../base-service";
 import UtilService from "../common/util";
+
+export type SearchResponse<T>={
+    count:number,
+    rows:T
+}
 
 export class LoanRequestService extends BaseService<LoanRequest> implements ILoanRequestService {
     convertToModel: (modelInDb: any) => Promise<LoanRequest>;
@@ -25,7 +30,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
     process = () => new Promise<any>(() => {
 
     });
-    search = (parameters: any, customer?: any) => new Promise<any>(async (resolve) => {
+    search = (parameters: any, customer?: any) => new Promise<BaseResponse<SearchResponse<any[]>>>(async (resolve) => {
         try {
             console.log("LoanRequest Search")
             let { pageNumber, maxSize, from, to, status, requestId }: any = parameters;
