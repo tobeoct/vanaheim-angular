@@ -8,7 +8,10 @@
 // INVESTMENT_EMAIL: process.env.INVESTMENT_EMAIL,
 // SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
 //   };
-
+export enum Environment{
+  production="production",
+  development="development"
+}
 export default class AppConfig {
   environment:string;
   port:string;

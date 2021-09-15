@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, first, take } from 'rxjs/operators';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 import { NotifyService } from './notify.service';
 
@@ -46,7 +47,7 @@ export class NotifyComponent implements OnInit, OnDestroy {
   get customerId() {
     return this.form.get("customerId") as FormControl || new FormControl();
   }
-  constructor(private _notifyService: NotifyService, private _fb: FormBuilder, private _customerService: CustomerService) {
+  constructor(private _notifyService: NotifyService,private _utility:Utility, private _fb: FormBuilder, private _customerService: CustomerService) {
 
   }
   ngOnDestroy(): void {
@@ -99,12 +100,12 @@ export class NotifyComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.loadingSubject.next(false);
-          this.apiSuccessSubject.next(response);
-          setTimeout(() => { this.apiSuccessSubject.next(); }, 5000)
+          this.form.reset()
+          this.customersSubject.next([])
+          this._utility.setSuccess(response);
         },
         error => {
-          setTimeout(() => { this.apiErrorSubject.next("Error: " + error); this.loadingSubject.next(false); }, 1000)
-          setTimeout(() => { this.apiErrorSubject.next(); }, 5000)
+           this._utility.setError("Error: " + error); this.loadingSubject.next(false);
         });
     this.allSubscriptions.push(sub);
   }

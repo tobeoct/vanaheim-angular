@@ -20,7 +20,7 @@ const cookieParser = require('cookie-parser');
 // This serves static files from the specified directory
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
-import AppConfig from '@config';
+import AppConfig, { Environment } from '@config';
 import { inject, loadControllers, scopePerRequest } from 'awilix-express';
 import helmet = require('helmet');
 import { authoriseRequest, clientApiKeyValidation, authoriseResponse, sessionRequestAuthorisation, sessionResponseAuthorisation } from './middleware/authorise-middleware';
@@ -89,7 +89,7 @@ export default class App {
     app.use(inject(sessionRequestAuthorisation))
     app.use("/api", inject(clientApiKeyValidation), inject(authoriseRequest), expAutoSan.route)
     console.log("App.TS", this._appConfig.environment)
-    if (this._appConfig.environment == "production") {
+    if (this._appConfig.environment ==Environment.production) {
       app.use(loadControllers('api/controllers/*.controller.js', { cwd: __dirname }));
     } else {
       app.use(loadControllers('api/controllers/*.controller.ts', { cwd: __dirname }));
@@ -98,8 +98,8 @@ export default class App {
 
     app.get('*', function (req: any, res: any) {
       res.setHeader('Cache-Control', 'public, max-age=5000');
-      let p = _this._appConfig.environment == "production" ? "" : "dist/";
-      let b = _this._appConfig.environment == "production" ? "../" : "../";
+      let p = _this._appConfig.environment == Environment.production ? "" : "dist/";
+      let b = _this._appConfig.environment == Environment.production ? "../" : "../";
       // // ,{ root: path.resolve(__dirname, b)  }p+
       res.sendFile('index.html', { root: path.resolve("dist/vanaheim") });
     })

@@ -8,13 +8,14 @@ import { DocumentUpload } from 'src/app/modules/loan/shared/document-upload/docu
 import { Document } from '@models/document';
 import { LoanRequest } from '@models/loan/loan-request';
 import { IDocumentRepository } from '@repository/interface/document/Idocument-repository';
+import AppConfig, { Environment } from '@api/config';
 @route('/api/document')
 export default class DocumentController {
 
   bvnList: any = {
   };
   bankList: any = {};
-  constructor(private _documentService: IDocumentService, private _documentRepository:IDocumentRepository, private _loanRequestRepository: ILoanRequestRepository) {
+  constructor(private _appConfig:AppConfig,private _documentService: IDocumentService, private _documentRepository:IDocumentRepository, private _loanRequestRepository: ILoanRequestRepository) {
 
   }
 
@@ -90,7 +91,8 @@ export default class DocumentController {
   @POST()
   download = async (req: any, res: any) => {
     const url = req.body.url;
-    const file = path.resolve(__dirname, "../../" + url);
+    let base = this._appConfig.environment==Environment.development? "../../../": "../../../../../" 
+    const file = path.resolve(__dirname, base + url);
     console.log("FILE", file,__dirname);
     res.download(path.resolve(url));
     // /app/dist/server/uploads/CUST_28562021125600/d72bc64ad82178b82e0517857dfae099.jpg
