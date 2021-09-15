@@ -5,21 +5,22 @@
         <p><b>{{item.title}}</b></p>
         <p>Count:{{item.totalCount}}</p>
       </div>
-  
-      <div
-        cdkDropList
-        [cdkDropListData]="item.data"
-        class="dd-list {{item.title}}"
-        (cdkDropListDropped)="drop($event)">
-        <div (click)="select({id:data.id,indicator:item.indicator})" class="dd-box items" id="{{data.id}}" *ngFor="let data of item.data" cdkDrag>
+
+      <div cdkDropList [cdkDropListData]="item.data" class="dd-list {{item.title}}" (cdkDropListDropped)="drop($event)">
+        <div (click)="select({id:data.id,indicator:item.indicator})" class="dd-box items" id="{{data.id}}"
+          *ngFor="let data of item.data" cdkDrag>
           <div class="dd-box-content">
-            <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{data.name}}</h3><div class="dot {{item.indicator}}"></div></div>
+            <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+              <h3>{{data.name}}</h3>
+              <div class="dot {{item.indicator}}"></div>
+            </div>
             <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
               <p>{{data.amount|currency:"₦"}}</p>
               <p>{{data.tenure}} {{data.denominator}}</p>
             </div>
           </div>
-          <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+          <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;"
+            class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
             <small>{{data.loanProduct}}</small>
             <small>{{data.requestDate|date:"MMM-dd-yyyy hh:mm:ss"}}</small>
           </div>
@@ -27,152 +28,54 @@
       </div>
     </div>
   </ng-container>
-    <!-- <div class="dd-container">
-      <div class="dd-title d-flex d-flex_horizontal--space-between">
-        <p><b>Processing</b></p>
-        <p>Count:{{totalCount$|async}}</p>
-      </div>
-  
-  
-      <div
-        cdkDropList
-        [cdkDropListData]="done"
-        class="dd-list done"
-        (cdkDropListDropped)="drop($event)">
-        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
-          <div class="dd-box-content">
-          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot processing"></div></div>
-          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-            <p>2,000,000</p>
-            <p>3 Months</p>
-          </div>
-        </div>
-        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-          <small>PAY DAY</small>
-          <small>Mar 15, 2021 11:59:03 AM</small>
-        </div></div>
-      </div>
-    </div>
 
-    <div class="dd-container">
-      <div class="dd-title d-flex d-flex_horizontal--space-between">
-        <p><b>Update Required</b></p>
-        <p>Count:{{totalCount$|async}}</p>
-      </div>
-  
-  
-      <div
-        cdkDropList
-        [cdkDropListData]="done"
-        class="dd-list done"
-        (cdkDropListDropped)="drop($event)">
-        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
-          <div class="dd-box-content">
-          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot update"></div></div>
-          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-            <p>2,000,000</p>
-            <p>3 Months</p>
-          </div>
-        </div>
-        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-          <small>PAY DAY</small>
-          <small>Mar 15, 2021 11:59:03 AM</small>
-        </div></div>
-      </div>
-    </div>
-
-    <div class="dd-container">
-      <div class="dd-title d-flex d-flex_horizontal--space-between">
-        <p><b>Declined</b></p>
-        <p>Count:{{totalCount$|async}}</p>
-      </div>
-  
-  
-      <div
-        cdkDropList
-        [cdkDropListData]="done"
-        class="dd-list done"
-        (cdkDropListDropped)="drop($event)">
-        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
-          <div class="dd-box-content">
-          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot declined"></div></div>
-          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-            <p>2,000,000</p>
-            <p>3 Months</p>
-          </div>
-        </div>
-        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-          <small>PAY DAY</small>
-          <small>Mar 15, 2021 11:59:03 AM</small>
-        </div></div>
-      </div>
-    </div>
-    <div class="dd-container">
-      <div class="dd-title d-flex d-flex_horizontal--space-between">
-        <p><b>Approved</b></p>
-        <p>Count:{{totalCount$|async}}</p>
-      </div>
-  
-  
-      <div
-        cdkDropList
-        [cdkDropListData]="done"
-        class="dd-list done"
-        (cdkDropListDropped)="drop($event)">
-        <div class="dd-box done" *ngFor="let item of done" cdkDrag>
-          <div class="dd-box-content">
-          <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center"><h3>{{item}}</h3><div class="dot approved"></div></div>
-          <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-            <p>2,000,000</p>
-            <p>3 Months</p>
-          </div>
-        </div>
-        <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-          <small>PAY DAY</small>
-          <small>Mar 15, 2021 11:59:03 AM</small>
-        </div></div>
-      </div>
-    </div> -->
+</div>
 
 
-  </div>
-
-  
 <ng-container *ngIf="(show$|async)==true">
   <app-modal [show]="show$|async" (onChange)="closeModal()">
     <app-modal-header slot="header">
       <h3>Change Notice</h3>
     </app-modal-header>
-    <app-modal-body  slot="body">
-      <p>Are you sure you want to change the status of this loan to <b>{{getStatus((event$|async)?.container?.element?.nativeElement?.classList)}}</b>?</p>
+    <app-modal-body slot="body">
+      <p>Are you sure you want to change the status of this loan to
+        <b>{{getStatus((event$|async)?.container?.element?.nativeElement?.classList)}}</b>?
+      </p>
       <div class="d-flex d-flex_horizontal--space-between">
-        <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'" (onClick)="closeModal()" ><ng-container slot="button">Cancel</ng-container></app-button>
-      <app-button [class]="'no-margin--bottom widget_button--small'" (onClick)="confirm()" ><ng-container slot="button">Continue</ng-container></app-button>
-        
+        <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'" (onClick)="closeModal()">
+          <ng-container slot="button">Cancel</ng-container>
+        </app-button>
+        <app-button [class]="'no-margin--bottom widget_button--small'" (onClick)="confirm()">
+          <ng-container slot="button">Continue</ng-container>
+        </app-button>
+
       </div>
     </app-modal-body>
   </app-modal>
-  
-  </ng-container>
+
+</ng-container>
 
 
-  
-<ng-container *ngIf="(enterFailure$|async)==true">
-  <app-modal [show]="enterFailure$|async" (onChange)="closeFailureModal()">
+
+<ng-container *ngIf="(enterFailure$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeFailureModal()">
     <app-modal-header slot="header">
       <h3>Enter Failure Reason</h3>
     </app-modal-header>
     <app-modal-body slot="body">
       <app-form [form]="fForm" (onSubmit)="onFailure($event)" (errorMessageChange)="onError($event)">
-
+        <app-input id="failureReason" [control]="failureReason" class="form-control">
+          <label>Reason For Failure</label>
+        </app-input>
         <div class="vc_form-field margin--2x" style="max-width: 500px;">
-          <label for="failureReason">Reason For Failure</label>
-          <textarea id="failureReason" placeholder="Enter failure reason" [formControl]="failureReason" class="form-control">
+          <label for="mailMessage">Personalised Message</label>
+          <textarea id="mailMessage" placeholder="Enter personalised message" [formControl]="mailMessage"
+            class="form-control">
 
         </textarea>
         </div>
 
-        <app-button fieldClass="no-margin--top" [form]="fForm">Done</app-button>
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="fForm">Done</app-button>
 
 
       </app-form>

@@ -14,6 +14,13 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
+    STATUS_UPDATE_DECLINED(message: string, id: string) {
+        return `  
+        ${message}<br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
     NOTIFICATION(message: string, type: string, id?: string) {
         if (id) {
             return `${type} -   LOAN ID: ${id} <br/><br/>

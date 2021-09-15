@@ -177,7 +177,7 @@ export class LoanService implements ILoanService {
 
           }
           if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-          resolve({ status: true, data: { id: request.id, loanRequestID: loanRequest.data?.rows[0]?.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+          resolve({ status: true, data: { id: request.id, loanRequestID: loanRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
 
         } else {
 
@@ -208,7 +208,7 @@ export class LoanService implements ILoanService {
     let d: any = denominator == "Months" ? "months" : "days";
     return funded.add(tenure, d);
   }
-  updateStatus = ({ requestStatus, id, failureReason }: any) => new Promise<any>(async (resolve, reject) => {
+  updateStatus = ({ requestStatus, id, failureReason,message }: any) => new Promise<any>(async (resolve, reject) => {
     try {
       let loanRequest = await this._loanRequestService.getById(id);
       if (!loanRequest || Object.keys(loanRequest).length == 0) throw "Invalid Loan Request";
@@ -267,7 +267,7 @@ export class LoanService implements ILoanService {
       notification.title = `Vanaheim: Loan Status Update`
       notification.data = new WebNotData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
-      await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
+      await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html:failureReason? this._templateService.STATUS_UPDATE_DECLINED(message??requestStatus, loanRequest.requestId): this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
       await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
       resolve({ status: true, data: loanRequest });
     } catch (err: any) {

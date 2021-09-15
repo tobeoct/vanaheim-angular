@@ -15,7 +15,7 @@ export default class DocumentController {
   bvnList: any = {
   };
   bankList: any = {};
-  constructor(private _appConfig:AppConfig,private _documentService: IDocumentService, private _documentRepository:IDocumentRepository, private _loanRequestRepository: ILoanRequestRepository) {
+  constructor(private _appConfig: AppConfig, private _documentService: IDocumentService, private _documentRepository: IDocumentRepository, private _loanRequestRepository: ILoanRequestRepository) {
 
   }
 
@@ -91,10 +91,11 @@ export default class DocumentController {
   @POST()
   download = async (req: any, res: any) => {
     const url = req.body.url;
-    let base = this._appConfig.environment==Environment.development? "../": "../../" 
-    const root =path.dirname(require.main?.filename)
-    const file = path.resolve(root, base+url);
-    console.log("FILE", file,root);
-    res.download(this._appConfig.environment==Environment.production?"../../" + url:file);
+    // let base = this._appConfig.environment==Environment.development? "../": "../../" 
+    // const root = path.dirname(require.main?.filename)
+    // const file = path.resolve(root, url);
+    // console.log("FILE", file, root);
+    res.download(url);
+    // res.download(this._appConfig.environment==Environment.production?"../../" + url:file);
   }
 }

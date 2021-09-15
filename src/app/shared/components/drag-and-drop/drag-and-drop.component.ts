@@ -3,6 +3,7 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { RequestService } from 'src/app/modules/admin/request/request.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Utility } from '../../helpers/utility.service';
 
 @Component({
   selector: 'app-drag-and-drop',
@@ -21,17 +22,24 @@ fForm:FormGroup;
   get failureReason() {
     return this.fForm.get("failureReason") as FormControl || new FormControl();
   }
+  get mailMessage() {
+    return this.fForm.get("mailMessage") as FormControl || new FormControl();
+  }
   idSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
   classListSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
+
+  loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
   showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$:Observable<boolean> = this.showSubject.asObservable();
   @Output()
   onClick:EventEmitter<any> = new EventEmitter<any>();
-  constructor(private _requestService:RequestService, private _fb:FormBuilder) { }
+  constructor(private _requestService:RequestService, private _fb:FormBuilder, private _utility:Utility) { }
   ngOnInit(): void {
     this.fForm = this._fb.group({
       failureReason: [""],
+      mailMessage:[""]
     });
   }
 
@@ -97,7 +105,9 @@ fForm:FormGroup;
   handleUpdate=(event:any,id:any,classList:any)=>{
     return ()=>{
       
-      this._requestService.updateStatus(id,this._requestService.getStatus(classList), this.failureReason.value).then(c=>{
+      this._requestService.updateStatus(id,this._requestService.getStatus(classList), this.failureReason.value, this.mailMessage.value).then(c=>{
+        this.loadingSubject.next(false)
+      this._utility.setSuccess("Successfully updated status and sent email to customer")
         if(!c || c.requestStatus != this._requestService.getStatus(classList)){
       this.reverse(event)
        }else{
@@ -107,6 +117,8 @@ fForm:FormGroup;
       }).catch(err=>{
         console.log(err)
 
+        this.loadingSubject.next(false)
+        this._utility.setError(err)
         this.reverse(event)
       
       })
@@ -170,13 +182,16 @@ fForm:FormGroup;
 enterFailureSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 enterFailure$: Observable<boolean> = this.enterFailureSubject.asObservable();
 
-onFailure(form: FormGroup) {
+onFailure(event:any) {
   this.proceed();
+  this.showSubject.next(false)
   this.enterFailureSubject.next(false);
 }
 closeFailureModal() {
   this.proceed();
+  this.showSubject.next(false)
   this.enterFailureSubject.next(false);
+
 }
 proceed(){
   // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}

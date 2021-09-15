@@ -92,12 +92,15 @@
               <h3>Documents</h3>
             </div>
             <div class="margin--3x">
-              <div class="detail-card d-flex d-flex_horizontal--space-between" *ngFor="let doc of loanDetails.documents">
+              <div class="detail-card d-flex d-flex_horizontal--space-between"
+                *ngFor="let doc of loanDetails.documents">
                 <div>
                   <small>{{doc.requirement}}</small>
                   <p><b>{{doc.name}}</b></p>
                 </div>
-                <app-button (onClick)="download(doc.url,doc.fileName)" size="small"><ng-container slot="button"> Download</ng-container></app-button>
+                <app-button (onClick)="download(doc.url,doc.fileName)" size="small">
+                  <ng-container slot="button"> Download</ng-container>
+                </app-button>
               </div>
 
             </div>
@@ -131,23 +134,25 @@
 </ng-container>
 
 
-<ng-container *ngIf="(enterFailure$|async)==true">
-  <app-modal [show]="enterFailure$|async" (onChange)="closeFailureModal()">
+<ng-container *ngIf="(enterFailure$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeFailureModal()">
     <app-modal-header slot="header">
       <h3>Enter Failure Reason</h3>
     </app-modal-header>
     <app-modal-body slot="body">
       <app-form [form]="fForm" (onSubmit)="onFailure($event)" (errorMessageChange)="onError($event)">
-
+        <app-input id="failureReason" [control]="failureReason" class="form-control">
+          <label>Reason For Failure</label>
+        </app-input>
         <div class="vc_form-field margin--2x" style="max-width: 500px;">
-          <label for="failureReason">Reason For Failure</label>
-          <textarea id="failureReason" placeholder="Enter failure reason" [formControl]="failureReason"
+          <label for="mailMessage">Personalised Message</label>
+          <textarea id="mailMessage" placeholder="Enter personalised message" [formControl]="mailMessage"
             class="form-control">
 
         </textarea>
         </div>
 
-        <app-button fieldClass="no-margin--top" [form]="fForm">Done</app-button>
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="fForm">Done</app-button>
 
 
       </app-form>

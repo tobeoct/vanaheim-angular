@@ -6,6 +6,7 @@ import { DocumentUpload } from "src/app/modules/loan/shared/document-upload/docu
 import { Customer } from "@models/customer";
 import mkdirsSync from "@models/helpers/utils/dir";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
+const path = require('path');
 import UtilService from "./common/util";
 import { Document } from "@models/document";
 import { BaseStatus } from "@models/helpers/enums/status";
@@ -42,9 +43,11 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             let base64 = base64String.split(';base64,').pop();
             let extension = this._utilService.getFileExtension(fileName);
             let name = this.md5(base64) + '.' + extension;
-            let filePath = "uploads/" + customerCode + "/" + name;
-            if (!this.fsExtra.existsSync("uploads")) mkdirsSync("uploads");
-            if (!this.fsExtra.existsSync("uploads/" + customerCode)) mkdirsSync("uploads/" + customerCode);
+            const root =path.dirname(require.main?.filename)
+            const uploadsPath = path.resolve(root,"uploads")
+            let filePath =uploadsPath+"/" + customerCode + "/" + name;
+            if (!this.fsExtra.existsSync(uploadsPath)) mkdirsSync(uploadsPath);
+            if (!this.fsExtra.existsSync(`${uploadsPath}/` + customerCode)) mkdirsSync(`${uploadsPath}/` + customerCode);
             if (!this.fsExtra.existsSync(filePath)) {
                 this.fs.writeFile(filePath, base64, { encoding: 'base64' }, function () {
                     console.log('File created');

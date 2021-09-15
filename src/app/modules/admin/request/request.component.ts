@@ -78,7 +78,10 @@ export class RequestComponent implements OnInit {
   get failureReason() {
     return this.fForm.get("failureReason") as FormControl || new FormControl();
   }
-  constructor(private _fb: FormBuilder, private _documentService:DocumentService, private _notifyService: NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
+  get mailMessage() {
+    return this.fForm.get("mailMessage") as FormControl || new FormControl();
+  }
+  constructor(private _fb: FormBuilder, private _documentService: DocumentService, private _notifyService: NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
     this.loanDetails$ = this._requestService.loanDetails$;
   }
 
@@ -104,6 +107,7 @@ export class RequestComponent implements OnInit {
     });
     this.fForm = this._fb.group({
       failureReason: [""],
+      mailMessage: [""]
     });
   }
   getCriteria(from: any, to: any) {
@@ -111,19 +115,27 @@ export class RequestComponent implements OnInit {
   }
   confirm() {
     const c = this.ctrl.value;
+    console.log(c)
     this.lastStatusSubject.next(c);
     const indicator = this.loanStatuses.find(l => l.label == c)?.key;
     this.indicatorSubject.next(indicator);
-    if (c.toLowerCase()!= "notqualified" && c.toLowerCase()!= "declined") {
-      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c,'');
+    if (c.toLowerCase() != "notqualified" && c.toLowerCase() != "declined") {
+      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "");
     } else {
       this.enterFailureSubject.next(true);
     }
     setTimeout(() => this.showConfirmSubject.next(false), 0);
   }
-  proceed(){
+  proceed() {
     // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
-    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this.lastStatusSubject.value, this.failureReason.value);
+    this.loadingSubject.next(true)
+    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.failureReason.value, this.mailMessage.value).then(response => {
+      this.loadingSubject.next(false)
+      this._utilityService.setSuccess("Successfully updated status and sent email to customer")
+    }).catch(err => {
+      this.loadingSubject.next(false)
+      this._utilityService.setError(err)
+    });
   }
   selectLoan({ id, indicator }: any) {
     this._requestService.selectLoan(id);
@@ -153,7 +165,7 @@ export class RequestComponent implements OnInit {
     setTimeout(() => { this.showConfirmSubject.next(false); }, 0);
   }
   closeFailureModal() {
-    this.proceed();
+    // this.proceed();
     this.enterFailureSubject.next(false);
   }
   trackByFn(index: number, item: any) {
@@ -188,7 +200,7 @@ export class RequestComponent implements OnInit {
 
 
   onNotify(form: FormGroup, code: string, customerId: number) {
-    
+
     // stop here if form is invalid
     if (form.invalid) {
       return;
@@ -200,7 +212,7 @@ export class RequestComponent implements OnInit {
   }
 
 
-  onFailure(form: FormGroup) {
+  onFailure(event: any) {
     this.proceed();
     this.enterFailureSubject.next(false);
   }
@@ -239,7 +251,7 @@ export class RequestComponent implements OnInit {
   onError(value: any): void {
     this.errorMessageSubject.next(value);
   }
-  download(url:string,filename:string){
-    this._documentService.download(url,filename)
+  download(url: string, filename: string) {
+    this._documentService.download(url, filename)
   }
 }

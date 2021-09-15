@@ -27,11 +27,11 @@ export class CustomerComponent implements OnInit {
 
   activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   activeLoan$: Observable<boolean> = this.activeLoanSubject.asObservable();
-
+  runningLoanSubscription: Subscription
 
   showInvalid$: Observable<boolean>;
   timerSubscription: Subscription;
-  constructor(private swPush: SwPush, private _store:Store, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
+  constructor(private swPush: SwPush, private _store: Store, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
     try {
       this.showInvalid$ = this._utility.showLoanInvalid$;
       if (environment.production) {
@@ -46,7 +46,7 @@ export class CustomerComponent implements OnInit {
           if (this.isGranted) this.submitNotification();
         })
       }
-    } catch (err:any) {
+    } catch (err: any) {
       console.log(err);
       this.pwaAble = false;
     }
@@ -54,13 +54,18 @@ export class CustomerComponent implements OnInit {
   }
   ngOnDestroy() {
     if (this.timerSubscription) this.timerSubscription.unsubscribe();
+    if (this.runningLoanSubscription) this.runningLoanSubscription.unsubscribe()
   }
   ngOnInit(): void {
     const sideNavSub = this._utility.activeNavigation$.subscribe(r => {
       this.showSubject.next(r.toString());
     })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
-    if (localStorage.getItem("page")) this.activeLoanSubject.next(true)
+
+    this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
+      if (localStorage.getItem("page") && !r) this.activeLoanSubject.next(true)
+
+    });
 
   }
 
@@ -72,7 +77,7 @@ export class CustomerComponent implements OnInit {
       if (Notification) {
         this.isGranted = Notification.permission === 'granted';
       }
-    } catch (err:any) {
+    } catch (err: any) {
       console.log(err);
       this.pwaAble = false;
     }

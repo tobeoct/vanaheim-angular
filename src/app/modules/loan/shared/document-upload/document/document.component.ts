@@ -31,7 +31,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
   onChange = new EventEmitter<any>();
   @Output()
   onClick = new EventEmitter<any>();
-
+  @Input()
+  resetOnUpload = false
   @Input()
   allowedExtensions =
     /(\.jpg|\.jpeg|\.png|\.xls|\.ppt|\.pptx|\.xlsx|\.doc|\.docx|\.odt|\.pdf|\.tex|\.txt|\.rtf|\.wps|\.wks|\.wpd)$/i;
@@ -114,6 +115,11 @@ export class DocumentComponent implements OnInit, OnDestroy {
       this.onChange.emit(d);
       this.loadingSubject.next(false);
       this.uploadedSubject.next(true);
+      if(this.resetOnUpload){
+        this.control.patchValue("")
+        this.uploadedSubject.next(false);
+        this.showTooltipSubject.next(false)
+      }
     });
 
     this.allSubscriptions.push(sub);

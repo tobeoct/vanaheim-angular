@@ -410,7 +410,7 @@
                     <div class="margin--3x">
                         <app-document (onChange)="onChange($event)" title="{{requirement.title}}"
                             fieldClass="document no-margin--top" description="{{requirement.description}}"
-                            [control]="uploadedDocument">
+                            [control]="uploadedDocument" [resetOnUpload]="true">
 
                         </app-document>
                     </div>

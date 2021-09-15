@@ -107,11 +107,12 @@ export class RequestService {
   }
 
   getStatus(classList: any) {
-    if (classList.value.includes("APPROVED")) return "Approved";
-    if (classList.value.includes("PROCESSING")) return "Processing";
-    if (classList.value.includes("UPDATE")) return "UpdateRequired";
-    if (classList.value.includes("DECLINED")) return "NotQualified";
-    if (classList.value.includes("FUNDED")) return "Funded";
+    let value = classList.value??classList;
+    if (value.toLowerCase().includes("approved")) return "Approved";
+    if (value.toLowerCase().includes("processing")) return "Processing";
+    if (value.toLowerCase().includes("update")) return "UpdateRequired";
+    if (value.toLowerCase().includes("decline")) return "NotQualified";
+    if (value.toLowerCase().includes("funded")) return "Funded";
     return "Pending";
   }
   searchForAdmin = (payload: any) => {
@@ -123,8 +124,8 @@ export class RequestService {
         return {};
       }));
   }
-  updateStatus = (id: number, status: string, failureReason:string) => {
-    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason })
+  updateStatus = (id: number, status: string, failureReason:string,message:string) => {
+    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason,message })
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;
