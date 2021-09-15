@@ -132,6 +132,7 @@ export class RequestComponent implements OnInit {
     this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.failureReason.value, this.mailMessage.value).then(response => {
       this.loadingSubject.next(false)
       this._utilityService.setSuccess("Successfully updated status and sent email to customer")
+      this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))
     }).catch(err => {
       this.loadingSubject.next(false)
       this._utilityService.setError(err)

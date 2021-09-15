@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AssetPath } from 'src/app/shared/constants/variables';
+import { Store } from 'src/app/shared/helpers/store';
 import {IAssetPath} from "src/app/shared/interfaces/assetpath";
 @Component({
   selector: 'app-onboarding',
@@ -13,7 +14,7 @@ export class OnboardingComponent implements OnInit {
   @ViewChild('invest') invest:ElementRef;
   showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   show$:Observable<boolean> = this.showSubject.asObservable();
-  constructor(private router: Router) { }
+  constructor(private router: Router,private _store:Store) { }
   assetPaths: IAssetPath = new AssetPath;
 main:string="main";
 nested:string="nested"
@@ -27,6 +28,8 @@ isClicked: boolean = false;
 
   
 onNavigate(route:string){
+  this._store.setPage("");
+  this._store.setPrevious("");
     this.router.navigate([route])
   }
 

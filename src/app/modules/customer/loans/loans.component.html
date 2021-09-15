@@ -197,7 +197,7 @@
                     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
                         <app-dropdown fieldClass="no-margin--top" [current]="loanType.value"
                             [fieldClass]="'no-margin--top'" [id]="'loanType'" [control]="loanType"
-                            aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                            aria-placeholder="Select a loan type">
                             <ng-container slot="label"><label for="loanType">Loan Products</label></ng-container>
                             <app-option [value]="product.id" *ngFor="let product of loanProducts">
                                 {{product.uniqueName}}

@@ -139,7 +139,7 @@ export class LoansComponent implements OnInit, OnDestroy {
       }
     })
     this.loans$ = this._loanService.loanWithFilter$;
-    let lType = this._store.loanType || "Personal Loans";
+    let lType = this._store.loanType || "PayMe Loan";
     let tenureRange = this._loanService.getTenureRange(lType);
     this.minTenure = tenureRange["min"];
     this.maxTenure = tenureRange["max"];

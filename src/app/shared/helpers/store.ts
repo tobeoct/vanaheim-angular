@@ -448,6 +448,10 @@ export class Store {
     if (application[this.loanCategory]) {
       return application[this.loanCategory][key];
     }
+    this.setPrevious("");
+    this.setPage("")
+    this.setLoanCategory("")
+    this.removeItem("loan-application")
     return null;
   }
 
