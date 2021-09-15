@@ -106,7 +106,7 @@ export class LoanService implements ILoanService {
             {
               key: "NOK Information",
               data: [
-                { key: "Name", value: this._utilService.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", "") },
+                { key: "Name", value: this._utilService.replaceAll(this._utilService.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", ""),"undefined","") },
                 { key: "Date Of Birth", value: request.Customer?.NOK?.dateOfBirth },
                 { key: "Relationship", value: request.Customer?.NOK?.relationship.toString() },
                 { key: "Email Address", value: request.Customer?.NOK?.email },
