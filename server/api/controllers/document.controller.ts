@@ -91,10 +91,10 @@ export default class DocumentController {
   @POST()
   download = async (req: any, res: any) => {
     const url = req.body.url;
-    let base = this._appConfig.environment==Environment.development? "../": "" 
+    let base = this._appConfig.environment==Environment.development? "../": "../../" 
     const root =path.dirname(require.main?.filename)
     const file = path.resolve(root, base+url);
-    console.log("FILE", file);
+    console.log("FILE", file,root);
     res.download(file);
   }
 }
