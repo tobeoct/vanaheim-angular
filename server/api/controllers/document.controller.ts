@@ -95,6 +95,6 @@ export default class DocumentController {
     const root =path.dirname(require.main?.filename)
     const file = path.resolve(root, base+url);
     console.log("FILE", file,root);
-    res.download(file);
+    res.download(this._appConfig.environment==Environment.production?"../../" + url:file);
   }
 }
