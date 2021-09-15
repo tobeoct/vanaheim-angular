@@ -30,6 +30,10 @@
         background: map-get($colors, yellow);
         color: map-get($colors, black);
     }
+    &-info {
+        background: map-get($colors, info);
+        color: map-get($colors, white);
+    }
     &-success {
         background: map-get($colors, green);
         color: map-get($colors, lightGreen);

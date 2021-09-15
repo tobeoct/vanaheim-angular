@@ -35,6 +35,8 @@ export class AppComponent implements OnChanges, OnInit {
 
   apiSuccess$: Observable<string> 
   apiError$: Observable<string>
+  apiInfo$: Observable<string>
+
 
 
   checkTimeOut() {
@@ -129,7 +131,8 @@ export class AppComponent implements OnChanges, OnInit {
     })
     this.allSubscriptions.push(authSub)
     this.apiError$ = this._utility.apiErrorSubject.asObservable();
-    this.apiSuccess$ = this._utility.apiSuccessSubject.asObservable()
+    this.apiSuccess$ = this._utility.apiSuccessSubject.asObservable();
+    this.apiInfo$ = this._utility.apiInfoSubject.asObservable();
   }
   ngOnChanges(): void {
     try {

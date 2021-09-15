@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnI
 import { FormControl } from '@angular/forms';
 import { VCValidators } from '@validators/default.validators';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { DocumentService } from 'src/app/shared/services/document/document.service';
 import { Document, DocumentUpload } from '../document';
@@ -46,7 +47,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   uploadedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   uploaded$: Observable<boolean> = this.uploadedSubject.asObservable();
-  constructor(private _validators: VCValidators, private _authenticationService: AuthService, private _documentService: DocumentService, private _cd: ChangeDetectorRef) { }
+  constructor(private _validators: VCValidators,private _utility:Utility, private _authenticationService: AuthService, private _documentService: DocumentService, private _cd: ChangeDetectorRef) { }
   ngOnDestroy(): void {
     autoIndex -= 1;
     this.allSubscriptions.forEach(sub => sub.unsubscribe())

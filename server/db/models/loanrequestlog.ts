@@ -83,6 +83,10 @@ module.exports = (sequelize:any, DataTypes:any) => {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  loanTypeRequirementID:{
+   type: DataTypes.INTEGER,
+   allowNull: false,
+ },
     loanPurpose:{
      type: DataTypes.STRING,
      allowNull: false,

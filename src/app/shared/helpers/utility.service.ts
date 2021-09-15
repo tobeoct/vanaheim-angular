@@ -23,6 +23,7 @@ export class Utility {
   apiSuccessSubject: Subject<string> = new Subject<string>();
 
   apiErrorSubject: Subject<string> = new Subject<string>();
+  apiInfoSubject: Subject<string> = new Subject<string>();
 
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
@@ -84,6 +85,11 @@ export class Utility {
     // 
     setTimeout(() => { this.apiSuccessSubject.next(message); }, 1000)
     setTimeout(() => { this.apiSuccessSubject.next("") }, 5000)
+  }
+  setInfo(message: string) {
+    // 
+    setTimeout(() => { this.apiInfoSubject.next(message); }, 0)
+    setTimeout(() => { this.apiInfoSubject.next("") }, 5000)
   }
   onNavigate(route: string, params: any = {}): void {
     this._router.navigate([route], { queryParams: params })

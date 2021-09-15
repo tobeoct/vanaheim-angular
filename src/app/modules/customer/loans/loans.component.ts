@@ -256,6 +256,7 @@ export class LoansComponent implements OnInit, OnDestroy {
     return status == "Processing" ? '' : 'info';
   }
   download(url: string, filename: string) {
+    
     this._documentService.download(url, filename)
   }
 
