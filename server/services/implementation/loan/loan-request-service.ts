@@ -251,7 +251,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             // save loan requirements 
             loanRequestInDb = await this._baseRepository.update(loanRequest);
 
-            templates.push(loanRequest);
+            templates.push(Object.assign(new LoanRequest(),loanRequest));
             templates.push(account1);
             if (account2.bank) templates.push(account2);
             if (category == "personal") {

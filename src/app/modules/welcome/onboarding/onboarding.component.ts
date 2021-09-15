@@ -28,8 +28,8 @@ isClicked: boolean = false;
 
   
 onNavigate(route:string){
-  this._store.setPage("");
-  this._store.setPrevious("");
+  // this._store.setPage("");
+  // this._store.setPrevious("");
     this.router.navigate([route])
   }
 

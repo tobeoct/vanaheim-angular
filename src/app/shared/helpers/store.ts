@@ -12,6 +12,7 @@ import { CompanyInfo } from 'src/app/modules/loan/business/company-info/company-
 import { ShareholderInfo } from 'src/app/modules/loan/business/shareholder-info/shareholder-info';
 import { CollateralInfo } from 'src/app/modules/loan/business/collateral-info/collateral-info';
 import { BaseLoanApplication } from 'src/app/modules/loan/loan-application';
+import { AuthService } from '../services/auth/auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -50,87 +51,6 @@ export class Store {
     { id: "Line Of Credit", uniqueName: "Line Of Credit", title: "Line Of Credit", frequency: "Monthly", description: "Get access to personal/business loans, withdraw by instalment as needed and repay as agreed." },
   
   ]
-  // loanTypes2: any[] = [{
-  //   id: 1,
-  //   title: "PayDay Loans",
-  //   requirements: [
-  //     { title: "Salary account statement", description: " for the last Six (6) months till date" },
-  //    { title: "Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." },
-  //    { title: "Work Identity card", description: "" },
-  //    { title: "Valid Government Issued ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },
-  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount" }]
-  // },
-  //  {
-  //   id: 2,
-  //   title: "Business Loans",
-  //   requirements: [{ title: "Copy ofbusiness registration documents", description: " from CAC" },
-  //    { title: "Business account statement", description: " for the last Six (6) months till date" },
-  //    { title: "Personal account statement", description: " for the last six (6) months till date" },
-  //    { title: "Business brief or Corporate Profile", description: "" },
-  //    { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" },
-  //    { title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" },
-  //    { title: "Postdated cheque", description: "s issued to the tune of the monthly repayment amount  (to be provided post the application process)" }]
-  // },
-  //  {
-  //   id: 3,
-  //   title: "LPO Financing",
-  //   requirements: [{ title: "Application letter", description: " on company letterhead" },
-  //    { title: "Business registration / incorporation", description: " details and documents" },
-  //    { title: "Board resolution for loan request", description: "" },
-  //    { title: "Valid means of Identity", description: " of two directors (Voter’s card, National ID card, Valid Driver’s License, or Valid International passport)." },
-  //    { title: "Business account bank statement", description: " for the last Six (6) months till date." },
-  //    { title: "Personal account statement", description: " for two directors for the last six (6) months till date" },
-  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount." },
-  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" },
-  //    { title: "Evidence of previously executed contracts", description: " (POs, contract agreements, completion certificates, payment invoices etc.)" },
-  //    { title: "Signed MOUs", description: " on current contract" },
-  //    { title: "Supplier Invoices on current contract", description: "" },
-  //    { title: "Terms & Conditions", description: " of contract (Full contract)" }]
-  // },
-  //  {
-  //   id: 4,
-  //   title: "Float Loans (Individual)",
-  //   requirements: [{ title: "Personal account statement", description: " for the last Six (6) months till date." },
-  //    { title: "Employment offer/Confirmation letter.", description: "" },
-  //    { title: "Work Identity card", description: "" },
-  //    { title: "Valid ID card", description: " (Driver’s License, international passport, National ID card or Voter’s card)." },
-  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount (to be provided post the application process)" },
-  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
-  // },
-  //  {
-  //   id: 5,
-  //   title: "Float Loans (Business)",
-  //   requirements: [{ title: "Copy of your business registration documents", description: " from CAC" },
-  //    { title: "Business account statement", description: " for the last Six (6) months till date" },
-  //    { title: "Personal account statement", description: " for the last six (6) months till date" },
-  //    { title: "Valid means of Identity", description: " (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" },
-  //    { title: "Postdated cheque", description: "s issued to the tune of the monthly repayment amount" },
-  //    { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" },
-  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
-  // },
-  //  {
-  //   id: 6,
-  //   title: "Personal Line Of Credit",
-  //   requirements: [{ title: "Salary account statement", description: " for the last Six (6) months till date" },
-  //    { title: "Other Personal account statement", description: " for the last six (6) months till date" },
-  //    { title: " Employment offer / Confirmation Letter", description: " + Current Letter of Introduction (Which can be obtained after the application process)." },
-  //    { title: "Work Identity card", description: "" },
-  //    { title: "Valid Government Issued ID card", description: " (Driver’s License, international passport,National ID card or Voter’s card)." },
-  //    { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount" }]
-  // },
-  //  {
-  //   id: 7,
-  //   title: "Business Line Of Credit",
-  //   requirements: [{ title: "Copy of your business registration documents", description: " from CAC" },
-  //    { title: "Business brief or Corporate Profile", description: "" },
-  //    { title: "Cover letter", description: " providing reason for accessing the loan (Which can be provided as a note in the application form)" },
-  //    { title: "Business account statement", description: " for the last Six (6) months till date" },
-  //    { title: "Personal account statement", description: " for two directors for the last six (6) months till date" },
-  //    { title: "Valid means of Identity", description: " for both directors (Voter’s card, National ID card, Valid Driver’s License or Valid International passport)" },
-  //    { title: "Postdated cheques", description: " issued to the tune of the monthly repayment amount" },
-  //    { title: "Remita Direct Debit mandate", description: " (to be provided post the application process)" }]
-  // }];
-
   loanTypes: any[] = [{
     id: 1,
     title: "PayMe Loan",
@@ -330,7 +250,7 @@ export class Store {
     "Financial Securities",
     "Others",
   ]
-  private loanApplicationSubject: Subject<BaseLoanApplication> = new Subject<BaseLoanApplication>();
+  private loanApplicationSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   loanApplication$: Observable<BaseLoanApplication> = this.loanApplicationSubject.asObservable();
 
   private pageSubject: BehaviorSubject<string> = new BehaviorSubject<string>('loan-type');
@@ -393,7 +313,7 @@ export class Store {
   private documents$: Observable<any[]> = this.documentsSubject.asObservable();
 
 
-  constructor(private _router: Router) {
+  constructor(private _router: Router, private _authService:AuthService) {
     this.applyingAsSubject.next(this.getFromCurrentApplication("applyingAs") || '');
     this.loanTypeSubject.next(this.getFromCurrentApplication("loanType") || '');
     this.loanProductSubject.next(this.getFromCurrentApplication("loanProduct") || '');
@@ -403,10 +323,15 @@ export class Store {
     this.loanCategorySubject.next(this.getItem("category") || '');
   }
   getItem(key: string) {
+    if(this._authService.isLoggedIn()){
     return localStorage.getItem(key);
+    }
+    return ""
   }
   setItem(key: string, value: any) {
+    if(this._authService.isLoggedIn()){
     localStorage.setItem(key, value);
+    }
   }
   removeItem(key: string) {
     localStorage.removeItem(key);
@@ -448,16 +373,13 @@ export class Store {
     if (application[this.loanCategory]) {
       return application[this.loanCategory][key];
     }
-    this.setPrevious("");
-    this.setPage("")
-    this.setLoanCategory("")
-    this.removeItem("loan-application")
+   
     return null;
   }
 
   get loanApplication() { return this.getLoanApplication() }
   private getLoanApplication = () => {
-    return JSON.parse(this.getItem("loan-application") || '{}');
+    return Object.keys(this.loanApplicationSubject.value).length>0?this.loanApplicationSubject.value: JSON.parse(this.getItem("loan-application") || '{}');
 
   }
   get loanType() { return this.getFromCurrentApplication("loanType") || ''; }

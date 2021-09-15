@@ -97,6 +97,7 @@ export class CustomerComponent implements OnInit {
       baseUrl = "welcome"
     }
     let url = baseUrl + endpoint
+    console.log(url)
     this._router.navigate([url]);
     this.activeLoanSubject.next(false)
   }
