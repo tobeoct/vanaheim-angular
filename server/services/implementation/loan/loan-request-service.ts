@@ -236,7 +236,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             loanRequest.denominator = "Months";
             loanRequest.customerID = customer.id;
             let loanRequestInDb = loanRequest
-            if(loanRequest.id==0){loanRequestInDb = await this._baseRepository.create(loanRequest)}
+            if(!loanRequest.id ||loanRequest.id==0){loanRequestInDb = await this._baseRepository.create(loanRequest)}
             else {await this._baseRepository.update(loanRequest);}
             let loanRequestLog = loanRequest as LoanRequestLog;
             loanRequestLog.loanRequestID = loanRequestInDb.id;
