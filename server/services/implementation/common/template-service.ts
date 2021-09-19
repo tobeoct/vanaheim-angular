@@ -14,8 +14,19 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
-    STATUS_UPDATE_DECLINED(message: string, id: string) {
-        return `  
+    LOAN_UPDATE(customerName: string, code: string) {
+        return `   LOAN ID: ${code} <br/><br/>
+        Customer:${customerName}<br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
+    STATUS_UPDATE_DECLINED(name:string,message: string, id: string) {
+        return `  Dear ${name},<br/><br/>
+ 
+        Thank you for your interest in Vanir Capital Limited’s loan services.<br/><br/>
+         
+        Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/><br/>
         ${message}<br/><br/>
         Kind Regards<br/><br/>
         <b>Vanir Capital Loans and Capital Finance Team</b>

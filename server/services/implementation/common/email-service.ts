@@ -46,6 +46,9 @@ export default class EmailService {
       this.CC_EMAIL = this._appConfig.LOAN_EMAIL || '';
       try {
         switch (type) {
+          case "update":
+            subject ='Loan Update';
+            break;
           case "form":
             subject = toCustomer ? 'Successful Loan Application' : 'JUST IN! New Application';
             break;

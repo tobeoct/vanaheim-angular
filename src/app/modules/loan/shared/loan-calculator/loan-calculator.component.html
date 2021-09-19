@@ -58,12 +58,3 @@
 </div>
 
 
-<div class="snackbar_container ">
-    <div *ngIf="apiError$|async" class="snackbar snackbar-danger mt-3 mb-0 animate__animated animate__fadeInUp">
-        {{apiError$|async}}
-    </div>
-    <div *ngIf="apiSuccess$|async" class="snackbar snackbar-success mt-3 mb-0 animate__animated animate__fadeInUp">
-        {{apiSuccess$|async}}
-    </div>
-
-</div>

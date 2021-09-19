@@ -17,6 +17,7 @@ export default class AppConfig {
   port:string;
   WEBURL:string;
   ADMIN_EMAIL:string;
+  OPS_EMAIL:string;
 CC_EMAIL:string;
 INVESTMENT_EMAIL:string;
 INVESTMENT_EMAIL_PASS:string;
@@ -34,6 +35,7 @@ JWT_SECRET_KEY:string ;
       this.environment= process.env.NODE_ENV || 'development'
       this.port= process.env.PORT ||'4200'
       this.ADMIN_EMAIL=process.env.LOAN_EMAIL||''
+      this.OPS_EMAIL=process.env.OPS_EMAIL||process.env.ADMIN_EMAIL||''
   this.CC_EMAIL=process.env.LOAN_EMAIL||''
   this.INVESTMENT_EMAIL= process.env.INVESTMENT_EMAIL||''
   this.SUPPORT_EMAIL= process.env.SUPPORT_EMAIL||''

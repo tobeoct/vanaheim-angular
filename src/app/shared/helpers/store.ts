@@ -441,7 +441,7 @@ export class Store {
   get documents() { return JSON.parse(this.getFromCurrentApplication("documents") || '[]'); }
   setDocuments(value: any[]) { this.documentsSubject.next(value); this.updateCurrentApplication('documents', JSON.stringify(value)); this.setPrevious("upload"); this.setPage("preview"); }
 
-  get loanCategory() { return this.getItem("category") || ''; }
+  get loanCategory() { return this.loanCategorySubject.value|| this.getItem("category") || ''; }
   setLoanCategory(value: string) {
     this.setItem("category", value);
     this.loanCategorySubject.next(value);

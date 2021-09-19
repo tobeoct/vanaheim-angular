@@ -247,9 +247,11 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
 
             let ltRInDb = await this._loanTypeRequirementRepository.create(loanRequest.loanTypeRequirements);
             loanRequest.loanTypeRequirementID = ltRInDb.id;
+            loanRequestLog.loanTypeRequirementID = ltRInDb.id;
             loanRequest.id = loanRequestInDb.id;
             // save loan requirements 
             loanRequestInDb = await this._baseRepository.update(loanRequest);
+            loanRequestLogInDb = await this._loanRequestLogRepository.update(loanRequestLog);
 
             templates.push(Object.assign(new LoanRequest(),loanRequest));
             templates.push(account1);

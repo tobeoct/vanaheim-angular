@@ -9,13 +9,15 @@ import { Document } from '@models/document';
 import { LoanRequest } from '@models/loan/loan-request';
 import { IDocumentRepository } from '@repository/interface/document/Idocument-repository';
 import AppConfig, { Environment } from '@api/config';
+import EmailService from '@services/implementation/common/email-service';
+import { TemplateService } from '@services/implementation/common/template-service';
 @route('/api/document')
 export default class DocumentController {
 
   bvnList: any = {
   };
   bankList: any = {};
-  constructor(private _appConfig: AppConfig, private _documentService: IDocumentService, private _documentRepository: IDocumentRepository, private _loanRequestRepository: ILoanRequestRepository) {
+  constructor(private _appConfig: AppConfig, private _templateService: TemplateService, private _emailService: EmailService, private _documentService: IDocumentService, private _documentRepository: IDocumentRepository, private _loanRequestRepository: ILoanRequestRepository) {
 
   }
 
@@ -23,7 +25,8 @@ export default class DocumentController {
   @GET()
   attachLoan = async (req: any, res: any, next: any) => {
     try {
-      if (req.session.userData.customer) {
+      let customer = req.session.userData.customer;
+      if (customer) {
         let { documentID, loanRequestID } = req.query;
         let docInDb: any = await this._documentRepository.getById(documentID);
 
@@ -31,6 +34,13 @@ export default class DocumentController {
           let doc = docInDb.dataValues
           doc.loanRequestID = loanRequestID;
           await this._documentService.update(doc)
+          let loanRequest = await this._loanRequestRepository.getById(loanRequestID) as LoanRequest;
+          try {
+            let sent = await this._emailService.SendEmail({ type: 'update', to: this._appConfig.OPS_EMAIL, attachment: path, filePaths: doc.url, html: this._templateService.LOAN_UPDATE(customer.firstName, loanRequest.code), toCustomer: false })
+          } catch (err) {
+            console.log("Loan Update Email failed to send");
+            console.log(err);
+          }
         }
         res.statusCode = 200;
         res.data = "Document Uploaded"
