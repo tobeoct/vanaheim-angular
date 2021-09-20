@@ -106,8 +106,14 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             queryParameters["requestStatus"] = { [this.Op.not]: "Completed" };
             // queryParameters["order"]= [['requestDate', 'DESC']]
             let requests = await repo.search({ ...queryParameters }, 0, 1, [['requestDate', 'DESC']]);
-            // console.log("Latest Loan Requests",requests)
-            resolve({ status: true, data: requests ? requests["rows"][0] ? requests["rows"][0] : {} : {} });
+            let loan =requests ? requests["rows"][0]:{};
+            if(loan){
+                let log = await this._loanRequestLogRepository.getByLoanRequestID(loan.id);
+               
+                loan["dataValues"]["loanRequestLogID"] = log?.id;
+                 console.log(loan)
+            }
+            resolve({ status: true, data: loan });
         }
         catch (err:any) {
             console.error(err);

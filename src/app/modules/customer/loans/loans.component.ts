@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, Observable, from, Subject, Subscription } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
@@ -105,7 +105,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   latestLoanSubscription: Subscription;
   activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
-  constructor(private _fb: FormBuilder, private _documentService: DocumentService, private _repaymentService: RepaymentService, private _store: Store, private _utility: Utility,
+  constructor(private _fb: FormBuilder, private _route: ActivatedRoute, private _documentService: DocumentService, private _repaymentService: RepaymentService, private _store: Store, private _utility: Utility,
     private _router: Router,
     private _validators: VCValidators,
     private _loanService: LoanService, private _requestService: RequestService) {
@@ -113,6 +113,7 @@ export class LoansComponent implements OnInit, OnDestroy {
       this.base = x.url + '/';
     });
     this.loanProducts = this._store.loanProducts;
+
   }
   ngOnDestroy(): void {
 
@@ -120,6 +121,14 @@ export class LoansComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this._route.params
+      .subscribe(params => {
+        const id = +params['id'];
+        console.log(id)
+        if (id) {
+          this.selectLoan(id);
+        }
+      });
     this.loanDetails = this._store.loanCalculator as LoanDetails;
     this.loanDetailsFromDb$ = this._requestService.loanLogDetails$;
     this.disbursedLoan$ = this._requestService.loanDetails$;
@@ -256,7 +265,7 @@ export class LoansComponent implements OnInit, OnDestroy {
     return status == "Processing" ? '' : 'info';
   }
   download(url: string, filename: string) {
-    
+
     this._documentService.download(url, filename)
   }
 
@@ -280,8 +289,9 @@ export class LoansComponent implements OnInit, OnDestroy {
       this._utility.setSuccess("Document Uploaded successfully")
       this.showUploadSubject.next(false);
       this.showSubject.next(false);
+      this.onNavigate("my/loans");
     }, error => {
-      this._utility.setError("Error:"+error)
+      this._utility.setError("Error:" + error)
     })
   }
 

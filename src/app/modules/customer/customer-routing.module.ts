@@ -12,6 +12,7 @@ const LOAN_ROUTES: Routes = [
 
 const routes: Routes = [
 {path:"dashboard", component:DashboardComponent},
+{path:"loans/:id", component:LoansComponent},
 {path:"loans", component:LoansComponent},
 { path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES, canActivate:[FlowGuard] },
 {path:"documents", component:DocumentsComponent},
