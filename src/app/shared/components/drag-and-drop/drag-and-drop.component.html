@@ -83,3 +83,29 @@
   </app-modal>
 
 </ng-container>
+
+
+<ng-container *ngIf="(enterUpdate$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeUpdateModal()">
+    <app-modal-header slot="header">
+      <h3>Enter Update Required</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="uForm" (onSubmit)="onUpdateRequired($event)" (errorMessageChange)="onError($event)">
+        
+        <div class="vc_form-field margin--2x" style="max-width: 500px;">
+          <label for="uMailMessage">Personalised Message</label>
+          <textarea id="uMailMessage" placeholder="Enter personalised message" [formControl]="uMailMessage"
+            class="form-control">
+
+        </textarea>
+        </div>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="uForm">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>

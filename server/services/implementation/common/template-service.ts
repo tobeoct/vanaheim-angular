@@ -14,6 +14,15 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
+    STATUS_UPDATE_REQUIRED(status: string, id: string,url:string,message:string) {
+        return `   LOAN ID: ${id} <br/><br/>
+        Your loan request status has been updated to ${status};<br/><br/>
+        Go to ${url} to provide the required document <br/><br/>
+        ${message} <br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
     LOAN_UPDATE(customerName: string, code: string,requirement:string) {
         return `   LOAN ID: ${code} <br/><br/>
         Customer:${customerName}<br/><br/>

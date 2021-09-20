@@ -267,7 +267,7 @@ export class LoanService implements ILoanService {
       notification.title = `Vanaheim: Loan Status Update`
       notification.data = new WebNotData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
-      await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html:failureReason? this._templateService.STATUS_UPDATE_DECLINED(customer.firstName,message??requestStatus, loanRequest.requestId): this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
+      await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html:failureReason? this._templateService.STATUS_UPDATE_DECLINED(customer.firstName,message??requestStatus, loanRequest.requestId):requestStatus== LoanRequestStatus.UpdateRequired? this._templateService.STATUS_UPDATE_REQUIRED(requestStatus, loanRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${loanRequestLog.id}`,message): this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
       await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
       resolve({ status: true, data: loanRequest });
     } catch (err: any) {

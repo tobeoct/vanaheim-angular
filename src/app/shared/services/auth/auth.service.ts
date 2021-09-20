@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, EMPTY, interval, Observable, Subscription, throwError, timer } from 'rxjs';
+import { BehaviorSubject, EMPTY, interval, Observable, of, Subscription, throwError, timer } from 'rxjs';
 import { catchError, debounceTime, map, timeout } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
@@ -110,6 +110,7 @@ export class AuthService {
     }
     stay = () => {
         // console.log(username)
+        return of([])
         return this._http.get<any>(`${environment.apiUrl}/auth/refresh-session`)
             .pipe(map(response => {
                 if (response && response.status == true) {

@@ -19,6 +19,7 @@ export class RequestComponent implements OnInit {
   loans$: Observable<any[]>;
   notifyForm: FormGroup;
   fForm: FormGroup;
+  uForm: FormGroup;
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
   loanStatuses: any[] = [{ label: "Pending", key: "new" }, { label: "Processing", key: "processing" }, { label: "UpdateRequired", key: "update" }, { label: "Declined", key: "declined" }, { label: "Approved", key: "approved" }, { label: "Funded", key: "funded" }];
   ctrl: FormControl = new FormControl("");
@@ -66,6 +67,8 @@ export class RequestComponent implements OnInit {
 
   enterFailureSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   enterFailure$: Observable<boolean> = this.enterFailureSubject.asObservable();
+  enterUpdateSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  enterUpdate$: Observable<boolean> = this.enterUpdateSubject.asObservable();
   get amount() {
     return this.form.get("amount") as FormControl || new FormControl();
   }
@@ -80,6 +83,10 @@ export class RequestComponent implements OnInit {
   }
   get mailMessage() {
     return this.fForm.get("mailMessage") as FormControl || new FormControl();
+  }
+  get uMailMessage() {
+
+    return this.uForm.get("mailMessage") as FormControl || new FormControl();
   }
   constructor(private _fb: FormBuilder, private _documentService: DocumentService, private _notifyService: NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
     this.loanDetails$ = this._requestService.loanDetails$;
@@ -109,27 +116,34 @@ export class RequestComponent implements OnInit {
       failureReason: [""],
       mailMessage: [""]
     });
+
+    this.uForm = this._fb.group({
+      mailMessage: [""]
+    });
   }
   getCriteria(from: any, to: any) {
     return { from: moment(from).startOf("day").toDate(), to: moment(to).endOf("day").toDate() };
   }
   confirm() {
     const c = this.ctrl.value;
-    console.log(c)
     this.lastStatusSubject.next(c);
     const indicator = this.loanStatuses.find(l => l.label == c)?.key;
     this.indicatorSubject.next(indicator);
-    if (c.toLowerCase() != "notqualified" && c.toLowerCase() != "declined") {
+    if ((c.toLowerCase() != "notqualified" && c.toLowerCase() != "declined") && (c.toLowerCase() != "updateRequired")) {
       this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "");
     } else {
-      this.enterFailureSubject.next(true);
+      if (c.toLowerCase() == "updateRequired") {
+        this.enterUpdateSubject.next(true)
+      } else {
+        this.enterFailureSubject.next(true);
+      }
     }
     setTimeout(() => this.showConfirmSubject.next(false), 0);
   }
   proceed() {
     // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
     this.loadingSubject.next(true)
-    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.failureReason.value, this.mailMessage.value).then(response => {
+    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.lastStatusSubject.value.toLowerCase()=="updaterequired"?undefined: this.failureReason.value,  this.lastStatusSubject.value.toLowerCase()=="updaterequired"?this.uMailMessage.value:this.mailMessage.value).then(response => {
       this.loadingSubject.next(false)
       this._utilityService.setSuccess("Successfully updated status and sent email to customer")
       this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))
@@ -168,6 +182,10 @@ export class RequestComponent implements OnInit {
   closeFailureModal() {
     // this.proceed();
     this.enterFailureSubject.next(false);
+  }
+  closeUpdateModal() {
+    // this.proceed();
+    this.enterUpdateSubject.next(false);
   }
   trackByFn(index: number, item: any) {
     return index;
@@ -216,6 +234,13 @@ export class RequestComponent implements OnInit {
   onFailure(event: any) {
     this.proceed();
     this.enterFailureSubject.next(false);
+    this.showSubject.next(false)
+  }
+
+  onUpdateRequired(event: any) {
+    this.proceed();
+    this.enterUpdateSubject.next(false);
+    this.showSubject.next(false)
   }
 
   repay(disbursedLoanId: number, loanRequestId: number, amount: number) {
