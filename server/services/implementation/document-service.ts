@@ -44,13 +44,14 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             let extension = this._utilService.getFileExtension(fileName);
             let name = this.md5(base64) + '.' + extension;
             const root =path.dirname(require.main?.filename)
-            const uploadsPath = "/app";//path.resolve(root,"uploads")
+            const uploadsPath = "/app/uploads";//path.resolve(root,"uploads")
             let filePath =uploadsPath+"/" + customerCode + "/" + name;
             if (!this.fsExtra.existsSync(uploadsPath)) mkdirsSync(uploadsPath);
             if (!this.fsExtra.existsSync(`${uploadsPath}/` + customerCode)) mkdirsSync(`${uploadsPath}/` + customerCode);
             if (!this.fsExtra.existsSync(filePath)) {
                 this.fs.writeFile(filePath, base64, { encoding: 'base64' }, function () {
                     console.log('File created');
+                    console.log(filePath)
                     resolve({ name, extension, path: filePath })
                 });
             } else {

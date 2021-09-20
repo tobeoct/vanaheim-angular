@@ -14,9 +14,10 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
-    LOAN_UPDATE(customerName: string, code: string) {
+    LOAN_UPDATE(customerName: string, code: string,requirement:string) {
         return `   LOAN ID: ${code} <br/><br/>
         Customer:${customerName}<br/><br/>
+        Requirement: ${requirement}
         Kind Regards<br/><br/>
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;

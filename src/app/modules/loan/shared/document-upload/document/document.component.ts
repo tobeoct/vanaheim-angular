@@ -112,15 +112,17 @@ export class DocumentComponent implements OnInit, OnDestroy {
     doc.label = this.title;
     docUpload.document = doc;
     let sub = this._documentService.uploadDocument(docUpload).subscribe(d => {
+      setTimeout(()=>{
 
-      this.onChange.emit(d);
-      this.loadingSubject.next(false);
-      this.uploadedSubject.next(true);
-      if(this.resetOnUpload){
-        this.control.patchValue("")
-        this.uploadedSubject.next(false);
-        this.showTooltipSubject.next(false)
-      }
+        this.onChange.emit(d);
+        this.loadingSubject.next(false);
+        this.uploadedSubject.next(true);
+        if(this.resetOnUpload){
+          this.control.patchValue("")
+          this.uploadedSubject.next(false);
+          this.showTooltipSubject.next(false)
+        }
+      },1000)
     });
 
     this.allSubscriptions.push(sub);
