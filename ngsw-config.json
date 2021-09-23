@@ -25,7 +25,6 @@
         "/api/document/getAll",
         "/api/customer/all",
         "/api/repayment/getRepayments",
-        "/api/loans/getLoanDetails",
         "/api/loans/getLoanLogDetails",
         "/api/loans/getDisbursedLoan"
       ],

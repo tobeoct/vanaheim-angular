@@ -27,14 +27,15 @@ export default class DocumentController {
     try {
       let customer = req.session.userData.customer;
       if (customer) {
-        let { documentID, loanRequestID } = req.query;
+        let { documentID, loanRequestID, loanRequestLogID } = req.query;
         let docInDb: any = await this._documentRepository.getById(documentID);
 
         if (docInDb && Object.keys(docInDb).length > 0) {
-          let doc = docInDb.dataValues
-          doc.loanRequestID = loanRequestID;
-          await this._documentService.update(doc)
           let loanRequest = await this._loanRequestRepository.getById(loanRequestID) as LoanRequest;
+          let doc = docInDb.dataValues
+          doc.loanRequestID =loanRequest.requestId;
+          doc.loanRequestLogID = loanRequestLogID;
+          await this._documentService.update(doc)
           try {
             let sent = await this._emailService.SendEmail({ type: 'update', to: this._appConfig.OPS_EMAIL, attachment: doc.url, html: this._templateService.LOAN_UPDATE(customer.firstName+" "+customer.lastName, loanRequest.code,doc.requirement), toCustomer: false })
           } catch (err) {

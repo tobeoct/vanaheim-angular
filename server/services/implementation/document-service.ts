@@ -16,10 +16,20 @@ class DocumentService extends BaseService<any> implements IDocumentService {
     constructor(_documentRepository: IDocumentRepository, private _redis: RedisMiddleware, private fs: any, private fsExtra: any, private _utilService: UtilService, private md5: any) {
         super(_documentRepository)
     }
-    getByLoanRequestId = (loanRequestId: number) => new Promise<any>(async (resolve, reject) => {
+    getByLoanRequestId = (loanRequestId: string) => new Promise<any>(async (resolve, reject) => {
         try {
             let repo = this._baseRepository as IDocumentRepository;
             let documents = await repo.getByLoanRequestId(loanRequestId);
+            resolve({ status: true, data: documents });
+        } catch (err:any) {
+            console.log(err.message);
+            resolve({ status: false, data: err });
+        }
+    });
+    getByLoanRequest = (loanRequestId: number,loanRequestLogId: number) => new Promise<any>(async (resolve, reject) => {
+        try {
+            let repo = this._baseRepository as IDocumentRepository;
+            let documents = await repo.getByLoanRequest(loanRequestId,loanRequestLogId);
             resolve({ status: true, data: documents });
         } catch (err:any) {
             console.log(err.message);

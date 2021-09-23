@@ -99,6 +99,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   showUploadSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showUpload$: Observable<boolean> = this.showUploadSubject.asObservable();
   loanRequestID: number
+  loanRequestLogID: number
 
   requirementSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   requirement$: Observable<any> = this.requirementSubject.asObservable();
@@ -269,10 +270,11 @@ export class LoansComponent implements OnInit, OnDestroy {
     this._documentService.download(url, filename)
   }
 
-  documentUpload(loanType: string, applyingAs: string, loanRequestID: number) {
+  documentUpload(loanType: string, applyingAs: string, loanRequestID: number,loanRequestLogID:number) {
     this.showUploadSubject.next(true)
     this.getRequirements(loanType, applyingAs)
     this.loanRequestID = loanRequestID
+    this.loanRequestLogID= loanRequestLogID
   }
   closeUpload() {
     this.showUploadSubject.next(false)
@@ -285,7 +287,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   }
 
   onChange(result: any) {
-    this._documentService.attachDocument(result.id, this.loanRequestID).subscribe(c => {
+    this._documentService.attachDocument(result.id, this.loanRequestID,this.loanRequestLogID).subscribe(c => {
       this._utility.setSuccess("Document Uploaded successfully")
       this.showUploadSubject.next(false);
       this.showSubject.next(false);

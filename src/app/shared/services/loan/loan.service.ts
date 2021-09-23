@@ -30,7 +30,7 @@ export class LoanService {
   runningLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   runningLoan$: Observable<boolean> = this.runningLoanSubject.asObservable();
 
-  interval = 1000000000//environment.production ? 300000 : 30000;
+  interval = environment.production ? 300000 : 30000;
   constructor(
     private _http: HttpClient,
     private _utility: Utility,

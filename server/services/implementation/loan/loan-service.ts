@@ -106,7 +106,7 @@ export class LoanService implements ILoanService {
             {
               key: "NOK Information",
               data: [
-                { key: "Name", value: this._utilService.replaceAll(this._utilService.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", ""),"undefined","") },
+                { key: "Name", value: this._utilService.replaceAll(this._utilService.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", ""), "undefined", "") },
                 { key: "Date Of Birth", value: request.Customer?.NOK?.dateOfBirth },
                 { key: "Relationship", value: request.Customer?.NOK?.relationship.toString() },
                 { key: "Email Address", value: request.Customer?.NOK?.email },
@@ -162,8 +162,8 @@ export class LoanService implements ILoanService {
           requestDetails = [...requestDetails, ...business];
         }
         if (type != "loanRequest") {
-          loanRequestResponse = await this._loanRequestService.search({ pageNumber: 1, maxSize: 1, requestId: request.requestId });
-          loanRequest = loanRequestResponse.data?.rows[0]
+          //loanRequestResponse = await this._loanRequestService.getById((request as LoanRequestLog).loanRequestID)//.search({ pageNumber: 1, maxSize: 1, requestId: request.requestId });
+          loanRequest = await this._loanRequestService.getById((request as LoanRequestLog).loanRequestID);//loanRequestResponse.data?.rows[0]
         } else {
           loanRequest = request;
         }
@@ -171,7 +171,7 @@ export class LoanService implements ILoanService {
           let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest.id);
           let totalRepayment = 0;
           let documents: Document[] = [];
-          let response = await this._documentService.getByLoanRequestId(loanRequest.id);
+          let response = await this._documentService.getByLoanRequestId(request.requestId);
           if (response.status) {
             documents = response?.data as Document[];
 
@@ -208,7 +208,7 @@ export class LoanService implements ILoanService {
     let d: any = denominator == "Months" ? "months" : "days";
     return funded.add(tenure, d);
   }
-  updateStatus = ({ requestStatus, id, failureReason,message }: any) => new Promise<any>(async (resolve, reject) => {
+  updateStatus = ({ requestStatus, id, failureReason, message }: any) => new Promise<any>(async (resolve, reject) => {
     try {
       let loanRequest = await this._loanRequestService.getById(id);
       if (!loanRequest || Object.keys(loanRequest).length == 0) throw "Invalid Loan Request";
@@ -251,7 +251,6 @@ export class LoanService implements ILoanService {
 
       loanRequestLog.requestStatus = requestStatus;
       loanRequestLog.updatedAt = new Date();
-      console.log("loan Request Log", loanRequestLog);
       await this._loanRequestLogRepository.update(loanRequestLog);
       if (requestStatus == LoanRequestStatus.Funded) {
         //create disbursed loan record
@@ -267,7 +266,7 @@ export class LoanService implements ILoanService {
       notification.title = `Vanaheim: Loan Status Update`
       notification.data = new WebNotData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
-      await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html:failureReason? this._templateService.STATUS_UPDATE_DECLINED(customer.firstName,message??requestStatus, loanRequest.requestId):requestStatus== LoanRequestStatus.UpdateRequired? this._templateService.STATUS_UPDATE_REQUIRED(requestStatus, loanRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${loanRequestLog.id}`,message): this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
+      await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: failureReason ? this._templateService.STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, loanRequest.requestId) : requestStatus == LoanRequestStatus.UpdateRequired ? this._templateService.STATUS_UPDATE_REQUIRED(requestStatus, loanRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${loanRequestLog.id}`, message) : this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
       await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
       resolve({ status: true, data: loanRequest });
     } catch (err: any) {
@@ -286,7 +285,7 @@ export class LoanService implements ILoanService {
       }
       let c = Object.assign(customer.dataValues as Customer, new Customer());
       // console.log("Customer",c)
-      let { loanRequest, templates } = await this._loanRequestService.createLoanRequest(request, c);
+      let { loanRequest, templates, loanRequestLog } = await this._loanRequestService.createLoanRequest(request, c);
 
 
       //Send Email to support and customer
@@ -302,7 +301,8 @@ export class LoanService implements ILoanService {
             // let doc: Document = new Document();
             // Object.assign(doc, docInDb.dataValues as Document)
             documentPath.push(docInDb.url);
-            docInDb.loanRequestID = loanRequest.id;
+            docInDb.loanRequestID = loanRequest.requestId;
+            docInDb.loanRequestLogID = loanRequestLog?.id;
             await this._documentService.update(docInDb)
           }
         }

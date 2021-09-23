@@ -329,7 +329,7 @@ export class Store {
     return ""
   }
   setItem(key: string, value: any) {
-    if(this._authService.isLoggedIn()){
+    if(this._authService.isLoggedIn() || ["page","previous"].includes(key)){
     localStorage.setItem(key, value);
     }
   }

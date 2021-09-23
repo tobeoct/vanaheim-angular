@@ -63,6 +63,7 @@ export class CustomerComponent implements OnInit {
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
+      console.log(r)
       if (localStorage.getItem("page") && !r) this.activeLoanSubject.next(true)
 
     });

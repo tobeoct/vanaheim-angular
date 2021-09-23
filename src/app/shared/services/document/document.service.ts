@@ -36,8 +36,8 @@ export class DocumentService {
       }));
   }
 
-  attachDocument(documentID: number, loanRequestID: number): Observable<any> {
-    return this._http.get<any>(`${environment.apiUrl}/document/attachLoan?documentID=${documentID}&loanRequestID=${loanRequestID}`)
+  attachDocument(documentID: number, loanRequestID: number,loanRequestLogID:number): Observable<any> {
+    return this._http.get<any>(`${environment.apiUrl}/document/attachLoan?documentID=${documentID}&loanRequestID=${loanRequestID}&loanRequestLogID=${loanRequestLogID}`)
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response

@@ -122,7 +122,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
     }
   }
   onNavigate(route: string, params: any = {}): void {
-    let base = this.isLoggedIn ? "my/loans/apply/" : "welcome/loans/apply/"
+    let base = this.isLoggedIn ? "my/loans" : "welcome/loans"
     const r = base + route;
     this._router.navigate([r], { queryParams: params })
   }

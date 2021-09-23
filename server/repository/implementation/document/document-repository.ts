@@ -6,16 +6,28 @@ import { BaseRepository } from "../base-repository";
   constructor(_db:any){
     super(_db.Document)
   }
-   getByLoanRequestId= (loanRequestId: number) => {
+   getByLoanRequestId= (loanRequestId: string) => {
     return new Promise<any[]>(async (resolve, reject) =>{
       resolve(await this._db.findAll({
         where: {
-          loanRequestID: loanRequestId?.toString()
+          loanRequestID: loanRequestId
         },
         order:[["updatedAt","DESC"]]
       }));
     });
     
+}
+getByLoanRequest= (loanRequestId: number,loanRequestLogId: number) => {
+  return new Promise<any[]>(async (resolve, reject) =>{
+    resolve(await this._db.findAll({
+      where: {
+        loanRequestID: loanRequestId?.toString(),
+        loanRequestLogID: loanRequestLogId
+      },
+      order:[["updatedAt","DESC"]]
+    }));
+  });
+  
 }
   getByCustomerID= (customerID: number) => {
     return new Promise<any[]>(async (resolve, reject) =>{

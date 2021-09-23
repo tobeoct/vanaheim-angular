@@ -130,7 +130,11 @@ export class RequestComponent implements OnInit {
     const indicator = this.loanStatuses.find(l => l.label == c)?.key;
     this.indicatorSubject.next(indicator);
     if ((c.toLowerCase() != "notqualified" && c.toLowerCase() != "declined") && (c.toLowerCase() != "updateRequired")) {
-      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "");
+      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "").then(response => {
+        this.loadingSubject.next(false)
+        this._utilityService.setSuccess("Successfully updated status and sent email to customer")
+        this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))
+      });
     } else {
       if (c.toLowerCase() == "updateRequired") {
         this.enterUpdateSubject.next(true)
@@ -143,7 +147,7 @@ export class RequestComponent implements OnInit {
   proceed() {
     // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
     this.loadingSubject.next(true)
-    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.lastStatusSubject.value.toLowerCase()=="updaterequired"?undefined: this.failureReason.value,  this.lastStatusSubject.value.toLowerCase()=="updaterequired"?this.uMailMessage.value:this.mailMessage.value).then(response => {
+    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.lastStatusSubject.value.toLowerCase() == "updaterequired" ? undefined : this.failureReason.value, this.lastStatusSubject.value.toLowerCase() == "updaterequired" ? this.uMailMessage.value : this.mailMessage.value).then(response => {
       this.loadingSubject.next(false)
       this._utilityService.setSuccess("Successfully updated status and sent email to customer")
       this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))

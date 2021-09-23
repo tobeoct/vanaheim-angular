@@ -282,7 +282,7 @@
                         <a style="margin-right:10px" (click)="showRepayment(loanDetails?.disbursedLoan.id)"><u><b>View Repayments</b></u></a>
                         <ng-container *ngIf="loanDetails?.status=='UpdateRequired'">
                             <app-button fieldClass="no-margin--all"
-                                (onClick)="documentUpload(loanDetails?.loanType, loanDetails?.applyingAs, loanDetails?.loanRequestID)"
+                                (onClick)="documentUpload(loanDetails?.loanType, loanDetails?.applyingAs, loanDetails?.loanRequestID, loanDetails?.id)"
                                 [class]="'widget_button--small no-margin--all'" class="no-margin--all">
                                 <ng-container slot="button">Upload Document</ng-container>
                             </app-button>

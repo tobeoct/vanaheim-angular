@@ -176,6 +176,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             loanRequest.requestDate = new Date();
             loanRequest.status = BaseStatus.Active;
             loanRequest.loanPurpose = loanDetails.purpose;
+            loanRequest.failureReason="";
             loanRequest.tenure = loanDetails.tenure;
             loanRequest.amount = this._utilService.convertToPlainNumber(loanDetails.loanAmount);
             loanRequest.monthlyPayment = this._utilService.convertToPlainNumber(loanDetails.monthlyRepayment);
@@ -244,8 +245,10 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             let loanRequestInDb = loanRequest
             if(!loanRequest.id ||loanRequest.id==0){loanRequestInDb = await this._baseRepository.create(loanRequest)}
             else {await this._baseRepository.update(loanRequest);}
-            let loanRequestLog = loanRequest as LoanRequestLog;
+            let loanRequestLog = Object.assign({},loanRequest as LoanRequestLog);
+            loanRequestLog.id = 0;
             loanRequestLog.loanRequestID = loanRequestInDb.id;
+            console.log("LOAN REQUEST LOG", loanRequestLog, loanRequestInDb)
             let loanRequestLogInDb = await this._loanRequestLogRepository.create(loanRequestLog);
             loanRequest.loanTypeRequirements = await this._loanTypeRequirementService.createLoanRequirement(loanApplication, category, customer);
             loanRequest.loanTypeRequirements.loanRequestLogID = loanRequestLogInDb.id || 0;
@@ -272,7 +275,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
                 templates.push(loanRequest.loanTypeRequirements.collateral)
             }
             console.log(templates);
-            resolve({ loanRequest, templates });
+            resolve({ loanRequest, templates,loanRequestLog });
         } catch (err:any) {
             console.log(err);
             reject(err);
