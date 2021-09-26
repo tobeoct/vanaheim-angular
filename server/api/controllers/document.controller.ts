@@ -49,11 +49,13 @@ export default class DocumentController {
       } else {
         res.statusCode = 400;
         res.data = { message: "Invalid User" }
+        next();
 
       }
     } catch (err) {
       res.statusCode = 400;
       res.data = { message: "An error occurred" }
+      next();
     }
   }
   @route('/upload')
@@ -73,8 +75,8 @@ export default class DocumentController {
       next();
     } else {
       res.statusCode = 400;
-      res.data = {}
-
+      res.data = {message:"Invalid User"}
+      next()
     }
   }
   @route('/getAll')
