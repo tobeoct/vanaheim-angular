@@ -26,6 +26,10 @@ module.exports = (sequelize:any, DataTypes:any) => {
      type: DataTypes.STRING,
      allowNull: false,
    },
+   path:{
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
    loanRequestID:{
     type: DataTypes.STRING,
     allowNull: true,

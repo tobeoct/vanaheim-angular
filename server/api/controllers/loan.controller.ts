@@ -137,7 +137,7 @@ export default class UserController {
     getLatestLoan =async (req:any, res:any,next:any) => {
         console.log("Getting Latest Loan")
         let response:any = await this._loanRequestService.getLatestLoan(req.session.userData);
-        console.log("Gotten Latest Loan", response)
+        console.log("Gotten Latest Loan")
         if(response.status==true){
             res.statusCode = 200;
             res.data = response.data;

@@ -44,6 +44,9 @@ export class LoanService implements ILoanService {
       ]) : await this._loanRequestLogService.getByIdWithInclude(id, [{
         model: this._db.Customer,
         required: true
+      },{
+        model: this._db.LoanRequest,
+        required: true
       }]);
       if (request) {
         let loanRequestResponse: BaseResponse<SearchResponse<any[]>>;

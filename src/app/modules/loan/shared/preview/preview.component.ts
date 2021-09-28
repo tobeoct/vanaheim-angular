@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanResponse } from 'src/app/shared/poco/loan/loan-response';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
@@ -40,7 +41,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   autoClick$: Observable<boolean> = this.autoClickSubject.asObservable();
   fromSignIn = "fromSignIn";
   @ViewChild('button') button: ElementRef;
-  constructor(private _store: Store, private _router: Router, private _zone: NgZone, private _fb: FormBuilder, private _authenticationService: AuthService, private _loanService: LoanService) { }
+  constructor(private _store: Store,private _utility:Utility, private _router: Router, private _zone: NgZone, private _fb: FormBuilder, private _authenticationService: AuthService, private _loanService: LoanService) { }
   ngAfterViewInit(): void {
     if (this._store.getItem(this.fromSignIn)) {
       this.moveToSubmit();
@@ -70,6 +71,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   }
   close2 = () => {
     this.show2Subject.next(false);
+    this._loanService.continueApplication(false)
     this.onNavigate("my/loans");
     // this.apiErrorSubject.next();
     // this.apiSuccessSubject.next();

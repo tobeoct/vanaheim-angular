@@ -66,12 +66,13 @@ export default class DocumentController {
       let documentUpload = req.body as DocumentUpload;
       let customer = req.session.userData.customer as Customer;
       let response = await this._documentService.processDocument(documentUpload, customer);
-      if (response.status = true) {
+      if (response.status == true) {
         res.statusCode = 200;
+        res.data = response.data;
       } else {
         res.statusCode = 400;
+        res.data = response;
       }
-      res.data = response.data;
       next();
     } else {
       res.statusCode = 400;

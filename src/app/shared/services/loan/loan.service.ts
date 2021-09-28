@@ -30,12 +30,17 @@ export class LoanService {
   runningLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   runningLoan$: Observable<boolean> = this.runningLoanSubject.asObservable();
 
+
+  activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   interval = environment.production ? 300000 : 30000;
   constructor(
     private _http: HttpClient,
     private _utility: Utility,
     private _store: Store) {
 
+  }
+  continueApplication(value:boolean){
+    this.activeLoanSubject.next(value);
   }
   getTenureRange = (type: string) => {
     if (type.toLowerCase().includes("float")) {
@@ -190,7 +195,16 @@ export class LoanService {
             return Object.keys(response.response).length > 0 ? response.response : null;
           }
           return null;
-        }), shareReplay(1))), retry()
+        }), catchError(err => {
+          console.error(err);
+          this.runningLoanSubject.next(false)
+          return EMPTY;
+        })))
+        , catchError(err => {
+          console.error(err);
+          this.runningLoanSubject.next(false)
+          return EMPTY;
+        })
       )
   }
 
@@ -209,7 +223,7 @@ export class LoanService {
     this.search$,
     this.paging$
   ])
-    .pipe(mergeMap(([loans, filter, search, paging]) => this.search({ ...paging, status: filter, search })), shareReplay(1),
+    .pipe(mergeMap(([loans, filter, search, paging]) => this.search({ ...paging, status: filter, search })),
       map(value => value),
       catchError(err => {
         console.error(err);

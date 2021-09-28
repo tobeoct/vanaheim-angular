@@ -463,4 +463,13 @@ export class Store {
     this.pageSubject.next(page);
     // this._router.navigate([".."])
   }
+
+  flushCache(){
+    localStorage.removeItem('user');
+    localStorage.removeItem('session_token');
+    localStorage.removeItem("expires_at");
+    localStorage.removeItem("page");
+    localStorage.removeItem("previous");
+    localStorage.removeItem("loan-application");
+  }
 }

@@ -2,6 +2,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { VCValidators } from '@validators/default.validators';
+import LZString = require('lz-string');
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -106,7 +107,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
     let docUpload = new DocumentUpload();
     let doc = new Document();
     docUpload.uploaded = false;
-    docUpload.data = data;
+    docUpload.data = LZString.compress(data);
     doc.id = 0;
     doc.fileName = name;
     doc.label = this.title;
@@ -123,6 +124,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
           this.showTooltipSubject.next(false)
         }
       },1000)
+    },error=>{
+      this.loadingSubject.next(false);
+      this.uploadedSubject.next(false);
+
     });
 
     this.allSubscriptions.push(sub);

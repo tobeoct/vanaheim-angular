@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
+import { BehaviorSubject, combineLatest, EMPTY, from, Observable, throwError, timer } from 'rxjs';
 import { catchError, concatMap, filter, map, mergeMap, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Document, DocumentUpload } from 'src/app/modules/loan/shared/document-upload/document';
 import { Utility } from '../../helpers/utility.service';
@@ -33,16 +33,24 @@ export class DocumentService {
         documentUpload.uploaded = false;
         documentUpload.document.id = 0;
         return document;
+      }), catchError(err => {
+        console.log(err)
+        this._utility.setError(err);
+        return throwError(err)
       }));
   }
 
-  attachDocument(documentID: number, loanRequestID: number,loanRequestLogID:number): Observable<any> {
+  attachDocument(documentID: number, loanRequestID: number, loanRequestLogID: number): Observable<any> {
     return this._http.get<any>(`${environment.apiUrl}/document/attachLoan?documentID=${documentID}&loanRequestID=${loanRequestID}&loanRequestLogID=${loanRequestLogID}`)
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response
         }
         return null;
+      }), catchError(err => {
+        console.log(err)
+        this._utility.setError(err);
+        return throwError(err)
       }));
   }
 
@@ -55,23 +63,42 @@ export class DocumentService {
         return [];
       }), catchError(err => EMPTY));
   }
+  downloadImageFromUrl = async (imageSrc: string, fileName: string) => {
+    const image = await fetch(imageSrc)
+    const imageBlob = await image.blob()
+    const imageURL = URL.createObjectURL(imageBlob)
 
+    const link = document.createElement('a')
+    link.href = imageURL
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
   download(url: string, fileName: string) {
-    
+
     this._utility.setInfo("Downloading")
-    this._http
-      .post(`${environment.apiUrl}/document/download`, { url }, { responseType: "blob" }) //set response Type properly (it is not part of headers)
-      .toPromise()
-      .then(blob => {
-        saveAs(blob, fileName);
 
-        this._utility.setSuccess("Downloaded");
-      })
-      .catch((err: any) => {
-        console.error("download error = ", err);
+    this.downloadImageFromUrl(url, fileName).then(res =>
+      this._utility.setSuccess("Downloaded")
+     ).catch ((err: any) => {
+      console.error("download error = ", err);
 
-        this._utility.setError("Download Failed");
-      })
+      this._utility.setError("Download Failed");
+    })
+    // this._http
+    //   .post(`${environment.apiUrl}/document/download`, { url }, { responseType: "blob" }) //set response Type properly (it is not part of headers)
+    //   .toPromise()
+    //   .then(blob => {
+    //     saveAs(blob, fileName);
+
+    //     this._utility.setSuccess("Downloaded");
+    //   })
+    //   .catch((err: any) => {
+    //     console.error("download error = ", err);
+
+    //     this._utility.setError("Download Failed");
+    //   })
   }
 
   // MD5 = function(d:any){let r = M(V(Y(X(d),8*d.length)));return r.toLowerCase()};

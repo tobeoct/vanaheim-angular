@@ -17,8 +17,6 @@
     {
       "name": "api-freshness",
       "urls": [
-        "/api/auth/token",
-        "/api/loans/getLatestLoan",
         "/api/customer/bvn",
         "/api/customer/getById",
         "/api/customer/shareholders",
@@ -27,6 +25,19 @@
         "/api/repayment/getRepayments",
         "/api/loans/getLoanLogDetails",
         "/api/loans/getDisbursedLoan"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 100,
+        "maxAge": "60s",
+        "timeout": "10s"
+      }
+    },
+    {
+      "name": "api-freshness-mn",
+      "urls": [
+        "/api/auth/token",
+        "/api/loans/getLatestLoan"
       ],
       "cacheConfig": {
         "strategy": "freshness",

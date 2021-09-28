@@ -42,6 +42,7 @@ import { StaffRepository } from '@repository/implementation/staff-repository';
 import { DisbursedLoanRepository } from '@repository/implementation/loan/disbursed-loan-repository';
 import { RepaymentRepository } from '@repository/implementation/repayment-repository';
 import { DisbursedLoanService } from '@services/implementation/loan/disbursed-loan-service';
+import { Cloudinary } from '@services/implementation/image/cloudinary-service';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -51,6 +52,7 @@ const md5 = require('md5');
 const fs = require('fs');
 const sanitizer = require('sanitizer');
 const fsExtra = require('fs-extra');
+var cloudinary = require('cloudinary').v2;
 export default class Bootstrap {
     instance:any
     constructor() {
@@ -70,6 +72,7 @@ export default class Bootstrap {
     
         container.register({
             app: asClass(App).singleton(),
+            cloudinary: asValue(cloudinary),
             _appConfig: asClass(AppConfig).singleton(),
             _db: asValue(db.default||db),
             jwt:asValue(jwt),
@@ -120,6 +123,7 @@ export default class Bootstrap {
             _userService: asClass(UserService).singleton(),
             _emailService: asClass(EmailService).singleton(),
             _documentService: asClass(DocumentService).singleton(),
+            _cloudinaryService: asClass(Cloudinary).singleton(),
         });
 
         return container;

@@ -7,6 +7,7 @@ export class Document extends BaseEntity{
    url:string;
    extension:string;
    fileName:string;
+   path:string;
    requirement:string;
    customerID:number;
    loanRequestID:string;

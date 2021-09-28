@@ -17,9 +17,9 @@ import { LoanDetails } from "src/app/modules/loan/shared/loan-calculator/loan-de
 import { BaseResponse, BaseService } from "../base-service";
 import UtilService from "../common/util";
 
-export type SearchResponse<T>={
-    count:number,
-    rows:T
+export type SearchResponse<T> = {
+    count: number,
+    rows: T
 }
 
 export class LoanRequestService extends BaseService<LoanRequest> implements ILoanRequestService {
@@ -89,7 +89,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             resolve({ status: true, data: { count: requests.count, rows } });
 
         }
-        catch (err:any) {
+        catch (err: any) {
             console.error(err);
             resolve({ status: false, data: err });
         }
@@ -104,18 +104,16 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
 
             let queryParameters: any = { customerID: customer.id };
             queryParameters["requestStatus"] = { [this.Op.not]: "Completed" };
-            // queryParameters["order"]= [['requestDate', 'DESC']]
             let requests = await repo.search({ ...queryParameters }, 0, 1, [['requestDate', 'DESC']]);
-            let loan =requests ? requests["rows"][0]:{};
-            if(loan){
+            let loan = requests ? requests["rows"][0] : {};
+            if (loan) {
                 let log = await this._loanRequestLogRepository.getByLoanRequestID(loan.id);
-               
+
                 loan["dataValues"]["loanRequestLogID"] = log?.id;
-                 console.log(loan)
             }
             resolve({ status: true, data: loan });
         }
-        catch (err:any) {
+        catch (err: any) {
             console.error(err);
             resolve({ status: false, message: err });
         }
@@ -127,7 +125,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             // console.log("Loan Request",request);
             resolve(request);
         }
-        catch (err:any) {
+        catch (err: any) {
             console.error(err);
             reject(err);
         }
@@ -136,11 +134,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
         try {
             const category = request.category;
             let templates: IBaseEntity[] = [];
-
-
-            // this._templateService.generatePDF("Loan Application",[c],"Test");
             let loanRequest = await this.getByCustomerID(customer.id);
-            console.log("loan Request", loanRequest)
             if (loanRequest && loanRequest.requestStatus != LoanRequestStatus.NotQualified && loanRequest.requestStatus != LoanRequestStatus.Completed) {
                 throw "You have a loan that we are currently still processing";
 
@@ -176,7 +170,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             loanRequest.requestDate = new Date();
             loanRequest.status = BaseStatus.Active;
             loanRequest.loanPurpose = loanDetails.purpose;
-            loanRequest.failureReason="";
+            loanRequest.failureReason = "";
             loanRequest.tenure = loanDetails.tenure;
             loanRequest.amount = this._utilService.convertToPlainNumber(loanDetails.loanAmount);
             loanRequest.monthlyPayment = this._utilService.convertToPlainNumber(loanDetails.monthlyRepayment);
@@ -243,9 +237,9 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             loanRequest.denominator = "Months";
             loanRequest.customerID = customer.id;
             let loanRequestInDb = loanRequest
-            if(!loanRequest.id ||loanRequest.id==0){loanRequestInDb = await this._baseRepository.create(loanRequest)}
-            else {await this._baseRepository.update(loanRequest);}
-            let loanRequestLog = Object.assign({},loanRequest as LoanRequestLog);
+            if (!loanRequest.id || loanRequest.id == 0) { loanRequestInDb = await this._baseRepository.create(loanRequest) }
+            else { await this._baseRepository.update(loanRequest); }
+            let loanRequestLog = Object.assign({}, loanRequest as LoanRequestLog);
             loanRequestLog.id = 0;
             loanRequestLog.loanRequestID = loanRequestInDb.id;
             console.log("LOAN REQUEST LOG", loanRequestLog, loanRequestInDb)
@@ -257,12 +251,14 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             let ltRInDb = await this._loanTypeRequirementRepository.create(loanRequest.loanTypeRequirements);
             loanRequest.loanTypeRequirementID = ltRInDb.id;
             loanRequestLog.loanTypeRequirementID = ltRInDb.id;
+            loanRequestLog.id =loanRequestLogInDb.id;
             loanRequest.id = loanRequestInDb.id;
             // save loan requirements 
             loanRequestInDb = await this._baseRepository.update(loanRequest);
             loanRequestLogInDb = await this._loanRequestLogRepository.update(loanRequestLog);
+            console.log("LOAN REQUEST LOG", loanRequestLog, loanRequestLogInDb)
 
-            templates.push(Object.assign(new LoanRequest(),loanRequest));
+            templates.push(Object.assign(new LoanRequest(), loanRequest));
             templates.push(account1);
             if (account2.bank) templates.push(account2);
             if (category == "personal") {
@@ -275,8 +271,8 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
                 templates.push(loanRequest.loanTypeRequirements.collateral)
             }
             console.log(templates);
-            resolve({ loanRequest, templates,loanRequestLog });
-        } catch (err:any) {
+            resolve({ loanRequest, templates, loanRequestLog });
+        } catch (err: any) {
             console.log(err);
             reject(err);
             // resolve({status:false, data:err.message});

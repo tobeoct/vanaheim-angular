@@ -137,9 +137,9 @@ export class AuthService {
         localStorage.removeItem('user');
         localStorage.removeItem('session_token');
         localStorage.removeItem("expires_at");
-        localStorage.removeItem("page");
+        // localStorage.removeItem("page");
         localStorage.removeItem("previous");
-        localStorage.removeItem("loan-application");
+        // localStorage.removeItem("loan-application");
         this.userSubject.next(new User());
         this.isLoggedInSubject.next(false);
         this.timeoutSubscription.unsubscribe();

@@ -24,9 +24,7 @@ export class CustomerComponent implements OnInit {
   showSubject: Subject<string> = new Subject<string>();
   show$: Observable<string> = this.showSubject.asObservable();
 
-
-  activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  activeLoan$: Observable<boolean> = this.activeLoanSubject.asObservable();
+  activeLoan$: Observable<boolean>;
   runningLoanSubscription: Subscription
 
   showInvalid$: Observable<boolean>;
@@ -57,14 +55,17 @@ export class CustomerComponent implements OnInit {
     if (this.runningLoanSubscription) this.runningLoanSubscription.unsubscribe()
   }
   ngOnInit(): void {
+
+    this.activeLoan$ = this._loanService.activeLoanSubject.asObservable();
     const sideNavSub = this._utility.activeNavigation$.subscribe(r => {
       this.showSubject.next(r.toString());
     })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
-      console.log(r)
-      if (localStorage.getItem("page") && !r) this.activeLoanSubject.next(true)
+      if (localStorage.getItem("page") && !r) { this._loanService.continueApplication(true); } else {
+        this._loanService.continueApplication(false);
+      }
 
     });
 
@@ -97,9 +98,8 @@ export class CustomerComponent implements OnInit {
     if (!this.isLoggedIn) {
       baseUrl = "welcome"
     }
-    let url = baseUrl + endpoint
-    console.log(url)
+    let url = baseUrl + endpoint;
     this._router.navigate([url]);
-    this.activeLoanSubject.next(false)
+    this._loanService.continueApplication(false)
   }
 }
