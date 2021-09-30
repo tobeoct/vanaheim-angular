@@ -27,6 +27,8 @@
         "/api/customer/all",
         "/api/repayment/getRepayments",
         "/api/loans/getLoanLogDetails",
+        "/api/loans/getLoanDetails",
+        "/api/loans/search",
         "/api/loans/getDisbursedLoan"
       ],
       "cacheConfig": {

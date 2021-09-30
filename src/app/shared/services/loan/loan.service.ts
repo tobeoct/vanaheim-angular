@@ -199,7 +199,8 @@ export class LoanService {
           console.error(err);
           this.runningLoanSubject.next(false)
           return EMPTY;
-        })))
+        }))),
+        shareReplay({bufferSize:1, refCount:true})
         , catchError(err => {
           console.error(err);
           this.runningLoanSubject.next(false)

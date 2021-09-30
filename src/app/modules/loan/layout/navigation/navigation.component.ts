@@ -79,6 +79,10 @@ show$:Observable<boolean> = this.showSubject.asObservable();
     this.allSubscriptions.push(sub);
   }
 
+  ngOnChanges():void{
+    this.isLoggedIn = this._authService.isLoggedIn();
+  }
+
   onNavigate(route:string){
     this._router.navigate([route], { relativeTo: this._route })
   }
