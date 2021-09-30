@@ -56,26 +56,26 @@ export default class App {
   _create(container: any) {
     let _this = this;
     const app = express();
-    app.use(helmet({
-      contentSecurityPolicy: false,
-    }))
+    // app.use(helmet({
+    //   contentSecurityPolicy: false,
+    // }))
     // app.use(helmet.contentSecurityPolicy());
-    // app.use(helmet.dnsPrefetchControl());
+    app.use(helmet.dnsPrefetchControl());
     // app.use(helmet.expectCt());
-    // app.use(helmet.frameguard());
-    // app.use(helmet.hidePoweredBy());
-    // app.use(helmet.hsts());
-    // app.use(helmet.ieNoOpen());
-    // app.use(helmet.noSniff());
+    app.use(helmet.frameguard());
+    app.use(helmet.hidePoweredBy());
+    app.use(helmet.hsts());
+    app.use(helmet.ieNoOpen());
+    app.use(helmet.noSniff());
     // app.use(helmet.permittedCrossDomainPolicies());
     // app.use(helmet.referrerPolicy());
-    // app.use(helmet.xssFilter());
+    app.use(helmet.xssFilter());
     app.use(compression());
     app.use(express.static('dist/vanaheim'));
     app.use(morgan("combined"))
-    app.use(express.json({ limit: '100mb' }))
+    app.use(express.json({ limit: '20mb' }))
     app.use(express.urlencoded({ extended: true }))
-    app.use(timeout('120s'));
+    app.use(timeout('150s'));
     app.use(expAutoSan.all)
     app.use(cors())
     app.use(scopePerRequest(container));

@@ -67,7 +67,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
       allowNull: true,
     },
     requestStatus:{
-      type: DataTypes.ENUM('Pending','Processing','UpdateRequired','NotQualified','Error','Approved','Completed'),
+      type: DataTypes.ENUM('Pending','Processing','UpdateRequired','NotQualified','Error','Approved','Completed','Defaulting'),
       allowNull: false,
       defaultValue: 'Pending'
     },
