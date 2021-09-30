@@ -5,8 +5,7 @@
     {
       "name": "api-performance",
       "urls": [
-        "/assets/**",
-        "/api/**"
+        "/assets/**"
       ],
       "cacheConfig": {
         "strategy": "performance",
@@ -20,6 +19,10 @@
         "/api/customer/bvn",
         "/api/customer/getById",
         "/api/customer/shareholders",
+        "/api/customer/employers",
+        "/api/customer/companies",
+        "/api/customer/nok",
+        "/api/customer/collaterals",
         "/api/document/getAll",
         "/api/customer/all",
         "/api/repayment/getRepayments",

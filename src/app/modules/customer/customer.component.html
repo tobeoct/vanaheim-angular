@@ -14,7 +14,7 @@
         Notifications are not available in the browser or enabled in the application
       </p> -->
     <ng-container slot="action">
-      <app-button [class]="'widget_button--small'" *ngIf="!isGranted" [outline]="true" (onClick)="submitNotification()">
+      <app-button [class]="'widget_button--small no-margin--all'" *ngIf="!isGranted" [outline]="true" (onClick)="submitNotification()">
         <ng-container slot="button">Notify Me</ng-container>
       </app-button>
     </ng-container>
