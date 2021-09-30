@@ -31,7 +31,7 @@ export class CustomerComponent implements OnInit {
   timerSubscription: Subscription;
   constructor(private swPush: SwPush, private _store: Store, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
     try {
-      this.showInvalid$ = this._utility.showLoanInvalid$;
+      this.showInvalid$ = this._utility.showLoanInvalidSubject.asObservable();
       if (environment.production) {
         this.isEnabled = this.swPush ? this.swPush.isEnabled : false;
         if (Notification) {

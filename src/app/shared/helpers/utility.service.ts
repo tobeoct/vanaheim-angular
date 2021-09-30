@@ -17,8 +17,7 @@ export class Utility {
   activeNavigation$: Observable<SideNavigationList> = this.activeNavigationSubject.asObservable();
   isSideNavOpenedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isSideNavOpened$: Observable<boolean> = this.isSideNavOpenedSubject.asObservable();
-  private showLoanInvalidSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  showLoanInvalid$: Observable<boolean> = this.showLoanInvalidSubject.asObservable();
+  showLoanInvalidSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   apiSuccessSubject: Subject<string> = new Subject<string>();
 

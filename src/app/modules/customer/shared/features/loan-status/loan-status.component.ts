@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-loan-status',
   templateUrl: './loan-status.component.html',
-  styleUrls: ['./loan-status.component.scss']
+  styleUrls: ['./loan-status.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoanStatusComponent implements OnInit {
 

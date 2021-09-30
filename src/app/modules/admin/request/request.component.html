@@ -64,7 +64,7 @@
               <p><b>Status</b></p>
             </div>
             <div>
-              <app-dropdown current="{{ctrl.value?ctrl.value:loanDetails.status}}" [control]="ctrl"
+              <app-dropdown current="{{ctrl.value?ctrl.value=='NotQualified'?'Declined':ctrl.value:loanDetails.status=='NotQualified'?'Declined':loanDetails.status}}" [control]="ctrl"
                 [fieldClass]="'no-margin--top'" [id]="'status'" aria-placeholder="Change loan status">
                 <app-option *ngFor="let t of loanStatuses; let i =index" [value]="t.label">{{t.label}}</app-option>
               </app-dropdown>
@@ -116,7 +116,7 @@
         <h3>Change Notice</h3>
       </app-modal-header>
       <app-modal-body slot="body">
-        <p>Are you sure you want to change the status of this loan to <b>{{ctrl.value}}</b>?</p>
+        <p>Are you sure you want to change the status of this loan to <b>{{ctrl.value=='NotQualified'?'Declined':ctrl.value}}</b>?</p>
         <div class="d-flex d-flex_horizontal--space-between">
           <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'"
             (onClick)="closeConfirmModal()">

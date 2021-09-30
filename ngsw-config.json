@@ -32,20 +32,8 @@
         "maxAge": "60s",
         "timeout": "10s"
       }
-    },
-    {
-      "name": "api-freshness-mn",
-      "urls": [
-        "/api/auth/token",
-        "/api/loans/getLatestLoan"
-      ],
-      "cacheConfig": {
-        "strategy": "freshness",
-        "maxSize": 100,
-        "maxAge": "60s",
-        "timeout": "10s"
-      }
     }
+    
   ],
   "assetGroups": [
     {

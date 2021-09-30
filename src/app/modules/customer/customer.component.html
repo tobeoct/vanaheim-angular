@@ -14,7 +14,9 @@
         Notifications are not available in the browser or enabled in the application
       </p> -->
     <ng-container slot="action">
-      <app-button [class]="'widget_button--small'" *ngIf="!isGranted" [outline]="true" (onClick)="submitNotification()"><ng-container slot="button">Notify Me</ng-container></app-button>
+      <app-button [class]="'widget_button--small'" *ngIf="!isGranted" [outline]="true" (onClick)="submitNotification()">
+        <ng-container slot="button">Notify Me</ng-container>
+      </app-button>
     </ng-container>
   </app-banner>
   <!-- </div> -->
@@ -41,7 +43,8 @@
     <h3>Oops,Invalid Action</h3>
   </app-modal-header>
   <app-modal-body slot="body">
-    <p style="text-align: center;"><b>You cannot apply for another loan if you have a running or processing loan</b></p>
+    <p style="text-align: center;"><b>You cannot continue to apply for another loan if you have a running or processing
+        loan</b></p>
   </app-modal-body>
 </app-modal>
 
