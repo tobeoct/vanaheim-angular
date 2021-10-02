@@ -21,6 +21,7 @@ const cookieParser = require('cookie-parser');
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
 import AppConfig, { Environment } from '@config';
+import { AWSService } from '@services/implementation/image/aws-service';
 import { inject, loadControllers, scopePerRequest } from 'awilix-express';
 import helmet = require('helmet');
 import { authoriseRequest, clientApiKeyValidation, authoriseResponse, sessionRequestAuthorisation, sessionResponseAuthorisation } from './middleware/authorise-middleware';
@@ -30,7 +31,7 @@ const publicVapidKey = 'BH9z7PCyti1n9ItSnlp_8qoyDHP-RUK-vdZrTCqaoYHKVKIlk2w3XPoZ
 const privateVapidKey = '_qHAcJ81LwWefymI1DnHmmeF6ZBqEeTmfXPFebOAGrM';
 export default class App {
 
-  constructor(private _appConfig: AppConfig, private _session: SessionMiddleware, private webPush: any) {
+  constructor(private _appConfig: AppConfig, private _session: SessionMiddleware, private webPush: any, private _awsService:AWSService) {
   }
 
   start(container: any, callback: any) {
@@ -75,7 +76,7 @@ export default class App {
     app.use(morgan("combined"))
     app.use(express.json({ limit: '20mb' }))
     app.use(express.urlencoded({ extended: true }))
-    app.use(timeout('150s'));
+    app.use(timeout('180s'));
     app.use(expAutoSan.all)
     app.use(cors())
     app.use(scopePerRequest(container));

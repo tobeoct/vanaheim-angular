@@ -107,7 +107,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
     let docUpload = new DocumentUpload();
     let doc = new Document();
     docUpload.uploaded = false;
-    docUpload.data = LZString.compress(data);
+    docUpload.data = data;//LZString.compress(data);
     doc.id = 0;
     doc.fileName = name;
     doc.label = this.title;

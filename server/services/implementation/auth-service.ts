@@ -25,7 +25,7 @@ class AuthService implements IAuthService{
     generateJWTToken = (userData:any) =>{
      return this.jwt.sign(userData, this._appConfig.JWT_SECRET_KEY, {
   
-      expiresIn: '2m' // expires in 365 days
+      expiresIn: '10m' // expires in 365 days
   
   });
   }

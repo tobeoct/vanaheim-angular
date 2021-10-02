@@ -13,9 +13,10 @@ import { BaseStatus } from "@models/helpers/enums/status";
 import RedisMiddleware from "server/middleware/redis-middleware";
 import { Cloudinary } from "./image/cloudinary-service";
 import LZString = require("lz-string");
+import { AWSService } from "./image/aws-service";
 
 class DocumentService extends BaseService<any> implements IDocumentService {
-    constructor(_documentRepository: IDocumentRepository,private _cloudinaryService:Cloudinary, private _redis: RedisMiddleware, private fs: any, private fsExtra: any, private _utilService: UtilService, private md5: any) {
+    constructor(_documentRepository: IDocumentRepository,private _cloudinaryService:Cloudinary,private _awsService:AWSService, private _redis: RedisMiddleware, private fs: any, private fsExtra: any, private _utilService: UtilService, private md5: any) {
         super(_documentRepository)
     }
     getByLoanRequestId = (loanRequestId: string) => new Promise<any>(async (resolve, reject) => {
@@ -64,11 +65,13 @@ class DocumentService extends BaseService<any> implements IDocumentService {
                 this.fs.writeFile(filePath, base64, { encoding: 'base64' }, async  () =>{
                     console.log('File created');
                     console.log(filePath)
-                    let url = await this._cloudinaryService.upload(filePath, name);
+                    // let url = await this._cloudinaryService.upload(filePath, name);
+                    let url = await this._awsService.upload(filePath,fileName,customerCode);
                     resolve({ name, extension, path: filePath, url })
                 });
             } else {
-                let url = await this._cloudinaryService.upload(filePath, name);
+                // let url = await this._cloudinaryService.upload(filePath, name);
+                let url = await this._awsService.upload(filePath,fileName,customerCode);
                 resolve({ name, extension, path: filePath, url })
             }
         } catch (err:any) {
@@ -80,7 +83,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
         try {
             // const customer = await this._customerRepository.getByUserID(userData.id);
             // let c = customer.dataValues as Customer;
-            const base64String = LZString.decompress(documentUpload.data)||"";
+            const base64String =documentUpload.data;// LZString.decompress(documentUpload.data)||"";
             let file = await this.createDocument(documentUpload.document.fileName, base64String, c.code)
             let repo = this._baseRepository as IDocumentRepository;
             let documentsInDb = await repo.getByCustomerID(c.id) as Document[];

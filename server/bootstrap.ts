@@ -43,6 +43,7 @@ import { DisbursedLoanRepository } from '@repository/implementation/loan/disburs
 import { RepaymentRepository } from '@repository/implementation/repayment-repository';
 import { DisbursedLoanService } from '@services/implementation/loan/disbursed-loan-service';
 import { Cloudinary } from '@services/implementation/image/cloudinary-service';
+import { AWSService } from '@services/implementation/image/aws-service';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -124,6 +125,7 @@ export default class Bootstrap {
             _emailService: asClass(EmailService).singleton(),
             _documentService: asClass(DocumentService).singleton(),
             _cloudinaryService: asClass(Cloudinary).singleton(),
+            _awsService: asClass(AWSService).singleton()
         });
 
         return container;

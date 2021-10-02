@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { LoanDeactivateGuard } from 'src/app/shared/guards/loan/deactivate.guard';
 import { LoanComponent } from '../loan/loan.component';
 import { InvestmentsComponent } from './investments/investments.component';
 import { LoansComponent } from './loans/loans.component';
@@ -9,7 +10,7 @@ const LOAN_ROUTES: Routes = [
 ]
 const routes: Routes = [
     {path:"loans", component: LoansComponent},
-    { path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES },
+    { path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES, canDeactivate: [LoanDeactivateGuard]},
     {path:"earnings",component:InvestmentsComponent},
   {path:"home", component:OnboardingComponent},
   {path:"**", redirectTo:"home"},

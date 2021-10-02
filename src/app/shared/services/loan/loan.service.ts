@@ -32,7 +32,7 @@ export class LoanService {
 
 
   activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  interval = environment.production ? 30000 : 30000;
+  interval = environment.production ? 30000 : 30000000000000000;
   constructor(
     private _http: HttpClient,
     private _utility: Utility,

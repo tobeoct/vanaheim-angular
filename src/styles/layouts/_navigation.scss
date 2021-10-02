@@ -35,9 +35,9 @@ ul{
      padding-right:5%;
     font-weight:300;
     opacity:.6;
-    // cursor:not-allowed;
+    cursor:not-allowed;
     transition:ease-in-out 0.3s;
-    // pointer-events:none;
+    pointer-events:none;
     font-size:1em;
     width: 100%;
     &:last-child{
@@ -49,9 +49,10 @@ ul{
  i{
     // display:none;
 }
-&[data-pointable]{
+&[data-pointable='true']{
     cursor: pointer !important;
     pointer-events: all;
+    opacity:1;
 }
 &[data-active],&--active{
     background:map-get($colors,yellow);
