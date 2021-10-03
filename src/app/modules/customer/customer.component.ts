@@ -67,7 +67,12 @@ export class CustomerComponent implements OnInit {
 
         this._loanService.continueApplication(true);
       } else {
-        this._utility.showLoanInvalidSubject.next(true);
+        if (localStorage.getItem("page")) {
+          this._utility.showLoanInvalidSubject.next(true);
+          this._store.setPage("");
+          this._store.removeItem("page")
+          this._store.removeItem("loan-application")
+        }
         this._loanService.continueApplication(false);
       }
 

@@ -21,7 +21,7 @@ export class RequestComponent implements OnInit {
   fForm: FormGroup;
   uForm: FormGroup;
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
-  loanStatuses: any[] = [{ label: "Pending", key: "new" }, { label: "Processing", key: "processing" }, { label: "UpdateRequired", key: "update" }, { label: "Declined", key: "declined" }, { label: "Approved", key: "approved" }, { label: "Funded", key: "funded" }];
+  loanStatuses: any[] = [{ label: "Processing", key: "processing" }, { label: "UpdateRequired", key: "update" }, { label: "Declined", key: "declined" }, { label: "Approved", key: "approved" }, { label: "Funded", key: "funded" }];
   ctrl: FormControl = new FormControl("");
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
   toDate: FormControl = new FormControl(moment().endOf("day").format('yyyy-MM-dd'));
