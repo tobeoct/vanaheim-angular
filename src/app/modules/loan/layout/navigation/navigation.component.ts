@@ -66,6 +66,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
+    this._authService.isLoggedIn();
     this.isLoggedIn$ = this._authService.isLoggedInSubject.asObservable()
     let sub = this._store.loanCategory$.subscribe((c: string) => {
       if (data[c]) {
