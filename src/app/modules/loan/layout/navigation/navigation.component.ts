@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { Utility } from 'src/app/shared/helpers/utility.service';
@@ -42,7 +42,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   theme: string;
   allSubscriptions: Subscription[] = [];
   active$: Observable<string>;
-  isLoggedIn: boolean = false;
+  isLoggedIn$: Observable<boolean> = of(false);
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -66,12 +66,12 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
-    this.isLoggedIn = this._authService.isLoggedIn();
+    this.isLoggedIn$ = this._authService.isLoggedInSubject.asObservable()
     let sub = this._store.loanCategory$.subscribe((c: string) => {
       if (data[c]) {
         let links = data[c].filter((d: any) => {
           if (c == "personal") return true;
-          if (this.isLoggedIn && c == "business" && d.title == "Additional") return false;
+          if (this._authService.isLoggedIn() && c == "business" && d.title == "Additional") return false;
           return true;
         })
         this.dataSelectionSubject.next(links)
@@ -104,9 +104,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(sub);
   }
 
-  ngOnChanges(): void {
-    this.isLoggedIn = this._authService.isLoggedIn();
-  }
+
 
   onNavigate(route: string) {
     this._router.navigate([route], { relativeTo: this._route })

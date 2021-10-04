@@ -1,7 +1,7 @@
 
 
-<ul class="sidenav animate__animated animate__fadeInLeft" *ngIf="!isLoggedIn">
-    <ng-container *ngIf="!isLoggedIn">
+<ul class="sidenav animate__animated animate__fadeInLeft" *ngIf="!(isLoggedIn$|async)">
+    <ng-container *ngIf="!(isLoggedIn$|async)">
         <div class="logo">
             <a href="/" ><img src="../../assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
         </div>
@@ -13,7 +13,7 @@ fiber_manual_record
 </ul>
 
 
-<ul class="sidenav sidenav-mini animate__animated animate__fadeInLeft" *ngIf="isLoggedIn && (show$|async)" >
+<ul class="sidenav sidenav-mini animate__animated animate__fadeInLeft" *ngIf="(isLoggedIn$|async) && (show$|async)" >
     
     <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [routerLinkActive]="'sidenav_link--active'" [attr.data-pointable]="nav.visited"  class="sidenav_link" id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
         <b><span class="material-icons material-icons-round">
@@ -24,7 +24,7 @@ check
 
 
 <ng-container *ngIf="(dataSelection$|async) as navs">
-<div class="sidenav_mobi theme_row" [ngClass]="{'loggedIn':!isLoggedIn}">
+<div class="sidenav_mobi theme_row" [ngClass]="{'loggedIn':!(isLoggedIn$|async)}">
     <div class="theme_color" style=" backdrop-filter: blur(4px); position: absolute; display: flex; align-items: center; right: 0px; z-index: 5; top:0%; background: rgba(0, 0, 0, 0.2); height: 100%; padding-left: 7px; padding-right: 5px;"><i class="fas fa-caret-right fa-2x"></i></div>
 <div class="theme_row theme_scrolling--wrapper theme_bg--yellow removables" style="display: flex;">
    
