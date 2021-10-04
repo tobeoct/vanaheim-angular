@@ -15,7 +15,7 @@ const data: any = {
   { visited: false, key: "accountInfo", title: "Account", id: "account-info", url: "account-info" },
   { visited: false, key: "documents", title: "Documents", id: "upload", url: "upload" },
   { visited: false, key: "preview", title: "Preview", id: "preview", url: "preview" },
-  { title: "Login", id: "login", url: "/auth/account" }],
+  { visited: true,key:"login", title: "Login", id: "login", url: "/auth/account" }],
   personal: [
     { visited: true, key: "loanCalculator", title: "Loan Details", id: "loan-calculator", url: "loan-calculator" },
     { visited: false, key: "bvn", title: "BVN", id: "bvn-info", url: "bvn-info" },
@@ -25,7 +25,7 @@ const data: any = {
     { visited: false, key: "nokInfo", title: "Next Of Kin", id: "nok-info", url: "nok-info" },
     { visited: false, key: "documents", title: "Documents", id: "upload", url: "upload" },
     { visited: false, key: "preview", title: "Preview", id: "preview", url: "preview" },
-    { title: "Login", id: "login", url: "/auth/account" },
+    {visited: true,key:"login", title: "Login", id: "login", url: "/auth/account" },
 
   ]
 }
@@ -83,7 +83,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
       let navigation = this.dataSelectionSubject.value;
       navigation.map((nav: any, i: number) => {
-        if (loan[nav.key]) {
+        if (loan[nav.key] && nav.key!=='login') {
           nav.visited = true;
 
           if (i < navigation.length) {
