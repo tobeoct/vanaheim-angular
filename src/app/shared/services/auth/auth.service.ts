@@ -18,6 +18,7 @@ export class AuthService {
     public user: Observable<User>;
     private timeoutSubscription: Subscription;
     public isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
     public get userValue(): User {
         return this.userSubject.value;
     }
