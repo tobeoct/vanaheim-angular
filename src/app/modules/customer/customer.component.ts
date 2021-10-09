@@ -63,7 +63,7 @@ export class CustomerComponent implements OnInit {
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
-      if (localStorage.getItem("page") && !r) {
+      if (localStorage.getItem("page") && !r && !this._router.url.includes("apply")) {
 
        setTimeout(()=>this._loanService.continueApplication(true),3000);
       } else {
