@@ -42,7 +42,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   theme: string;
   allSubscriptions: Subscription[] = [];
   active$: Observable<string>;
-  isLoggedIn$: Observable<boolean> = of(false);
+  isLoggedIn$: Observable<boolean>;
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -66,6 +66,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
+    console.log(this._store.loanCategory,  this._store.loanApplication)
     this._authService.isLoggedIn();
     this.isLoggedIn$ = this._authService.isLoggedInSubject.asObservable()
     let sub = this._store.loanCategory$.subscribe((c: string) => {

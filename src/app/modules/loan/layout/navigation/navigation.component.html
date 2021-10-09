@@ -1,41 +1,49 @@
-
-
 <ul class="sidenav animate__animated animate__fadeInLeft" *ngIf="!(isLoggedIn$|async)">
     <ng-container *ngIf="!(isLoggedIn$|async)">
         <div class="logo">
-            <a href="/" ><img src="../../assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
+            <a href="/"><img src="../../assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
         </div>
     </ng-container>
-    <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [routerLinkActive]="'sidenav_link--active'" [attr.data-pointable]="nav.visited"  class="sidenav_link" id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a><span class="material-icons material-icons-round">
-fiber_manual_record
-</span></li>
+    <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)"
+        [routerLinkActive]="'sidenav_link--active'" [attr.data-pointable]="nav.visited" class="sidenav_link"
+        id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a><span
+            class="material-icons material-icons-round">
+            fiber_manual_record
+        </span></li>
 
 </ul>
 
 
-<ul class="sidenav sidenav-mini animate__animated animate__fadeInLeft" *ngIf="(isLoggedIn$|async) && (show$|async)" >
-    
-    <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [routerLinkActive]="'sidenav_link--active'" [attr.data-pointable]="nav.visited"  class="sidenav_link" id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
+<ul class="sidenav sidenav-mini animate__animated animate__fadeInLeft" *ngIf="(isLoggedIn$|async) && (show$|async)">
+
+    <li *ngFor="let nav of (dataSelection$|async) as navs;trackBy: trackByFn" (click)="onNavigate(nav.url)"
+        [routerLinkActive]="'sidenav_link--active'" [attr.data-pointable]="nav.visited" class="sidenav_link"
+        id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
         <b><span class="material-icons material-icons-round">
-check
-</span></b></li>
+                check
+            </span></b>
+    </li>
 
 </ul>
 
 
 <ng-container *ngIf="(dataSelection$|async) as navs">
-<div class="sidenav_mobi theme_row" [ngClass]="{'loggedIn':!(isLoggedIn$|async)}">
-    <div class="theme_color" style=" backdrop-filter: blur(4px); position: absolute; display: flex; align-items: center; right: 0px; z-index: 5; top:0%; background: rgba(0, 0, 0, 0.2); height: 100%; padding-left: 7px; padding-right: 5px;"><i class="fas fa-caret-right fa-2x"></i></div>
-<div class="theme_row theme_scrolling--wrapper theme_bg--yellow removables" style="display: flex;">
-   
-    <li *ngFor="let nav of navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [attr.data-pointable]="true"  [routerLinkActive]="'sidenav_link--active'" class="sidenav_link" id="{{nav.id}}"><a [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
-        <!-- <b><span class="material-icons material-icons-round">
+    <div class="sidenav_mobi theme_row" [ngClass]="{'loggedIn':!(isLoggedIn$|async)}">
+        <div class="theme_color"
+            style=" backdrop-filter: blur(4px); position: absolute; display: flex; align-items: center; right: 0px; z-index: 5; top:0%; background: rgba(0, 0, 0, 0.2); height: 100%; padding-left: 7px; padding-right: 5px;">
+            <i class="fas fa-caret-right fa-2x"></i></div>
+        <div class="theme_row theme_scrolling--wrapper theme_bg--yellow removables" style="display: flex;">
+
+            <li *ngFor="let nav of navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [attr.data-pointable]="true"
+                [routerLinkActive]="'sidenav_link--active'" class="sidenav_link" id="{{nav.id}}"><a
+                    [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
+                <!-- <b><span class="material-icons material-icons-round">
 check
 </span></b> -->
 
-</li>
+            </li>
 
-</div>
-</div>
+        </div>
+    </div>
 </ng-container>
 <!-- [ngClass]="{'sidenav_link--active':(active$|async)==nav.id}" data-order="1" (click)="onNavigate(nav.url)" -->

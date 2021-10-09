@@ -52,6 +52,7 @@ export class AuthService {
             .pipe(map(response => {
                 // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
                 if (response && response.status == true) {
+                    this.isLoggedInSubject.next(true);
                     const user = this.createSession(response.response, response.response["expires-in"]);
                     this.userSubject.next(user);
                     return user;
