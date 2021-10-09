@@ -472,4 +472,10 @@ export class Store {
     localStorage.removeItem("previous");
     localStorage.removeItem("loan-application");
   }
+
+  updateStore(){
+    this.setLoanCategory( this.loanCategorySubject.value);
+    this.setPage(this.pageSubject.value);
+
+  }
 }

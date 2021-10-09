@@ -122,6 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         data => {
           this.loadingSubject.next(false);
           this._utility.setSuccess("Welcome back " + data?.firstName);
+          this._store.updateStore()
           setTimeout(() => this.onNavigate(this.returnUrl), 2000);
         },
         error => {

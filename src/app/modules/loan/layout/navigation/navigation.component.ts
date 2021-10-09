@@ -66,7 +66,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
-    console.log(this._store.loanCategory,  this._store.loanApplication)
+    // console.log(this._store.loanCategory,  this._store.loanApplication)
     this._authService.isLoggedIn();
     this.isLoggedIn$ = this._authService.isLoggedInSubject.asObservable()
     let sub = this._store.loanCategory$.subscribe((c: string) => {
@@ -80,8 +80,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
       }
     });
     this._store.loanApplication$.subscribe((application: any) => {
-      let loan = application[this._store.loanCategory] as any
-      console.log(loan)
+      let loan = application[this._store.loanCategory] as any;
 
       let navigation = this.dataSelectionSubject.value;
       navigation.map((nav: any, i: number) => {
