@@ -265,10 +265,10 @@ export class Store {
   titleSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   title$: Observable<string> = this.titleSubject.asObservable();
 
-  private loanTypeSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  loanTypeSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   loanType$: Observable<string> = this.loanTypeSubject.asObservable();
 
-  private applyingAsSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  applyingAsSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   applyingAs$: Observable<string> = this.applyingAsSubject.asObservable();
 
   private loanProductSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');

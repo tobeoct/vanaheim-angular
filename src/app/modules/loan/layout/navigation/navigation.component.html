@@ -34,7 +34,7 @@
             <i class="fas fa-caret-right fa-2x"></i></div>
         <div class="theme_row theme_scrolling--wrapper theme_bg--yellow removables" style="display: flex;">
 
-            <li *ngFor="let nav of navs;trackBy: trackByFn" (click)="onNavigate(nav.url)" [attr.data-pointable]="true"
+            <li *ngFor="let nav of navs;trackBy: trackByFn" (click)="onNavigate(nav.url)"  [attr.data-pointable]="nav.visited"
                 [routerLinkActive]="'sidenav_link--active'" class="sidenav_link" id="{{nav.id}}"><a
                     [routerLink]="nav.url" class="theme_anchor__disabled"><span>{{nav.title}}</span></a>
                 <!-- <b><span class="material-icons material-icons-round">
