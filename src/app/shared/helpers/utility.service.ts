@@ -75,7 +75,9 @@ export class Utility {
   toggleLoanInvalid() {
     this.showLoanInvalidSubject.next(!this.showLoanInvalidSubject.value);
   }
-
+  showLoanInvalid(status:boolean) {
+    this.showLoanInvalidSubject.next(status);
+  }
   setError(message: string) {
     setTimeout(() => { this.apiErrorSubject.next(message); }, 1000)
     setTimeout(() => { this.apiErrorSubject.next("") }, 5000)

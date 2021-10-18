@@ -82,7 +82,7 @@ export class CustomerComponent implements OnInit {
   }
 
   closeInvalid() {
-    this._utility.toggleLoanInvalid();
+    this._utility.showLoanInvalid(false);
   }
   ngOnChanges(): void {
     try {
