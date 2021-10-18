@@ -23,6 +23,7 @@ export class FlowGuard implements CanActivate {
       this._store.removeItem("page")
       this._store.removeItem("previous")
       this._utility.toggleLoanInvalid();
+      this._loanService.continueApplication(false)
       return false;
     }
 
