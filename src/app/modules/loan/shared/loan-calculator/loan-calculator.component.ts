@@ -161,7 +161,7 @@ export class LoanCalculatorComponent implements OnInit {
       })
     };
     this._store.setLoanCalculator(loanDetails);
-    this.onNavigate(this._store.loanCategory == "personal" ? "bvn-info" : this.isLoggedIn ? "company-info" : "contact-info");
+    this.onNavigate(this._store.loanCategory == "personal" ? "bvn-info" : this._authService.isLoggedIn() ? "company-info" : "contact-info");
   }
   onSubmit2 = (event: any) => {
     this.planLoadingSubject.next(true);

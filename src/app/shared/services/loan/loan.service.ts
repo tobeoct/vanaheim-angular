@@ -200,8 +200,8 @@ export class LoanService {
           this.runningLoanSubject.next(false)
           return EMPTY;
         }))),
-        shareReplay({bufferSize:1, refCount:true})
-        , catchError(err => {
+        // shareReplay({bufferSize:1, refCount:true})
+         catchError(err => {
           console.error(err);
           this.runningLoanSubject.next(false)
           return EMPTY;
@@ -213,6 +213,7 @@ export class LoanService {
 
   loans$: Observable<any> = this.search({ pageNumber: 1, maxSize: 10 });
   latestLoan$: Observable<any> = this.getLatest().pipe(tap(c => {
+    console.log(c)
     if (!c || c.requestStatus == "NotQualified" || c.requestStatus == "Completed") { this.runningLoanSubject.next(false) } else {
       this.runningLoanSubject.next(true)
     }

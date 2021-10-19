@@ -19,6 +19,8 @@ export class FlowGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
+      
+    console.log("Running Loan ",this._loanService.runningLoanSubject.value)
     if (this._loanService.runningLoanSubject.value==true) {
       this._store.removeItem("page")
       this._store.removeItem("previous")

@@ -72,7 +72,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   close2 = () => {
     this.show2Subject.next(false);
     this._loanService.continueApplication(false)
-    this.onNavigate("my/loans");
+    this._router.navigate(["my/loans"])
     // this.apiErrorSubject.next();
     // this.apiSuccessSubject.next();
   }

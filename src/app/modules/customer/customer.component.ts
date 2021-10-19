@@ -63,10 +63,12 @@ export class CustomerComponent implements OnInit {
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
-      if (localStorage.getItem("page") && r!=true && !this._router.url.includes("apply")) {
-        this._store.setLoanType(this._store.loanTypeSubject.value);
-        this._store.setApplyingAs(this._store.applyingAs.value);
-       setTimeout(()=>this._loanService.continueApplication(true),3000);
+      console.log("Running Loan ", r)
+      if (localStorage.getItem("page") && r != true && !this._router.url.includes("apply")) {
+        this._store.setLoanType(this._store.loanTypeSubject.value, false);
+        this._store.setApplyingAs(this._store.applyingAsSubject.value, false);
+        this._store.setLoanProduct(this._store.loanProductSubject.value, false);
+        setTimeout(() => this._loanService.continueApplication(true), 3000);
       } else {
         if (localStorage.getItem("page")) {
           this._utility.showLoanInvalidSubject.next(true);
