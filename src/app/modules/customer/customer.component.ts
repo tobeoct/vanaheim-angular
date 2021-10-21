@@ -63,7 +63,7 @@ export class CustomerComponent implements OnInit {
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
-      console.log("Running Loan ", r)
+      // console.log("Running Loan ", r)
       if (localStorage.getItem("page") && r != true && !this._router.url.includes("apply")) {
         this._store.setLoanType(this._store.loanTypeSubject.value, false);
         this._store.setApplyingAs(this._store.applyingAsSubject.value, false);
@@ -71,7 +71,9 @@ export class CustomerComponent implements OnInit {
         setTimeout(() => this._loanService.continueApplication(true), 3000);
       } else {
         if (localStorage.getItem("page")) {
-          this._utility.showLoanInvalidSubject.next(true);
+          if (!this._router.url.includes("apply")) {
+            this._utility.showLoanInvalidSubject.next(true);
+          }
           this._store.setPage("");
           this._store.removeItem("page")
           this._store.removeItem("loan-application")
