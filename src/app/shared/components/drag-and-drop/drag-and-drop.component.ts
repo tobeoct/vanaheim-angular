@@ -71,12 +71,14 @@ export class DragAndDropComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      let data = event.previousContainer.data[event.previousIndex];
+      let classList = event.container.element.nativeElement.classList;
+      if (this.getStatus(classList)=='New') return
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
-      let data = event.previousContainer.data[event.previousIndex];
-      let classList = event.container.element.nativeElement.classList;
+  
       let id = event.item.element.nativeElement.id;
       this.idSubject.next(id);
       this.classListSubject.next(classList);

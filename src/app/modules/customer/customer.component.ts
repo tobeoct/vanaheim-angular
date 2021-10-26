@@ -63,7 +63,20 @@ export class CustomerComponent implements OnInit {
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
-      if (localStorage.getItem("page") && !r) { this._loanService.continueApplication(true); } else {
+      // console.log("Running Loan ", r)
+      if (localStorage.getItem("page") && r != true && !this._router.url.includes("apply")) {
+        this._store.setLoanType(this._store.loanTypeSubject.value, false);
+        this._store.setApplyingAs(this._store.applyingAsSubject.value, false);
+        this._store.setLoanProduct(this._store.loanProductSubject.value, false);
+        setTimeout(() => this._loanService.continueApplication(true), 3000);
+      } else {
+        if (localStorage.getItem("page") && r == true) {
+
+          this._utility.showLoanInvalidSubject.next(true);
+          this._store.setPage("");
+          this._store.removeItem("page")
+          this._store.removeItem("loan-application")
+        }
         this._loanService.continueApplication(false);
       }
 
@@ -72,7 +85,7 @@ export class CustomerComponent implements OnInit {
   }
 
   closeInvalid() {
-    this._utility.toggleLoanInvalid();
+    this._utility.showLoanInvalid(false);
   }
   ngOnChanges(): void {
     try {

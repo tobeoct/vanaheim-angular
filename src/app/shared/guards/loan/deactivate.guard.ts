@@ -12,6 +12,7 @@ export class LoanDeactivateGuard implements CanDeactivate<unknown> {
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     
+      if(nextState?.url.includes("auth")) return true
       return  window.confirm( 'Are you sure you want to leave? You would lose your application progress.');
   }
   

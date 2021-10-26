@@ -65,6 +65,7 @@ export class DocumentUploadComponent implements OnInit {
 
   buildDocuments = (): FormControl[] => {
     let groups: FormControl[] = [];
+    console.log(this.documents)
     for (let i = 0; i < this.requirements.length; i++) {
       let requirement = this.requirements[i];
       let doc = this.documents.find(c => c.label == requirement.title)

@@ -43,13 +43,13 @@ export class Store {
     { code: "035", title: "Wema Bank" },
     { code: "057", title: "Zenith Bank" }
   ]
- loanProducts: any[] = [
+  loanProducts: any[] = [
     { id: "PayMe Loan", title: "Salary Earners' Loans", uniqueName: "PayMe Loan", frequency: "Monthly", description: "Need a loan for house rent, to buy a new phone or to fix your car?.Take personal loans between NGN 25,000 to NGN 5M and pay back monthly." },
     { id: "FundMe Loan", title: "Business (SME) Loan", uniqueName: "FundMe Loan", frequency: "Monthly", description: "Need a loan to grow your business?.Get business loans up to NGN 5M with no application fees at affordable interest rates." },
     { id: "LPO Finance", title: "Local Purchase Order", uniqueName: "LPO Finance", frequency: "Monthly", description: "Are you a contractor, vendor or a supplier in need of funding to execute a project?.Get access to loans up to NGN 5M for your local purchase order projects." },
     { id: "FloatMe Loan", uniqueName: "FloatMe Loan", title: "Emergency/Quick Cash", frequency: "Daily", description: "Dealing with emergency expenses at mid-month?.Get loans up to NGN 5M naira and pay back daily or weekly in." },
     { id: "Line Of Credit", uniqueName: "Line Of Credit", title: "Line Of Credit", frequency: "Monthly", description: "Get access to personal/business loans, withdraw by instalment as needed and repay as agreed." },
-  
+
   ]
   loanTypes: any[] = [{
     id: 1,
@@ -95,7 +95,7 @@ export class Store {
         { title: "Valid ID card", description: " (National ID, Valid Driver’s License or Valid International Passport or Voter’s Card) for each Director" },
         { title: "Business account statement", description: " for the last 12 months till date" },
         { title: "Directors account statement", description: " for the last 12 months till date" },
-        { title: "Loan Application Letter", description: " on company letterhead" }, 
+        { title: "Loan Application Letter", description: " on company letterhead" },
         { title: "Postdated cheque", description: " issued to the tune of the monthly repayment amount." },
         { title: "Business Profile", description: " and the reason for accessing the loan" },
         { title: "Business registration documents", description: " from CAC (Certificate of Incorporation)" },
@@ -265,13 +265,13 @@ export class Store {
   titleSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   title$: Observable<string> = this.titleSubject.asObservable();
 
-  private loanTypeSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  loanTypeSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   loanType$: Observable<string> = this.loanTypeSubject.asObservable();
 
-  private applyingAsSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  applyingAsSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   applyingAs$: Observable<string> = this.applyingAsSubject.asObservable();
 
-  private loanProductSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  loanProductSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   loanProduct$: Observable<string> = this.loanProductSubject.asObservable();
 
   private requirementsSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
@@ -313,7 +313,7 @@ export class Store {
   private documents$: Observable<any[]> = this.documentsSubject.asObservable();
 
 
-  constructor(private _router: Router, private _authService:AuthService) {
+  constructor(private _router: Router, private _authService: AuthService) {
     this.applyingAsSubject.next(this.getFromCurrentApplication("applyingAs") || '');
     this.loanTypeSubject.next(this.getFromCurrentApplication("loanType") || '');
     this.loanProductSubject.next(this.getFromCurrentApplication("loanProduct") || '');
@@ -323,14 +323,14 @@ export class Store {
     this.loanCategorySubject.next(this.getItem("category") || '');
   }
   getItem(key: string) {
-    if(this._authService.isLoggedIn()){
-    return localStorage.getItem(key);
+    if (this._authService.isLoggedIn()) {
+      return localStorage.getItem(key);
     }
     return ""
   }
   setItem(key: string, value: any) {
-    if(this._authService.isLoggedIn() || ["page","previous"].includes(key)){
-    localStorage.setItem(key, value);
+    if (this._authService.isLoggedIn() || ["page", "previous"].includes(key)) {
+      localStorage.setItem(key, value);
     }
   }
   removeItem(key: string) {
@@ -373,17 +373,17 @@ export class Store {
     if (application[this.loanCategory]) {
       return application[this.loanCategory][key];
     }
-   
+
     return null;
   }
 
   get loanApplication() { return this.getLoanApplication() }
   private getLoanApplication = () => {
-    return Object.keys(this.loanApplicationSubject.value).length>0?this.loanApplicationSubject.value: JSON.parse(this.getItem("loan-application") || '{}');
+    return Object.keys(this.loanApplicationSubject.value).length > 0 ? this.loanApplicationSubject.value : JSON.parse(this.getItem("loan-application") || '{}');
 
   }
   get loanType() { return this.getFromCurrentApplication("loanType") || ''; }
-  setLoanType(value: string) {
+  setLoanType(value: string, setPage = true) {
 
     if (value != this.loanType) { this.setApplyingAs(''); this.setLoanProduct(''); this.clear(this.loanCategory); }
 
@@ -396,18 +396,20 @@ export class Store {
     }
 
     this.updateCurrentApplication('loanType', value);
-    this.setPrevious("loan-type");
-    this.setPage("applying-as");
+    if (setPage) {
+      this.setPrevious("loan-type");
+      this.setPage("applying-as");
+    }
 
   }
   get applyingAs() { return this.getFromCurrentApplication("applyingAs") || ''; }
-  setApplyingAs(value: string) { this.applyingAsSubject.next(value); this.updateCurrentApplication('applyingAs', value); this.setPrevious("applying-as"); this.setPage("loan-calculator"); }
+  setApplyingAs(value: string, setPage = true) { this.applyingAsSubject.next(value); this.updateCurrentApplication('applyingAs', value); if (setPage) { this.setPrevious("applying-as"); this.setPage("loan-calculator"); } }
 
   get loanProduct() { return this.getFromCurrentApplication("loanProduct") || ''; }
-  setLoanProduct(value: string) { this.loanProductSubject.next(value); this.updateCurrentApplication('loanProduct', value); this.setPrevious("applying-as"); this.setPage("loan-calculator"); }
+  setLoanProduct(value: string, setPage = true) { this.loanProductSubject.next(value); this.updateCurrentApplication('loanProduct', value); if (setPage) { this.setPrevious("applying-as"); this.setPage("loan-calculator"); } }
 
   get loanCalculator() { return JSON.parse(this.getFromCurrentApplication("loanCalculator") || '{}'); }
-  setLoanCalculator(value: LoanDetails) { this.loanCalculatorSubject.next(value); this.updateCurrentApplication('loanCalculator', JSON.stringify(value)); this.setPrevious("loan-calculator"); this.setPage("bvn-info"); }
+  setLoanCalculator(value: LoanDetails) { this.loanCalculatorSubject.next(value); this.updateCurrentApplication('loanCalculator', JSON.stringify(value)); this.setPrevious("loan-calculator"); if (this.loanCategorySubject.value == 'personal') { this.setPage("bvn-info"); } else { this.setPage("additional-info") } }
 
   // Personal
   get bvn() { return JSON.parse(this.getFromCurrentApplication("bvn") || '{}'); }
@@ -417,7 +419,7 @@ export class Store {
   setPersonalInfo(value: PersonalInfo) { this.personalInfoSubject.next(value); this.updateCurrentApplication('personalInfo', JSON.stringify(value)); this.setPrevious("personal-info"); this.setPage("account-info"); }
 
   get accountInfo() { return JSON.parse(this.getFromCurrentApplication("accountInfo") || '[]'); }
-  setAccountInfo(value: AccountInfo[]) { this.accountInfoSubject.next(value); this.updateCurrentApplication('accountInfo', JSON.stringify(value)); this.setPrevious("account-info"); this.setPage("employment-info"); }
+  setAccountInfo(value: AccountInfo[]) { this.accountInfoSubject.next(value); this.updateCurrentApplication('accountInfo', JSON.stringify(value)); this.setPrevious("account-info"); if (this.loanCategorySubject.value == 'personal') { this.setPage("employment-info"); } else { this.setPage("upload") } }
 
   get employmentInfo() { return JSON.parse(this.getFromCurrentApplication("employmentInfo") || '{}'); }
   setEmploymentInfo(value: EmploymentInfo) { this.employmentInfoSubject.next(value); this.updateCurrentApplication('employmentInfo', JSON.stringify(value)); this.setPrevious("employment-info"); this.setPage("nok-info"); }
@@ -441,7 +443,7 @@ export class Store {
   get documents() { return JSON.parse(this.getFromCurrentApplication("documents") || '[]'); }
   setDocuments(value: any[]) { this.documentsSubject.next(value); this.updateCurrentApplication('documents', JSON.stringify(value)); this.setPrevious("upload"); this.setPage("preview"); }
 
-  get loanCategory() { return this.loanCategorySubject.value|| this.getItem("category") || ''; }
+  get loanCategory() { return this.loanCategorySubject.value || this.getItem("category") || ''; }
   setLoanCategory(value: string) {
     this.setItem("category", value);
     this.loanCategorySubject.next(value);
@@ -464,12 +466,19 @@ export class Store {
     // this._router.navigate([".."])
   }
 
-  flushCache(){
+  flushCache() {
     localStorage.removeItem('user');
     localStorage.removeItem('session_token');
     localStorage.removeItem("expires_at");
     localStorage.removeItem("page");
     localStorage.removeItem("previous");
     localStorage.removeItem("loan-application");
+  }
+
+  updateStore() {
+    this.setLoanCategory(this.loanCategorySubject.value);
+    console.log(this.pageSubject.value);
+    this.setPage(this.pageSubject.value);
+
   }
 }

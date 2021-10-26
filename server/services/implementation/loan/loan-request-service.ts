@@ -234,7 +234,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             }
 
             loanRequest.accountNumber = accountInfo.length > 1 ? account2.number : account1.number;
-            loanRequest.denominator = "Months";
+            loanRequest.denominator = loanRequest.loanType.toLowerCase().includes("float")?"Days": "Months";
             loanRequest.customerID = customer.id;
             let loanRequestInDb = loanRequest
             if (!loanRequest.id || loanRequest.id == 0) { loanRequestInDb = await this._baseRepository.create(loanRequest) }

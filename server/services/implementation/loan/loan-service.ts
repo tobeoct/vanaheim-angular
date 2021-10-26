@@ -310,7 +310,7 @@ export class LoanService implements ILoanService {
           if (docInDb && Object.keys(docInDb).length > 0) {
             // let doc: Document = new Document();
             // Object.assign(doc, docInDb.dataValues as Document)
-            documentPath.push(docInDb.url);
+            documentPath.push(docInDb.path);
             docInDb.loanRequestID = loanRequest.requestId;
             docInDb.loanRequestLogID = loanRequestLog?.id;
             await this._documentService.update(docInDb)
