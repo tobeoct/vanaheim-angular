@@ -17,7 +17,7 @@ const expAutoSan = require('express-autosanitizer');
 @route('/api/customer')
 export default class CustomerController {
 
-  constructor(private sanitizer: any, private _utilService: UtilService, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: CollateralRepository) {
+  constructor(private sanitizer: any, private _utils: UtilService, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: CollateralRepository) {
 
   }
 
@@ -145,8 +145,8 @@ export default class CustomerController {
           c.phoneNumber = this.sanitizer.escape(customerToUpdate.phoneNumber);
           c.gender = this.sanitizer.escape(customerToUpdate.gender) as unknown as Gender
           c.maritalStatus = this.sanitizer.escape(customerToUpdate.maritalStatus) as unknown as MaritalStatus
-          c.dateOfBirth = this._utilService.toDate(this.sanitizer.escape(customerToUpdate.dob.day), this.sanitizer.escape(customerToUpdate.dob.month), this.sanitizer.escape(customerToUpdate.dob.year));
-          c.address = this._utilService.toAddress(this.sanitizer.escape(customerToUpdate.address.street), this.sanitizer.escape(customerToUpdate.address.city), this.sanitizer.escape(customerToUpdate.address.state));
+          c.dateOfBirth = this._utils.toDate(this.sanitizer.escape(customerToUpdate.dob.day), this.sanitizer.escape(customerToUpdate.dob.month), this.sanitizer.escape(customerToUpdate.dob.year));
+          c.address = this._utils.toAddress(this.sanitizer.escape(customerToUpdate.address.street), this.sanitizer.escape(customerToUpdate.address.city), this.sanitizer.escape(customerToUpdate.address.state));
           this._customerRepository.update(customer);
         }
         res.statusCode = 200;
@@ -247,7 +247,7 @@ export default class CustomerController {
         let nok: any = await this._nokRepository.getByCustomerID(customer.id);
         if (nok) {
           nok = nok.dataValues as NOK;
-          nok.dateOfBirth = this._utilService.toDate(this.sanitizer.escape(nokInfo.dob.day), this.sanitizer.escape(nokInfo.dob.month), this.sanitizer.escape(nokInfo.dob.year));
+          nok.dateOfBirth = this._utils.toDate(this.sanitizer.escape(nokInfo.dob.day), this.sanitizer.escape(nokInfo.dob.month), this.sanitizer.escape(nokInfo.dob.year));
           nok.email = this.sanitizer.escape(nokInfo.email);
           nok.otherNames = this.sanitizer.escape(nokInfo.otherNames);
           nok.lastName = this.sanitizer.escape(nokInfo.surname);

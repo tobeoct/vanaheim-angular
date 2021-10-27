@@ -16,7 +16,7 @@ import LZString = require("lz-string");
 import { AWSService } from "./image/aws-service";
 
 class DocumentService extends BaseService<any> implements IDocumentService {
-    constructor(_documentRepository: IDocumentRepository,private _cloudinaryService:Cloudinary,private _awsService:AWSService, private _redis: RedisMiddleware, private fs: any, private fsExtra: any, private _utilService: UtilService, private md5: any) {
+    constructor(_documentRepository: IDocumentRepository,private _cloudinaryService:Cloudinary,private _awsService:AWSService, private _redis: RedisMiddleware, private fs: any, private fsExtra: any, private _utils: UtilService, private md5: any) {
         super(_documentRepository)
     }
     getByLoanRequestId = (loanRequestId: string) => new Promise<any>(async (resolve, reject) => {
@@ -54,7 +54,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
     createDocument = (fileName: string, base64String: string, customerCode: string) => new Promise<any>(async (resolve, reject) => {
         try {
             let base64 = base64String.split(';base64,').pop();
-            let extension = this._utilService.getFileExtension(fileName);
+            let extension = this._utils.getFileExtension(fileName);
             let name = this.md5(base64) + '.' + extension;
             const root =path.dirname(require.main?.filename)
             const uploadsPath = path.resolve(root,"uploads");
@@ -95,7 +95,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
                 document.fileName = file.name;
                 document.name = documentUpload.document.fileName;
                 document.status = BaseStatus.Active;
-                document.code = this._utilService.autogenerate({ prefix: "DOC" });
+                document.code = this._utils.autogenerate({ prefix: "DOC" });
                 document.extension = file.extension;
                 document.createdAt = new Date();
                 document.path = file.path;
@@ -114,7 +114,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
         try {
             let bvnList: any = await this._redis.get("bvnList", {});
             //Send bvn information to VCAP
-            if (this._utilService.hasValue(bvn) && this._utilService.hasValue(bvnList[bvn])) {
+            if (this._utils.hasValue(bvn) && this._utils.hasValue(bvnList[bvn])) {
                 let base64String = `data:image/jpg;base64,${bvnList[bvn]}`;
                 let file = await this.createDocument("BVN DETAILS.jpg", base64String, customerCode);
                 resolve({ status: true, file });
