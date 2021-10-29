@@ -13,9 +13,9 @@ export default class AccountController {
 
   accountEnquiryInstance = axios.create({
     method: 'post',
-    baseURL: 'https://app.verified.ng',
+    baseURL: 'https://api.verified.africa',
     timeout: 60000,
-    headers: { 'Content-Type': 'application/json', 'api-key': "7UBUKPMxF8i99DgB", 'userid': '1543318849803' }, //,'accountNumber':body.accountNumber,'bankcode':key},
+    headers: { 'Content-Type': 'application/json', 'apikey': "7UBUKPMxF8i99DgB", 'userid': '1543318849803' }, //,'accountNumber':body.accountNumber,'bankcode':key},
   });
 
   constructor(private _utilService: UtilService, private _redis: RedisMiddleware, private _accountRepository: AccountRepository) {
@@ -34,10 +34,10 @@ export default class AccountController {
     let accountList: any = await this._redis.get(cacheKey, {});
     if (this._utilService.verifyRequest(req, "accountenquiry") && this._utilService.spamChecker(req.ip, "accountenquiry")) {
       try {
-        let url = '/inquiry/api/sacctinq/bvn/wrapper';
-        let body = { bankCode: req.body.bankcode, accountNumber: req.body.accountnumber };
-        accountNumber = body.accountNumber;
-        const key = `${body.bankCode}-${body.accountNumber}`;
+        let url = '/sfx-verify/v3/id-service/';
+        let body = { bankCode: req.body.bankcode, searchParameter: req.body.searchParameter, verificationType:req.body.verificationType};
+        accountNumber = body.searchParameter;
+        const key = `${body.bankCode}-${body.searchParameter}`;
         console.log(accountList, accountList[key])
         if (!this._utilService.hasValue(accountList[key])) {
           let result = await this.accountEnquiryInstance.post(url, body);
