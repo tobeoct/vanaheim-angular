@@ -57,7 +57,9 @@ export class TemplateService {
             `;
         }
     }
-    INVESTMENT_CUSTOMER_TEMPLATE = `Welcome to Vanir Capital Limited.<br/><br/>
+    INVESTMENT_CUSTOMER_TEMPLATE =(customer:string) =>`
+    Dear ${customer},<br/><br/>
+    Welcome to Vanir Capital Limited.<br/><br/>
     We thank you for your interest in our earnings service. We are
     resolute in our mission for quality financial service delivery, assured by
     our core values of passion and sustained through Professionalism,
@@ -71,6 +73,15 @@ export class TemplateService {
     Kind Regards<br/><br/>
     <b>Vanir Capital Earnings Team</b>`;
 
+    INVESTMENT_ADMIN_TEMPLATE=(name:string,emailAddress:string,amount:string,duration:string,maturity:string,payout:string,rate:number,earningType:string)=>`Customer Name: ${name} <br/><br/>
+    Customer Email: ${emailAddress} <br/><br/>
+    Amount: ${amount} <br/><br/>
+    Duration: ${duration} Months <br/><br/>
+    Maturity Date: ${maturity} <br/><br/>
+    Total Payout: ${payout} <br/><br/>
+    Rate: ${rate}% <br/><br/>
+    Earning Type: ${earningType}
+    `
     SUCCESSFUL_LOAN_TEMPLATE = (customerName: string) => `<div style="width:100% !important;  margin-top:20px;"><p>Dear ${customerName.trim()},<br/><br/>
     Thank you for your interest in Vanir Capital Limited's loan services.​<br/><br/>
 ​

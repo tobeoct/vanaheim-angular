@@ -1,20 +1,73 @@
-.investment_background {
-    position: fixed;
-    z-index: 1;
+@import "../../../../../styles/abstracts/_abstracts-dir";
+@import "../../../../../styles/themes/_theme-dir";
+.investment {
+    &_background {
+        position: fixed;
+        z-index: 1;
+        &.theme_col-5 {
+            position: relative;
+            z-index: 2;
+            margin-left: 58.33%;
+        }
+        .copy {
+            margin: 0;
+            margin-bottom: 100px;
+            margin-top: 50px;
+            max-width: 80%;
+        }
+    }
 }
-.investment_background.theme_col-5 {
-    position: relative;
-    z-index: 2;
-    margin-left: 58.33%;
-}
+#earning-type {
+    // @include flex(horizontal, space-between);
+    // @include flex(vertical, flex-start);
+    small {
+        font-weight: 600;
+    }
+    .actions {
+        @include marginVertical(false, "px", 0.25, 0.5);
+        @include flex(horizontal, space-between);
+        // width:map-get($sizings,"px" )* 4;
+        .item {
+            border-radius: $border-radius;
+            // width: map-get($sizings,"px" ) * 1.2;
+            // height: map-get($sizings,"px" ) * 1.2;
+            @include paddingVertical(true, "px", 0.1);
+            // @include paddingHorizontal(true, "px", 1);
+            border: 1px solid black;
+            @include flex(both, center);
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            width: 47.5%;
+            &.active {
+                border-color: map-get($colors, black) !important;
+                background: map-get($colors, black) !important;
+                color: map-get($colors, white) !important;
+            }
+            &:hover {
+                transform: scale(1.05);
+            }
+            &:first-child {
+                border-color: map-get($colors, facebook);
+                color: map-get($colors, facebook);
+            }
+            &:nth-child(2) {
+                border-color: map-get($colors, yellow);
+                color: map-get($colors, yellow);
+                margin-left: map-get($sizings, "px") / 2;
+                // &.active{
 
-.investment_background .copy {
-    margin: 0;
-    margin-bottom: 100px;
-    margin-top: 50px;
-    max-width: 80%;
+                // border-color: map-get($colors, black);
+                // background: map-get($colors, black);
+                // color: map-get($colors, white);
+                // }
+            }
+            p {
+                @include font(p);
+                font-weight: map-get($font-weights, "bold");
+            }
+        }
+    }
 }
-
 @media all and (max-width: 900px) {
     .investment_background .copy {
         max-width: 100%;

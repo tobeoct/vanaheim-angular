@@ -12,6 +12,8 @@ export class RateComponent implements OnInit {
   @Input()
   amount$: Observable<number> = from([0]);
   amount: number;
+  @Input()
+  type:string;
   @Output() rateDetailChange = new EventEmitter();
   rateSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   payoutSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
