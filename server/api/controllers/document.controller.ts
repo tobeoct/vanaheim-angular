@@ -9,7 +9,7 @@ import { Document } from '@models/document';
 import { LoanRequest } from '@models/loan/loan-request';
 import { IDocumentRepository } from '@repository/interface/document/Idocument-repository';
 import AppConfig, { Environment } from '@api/config';
-import EmailService from '@services/implementation/common/email-service';
+import EmailService, { EmailType } from '@services/implementation/common/email-service';
 import { TemplateService } from '@services/implementation/common/template-service';
 @route('/api/document')
 export default class DocumentController {
@@ -37,7 +37,7 @@ export default class DocumentController {
           doc.loanRequestLogID = loanRequestLogID;
           await this._documentService.update(doc)
           try {
-            let sent = await this._emailService.SendEmail({ type: 'update', to: this._appConfig.OPS_EMAIL, attachment: doc.path, html: this._templateService.LOAN_UPDATE(customer.firstName+" "+customer.lastName, loanRequest.code,doc.requirement), toCustomer: false })
+            let sent = await this._emailService.SendEmail({ type: EmailType.Update, to: this._appConfig.OPS_EMAIL, attachment: doc.path, html: this._templateService.LOAN_UPDATE(customer.firstName+" "+customer.lastName, loanRequest.code,doc.requirement), toCustomer: false })
           } catch (err) {
             console.log("Loan Update Email failed to send");
             console.log(err);
