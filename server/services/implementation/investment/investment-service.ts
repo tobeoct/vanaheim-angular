@@ -8,7 +8,7 @@ import EmailService from "../common/email-service";
 import { TemplateService } from "../common/template-service";
 import UtilService from "../common/util";
 export class InvestmentService implements IInvestmentService{
-  constructor(private _appConfig:AppConfig,private _templateService:TemplateService, private _emailService:EmailService, private _utilService:UtilService){
+  constructor(private _appConfig:AppConfig,private _templateService:TemplateService, private _emailService:EmailService, private _utils:UtilService){
 
   }
  getAllInvestmentRequests: () => Promise<InvestmentRequest[]>;
@@ -22,16 +22,16 @@ export class InvestmentService implements IInvestmentService{
 
   process= ({name,emailAddress,payout,duration,rate,maturity,amount}: any) =>  new Promise<any>(async (resolve,reject)=>{
     try{
-      const intro = (!name)?"Dear Customer":`Dear ${this._utilService.titleCase(name)}`;
+      const intro = (!name)?"Dear Customer":`Dear ${this._utils.titleCase(name)}`;
       const customerTemplate= `${intro} ,<br/><br/>
   ${this._templateService.INVESTMENT_CUSTOMER_TEMPLATE}
       `;
       const template = `Customer Name: ${name} <br/><br/>
                         Customer Email: ${emailAddress} <br/><br/>
-                        Amount: ${this._utilService.currencyFormatter(this._utilService.convertToPlainNumber(amount))} <br/><br/>
+                        Amount: ${this._utils.currencyFormatter(this._utils.convertToPlainNumber(amount))} <br/><br/>
                         Duration: ${duration} Months <br/><br/>
                         Maturity Date: ${maturity} <br/><br/>
-                        Total Payout: ${this._utilService.currencyFormatter(payout)} <br/><br/>
+                        Total Payout: ${this._utils.currencyFormatter(payout)} <br/><br/>
                         Rate: ${rate}% <br/><br/>`; //`dist/vanaheim/assets/static/Vanir Capital Privacy Policy.pdf`,
  await this._emailService.SendEmail({type:'investment',to:emailAddress,attachment:null,filePaths:[`dist/vanaheim/assets/static/VANIR CAPITAL GLOBAL PITCH DECK_Vol 4.pdf`],html:customerTemplate,toCustomer:true})
  

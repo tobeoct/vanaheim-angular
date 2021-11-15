@@ -1,9 +1,11 @@
 import { Account } from '@models/account';
 import { Customer } from '@models/customer';
 import { AccountRepository } from '@repository/implementation/account-repository';
+import { EnvConstants } from '@services/implementation/common/env.constants';
 import UtilService from '@services/implementation/common/util';
 import { GET, POST, route, before, PUT } from 'awilix-express';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { Request, Response } from 'express';
 import RedisMiddleware from 'server/middleware/redis-middleware';
 const expAutoSan = require('express-autosanitizer');
 
@@ -13,44 +15,41 @@ export default class AccountController {
 
   accountEnquiryInstance = axios.create({
     method: 'post',
-    baseURL: 'https://app.verified.ng',
+    baseURL: EnvConstants.verify.v3.baseUrl,
     timeout: 60000,
-    headers: { 'Content-Type': 'application/json', 'api-key': "7UBUKPMxF8i99DgB", 'userid': '1543318849803' }, //,'accountNumber':body.accountNumber,'bankcode':key},
+    headers: { 'Content-Type': 'application/json', 'apiKey': EnvConstants.verify.v3.accountInquiry.apiKey, 'userid': EnvConstants.verify.v3.accountInquiry.userId }, //,'accountNumber':body.accountNumber,'bankcode':key},
   });
 
-  constructor(private _utilService: UtilService, private _redis: RedisMiddleware, private _accountRepository: AccountRepository) {
+  constructor(private _utils: UtilService, private _redis: RedisMiddleware, private _accountRepository: AccountRepository) {
 
   }
 
-  getAccountName(data: any) {
-    //"inquiry":{"status":"00","accountNumber":"0801850608","otherNames":"TOBECHUKWU","surname":"ONYEMA","bvn":null,"bankCode":"044"}
-    return data["surname"] + " " + data["otherNames"];
+  getAccountName(data: VerifyAccountEnquiryResponsePayload | any) {
+    return data.full_name ?? (data["surname"] + " " + data["otherNames"]);
   }
   @route('/enquiry')
   @POST()
-  enquiry = async (req: any, res: any, next: any) => {
-    let accountNumber;
+  enquiry = async (req: Request, res: any, next: any) => {
     let cacheKey = "accountList";
     let accountList: any = await this._redis.get(cacheKey, {});
-    if (this._utilService.verifyRequest(req, "accountenquiry") && this._utilService.spamChecker(req.ip, "accountenquiry")) {
+    if (this._utils.verifyRequest(req, "accountenquiry") && this._utils.spamChecker(req.ip, "accountenquiry")) {
       try {
-        let url = '/inquiry/api/sacctinq/bvn/wrapper';
-        let body = { bankCode: req.body.bankcode, accountNumber: req.body.accountnumber };
-        accountNumber = body.accountNumber;
-        const key = `${body.bankCode}-${body.accountNumber}`;
+        let endpoint = EnvConstants.verify.v3.accountInquiry.endpoint;
+        let body: VerifyAccountEnquiryRequest = { bankCode: req.body.bankcode, searchParameter: req.body.accountnumber, verificationType: VerifyVerificationType.AccountEnquiry, transactionReference: "" };
+        const key = `${body.bankCode}-${body.searchParameter}`;
         console.log(accountList, accountList[key])
-        if (!this._utilService.hasValue(accountList[key])) {
-          let result = await this.accountEnquiryInstance.post(url, body);
+        if (!this._utils.hasValue(accountList[key])) {
+          let result = await this.accountEnquiryInstance.post<VerifyAccountEnquiryRequest, AxiosResponse<VerifyAccountEnquiryResponse>>(endpoint, body);
 
-          console.log("Fetch Result",result);
-          if (this._utilService.hasValue(result.data["inquiry"]) && result.data["inquiry"]["status"] == "00") {
+          console.log("Fetch Account Result", result?.data);
+          if (this._utils.hasValue(result.data) && result.data.responseCode == "00") {
 
-            accountList[key] = result.data["inquiry"];
+            accountList[key] = result.data.response || VerifyVerificationStatus.NotVerified;
           }
 
-          if (result.data["inquiry"]["status"] == "00") {
+          if (result.data.responseCode == "00" && result.data.verificationStatus == VerifyVerificationStatus.Verified) {
 
-            res.data = { message: "Account Enquiry was successful", data: this.getAccountName(result.data["inquiry"]) };
+            res.data = { message: "Account Enquiry was successful", data: this.getAccountName(result.data.response) };
             res.statusCode = 200;
           } else {
             res.statusCode = 400;
@@ -59,12 +58,17 @@ export default class AccountController {
 
         }
         else {
-          console.log("Cached Result",accountList[key]);
-          res.data = { message: "Account Enquiry was successful", data: this.getAccountName(accountList[key]) };
-          res.statusCode = 200;
+          console.log("Cached Result", accountList[key]);
+          if (accountList[key] == VerifyVerificationStatus.NotVerified) {
+            res.statusCode = 400;
+            res.data = { message: "Account Enquiry was not successful" };
+          } else {
+            res.data = { message: "Account Enquiry was successful", data: this.getAccountName(accountList[key]) };
+            res.statusCode = 200;
+          }
         }
       }
-      catch (err:any) {
+      catch (err: any) {
         res.data = { message: "Account Enquiry was not successful" };
         res.statusCode = 500;
         console.log(err);
@@ -93,7 +97,7 @@ export default class AccountController {
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get accounts" }
     }
@@ -114,17 +118,55 @@ export default class AccountController {
           this._accountRepository.update(accInDb);
         })
         res.statusCode = 200;
-          res.data = {status:true,response: "Successfully Updated"};
+        res.data = { status: true, response: "Successfully Updated" };
       } else {
         res.statusCode = 400;
         res.data = { status: false, message: "Not a customer" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
       res.data = { status: false, message: "Failed to get accounts" }
     }
     next();
   }
+}
+
+
+type VerifyAccountEnquiryRequest = {
+  transactionReference: string
+  searchParameter: string
+  bankCode: string
+  verificationType: VerifyVerificationType
+}
+
+type VerifyAccountEnquiryResponse = {
+  responseCode: string,
+  description: string,
+  verificationType: VerifyVerificationType,
+  verificationStatus: VerifyVerificationStatus,
+  transactionStatus: string,
+  transactionReference: string,
+  transactionDate: string,
+  searchParameter: string,
+  response: VerifyAccountEnquiryResponsePayload,
+  faceMatch: string,
+}
+type VerifyAccountEnquiryResponsePayload = {
+
+  full_name: string,
+  bank_name: string,
+  account_number: string,
+  bank_code: string,
+  message: string,
+
+}
+enum VerifyVerificationType {
+  AccountEnquiry = "ACCOUNT-INQUIRY-VERIFICATION"
+}
+
+enum VerifyVerificationStatus {
+  Verified = "VERIFIED",
+  NotVerified = "NOT VERIFIED"
 }

@@ -14,7 +14,7 @@ import { Staff } from "@models/staff";
 import { IStaffRepository } from "@repository/interface/Istaff-repository";
 import { TemplateService } from "./common/template-service";
 class UserService extends BaseService<User> implements IUserService {
-  constructor(private _userRepository: IUserRepository, private _templateService:TemplateService, private _emailService: EmailService, private _utilService: UtilService, private _staffRepository: IStaffRepository, private _customerRepository: ICustomerRepository, private _encryption: Encryption) {
+  constructor(private _userRepository: IUserRepository, private _templateService:TemplateService, private _emailService: EmailService, private _utils: UtilService, private _staffRepository: IStaffRepository, private _customerRepository: ICustomerRepository, private _encryption: Encryption) {
     super(_userRepository);
   }
   convertToModel = (modelInDb: any) => {
@@ -143,7 +143,7 @@ class UserService extends BaseService<User> implements IUserService {
           user.phoneNumber = phoneNumber;
           user.username = email;
           user.status = BaseStatus.Active;
-          user.code = this._utilService.autogenerate({ prefix: "USER" });
+          user.code = this._utils.autogenerate({ prefix: "USER" });
           const encryptedPass: any = await this._encryption.generateHash(password);
           user.passwordHash = encryptedPass.hash;
           user.passwordSalt = encryptedPass.salt;
@@ -164,7 +164,7 @@ class UserService extends BaseService<User> implements IUserService {
             staff.role = role ?? "Admin";
             staff.position = position ?? "OPS";
             staff.gender = gender ?? "Male";
-            staff.code = this._utilService.autogenerate({ prefix: "STF" });
+            staff.code = this._utils.autogenerate({ prefix: "STF" });
             user.staff = staff;
 
             let staffInDb = await this._staffRepository.create(staff);
@@ -232,7 +232,7 @@ class UserService extends BaseService<User> implements IUserService {
           user.phoneNumber = phoneNumber;
           user.username = email;
           user.status = BaseStatus.Active;
-          user.code = this._utilService.autogenerate({ prefix: "USER" });
+          user.code = this._utils.autogenerate({ prefix: "USER" });
           const encryptedPass: any = await this._encryption.generateHash(password);
           user.passwordHash = encryptedPass.hash;
           user.passwordSalt = encryptedPass.salt;
@@ -247,7 +247,7 @@ class UserService extends BaseService<User> implements IUserService {
             customer.phoneNumber = phoneNumber;
             customer.createdAt = new Date();
             customer.userID = userInDb.id;
-            customer.code = this._utilService.autogenerate({ prefix: "CUST" });
+            customer.code = this._utils.autogenerate({ prefix: "CUST" });
             user.customer = customer;
 
             let customerInDb = await this._customerRepository.create(customer);
@@ -385,7 +385,7 @@ class UserService extends BaseService<User> implements IUserService {
       let userInDB = await this.getByUserName(username);
       if (userInDB && Object.keys(userInDB).length > 0) {
         let user = userInDB as User ?? userInDB;
-        const password = this._utilService.randPassword(4, 2, 2);
+        const password = this._utils.randPassword(4, 2, 2);
         const encryptedPass: any = await this._encryption.generateHash(password);
         user.passwordHash = encryptedPass.hash;
         user.passwordSalt = encryptedPass.salt;

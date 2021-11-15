@@ -32,7 +32,7 @@ import UtilService from "../common/util";
 import { SearchResponse } from "./loan-request-service";
 
 export class LoanService implements ILoanService {
-  constructor(private _db: any, private _appConfig: AppConfig, private _repaymentService: IRepaymentService, private _disbursedLoanService: IDisbursedLoanService, private _disbursedLoanRepository: IDisbursedLoanRepository, private _nokRepository: NOKRepository, private _accountRepository: AccountRepository, private _notificationService: INotificationService, private _loanTypeRequirementService: ILoanTypeRequirementService, private _documentService: IDocumentService, private _templateService: TemplateService, private _emailService: EmailService, private _customerRepository: ICustomerRepository, private _loanRequestService: ILoanRequestService, private _utilService: UtilService, private _loanRequestLogService: ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository) {
+  constructor(private _db: any, private _appConfig: AppConfig, private _repaymentService: IRepaymentService, private _disbursedLoanService: IDisbursedLoanService, private _disbursedLoanRepository: IDisbursedLoanRepository, private _nokRepository: NOKRepository, private _accountRepository: AccountRepository, private _notificationService: INotificationService, private _loanTypeRequirementService: ILoanTypeRequirementService, private _documentService: IDocumentService, private _templateService: TemplateService, private _emailService: EmailService, private _customerRepository: ICustomerRepository, private _loanRequestService: ILoanRequestService, private _utils: UtilService, private _loanRequestLogService: ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository) {
 
   }
   getLoanDetails = (id: number, type = "loanRequest") => new Promise<any>(async (resolve, reject) => {
@@ -64,16 +64,16 @@ export class LoanService implements ILoanService {
               { key: "Applying As", value: request.applyingAs },
               // { key: "Loan Product", value: request.loanProduct },
               { key: "Loan Purpose", value: request.loanPurpose },
-              { key: "Loan Amount", value: this._utilService.currencyFormatter(request.amount) },
-              { key: "Monthly Repayment", value: this._utilService.currencyFormatter(request.monthlyPayment) },
-              { key: "Total Repayment", value: this._utilService.currencyFormatter(request.totalRepayment) },
+              { key: "Loan Amount", value: this._utils.currencyFormatter(request.amount) },
+              { key: "Monthly Repayment", value: this._utils.currencyFormatter(request.monthlyPayment) },
+              { key: "Total Repayment", value: this._utils.currencyFormatter(request.totalRepayment) },
               { key: "Tenure", value: request.tenure + " " + request.denominator },
             ]
           },
           {
             key: "Personal Information",
             data: [
-              { key: "Name", value: this._utilService.replaceAll((request.Customer.title + " " + request.Customer.lastName + " " + request.Customer.otherNames + " " + request.Customer.firstName), "null", "") },
+              { key: "Name", value: this._utils.replaceAll((request.Customer.title + " " + request.Customer.lastName + " " + request.Customer.otherNames + " " + request.Customer.firstName), "null", "") },
               { key: "Date Of Birth", value: request.Customer.dateOfBirth },
               { key: "Gender", value: request.Customer.gender?.toString() },
               { key: "Marital Status", value: request.Customer.maritalStatus?.toString() },
@@ -109,7 +109,7 @@ export class LoanService implements ILoanService {
             {
               key: "NOK Information",
               data: [
-                { key: "Name", value: this._utilService.replaceAll(this._utilService.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", ""), "undefined", "") },
+                { key: "Name", value: this._utils.replaceAll(this._utils.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", ""), "undefined", "") },
                 { key: "Date Of Birth", value: request.Customer?.NOK?.dateOfBirth },
                 { key: "Relationship", value: request.Customer?.NOK?.relationship.toString() },
                 { key: "Email Address", value: request.Customer?.NOK?.email },
@@ -137,7 +137,7 @@ export class LoanService implements ILoanService {
               key: "Collateral Information",
               data: [
                 { key: "Owner", value: request.loanTypeRequirements?.collateral?.owner },
-                { key: "Valuation", value: this._utilService.currencyFormatter(request.loanTypeRequirements?.collateral?.valuation) },
+                { key: "Valuation", value: this._utils.currencyFormatter(request.loanTypeRequirements?.collateral?.valuation) },
                 { key: "Type", value: request.loanTypeRequirements?.collateral?.type },
                 { key: "Description", value: request.loanTypeRequirements?.collateral?.description },
                 { key: "Document", value: request.loanTypeRequirements?.collateral?.document?.requirement },
@@ -259,7 +259,7 @@ export class LoanService implements ILoanService {
         //create disbursed loan record
         let disbursedLoans = new DisbursedLoan();
         disbursedLoans.new(loanRequest, loanRequestLog);
-        disbursedLoans.code = this._utilService.autogenerate({ prefix: "DISB" });
+        disbursedLoans.code = this._utils.autogenerate({ prefix: "DISB" });
         disbursedLoans.maturityDate = this.getMaturityDate(loanRequest.dateApproved, loanRequest.tenure, loanRequest.denominator).toDate();
         let dLoanInDb = await this._disbursedLoanRepository.create(disbursedLoans);
       }

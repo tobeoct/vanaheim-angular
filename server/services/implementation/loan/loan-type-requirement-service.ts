@@ -31,7 +31,7 @@ import { PersonalInfo } from "src/app/modules/loan/personal/personal-info/person
 import UtilService from "../common/util";
 
 export class LoanTypeRequirementService implements ILoanTypeRequirementService {
-  constructor(private _customerRepository: ICustomerRepository, private _accountRepository: IAccountRepository, private _nokRepository: INOKRepository, private _companyRepository: ICompanyRepository, private _shareholderRepository: IShareholderRepository, private _collateralRepository: ICollateralRepository, private _employmentRepository: IEmploymentRepository, private _loanTypeRequirementRepository: ILoanTypeRequirementRepository, private _utilService: UtilService, _loanRequestRepository: ILoanRequestRepository) {
+  constructor(private _customerRepository: ICustomerRepository, private _accountRepository: IAccountRepository, private _nokRepository: INOKRepository, private _companyRepository: ICompanyRepository, private _shareholderRepository: IShareholderRepository, private _collateralRepository: ICollateralRepository, private _employmentRepository: IEmploymentRepository, private _loanTypeRequirementRepository: ILoanTypeRequirementRepository, private _utils: UtilService, _loanRequestRepository: ILoanRequestRepository) {
 
   }
   search: (parameters: any, customer?: any) => Promise<any>;
@@ -110,7 +110,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
           if (!nokInfo || Object.keys(nokInfo).length == 0) throw "Please provide your Next Of Kin details";
 
           nok.createdAt = new Date();
-          nok.code = this._utilService.autogenerate({ prefix: "NOK" });
+          nok.code = this._utils.autogenerate({ prefix: "NOK" });
           nok.status = BaseStatus.Active;
         }
         else {
@@ -120,7 +120,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
 
         if (nokInfo && Object.keys(nokInfo).length > 0) {
           nok.customerID = customer.id;
-          nok.dateOfBirth = this._utilService.toDate(nokInfo.dob.day, nokInfo.dob.month, nokInfo.dob.year);
+          nok.dateOfBirth = this._utils.toDate(nokInfo.dob.day, nokInfo.dob.month, nokInfo.dob.year);
           nok.email = nokInfo.email;
           nok.otherNames = nokInfo.otherNames;
           nok.lastName = nokInfo.surname;
@@ -144,12 +144,12 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
           customer.updatedAt = new Date();
           if (personalInfo && Object.keys(personalInfo).length > 0) {
 
-            customer.dateOfBirth = this._utilService.toDate(personalInfo.dob.day, personalInfo.dob.month, personalInfo.dob.year);
+            customer.dateOfBirth = this._utils.toDate(personalInfo.dob.day, personalInfo.dob.month, personalInfo.dob.year);
             customer.email = personalInfo.email;
             customer.firstName = personalInfo.firstName;
             customer.lastName = personalInfo.surname;
             customer.otherNames = personalInfo.otherNames;
-            customer.address = this._utilService.toAddress(personalInfo.address.street, personalInfo.address.city, personalInfo.address.state);
+            customer.address = this._utils.toAddress(personalInfo.address.street, personalInfo.address.city, personalInfo.address.state);
             customer.gender = personalInfo.gender as unknown as Gender;
             customer.phoneNumber = personalInfo.phoneNumber;
             customer.title = personalInfo.title;
@@ -179,7 +179,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
             employment.id = 0;
             employment.createdAt = new Date();
             employment.status = BaseStatus.Active;
-            employment.code = this._utilService.autogenerate({ prefix: "EMP" })
+            employment.code = this._utils.autogenerate({ prefix: "EMP" })
           } else {
             employment.updatedAt = new Date();
           }
@@ -198,7 +198,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
           employment.street = employmentInfo.address.street;
           employment.city = employmentInfo.address.city;
           employment.state = employmentInfo.address.state;
-          employment.address = this._utilService.toAddress(employmentInfo.address.street, employmentInfo.address.city, employmentInfo.address.state);
+          employment.address = this._utils.toAddress(employmentInfo.address.street, employmentInfo.address.city, employmentInfo.address.state);
           employment.phoneNumber = employmentInfo.phoneNumber;
           employment.payDay = +employmentInfo.payDay;
           employment.netMonthlySalary = employmentInfo.netMonthlySalary;
@@ -218,7 +218,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
         loanTypeRequirements.employment = employment;
         loanTypeRequirements.employmentID = employmentInDb.id;
         loanTypeRequirements.nok = nok;
-        loanTypeRequirements.code = this._utilService.autogenerate({ prefix: "LTR" });
+        loanTypeRequirements.code = this._utils.autogenerate({ prefix: "LTR" });
         loanTypeRequirements.createdAt = new Date();
         loanTypeRequirements.status = BaseStatus.Active;
 
@@ -240,7 +240,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
             company.id = 0;
             company.createdAt = new Date();
             company.status = BaseStatus.Active;
-            company.code = this._utilService.autogenerate({ prefix: "Company" });
+            company.code = this._utils.autogenerate({ prefix: "Company" });
           }
           else {
             company.updatedAt = new Date();
@@ -256,7 +256,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
         }
 
         if (companyInfo && Object.keys(companyInfo).length > 0) {
-          company.dateOfIncorporation = this._utilService.toDate(companyInfo.dateOfIncorporation.day, companyInfo.dateOfIncorporation.month, companyInfo.dateOfIncorporation.year);
+          company.dateOfIncorporation = this._utils.toDate(companyInfo.dateOfIncorporation.day, companyInfo.dateOfIncorporation.month, companyInfo.dateOfIncorporation.year);
           company.email = companyInfo.email;
           company.natureOfBusiness = companyInfo.natureOfBusiness;
           company.name = companyInfo.companyName;
@@ -264,7 +264,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
           company.street = companyInfo.address.street;
           company.city = companyInfo.address.city;
           company.state = companyInfo.address.state;
-          company.address = this._utilService.toAddress(companyInfo.address.street, companyInfo.address.city, companyInfo.address.state);
+          company.address = this._utils.toAddress(companyInfo.address.street, companyInfo.address.city, companyInfo.address.state);
           company.timeInBusiness = companyInfo.timeInBusiness
           company.phoneNumber = companyInfo.phoneNumber;
         }
@@ -308,7 +308,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
       collateral.id = 0;
       collateral.createdAt = new Date();
       collateral.status = BaseStatus.Active;
-      collateral.code = this._utilService.autogenerate({ prefix: "COLLAT" });
+      collateral.code = this._utils.autogenerate({ prefix: "COLLAT" });
     }
     else {
       let e: any = await this._collateralRepository.getById(collateralInfo.id);
@@ -322,7 +322,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
       collateral.description = collateralInfo.description;
       collateral.owner = collateralInfo.owner;
       collateral.type = collateralInfo.type;
-      collateral.valuation = this._utilService.convertToPlainNumber(collateralInfo.valuation);
+      collateral.valuation = this._utils.convertToPlainNumber(collateralInfo.valuation);
       let documentInfo = collateralInfo.document;
       if (documentInfo.id > 0) {
         let document = new Document(); //get document from db;
@@ -357,7 +357,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
         shareholder.id = 0;
         shareholder.createdAt = new Date();
         shareholder.status = BaseStatus.Active;
-        shareholder.code = this._utilService.autogenerate({ prefix: "SHLDR" });
+        shareholder.code = this._utils.autogenerate({ prefix: "SHLDR" });
       }
       else {
         let e: any = await this._shareholderRepository.getById(shareholderInfo.id);
@@ -369,7 +369,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
 
       if (shareholderInfo && Object.keys(shareholderInfo).length > 0) {
         shareholder.title = shareholderInfo.title;
-        shareholder.dateOfBirth = this._utilService.toDate(shareholderInfo.dob.day, shareholderInfo.dob.month, shareholderInfo.dob.year);
+        shareholder.dateOfBirth = this._utils.toDate(shareholderInfo.dob.day, shareholderInfo.dob.month, shareholderInfo.dob.year);
         shareholder.email = shareholderInfo.email;
         shareholder.designation = shareholderInfo.designation;
         shareholder.otherNames = shareholderInfo.otherNames;
@@ -377,7 +377,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
         shareholder.street = shareholderInfo.address.street;
         shareholder.city = shareholderInfo.address.city;
         shareholder.state = shareholderInfo.address.state;
-        shareholder.address = this._utilService.toAddress(shareholderInfo.address.street, shareholderInfo.address.city, shareholderInfo.address.state);
+        shareholder.address = this._utils.toAddress(shareholderInfo.address.street, shareholderInfo.address.city, shareholderInfo.address.state);
         shareholder.educationalQualification = shareholderInfo.educationalQualification;
         shareholder.phoneNumber = shareholderInfo.phoneNumber;
         shareholder.relationship = "";

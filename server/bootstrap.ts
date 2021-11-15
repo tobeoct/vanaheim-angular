@@ -120,7 +120,7 @@ export default class Bootstrap {
             _clientService: asClass(ClientService).singleton(),
             _templateService: asClass(TemplateService).singleton(),
             _authService: asClass(AuthService).singleton(),
-            _utilService: asClass(UtilService).singleton(),
+            _utils: asClass(UtilService).singleton(),
             _userService: asClass(UserService).singleton(),
             _emailService: asClass(EmailService).singleton(),
             _documentService: asClass(DocumentService).singleton(),
