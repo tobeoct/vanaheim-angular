@@ -25,7 +25,7 @@ export default class AccountController {
   }
 
   getAccountName(data: VerifyAccountEnquiryResponsePayload | any) {
-    return data.full_name ?? (data["surname"] + " " + data["otherNames"]);
+    return data.full_name ?? (!data["surname"] && !data["otherNames"])?"": (data["surname"]??"" + " " + data["otherNames"]??"");
   }
   @route('/enquiry')
   @POST()
