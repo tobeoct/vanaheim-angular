@@ -1,42 +1,62 @@
-<div class="theme_bg--white theme_col-5 investment_background theme_dropshadow--light animate__animated animate__fadeInUp" style="height: 100%;">
-    <div class=" theme_bg" style=" width: 100%; height: 60px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
-        <p class="theme_color--yellow theme_text--heading3" style="text-align: center; margin: auto;">Savings Application</p>
+<div
+  class="theme_bg--white theme_col-5 investment_background theme_dropshadow--light animate__animated animate__fadeInUp"
+  style="height: 100%;">
+  <div class=" theme_bg"
+    style=" width: 100%; height: 60px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
+    <p class="theme_color--yellow theme_text--heading3" style="text-align: center; margin: auto;">Savings Application
+    </p>
+  </div>
+  <!-- <form role="form" id="form" novalidate (ngSubmit)="save()" class="example-form" [formGroup]="form"> -->
+  <app-form [form]="form" (onSubmit)="onSubmit($event)" (valueChange)="onChange($event)"
+    (errorMessageChange)="onError($event)">
+    <app-investment-card [maturity]="maturity.value" [amount]="amount.value" [payout]="payout.value"
+      *ngIf="changed$|async"></app-investment-card>
+    <div class="theme_row" style="padding: 5%; padding-top: 0;">
+      <app-input [focus$]="focus$" id="amountId" placeholder="Enter savings amount" [control]="amount"
+        class="form-control" [error]="(errorMessage$ | async)?.amount">
+        <label for="amountId">How much do you want to save (100K - 50M)</label>
+      </app-input>
+      <div id="earning-type" class="margin--3x no-margin--bottom">
+        <small>Earning Type</small>
+        <div class="actions">
+          <div class="item" [ngClass]="{'active':type.value=='Monthly ROI'}" (click)="setType('Monthly ROI')">
+            <p><b>Monthly ROI</b></p>
+          </div>
+          <div class="item" [ngClass]="{'active':type.value=='End Of Tenor'}" (click)="setType('End Of Tenor')">
+            <p><b>End Of Tenor</b></p>
+          </div>
+        </div>
+      </div>
+      <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="durationId" [control]="duration"
+        class="form-control">
+      </app-input>
+
+      <app-rate (rateDetailChange)="rateDetailChange($event)" [type]="type.value" [amount$]="amount$"></app-rate>
+
+      <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="rateId" [control]="rate" class="form-control">
+      </app-input>
+
+      <app-input id="nameId" placeholder="Enter your preferred name" [control]="name" class="form-control"
+        [error]="(errorMessage$ | async)?.name">
+        <label for="nameId">Preferred Name</label>
+      </app-input>
+
+      <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="payoutId" [control]="payout"
+        class="form-control">
+      </app-input>
+
+      <app-input type="email" id="emailId" placeholder="Enter your preferred email" [control]="email"
+        class="form-control" [error]="(errorMessage$ | async)?.email">
+        <label for="emailId">Email</label>
+      </app-input>
+
+      <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="maturityId" [control]="maturity"
+        class="form-control">
+      </app-input>
     </div>
-    <!-- <form role="form" id="form" novalidate (ngSubmit)="save()" class="example-form" [formGroup]="form"> -->
-        <app-form [form]="form" (onSubmit)="onSubmit($event)" (valueChange) = "onChange($event)" (errorMessageChange) = "onError($event)">
-        <app-investment-card [maturity]="maturity.value" [amount]="amount.value" [payout]="payout.value" *ngIf="changed$|async"></app-investment-card>
-        <div class="theme_row" style="padding: 5%; padding-top: 0;"> 
-              <app-input [focus$]="focus$" id="amountId" placeholder="Enter savings amount"  [control]="amount" class="form-control" [error]="(errorMessage$ | async)?.amount" >
-                <label for="amountId">How much do you want to save (100K - 50M)</label>
-            </app-input>
-
-              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="durationId" [control]="duration" class="form-control"  >
-              </app-input>
-
-            <app-rate (rateDetailChange)="rateDetailChange($event)" [amount$]="amount$"></app-rate>
-            
-              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="rateId" [control]="rate" class="form-control"  >
-              </app-input>
-           
-              <app-input id="nameId" placeholder="Enter your preferred name"  [control]="name" class="form-control" [error]="(errorMessage$ | async)?.name" >
-                <label for="nameId">Preferred Name</label>
-            </app-input>
-            
-              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="payoutId" [control]="payout" class="form-control"  >
-              </app-input>
-
-              <app-input type="email" id="emailId" placeholder="Enter your preferred email"  [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
-                <label for="emailId">Email</label>
-            </app-input>
-
-              <app-input [hidden]="true" fieldClass="vc_form-field--hidden"  id="maturityId" [control]="maturity" class="form-control"  >
-              </app-input>
-        </div>
-        <div class="theme_row" style="width: 90%; margin:0px auto;">
-            <app-button [form]="form" [loading$]="loading$">I Am Interested</app-button>
-        </div>
-    </app-form>
-    <app-footer></app-footer>
+    <div class="theme_row" style="width: 90%; margin:0px auto;">
+      <app-button [form]="form" [loading$]="loading$">I Am Interested</app-button>
+    </div>
+  </app-form>
+  <app-footer></app-footer>
 </div>
-
-

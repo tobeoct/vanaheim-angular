@@ -15,7 +15,7 @@ import { ILoanRequestRepository } from "@repository/interface/loan/Iloan-request
 import { IRepaymentService } from "@services/interfaces/Irepayment-service";
 import moment = require("moment");
 import { BaseService } from "./base-service";
-import EmailService from "./common/email-service";
+import EmailService, { EmailType } from "./common/email-service";
 import { TemplateService } from "./common/template-service";
 import UtilService from "./common/util";
 type DateRange = {
@@ -36,7 +36,19 @@ type RepaymentHealth = {
   lastPayment: number,
   lastPaymentDate: Date
 }
-
+type RepaymentCycle = {
+  paymentDate: string,
+  rawDate: Date,
+  loanBalance: number,
+  principalRepayment: number,
+  interestRepayment: number,
+  loanRepayment: number
+}
+enum LoanType {
+  FloatMe = 'float me',
+  Personal = "personal loan",
+  Business = "business loan"
+}
 // call is made for repayment cycle using disb id
 // get loan details using disb id 
 // get current repayments
@@ -53,7 +65,7 @@ type RepaymentHealth = {
 // Recalculate based on this info. -> If full update status and use default cycle -> else recalculate cycle
 
 export class RepaymentService extends BaseService<Repayment> implements IRepaymentService {
-  constructor(private _db: any, private _customerRepository:CustomerRepository, private _templateService: TemplateService, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utils: UtilService) {
+  constructor(private _db: any, private _customerRepository: CustomerRepository, private _templateService: TemplateService, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utils: UtilService) {
     super(_repaymentRepository)
   }
   getByDisbursedLoanID = (disbursedLoanId: number) => new Promise<any[]>(async (resolve, reject) => {
@@ -61,7 +73,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
     try {
       let repayments = await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId) as Repayment[];
       resolve(repayments);
-    } catch (err:any) {
+    } catch (err: any) {
 
     }
   });
@@ -70,7 +82,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
     try {
       let repayments = await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId) as Repayment[];
       resolve(this.reducePayments(repayments, moment().add(2, 'year')))
-    } catch (err:any) {
+    } catch (err: any) {
 
     }
   });
@@ -92,7 +104,6 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       }]);// as DisbursedLoan;
       let disbursedLoan = new DisbursedLoan();
       Object.assign(disbursedLoan, d?.dataValues);
-      console.log("Disbursed Loan", disbursedLoan)
       if (!disbursedLoan) {
         resolve({ status: false, data: "Invalid request" });
         return;
@@ -102,12 +113,11 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
         return;
       }
       let loanRequest = await this._loanRequestRepository.getById(loanRequestId) as LoanRequest;
-      // let period = this.getCurrentCycleRange(disbursedLoan.dateDisbursed,loanRequest.denominator);
       let repaymentsSoFar = await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId);
       let currentCycleRepayments = this.reducePayments(repaymentsSoFar, moment(nextRepaymentDate ?? disbursedLoan.nextRepaymentDate), moment(nextRepaymentDate ?? disbursedLoan.nextRepaymentDate).subtract(1, this.getDenom(loanRequest.denominator)));
       console.log("Current Cycle Repayments", currentCycleRepayments)
       let totalRepaymentSoFar = this.reducePayments(repaymentsSoFar, moment(disbursedLoan.maturityDate));//this.reducePayments(await this._repaymentRepository.getByDisbursedLoanID(disbursedLoanId),period.from.add(dateOffset,this.getDenom(loanRequest.denominator)));
-      // totalRepayment+=amount;
+
       console.log("Repayments so far", totalRepaymentSoFar)
       let expectedFullPayment = loanRequest.totalRepayment;
       let isPaidInFull = (totalRepaymentSoFar + amount) > expectedFullPayment
@@ -117,7 +127,6 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       console.log("True Amount to repay", amount)
       let totalRepayment = (currentCycleRepayments + amount);
       console.log("TotalRepayment", totalRepayment);
-      // if ((totalRepayment <= disbursedLoan.nextPayment)) {
       if (totalRepaymentSoFar != expectedFullPayment) {
         let repayment = new Repayment();
         repayment.code = this._utils.autogenerate({ prefix: "RPY" });
@@ -132,7 +141,6 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
         await this._disbursedLoanRepository.update(disbursedLoan);
         let repaymentInDb = await this._repaymentRepository.create(repayment);
       }
-      // }
 
 
       if (totalRepayment > disbursedLoan.nextPayment) {
@@ -174,41 +182,36 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       }
       resolve({ status: true, data: "Repayment was successful" });
       return;
-    } catch (err:any) {
+    } catch (err: any) {
       resolve({ status: false, data: "Repayment was not successful" });
       return;
     }
   });
-  processRepaymentPlan = ({ email, tenure, denominator, loanType, purpose, rate, loanAmount, monthlyRepayment }: any,userData:any) => new Promise<any>(async (resolve, reject) => {
+  processRepaymentPlan = ({ email, tenure, denominator, loanType, purpose, rate, loanAmount, monthlyRepayment }: any, userData: any) => new Promise<any>(async (resolve, reject) => {
 
     try {
       let customer;
-      if(userData){
-       customer = await this._customerRepository.getByUserID(userData.id);
-      if (customer && Object.keys(customer).length > 0) {
-        customer= Object.assign(customer.dataValues as Customer, new Customer());
+      if (userData) {
+        customer = await this._customerRepository.getByUserID(userData.id);
+        if (customer && Object.keys(customer).length > 0) {
+          customer = Object.assign(customer.dataValues as Customer, new Customer());
+        }
       }
-    }
-       const fileName = `Repayment Plan - ${Date.now()}`;
+      const fileName = `Repayment Plan - ${Date.now()}`;
       let t = this.getRepaymentTemplate({ tenure: tenure + ' ' + denominator, loanType, purpose, rate, loanAmount, monthlyRepayment });
       let { path }: any = await this._templateService.generatePDF("Repayment Plan", [], "repayments/" + fileName, t);
 
-      let sent = await this._emailService.SendEmail({ type: 'repayment', to: this._appConfig.ADMIN_EMAIL, attachment: path, filePaths: null, html: t, toCustomer: false })
-      await this._emailService.SendEmail({ type: 'repayment', to: email, attachment: path, filePaths: null, html: this._templateService.REPAYMENT_PLAN_TEMPLATE(customer? (customer?.firstName+' '+customer?.lastName):"Customer"), toCustomer: true })
+      let sent = await this._emailService.SendEmail({ type: EmailType.Repayment, to: this._appConfig.ADMIN_EMAIL, attachment: path, html: t, toCustomer: false })
+      await this._emailService.SendEmail({ type: EmailType.Repayment, to: email, attachment: path, html: this._templateService.REPAYMENT_PLAN_TEMPLATE(customer ? (customer?.firstName + ' ' + customer?.lastName) : "Customer"), toCustomer: true })
       resolve({ status: true, data: { message: "Sent successfully" } })
 
-    } catch (err:any) {
+    } catch (err: any) {
       console.log(err)
       resolve({ status: false, message: "Failed" })
     }
 
   });
-  restructureRepaymentPlan(repaymentCycle: any[], currentRepayments: Repayment[]) {
-    let newHistory = [];
-    repaymentCycle.forEach(plan => {
 
-    })
-  }
 
   getPastCycles(repayments: Repayment[], dateFunded: Date, lastCyclePeriod: number, denominator: string) {
     if (repayments.length == 0) return [];
@@ -286,7 +289,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       let remainingCycles = this.generateRepaymentCycle({ dateFunded: moment(dateApproved).add(lastPeriod, this.getDenom(denominator)), tenure: t, denominator, rate: rate / 100, loanAmount, monthlyRepayment: this.calculateMonthlyRepayment(loanAmount, t, loanType) });
       let idealCycles = [...pastCycles, ...remainingCycles];
       resolve({ status: true, data: this.generateHealth(idealCycles, currentRepayments) });
-    } catch (err:any) {
+    } catch (err: any) {
       console.log(err)
       resolve({ status: true, data: [] });
     }
@@ -297,9 +300,10 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
     }
     return { min: 1, max: 12 };
   }
-  getRate = (type: string, loanAmount: number, min: number, max: number) => {
+
+  getRate = (type: LoanType, loanAmount: number, min: number, max: number) => {
     let interestRate = 0;
-    if (type.toLowerCase().includes('float me')) {
+    if (type.toLowerCase().includes(LoanType.FloatMe)) {
       if (loanAmount >= min && loanAmount < 100000) {
         interestRate = 0.005;
       }
@@ -349,7 +353,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
     let interestRate: number = 0;
     switch (loanType.toLowerCase()) {
       case "Float Me - Business":
-        interestRate = this.getRate("float me", loanAmount, min, max);
+        interestRate = this.getRate(LoanType.FloatMe, loanAmount, min, max);
         break;
       default: interestRate = this.getRate(loanType, loanAmount, min, max); break;
       // $monthlyHeader.textContent = "Monthly Payment (NGN)";
@@ -413,7 +417,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       return total += 0;
     }, 0)
   }
-  generateRepaymentCycle({ tenure, denominator, rate, loanAmount, monthlyRepayment, dateFunded }: any) {
+  generateRepaymentCycle({ tenure, denominator, rate, loanAmount, monthlyRepayment, dateFunded }: any): RepaymentCycle[] {
 
     // let p = Number(loanAmount.replace(/[^0-9.-]+/g, ""));
     let p = loanAmount;

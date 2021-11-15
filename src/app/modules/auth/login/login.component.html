@@ -13,14 +13,12 @@
                 <p>Securely log into your account</p>
                 <small>Sign in with</small>
                 <div id="social-login">
-                    <!-- <div > -->
                     <div class="item" (click)="loginWithFacebook()">
                         <p><b>Facebook</b></p>
                     </div>
                     <div class="item" (click)="loginWithGoogle()">
                         <p><b>Google</b></p>
                     </div>
-                    <!-- </div> -->
                 </div>
             </div>
             <app-form [form]="loginForm" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">

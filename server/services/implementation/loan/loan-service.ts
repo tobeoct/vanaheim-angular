@@ -26,7 +26,7 @@ import { ILoanService } from "@services/interfaces/loan/Iloanservice";
 import moment = require("moment");
 import { BVN } from "src/app/modules/loan/personal/bvn/bvn";
 import { BaseResponse } from "../base-service";
-import EmailService from "../common/email-service";
+import EmailService, { EmailType } from "../common/email-service";
 import { TemplateService } from "../common/template-service";
 import UtilService from "../common/util";
 import { SearchResponse } from "./loan-request-service";
@@ -326,8 +326,8 @@ export class LoanService implements ILoanService {
         }
       }
       let { path, template }: any = await this._templateService.generatePDF("Loan Application", templates, customer.code + "/" + loanRequest.requestId)
-      let sent = await this._emailService.SendEmail({ type: 'form', to: this._appConfig.ADMIN_EMAIL, attachment: path, filePaths: documentPath, html: template, toCustomer: false })
-      await this._emailService.SendEmail({ type: 'form', to: customer.email, attachment: path, filePaths: null, html: this._templateService.SUCCESSFUL_LOAN_TEMPLATE(c ? (c.firstName + ' ' + c.lastName) : "Customer"), toCustomer: true })
+      let sent = await this._emailService.SendEmail({ type: EmailType.Form, to: this._appConfig.ADMIN_EMAIL, attachment: path, filePaths: documentPath, html: template, toCustomer: false })
+      await this._emailService.SendEmail({ type: EmailType.Form, to: customer.email, attachment: path, html: this._templateService.SUCCESSFUL_LOAN_TEMPLATE(c ? (c.firstName + ' ' + c.lastName) : "Customer"), toCustomer: true })
       let notification: WebNotification = new WebNotification();
       notification.title = "Vanaheim by Vanir Capital";
       notification.body = "Your have successfully applied for a loan";

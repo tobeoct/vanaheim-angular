@@ -15,6 +15,23 @@ let FileAPI = require('file-api')
   , File = FileAPI.File
   , FileList = FileAPI.FileList
   , FileReader = FileAPI.FileReader, reader = new FileReader();
+export enum EmailType {
+  Update,
+  Form,
+  Investment,
+  Feedback,
+  Repayment,
+  Loan
+}
+type EmailPayload = {
+  subject?: string,
+  to: string,
+  attachment?: string,
+  filePaths?: string[],
+  html: string,
+  toCustomer: boolean,
+  type?: EmailType
+}
 
 export default class EmailService {
   bvnList: any[] = [];
@@ -26,7 +43,7 @@ export default class EmailService {
   getFileName = (path: string) => {
     return `${path.split('/')[path.split('/').length - 1].trim()}`
   }
-  SendEmail = async ({ subject, to, attachment, filePaths, html, toCustomer, type }: any) => {
+  SendEmail = async ({ subject, to, attachment = "", filePaths = [], html, toCustomer, type }: EmailPayload) => {
     return new Promise((resolve, reject) => {
       //const SendEmail=({subject,to,attachment,filePaths,html,toCustomer,type})=>new Promise((resolve,reject)=>{
       console.log("---------------SENDING EMAIL---------------");
@@ -46,13 +63,13 @@ export default class EmailService {
       this.CC_EMAIL = this._appConfig.LOAN_EMAIL || '';
       try {
         switch (type) {
-          case "update":
-            subject ='Loan Update';
+          case EmailType.Update:
+            subject = 'Loan Update';
             break;
-          case "form":
+          case EmailType.Form:
             subject = toCustomer ? 'Successful Loan Application' : 'JUST IN! New Application';
             break;
-          case "feedback":
+          case EmailType.Feedback:
             subject = toCustomer ? 'Thanks For The Feedback' : 'A Customer Gave A Feedback';
             transporterOptions.auth = {
               user: this._appConfig.SUPPORT_EMAIL,
@@ -62,10 +79,10 @@ export default class EmailService {
             this.ADMIN_EMAIL = this._appConfig.SUPPORT_EMAIL || '';
             this.CC_EMAIL = this._appConfig.SUPPORT_EMAIL || '';
             break;
-          case "repayment":
+          case EmailType.Repayment:
             subject = toCustomer ? 'Loan Repayment Plan' : 'A Customer Requested For A Repayment Plan';
             break;
-          case "investment":
+          case EmailType.Investment:
             subject = toCustomer ? 'Vanir Capital: Earnings Indication' : 'Earnings Indication';
             transporterOptions.auth = {
               user: this._appConfig.INVESTMENT_EMAIL,
@@ -155,7 +172,7 @@ export default class EmailService {
           console.log("---------------DONE SENDING EMAIL---------------");
         });
       }
-      catch (err:any) {
+      catch (err: any) {
         console.log(err);
         throw new Error("Error Sending Email");
       }
@@ -184,12 +201,12 @@ export default class EmailService {
       }
       reader.onerror = (error: any) => {
         console.log(error);
-        this.toBase64(file).then((f) => resolve(f)).catch((err:any) => reject(err));
+        this.toBase64(file).then((f) => resolve(f)).catch((err: any) => reject(err));
         // reject(error);
       }
     } catch (error) {
       console.log(error);
-      this.toBase64(file).then((f) => resolve(f)).catch((err:any) => reject(err));
+      this.toBase64(file).then((f) => resolve(f)).catch((err: any) => reject(err));
 
     }
   });
