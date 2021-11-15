@@ -24,8 +24,8 @@ export default class AccountController {
 
   }
 
-  getAccountName(data: VerifyAccountEnquiryResponsePayload) {
-    return data.full_name;
+  getAccountName(data: VerifyAccountEnquiryResponsePayload | any) {
+    return data.full_name ?? (data["surname"] + " " + data["otherNames"]);
   }
   @route('/enquiry')
   @POST()
@@ -41,7 +41,7 @@ export default class AccountController {
         if (!this._utils.hasValue(accountList[key])) {
           let result = await this.accountEnquiryInstance.post<VerifyAccountEnquiryRequest, AxiosResponse<VerifyAccountEnquiryResponse>>(endpoint, body);
 
-          console.log("Fetch Result", result);
+          console.log("Fetch Account Result", result?.data);
           if (this._utils.hasValue(result.data) && result.data.responseCode == "00") {
 
             accountList[key] = result.data.response || VerifyVerificationStatus.NotVerified;
