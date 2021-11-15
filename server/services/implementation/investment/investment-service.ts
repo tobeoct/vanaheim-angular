@@ -26,7 +26,7 @@ export class InvestmentService implements IInvestmentService {
 
       await this._emailService.SendEmail({ type: EmailType.Investment, to: this._appConfig.INVESTMENT_EMAIL, html: adminTemplate, toCustomer: false });
 
-      resolve({ status: true, data: { message: "Thanks for indicating your interest in investing 😊" } });
+      resolve({ status: true, data: { message: "Thanks for indicating your interest in earnings 😊" } });
 
     }
     catch (err) {

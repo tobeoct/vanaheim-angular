@@ -1,5 +1,5 @@
 
-const INVESTMENTS = "/api/investments"
+const INVESTMENTS = "/api/earnings"
 const LOANS = "/api/loans"
 const USERS = "/api/users"
 const REPAYMENTS = "/api/repayments"

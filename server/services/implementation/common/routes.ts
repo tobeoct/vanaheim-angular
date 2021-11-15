@@ -1,7 +1,7 @@
 export const newSessionRoutes = [{ path: '/api/auth/login', method: 'POST' }, { path: '/api/auth/register', method: 'POST' },
 { path: '/api/auth/token', method: 'POST' },
 { path: '/api/repayment/plan', method: 'POST' },
-{ path: '/api/investments/apply', method: 'POST' },
+{ path: '/api/earnings/apply', method: 'POST' },
 { path: '/api/account/enquiry', method: 'POST' }, { path: '/api/common/validatebvn', method: 'POST' }, { path: '/api/auth/verify', method: 'POST' }, { path: '/api/auth/resetpassword', method: 'POST' }];
 export const authRoutes = [
   { path: "/api/auth/refresh-session", method: "GET" },
@@ -14,7 +14,7 @@ export const authRoutes = [
   { path: '/api/auth/logout', method: 'GET' },
   { path: '/api/auth/passwordChange', method: 'PUT' },
   { path: '/api/users', method: 'GET' },
-  { path: '/api/investments', method: 'GET' },
+  { path: '/api/earnings', method: 'GET' },
   { path: '/api/account', method: 'GET' },
   { path: '/api/account/updateAccounts', method: "POST" },
   { path: '/api/loans/getLatestLoan', method: 'GET' },

@@ -1,8 +1,8 @@
 
 import { IInvestmentService } from '@services/interfaces/investment/Iinvestmentservice';
 import { POST, route } from 'awilix-express'; 
-@route('/api/investments')
-export default class UserController {
+@route('/api/earnings')
+export default class EarningsController {
 
     constructor(private _investmentService:IInvestmentService) {
 

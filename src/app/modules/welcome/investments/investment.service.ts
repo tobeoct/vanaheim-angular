@@ -23,7 +23,7 @@ apiError$:Observable<string> = this.apiErrorSubject.asObservable();
   constructor(private _http:HttpClient) { }
   apply=(payload:any)=>{
     // console.log(payload)
-    return this._http.post<any>(`${environment.apiUrl}/investments/apply`, payload)
+    return this._http.post<any>(`${environment.apiUrl}/earnings/apply`, payload)
     .pipe(map(response => {
         // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
         if(response && response.status==true){
