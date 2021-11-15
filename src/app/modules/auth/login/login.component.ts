@@ -12,6 +12,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { LoginType } from '@models/helpers/enums/logintype';
 import { Utility } from 'src/app/shared/helpers/utility.service';
+import { Store } from 'src/app/shared/helpers/store';
 
 @Component({
   selector: 'app-login',
@@ -53,7 +54,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private socialAuthService: SocialAuthService,
     private _router: Router,
     private _validators: VCValidators,
-    private _utility:Utility
+    private _utility:Utility,
+    private _store:Store
   ) {
     this.loginAs = this._router.url.includes("admin") ? "Admin" : "Customer";
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -120,6 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         data => {
           this.loadingSubject.next(false);
           this._utility.setSuccess("Welcome back " + data?.firstName);
+          this._store.updateStore()
           setTimeout(() => this.onNavigate(this.returnUrl), 2000);
         },
         error => {

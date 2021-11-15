@@ -113,7 +113,7 @@ export class RequestService {
     if (value.toLowerCase().includes("update")) return "UpdateRequired";
     if (value.toLowerCase().includes("decline")) return "NotQualified";
     if (value.toLowerCase().includes("funded")) return "Funded";
-    return "Pending";
+    return "New";
   }
   searchForAdmin = (payload: any) => {
     return this._http.post<any>(`${environment.apiUrl}/loans/searchToProcess`, { ...payload })

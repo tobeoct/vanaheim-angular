@@ -14,7 +14,7 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
-    STATUS_UPDATE_REQUIRED(status: string, id: string,url:string,message:string) {
+    STATUS_UPDATE_REQUIRED(status: string, id: string, url: string, message: string) {
         return `   LOAN ID: ${id} <br/><br/>
         Your loan request status has been updated to ${status};<br/><br/>
         Go to ${url} to provide the required document <br/><br/>
@@ -23,7 +23,7 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
-    LOAN_UPDATE(customerName: string, code: string,requirement:string) {
+    LOAN_UPDATE(customerName: string, code: string, requirement: string) {
         return `   LOAN ID: ${code} <br/><br/>
         Customer:${customerName}<br/><br/>
         Requirement: ${requirement}<br/><br/>
@@ -31,8 +31,8 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
-    STATUS_UPDATE_DECLINED(name:string,message: string, id: string) {
-        return `  Dear ${name},<br/><br/>
+    STATUS_UPDATE_DECLINED(name: string, message: string, id: string) {
+        return `  Dear ${name.trim()},<br/><br/>
  
         Thank you for your interest in Vanir Capital Limited’s loan services.<br/><br/>
          
@@ -71,7 +71,7 @@ export class TemplateService {
     Kind Regards<br/><br/>
     <b>Vanir Capital Earnings Team</b>`;
 
-    SUCCESSFUL_LOAN_TEMPLATE = (customerName: string) => `<div style="width:100% !important;  margin-top:20px;"><p>Dear ${customerName},<br/><br/>
+    SUCCESSFUL_LOAN_TEMPLATE = (customerName: string) => `<div style="width:100% !important;  margin-top:20px;"><p>Dear ${customerName.trim()},<br/><br/>
     Thank you for your interest in Vanir Capital Limited's loan services.​<br/><br/>
 ​
 We are pleased to inform you that your application for a loan has been received. It will be processed upon review of all required documents.​<br/><br/>
@@ -91,7 +91,7 @@ Best regards,​<br/><br/>
 The Vanir Loans’ Team
 </p><div>`
 
-    REPAYMENT_PLAN_TEMPLATE = (customerName: string) => `<div style="margin-top:50px;"><p>Dear ${customerName},<br/><br/> 
+    REPAYMENT_PLAN_TEMPLATE = (customerName: string) => `<div style="margin-top:50px;"><p>Dear ${customerName.trim()},<br/><br/> 
     Thank you for your indication of interest in Vanir Capital Limited's loan services.​<br/><br/>
 ​
 Kindly find attached a copy of your loan repayment plan as requested. ​<br/><br/>
@@ -114,7 +114,7 @@ The Vanir Loans’ Team
         
         `;
     NEW_CUSTOMER_TEMPLATE = (customerName: string) => {
-        return `<div style="width:100% !important;  margin-top:20px;"><p>Hello ${customerName},<br/><br/>
+        return `<div style="width:100% !important;  margin-top:20px;"><p>Hello ${customerName.trim()},<br/><br/>
             Welcome to Vanir Capital LLC.<br/><br/>
             
             Congratulations! You are on your way to receiving financial information and freedom.​<br/><br/>
@@ -222,7 +222,7 @@ The Vanir Loans’ Team
 
             });
 
-        } catch (err:any) {
+        } catch (err: any) {
             reject(err);
         }
     });

@@ -72,7 +72,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   close2 = () => {
     this.show2Subject.next(false);
     this._loanService.continueApplication(false)
-    this.onNavigate("my/loans");
+    this._router.navigate(["my/loans"])
     // this.apiErrorSubject.next();
     // this.apiSuccessSubject.next();
   }
@@ -124,7 +124,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
     }
   }
   onNavigate(route: string, params: any = {}): void {
-    let base = this.isLoggedIn ? "my/loans" : "welcome/loans"
+    let base = this.isLoggedIn ? "my/loans/apply/" : "welcome/loans/apply/"
     const r = base + route;
     this._router.navigate([r], { queryParams: params })
   }

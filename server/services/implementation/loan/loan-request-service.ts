@@ -24,7 +24,7 @@ export type SearchResponse<T> = {
 
 export class LoanRequestService extends BaseService<LoanRequest> implements ILoanRequestService {
     convertToModel: (modelInDb: any) => Promise<LoanRequest>;
-    constructor(private moment: any, private _db: any, private Op: any, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanTypeRequirementService: ILoanTypeRequirementService, private _customerRepository: ICustomerRepository, private _accountRepository: IAccountRepository, private _loanTypeRequirementRepository: ILoanTypeRequirementRepository, private _utilService: UtilService, _loanRequestRepository: ILoanRequestRepository) {
+    constructor(private moment: any, private _db: any, private Op: any, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanTypeRequirementService: ILoanTypeRequirementService, private _customerRepository: ICustomerRepository, private _accountRepository: IAccountRepository, private _loanTypeRequirementRepository: ILoanTypeRequirementRepository, private _utils: UtilService, _loanRequestRepository: ILoanRequestRepository) {
         super(_loanRequestRepository);
     }
     process = () => new Promise<any>(() => {
@@ -156,13 +156,13 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             if (!accountInfo || accountInfo.length < 1) throw "Please provide account details";
 
             loanRequest.createdAt = new Date();
-            loanRequest.requestId = this._utilService.autogenerate({ prefix: "LOAN" });
+            loanRequest.requestId = this._utils.autogenerate({ prefix: "LOAN" });
             loanRequest.code = loanRequest.requestId;
             loanRequest.requestStatus = LoanRequestStatus.Pending;
             //Fetch from db  or cache instead
             // loanRequest.loanType = new LoanType();
             loanRequest.loanType = loanType;
-            // loanRequest.loanType.code = this._utilService.autogenerate({prefix:"LTYP"});
+            // loanRequest.loanType.code = this._utils.autogenerate({prefix:"LTYP"});
             loanRequest.applyingAs = applyingAs;
             // Fetch from db or cache instead
             // loanRequest.loanProduct= new LoanProduct();
@@ -172,9 +172,9 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             loanRequest.loanPurpose = loanDetails.purpose;
             loanRequest.failureReason = "";
             loanRequest.tenure = loanDetails.tenure;
-            loanRequest.amount = this._utilService.convertToPlainNumber(loanDetails.loanAmount);
-            loanRequest.monthlyPayment = this._utilService.convertToPlainNumber(loanDetails.monthlyRepayment);
-            loanRequest.totalRepayment = this._utilService.convertToPlainNumber(loanDetails.totalRepayment);
+            loanRequest.amount = this._utils.convertToPlainNumber(loanDetails.loanAmount);
+            loanRequest.monthlyPayment = this._utils.convertToPlainNumber(loanDetails.monthlyRepayment);
+            loanRequest.totalRepayment = this._utils.convertToPlainNumber(loanDetails.totalRepayment);
             loanRequest.rate = loanDetails.rate || 0;
             let mDate = this.moment().add(+loanDetails.tenure, loanDetails.denominator.toLowerCase());
             loanRequest.maturityDate = mDate.format("MMMM Do YYYY");
@@ -188,7 +188,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
                 if (!accountInDb) {
                     account1 = new Account();
                     account1.bank = accountInfo[0].bank;
-                    account1.code = this._utilService.autogenerate({ prefix: "ACC" });
+                    account1.code = this._utils.autogenerate({ prefix: "ACC" });
                     account1.createdAt = new Date();
                     account1.customerID = customer.id;
                     account1.number = accountInfo[0].accountNumber;
@@ -211,7 +211,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
                     let accountInDb = accountsInDb.find(c => c.bank == accountInfo[1].bank && c.number == accountInfo[1].accountNumber);
                     if (!accountInDb) {
                         account2.bank = accountInfo[1].bank;
-                        account2.code = this._utilService.autogenerate({ prefix: "ACC" });
+                        account2.code = this._utils.autogenerate({ prefix: "ACC" });
                         account2.createdAt = new Date();
                         account2.customerID = customer.id;
                         // account2.customerID = 1;
@@ -234,7 +234,7 @@ export class LoanRequestService extends BaseService<LoanRequest> implements ILoa
             }
 
             loanRequest.accountNumber = accountInfo.length > 1 ? account2.number : account1.number;
-            loanRequest.denominator = "Months";
+            loanRequest.denominator = loanRequest.loanType.toLowerCase().includes("float")?"Days": "Months";
             loanRequest.customerID = customer.id;
             let loanRequestInDb = loanRequest
             if (!loanRequest.id || loanRequest.id == 0) { loanRequestInDb = await this._baseRepository.create(loanRequest) }

@@ -20,7 +20,7 @@ export default class EmailService {
   bvnList: any[] = [];
   ADMIN_EMAIL: string;
   CC_EMAIL: string;
-  constructor(private _utilService: UtilService, private _appConfig: AppConfig) {
+  constructor(private _utils: UtilService, private _appConfig: AppConfig) {
 
   }
   getFileName = (path: string) => {
@@ -90,15 +90,15 @@ export default class EmailService {
 
           ]
         };
-        if (this._utilService.hasValue(attachment)) {
+        if (this._utils.hasValue(attachment)) {
           mailOptions["attachments"].push({   // file on disk as an attachment 
             filename: this.getFileName(attachment),
             path: `${attachment.trim()}` // stream this file
           });
         }
-        if (this._utilService.hasValue(filePaths)) {
+        if (this._utils.hasValue(filePaths)) {
 
-          if (!this._utilService.hasValue(mailOptions["attachments"])) mailOptions["attachments"] = []
+          if (!this._utils.hasValue(mailOptions["attachments"])) mailOptions["attachments"] = []
 
           for (let i = 0; i < filePaths.length; i++) {
             mailOptions["attachments"].push({   // file on disk as an attachment
@@ -109,7 +109,7 @@ export default class EmailService {
         }
         if (!toCustomer) {
           mailOptions['cc'] = this.CC_EMAIL;//"tobe.onyema@gmail.com";
-          if (!this._utilService.hasValue(html)) {
+          if (!this._utils.hasValue(html)) {
             mailOptions["html"] += `<b>You just got a new application</b> <br/> <b>Name:</b> ${attachment.split('-')[0]} <br/> <b>Phone Number:</b> ${attachment.split('-')[1]}`;
           } else {
             mailOptions["html"] += html;
@@ -118,7 +118,7 @@ export default class EmailService {
         }
         else {
           // mailOptions['cc']= CC_EMAIL;
-          if (!this._utilService.hasValue(html)) {
+          if (!this._utils.hasValue(html)) {
             mailOptions["html"] += `Hello, <br/> <h1>Thanks for choosing Vanir Capital</h1> <br/><br/> We would get in touch with you shortly <br/><br/> <p class="theme_color--grey">If you are looking to earn more? <span class="theme_color--yellow"><a href="http://vanircapital.org/investment.html" target="_blank"><u>Click here</u></a></span></p>
     `;
           }
@@ -199,12 +199,12 @@ export default class EmailService {
       bitmap += data;
     }).on('end', () => {
       console.log('No more data');
-      if (this._utilService.hasValue(bitmap)) {
+      if (this._utils.hasValue(bitmap)) {
         resolve(bitmap);
       } else {
         fs.createReadStream(file, bitmap).then((map: any) => {
           bitmap = map;
-          if (this._utilService.hasValue(bitmap)) resolve(bitmap);
+          if (this._utils.hasValue(bitmap)) resolve(bitmap);
         });
       }
     });
@@ -228,16 +228,16 @@ export default class EmailService {
     // console.log(files)
     let filePaths: any[] = [];
     let bvnFile;
-    if (this._utilService.hasValue(files)) {
+    if (this._utils.hasValue(files)) {
       for (let item in files) {
         filePaths.push(files[item]);
       }
       //Send bvn information to VCAP
       let shouldProceed = false;
-      if (this._utilService.hasValue(bvnVer)) {
-        if (this._utilService.hasValue(bvnVer["BVN"])) {
-          if (this._utilService.hasValue(this.bvnList[bvnVer["BVN"]])) {
-            if (this._utilService.hasValue(this.bvnList[bvnVer["BVN"]]["basicDetails"])) {
+      if (this._utils.hasValue(bvnVer)) {
+        if (this._utils.hasValue(bvnVer["BVN"])) {
+          if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]])) {
+            if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]]["basicDetails"])) {
               shouldProceed = true;
             }
           }
@@ -251,7 +251,7 @@ export default class EmailService {
         let mime: any = this.base64MimeType(base64String);
         // console.log(item);
         // console.log(mime);
-        if (this._utilService.hasValue(mime)) {
+        if (this._utils.hasValue(mime)) {
           mime = mime.split('/')[1];
           // Remove header
           let itemName = `${item.split('.')[0]}-${Date.now()}.${mime}`;

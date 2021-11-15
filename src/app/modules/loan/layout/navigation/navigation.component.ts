@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Store } from 'src/app/shared/helpers/store';
 import { Utility } from 'src/app/shared/helpers/utility.service';
@@ -15,7 +15,7 @@ const data: any = {
   { visited: false, key: "accountInfo", title: "Account", id: "account-info", url: "account-info" },
   { visited: false, key: "documents", title: "Documents", id: "upload", url: "upload" },
   { visited: false, key: "preview", title: "Preview", id: "preview", url: "preview" },
-  { title: "Login", id: "login", url: "/auth/account" }],
+  { visited: true,key:"login", title: "Login", id: "login", url: "/auth/account" }],
   personal: [
     { visited: true, key: "loanCalculator", title: "Loan Details", id: "loan-calculator", url: "loan-calculator" },
     { visited: false, key: "bvn", title: "BVN", id: "bvn-info", url: "bvn-info" },
@@ -25,7 +25,7 @@ const data: any = {
     { visited: false, key: "nokInfo", title: "Next Of Kin", id: "nok-info", url: "nok-info" },
     { visited: false, key: "documents", title: "Documents", id: "upload", url: "upload" },
     { visited: false, key: "preview", title: "Preview", id: "preview", url: "preview" },
-    { title: "Login", id: "login", url: "/auth/account" },
+    {visited: true,key:"login", title: "Login", id: "login", url: "/auth/account" },
 
   ]
 }
@@ -42,7 +42,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   theme: string;
   allSubscriptions: Subscription[] = [];
   active$: Observable<string>;
-  isLoggedIn: boolean = false;
+  isLoggedIn$: Observable<boolean>;
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -66,24 +66,25 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
-    this.isLoggedIn = this._authService.isLoggedIn();
+    // console.log(this._store.loanCategory,  this._store.loanApplication)
+    this._authService.isLoggedIn();
+    this.isLoggedIn$ = this._authService.isLoggedInSubject.asObservable()
     let sub = this._store.loanCategory$.subscribe((c: string) => {
       if (data[c]) {
         let links = data[c].filter((d: any) => {
           if (c == "personal") return true;
-          if (this.isLoggedIn && c == "business" && d.title == "Additional") return false;
+          if (this._authService.isLoggedIn() && c == "business" && d.title == "Additional") return false;
           return true;
         })
         this.dataSelectionSubject.next(links)
       }
     });
     this._store.loanApplication$.subscribe((application: any) => {
-      let loan = application[this._store.loanCategory] as any
-      console.log(loan)
+      let loan = application[this._store.loanCategory] as any;
 
       let navigation = this.dataSelectionSubject.value;
       navigation.map((nav: any, i: number) => {
-        if (loan[nav.key]) {
+        if (loan[nav.key] && nav.key!=='login') {
           nav.visited = true;
 
           if (i < navigation.length) {
@@ -104,9 +105,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(sub);
   }
 
-  ngOnChanges(): void {
-    this.isLoggedIn = this._authService.isLoggedIn();
-  }
+
 
   onNavigate(route: string) {
     this._router.navigate([route], { relativeTo: this._route })

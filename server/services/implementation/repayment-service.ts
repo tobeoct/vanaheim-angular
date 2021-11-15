@@ -53,7 +53,7 @@ type RepaymentHealth = {
 // Recalculate based on this info. -> If full update status and use default cycle -> else recalculate cycle
 
 export class RepaymentService extends BaseService<Repayment> implements IRepaymentService {
-  constructor(private _db: any, private _customerRepository:CustomerRepository, private _templateService: TemplateService, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utilService: UtilService) {
+  constructor(private _db: any, private _customerRepository:CustomerRepository, private _templateService: TemplateService, private _loanRequestLogRepository: ILoanRequestLogRepository, private _loanRequestRepository: ILoanRequestRepository, private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _emailService: EmailService, private _appConfig: AppConfig, private _utils: UtilService) {
     super(_repaymentRepository)
   }
   getByDisbursedLoanID = (disbursedLoanId: number) => new Promise<any[]>(async (resolve, reject) => {
@@ -120,7 +120,7 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       // if ((totalRepayment <= disbursedLoan.nextPayment)) {
       if (totalRepaymentSoFar != expectedFullPayment) {
         let repayment = new Repayment();
-        repayment.code = this._utilService.autogenerate({ prefix: "RPY" });
+        repayment.code = this._utils.autogenerate({ prefix: "RPY" });
         repayment.amount = (currentCycleRepayments + amount) > disbursedLoan.nextPayment ? disbursedLoan.nextPayment - currentCycleRepayments : amount;
         repayment.dateRepaid = dateOffset > 0 ? moment().add(dateOffset, this.getDenom(loanRequest.denominator)).toDate() : new Date();
         repayment.disbursedLoanID = disbursedLoanId;
@@ -468,10 +468,10 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
     template += `
         <div style="width:100%;">
         <div style="color:#333333;padding-top:10px; padding-bottom:10px; width:100%; justify-content:space-between;">
-                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; justify-content:space-between; color:#E6AF2A;">Purpose</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(purpose)}</p>
+                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; justify-content:space-between; color:#E6AF2A;">Purpose</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utils.titleCase(purpose)}</p>
                     </div>
                     <div style="color:#333333;padding-top:10px; padding-bottom:10px; width:100%;  justify-content:space-between;">
-                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; color:#E6AF2A;">Type</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(loanType)}</p>
+                      <p style="padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333; color:#E6AF2A;">Type</p><p style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utils.titleCase(loanType)}</p>
                     </div>  
                     </div>
                     <div style="width:100%;position:relative;">
@@ -484,11 +484,11 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
                       <td style="padding-left:10px;padding-top:10px; border-bottom:1px solid #e0e0e0; padding-bottom:10px;background: #333333; color:#E6AF2A;">Loan Amount <b>(NGN)</b></td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${loanAmount.replace("NGN", '').trim()}</td>
                     </tr> 
                     <tr style="color:#333333">
-                      <td style="border-bottom:1px solid #e0e0e0;padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333;color:#E6AF2A;">Chosen Tenure</td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utilService.titleCase(tenure)}</td>
+                      <td style="border-bottom:1px solid #e0e0e0;padding-left:10px;padding-top:10px; padding-bottom:10px;background: #333333;color:#E6AF2A;">Chosen Tenure</td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;border:1px solid #e0e0e0;">${this._utils.titleCase(tenure)}</td>
                     </tr>
                     
                     <tr>
-                      <td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333; font-weight:bold;">${this._utilService.titleCase(tp)}  Installment <b>(NGN)</b></td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333;background:#e0e0e0;"><b>${this._utilService.currencyFormatter(this._utilService.convertToPlainNumber(m)).replace("NGN", '').trim()}</b></td> 
+                      <td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333; font-weight:bold;">${this._utils.titleCase(tp)}  Installment <b>(NGN)</b></td><td style="padding-left:10px;padding-top:10px; padding-bottom:10px;color: #333333;background:#e0e0e0;"><b>${this._utils.currencyFormatter(this._utils.convertToPlainNumber(m)).replace("NGN", '').trim()}</b></td> 
                     </tr>
                     </tbody>
         </table>
@@ -532,16 +532,16 @@ export class RepaymentService extends BaseService<Repayment> implements IRepayme
       if (beginning < 0) beginning = 0;
       template += `<tr style="padding-top:10px; padding-bottom:10px; width:100%;">
                                   <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${lDate}</td>
-                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(beginning).replace("NGN", '').trim()}</td>
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utils.currencyFormatter(beginning).replace("NGN", '').trim()}</td>
                                   
-                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(monthlyPrincipal).replace("NGN", '').trim()}</td>
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utils.currencyFormatter(monthlyPrincipal).replace("NGN", '').trim()}</td>
                                   
-                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(monthlyInterest).replace("NGN", '').trim()}</td>
-                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utilService.currencyFormatter(m).replace("NGN", '').trim()}</td>
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utils.currencyFormatter(monthlyInterest).replace("NGN", '').trim()}</td>
+                                  <td  style="padding-top:10px; padding-bottom:10px; padding-left:1%;border:1px solid #e0e0e0;">${this._utils.currencyFormatter(m).replace("NGN", '').trim()}</td>
                                 </tr>`
       beginning = beginning - monthlyPrincipal;
     }
-    template += `<tr style="style="width:100%" background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;"><td style="padding-left:10px;background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;" colspan="4">Total Repayment (Principal + Interest)</td><td style="padding-left:10px;background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;">${this._utilService.currencyFormatter(total).replace("NGN", '').trim()}</td></tr></tbody></table></div>`
+    template += `<tr style="style="width:100%" background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;"><td style="padding-left:10px;background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;" colspan="4">Total Repayment (Principal + Interest)</td><td style="padding-left:10px;background:#e0e0e0; font-weight:700 !important; padding-top:10px; padding-bottom:10px;">${this._utils.currencyFormatter(total).replace("NGN", '').trim()}</td></tr></tbody></table></div>`
 
     return template;
   }
