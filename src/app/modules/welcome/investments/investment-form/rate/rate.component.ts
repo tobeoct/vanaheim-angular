@@ -13,7 +13,7 @@ export class RateComponent implements OnInit {
   amount$: Observable<number> = from([0]);
   amount: number;
   @Input()
-  type:string;
+  type: string;
   @Output() rateDetailChange = new EventEmitter();
   rateSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   payoutSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -21,16 +21,14 @@ export class RateComponent implements OnInit {
   payout$: Observable<number> = this.payoutSubject.asObservable();
   durationsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([{ value: 12, active: false }, { value: 6, active: false }, { value: 3, active: false }])
   durations$: Observable<any[]> = this.durationsSubject.asObservable();
-  // { value: 9, active: false },
 
   constructor(private utility: Utility) { }
 
   ngOnInit(): void {
-    // this
     this.amount$.subscribe(v => this.amount = v);
   }
   trackByFn(index: any, item: any) {
-    return index; // or item.id
+    return index; 
   }
   activate(duration: number) {
     this.durationsSubject.next(this.durationsSubject.value.map(d => {
@@ -73,7 +71,7 @@ export class RateComponent implements OnInit {
 }
 
 const addMonths = (date: any, months: any) => {
-  var d = date.getDate();
+  let d = date.getDate();
   date.setMonth(date.getMonth() + +months);
   if (date.getDate() != d) {
     date.setDate(0);

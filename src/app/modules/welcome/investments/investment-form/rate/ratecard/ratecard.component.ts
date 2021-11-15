@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
+import { EarningType, InvestmentService } from '../../../investment.service';
 
 @Component({
     selector: 'app-ratecard',
@@ -12,65 +13,19 @@ export class RatecardComponent implements OnInit, OnChanges {
     @Input() amount: number | null = 100000;
     @Input() type: string;
     @Output() rateChange = new EventEmitter();
-    constructor() { }
+    constructor(private _investmentService:InvestmentService) { }
 
     ngOnInit(): void {
-        this.rate = this.getRate(this.amount || 0, this.duration);
+        this.rate = this._investmentService.getRate(this.type as EarningType,this.amount || 0, this.duration);
         if (this.active) {
             this.rateChange.emit(this.rate.toString());
         }
     }
     ngOnChanges(): void {
-        this.rate = this.getRate(this.amount || 0, this.duration);
+        this.rate = this._investmentService.getRate(this.type  as EarningType,this.amount || 0, this.duration);
         if (this.active) {
             this.rateChange.emit(this.rate.toString());
         }
     }
-    getRate(amount: number, duration: number) {
-        let r = 0;
-
-        switch (duration) {
-            case 3:
-                if (amount >= 100000 && amount <= 10000000) {
-                    r = this.type == "End Of Tenor" ? 18 : 16;
-                } else if (amount > 10000000 && amount <= 20000000) {
-                    r = this.type == "End Of Tenor" ? 20 : 18;
-                }
-                break;
-            case 6:
-                if (amount >= 100000 && amount <= 10000000) {
-                    r = this.type == "End Of Tenor" ? 20 : 18;
-                } else if (amount > 10000000 && amount <= 20000000) {
-                    r = this.type == "End Of Tenor" ? 22 : 20;
-                }
-                // else if (amount>20000000){
-                //     r=22;
-                // }
-                break;
-            case 9:
-                if (amount >= 100000 && amount <= 10000000) {
-                    r = 19;
-                } else if (amount > 10000000 && amount <= 20000000) {
-                    r = 20;
-                }
-                // else if (amount>20000000){
-                //     r=23;
-                // }
-                break;
-            case 12:
-                if (amount >= 100000 && amount <= 10000000) {
-                    r = this.type == "End Of Tenor" ? 22 : 20;
-                } else if (amount > 10000000 && amount <= 20000000) {
-                    r = 22;
-                }
-
-                // else if (amount>20000000){
-                //     r=24;
-                // }
-                break;
-        }
-        return r;
-
-
-    }
+    
 }

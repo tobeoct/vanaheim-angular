@@ -25,7 +25,8 @@ export default class AccountController {
   }
 
   getAccountName(data: VerifyAccountEnquiryResponsePayload | any) {
-    return data.full_name ?? (!data["surname"] && !data["otherNames"])?"": (data["surname"]??"" + " " + data["otherNames"]??"");
+    console.log("Account Info",data)
+    return data.full_name //?? (!data["surname"] && !data["otherNames"])?"": (data["surname"]??"" + " " + data["otherNames"]??"");
   }
   @route('/enquiry')
   @POST()
@@ -37,7 +38,7 @@ export default class AccountController {
         let endpoint = EnvConstants.verify.v3.accountInquiry.endpoint;
         let body: VerifyAccountEnquiryRequest = { bankCode: req.body.bankcode, searchParameter: req.body.accountnumber, verificationType: VerifyVerificationType.AccountEnquiry, transactionReference: "" };
         const key = `${body.bankCode}-${body.searchParameter}`;
-        console.log(accountList, accountList[key])
+        // console.log(accountList, accountList[key])
         if (!this._utils.hasValue(accountList[key])) {
           let result = await this.accountEnquiryInstance.post<VerifyAccountEnquiryRequest, AxiosResponse<VerifyAccountEnquiryResponse>>(endpoint, body);
 
