@@ -39,20 +39,20 @@
             transition: 0.3s ease-in-out;
             width: 47.5%;
             &.active {
-                border-color: map-get($colors, black) !important;
-                background: map-get($colors, black) !important;
-                color: map-get($colors, white) !important;
+                border-color: map-get($colors, yellow) !important;
+                background: map-get($colors, yellow) !important;
+                color: map-get($colors, black) !important;
             }
             &:hover {
                 transform: scale(1.05);
             }
             &:first-child {
-                border-color: map-get($colors, facebook);
-                color: map-get($colors, facebook);
+                border-color: map-get($colors, black);
+                color: map-get($colors, black);
             }
             &:nth-child(2) {
-                border-color: map-get($colors, yellow);
-                color: map-get($colors, yellow);
+                border-color: map-get($colors, black);
+                color: map-get($colors, black);
                 margin-left: map-get($sizings, "px") / 2;
                 // &.active{
 
