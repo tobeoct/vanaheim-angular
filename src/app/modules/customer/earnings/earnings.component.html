@@ -1,0 +1,127 @@
+<div id="earning-content" class="grid-padding-4x">
+    <div class="left layout">
+        <div id="earning-summary">
+
+            <ng-container *ngIf="totalEarnings.length>0">
+                <div class="heading">
+                    <h3>Earnings Summary</h3> <select id="month" required>
+                        <option value="January" data-display-text="January" aria-label="January">This week</option>
+                        <option value="February" aria-label="February">February</option>
+                        <option value="March" aria-label="March">March</option>
+                        <option value="April" aria-label="April">April</option>
+                        <option value="May" aria-label="May">May</option>
+                        <option value="June" aria-label="June">June</option>
+                        <option value="July" aria-label="July">July</option>
+                        <option value="August" aria-label="August">August</option>
+                        <option value="September" aria-label="September">September</option>
+                        <option value="October" aria-label="October">October</option>
+                        <option value="November" aria-label="November">November</option>
+                        <option value="December" aria-label="December">December</option>
+
+                    </select>
+                </div>
+
+                <div id="summary-card">
+                    <div>
+                        <p>You have applied for 10 Earnings worth </p>
+                        <h2>₦200,000,000</h2>
+                    </div>
+                    <div>
+                        <p>Total repayment of</p>
+                        <h2>₦199,950,000</h2>
+                    </div>
+                </div>
+            </ng-container>
+            <div id="earning-history" class="animate__animated animate__fadeInUp"
+                [ngClass]="{'no-margin--top':totalEarnings.length==0}">
+                <div class="heading">
+                    <h3>Earning History</h3>
+                </div>
+                <app-table>
+                    <ng-container slot="filter">
+                        <div id="filters">
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}"
+                                (click)="changeFilter('')">All</div>
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Processing'}"
+                                (click)="changeFilter('Processing')">Processing</div>
+                            <!-- <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Defaulting'}"
+                                (click)="changeFilter('Defaulting')">Defaulting</div> -->
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='NotQualified'}"
+                                (click)="changeFilter('NotQualified')">Declined</div>
+                        </div>
+                    </ng-container>
+                    <ng-container slot="header">
+                        <tr>
+                            <th>Date</th>
+                            <th>Earning ID</th>
+                            <th>Amount</th>
+                            <th>Earning Product</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-container>
+                    <ng-container slot="body" *ngIf="earnings$|async as data">
+                        <ng-container *ngIf="data.rows.length==0">
+                            <div class="no-data">
+                                <span class="material-icons material-icons-outlined">
+                                    info
+                                </span>
+                                <h3>No data available</h3>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="data.rows.length>0">
+                            <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                                <td>{{row.requestDate | date :'MMMM d, y'}}</td>
+                                <td>{{row.requestId}}</td>
+                                <td>{{row.amount|currency:'₦'}}</td>
+                                <td>{{row.earningProduct}}</td>
+                                <td>{{row.tenure}} {{row.denominator}}</td>
+                                <td>
+                                    <app-badge [color]="getEarningStatusColor(row.requestStatus)">{{row.requestStatus}}
+                                    </app-badge>
+                                </td>
+                                <td>
+                                    <app-button [class]="'widget_button--small'" (onClick)="selectEarning(row.id)"
+                                        fieldClass="no-margin--all">
+                                        <ng-container slot="button">View Details</ng-container>
+                                    </app-button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container slot="body" *ngIf="!(earnings$|async)">
+                        <div class="no-data">
+                            <span class="material-icons material-icons-outlined">
+                                info
+                            </span>
+                            <h3>No data available</h3>
+                        </div>
+                    </ng-container>
+                    <ng-container slot="pagination">
+                        <app-pagination [totalCount]="(earnings$|async)?.count||0" [maxSize]="10"
+                            [pagingChangeSubject]="pagingSubject"></app-pagination>
+                    </ng-container>
+                </app-table>
+            </div>
+        </div>
+    </div>
+    <div class="right layout">
+
+        <div id="calculator" class="theme_dropshadow--light animate__animated animate__fadeInUp">
+            <!-- <div class="theme_bg--white theme_col-5 investment_background theme_dropshadow--light animate__animated animate__fadeInUp"
+                            style="height: 100%;"> -->
+            <div class=" theme_bg"
+                style=" width: 100%; height: 60px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
+                <p class="theme_color--yellow theme_text--heading3" style="text-align: center; margin: auto;">Earnings
+                    Application
+                </p>
+            </div>
+            <app-earning-form></app-earning-form>
+        </div>
+    </div>
+
+    <app-template #templates></app-template>
+
+</div>
+

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Component({
-  selector: 'app-investment-card',
+  selector: 'app-earning-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })

@@ -1,6 +1,6 @@
-import { InvestmentRequest } from "@models/investment/investment-request";
+import { EarningRequest } from "@models/investment/investment-request";
 import { IBaseService } from "../Ibaseservice";
 
-export interface IInvestmentRequestService extends IBaseService<InvestmentRequest>{
+export interface IEarningRequestService extends IBaseService<EarningRequest>{
 
 }

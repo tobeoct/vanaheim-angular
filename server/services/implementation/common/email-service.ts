@@ -18,7 +18,7 @@ let FileAPI = require('file-api')
 export enum EmailType {
   Update,
   Form,
-  Investment,
+  Earning,
   Feedback,
   Repayment,
   Loan
@@ -82,7 +82,7 @@ export default class EmailService {
           case EmailType.Repayment:
             subject = toCustomer ? 'Loan Repayment Plan' : 'A Customer Requested For A Repayment Plan';
             break;
-          case EmailType.Investment:
+          case EmailType.Earning:
             subject = toCustomer ? 'Vanir Capital: Earnings Indication' : 'Earnings Indication';
             transporterOptions.auth = {
               user: this._appConfig.INVESTMENT_EMAIL,

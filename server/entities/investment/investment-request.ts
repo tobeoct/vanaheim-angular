@@ -1,9 +1,9 @@
-import { InvestmentRequestStatus } from "server/enums/investmentrequeststatus";
+import { EarningRequestStatus } from "server/enums/investmentrequeststatus";
 import { Account } from "../account";
 import { BaseEntity } from "../base-entity";
 import { Customer } from "../customer";
 
-export class InvestmentRequest extends BaseEntity{
+export class EarningRequest extends BaseEntity{
     customer:Customer;
      duration:number;
      amount:number;
@@ -14,7 +14,7 @@ export class InvestmentRequest extends BaseEntity{
      dateDeclined:Date;
      failureReason:string;
      rate:any;
-    requestStatus:InvestmentRequestStatus;
+    requestStatus:EarningRequestStatus;
     dateDueForFunding:Date;
 workflow:any;
     requestId:string;

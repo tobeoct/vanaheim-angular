@@ -1,4 +1,4 @@
-export class InvestmentIndication{
+export class EarningIndication{
     constructor(){
 
     }

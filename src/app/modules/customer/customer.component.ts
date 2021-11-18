@@ -8,6 +8,8 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Router } from '@angular/router';
 import { Store } from 'src/app/shared/helpers/store';
+import { EarningService } from 'src/app/shared/services/earning/earning.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customer',
@@ -24,12 +26,17 @@ export class CustomerComponent implements OnInit {
   showSubject: Subject<string> = new Subject<string>();
   show$: Observable<string> = this.showSubject.asObservable();
 
+  showSuccess$: Observable<boolean>
+  show2$: Observable<boolean>
+  apiSuccess$: Observable<string>;
+  apiError$: Observable<string>;
+
   activeLoan$: Observable<boolean>;
   runningLoanSubscription: Subscription
 
   showInvalid$: Observable<boolean>;
   timerSubscription: Subscription;
-  constructor(private swPush: SwPush, private _store: Store, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
+  constructor(private swPush: SwPush, private _store: Store, private _earningService: EarningService, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
     try {
       this.showInvalid$ = this._utility.showLoanInvalidSubject.asObservable();
       if (environment.production) {
@@ -50,18 +57,43 @@ export class CustomerComponent implements OnInit {
     }
 
   }
+  close = () => {
+    setTimeout(() => { this._earningService.showError(false); this._earningService.showSuccess(false) }, 0);
+    // this.apiErrorSubject.next();
+    // this.apiSuccessSubject.next();
+  }
   ngOnDestroy() {
     if (this.timerSubscription) this.timerSubscription.unsubscribe();
     if (this.runningLoanSubscription) this.runningLoanSubscription.unsubscribe()
   }
   ngOnInit(): void {
 
+    this.show2$ = this._earningService.show2$;
+    this.showSuccess$ = this._earningService.show$;
+    this.apiError$ = this._earningService.apiError$;
+    this.apiSuccess$ = this._earningService.apiSuccess$;
     this.activeLoan$ = this._loanService.activeLoanSubject.asObservable();
     const sideNavSub = this._utility.activeNavigation$.subscribe(r => {
       this.showSubject.next(r.toString());
     })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
+    if (Object.keys(this._store.getEarningApplication()).length > 0) {
+      // this._store.saveEarningApplication(this._store.getEarningApplication());
+      this._earningService.apply(this._store.getEarningApplication()).pipe(take(1)).subscribe(
+        data => {
+
+          setTimeout(() => { this._earningService.success(data.message); this._earningService.showSuccess(true); }, 0);
+
+        },
+        (error: string) => {
+          if (error == "Not Found") error = "You do not seem to be connected to the internet";
+          setTimeout(() => { this._earningService.error(error); this._earningService.showError(true); }, 0);
+
+        });
+
+      this._store.removeEarningApplication()
+    }
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
       // console.log("Running Loan ", r)
       if (localStorage.getItem("page") && r != true && !this._router.url.includes("apply")) {

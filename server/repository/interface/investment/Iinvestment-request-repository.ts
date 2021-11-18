@@ -1,6 +1,7 @@
-import { InvestmentRequest } from "@models/investment/investment-request";
+import { EarningRequestStatus } from "@models/helpers/enums/investmentrequeststatus";
+import { EarningRequest } from "@models/investment/investment-request";
 import { IBaseRepository } from "../Ibase-repository";
 
-export interface IInvestmentRequestRepository extends IBaseRepository<InvestmentRequest>{
-    
+export interface IEarningRequestRepository extends IBaseRepository<EarningRequest>{
+    getEarningByStatus:(customerID:number, status:EarningRequestStatus|any)=>Promise<EarningRequest[]>;
 }

@@ -10,12 +10,13 @@ export enum EarningType {
 @Injectable({
   providedIn: 'root'
 })
-export class InvestmentService {
+export class EarningService {
 
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$: Observable<boolean> = this.showSubject.asObservable();
   show2Subject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show2$: Observable<boolean> = this.show2Subject.asObservable();
+  showLoginSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 
   apiSuccessSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -37,11 +38,14 @@ export class InvestmentService {
 
 
   }
-  show(v: boolean) {
+  showSuccess(v: boolean) {
     this.showSubject.next(v);
   }
-  show2(v: boolean) {
+  showError(v: boolean) {
     this.show2Subject.next(v);
+  }
+  showLogin = (value: boolean) => {
+    this.showLoginSubject.next(value);
   }
   success(v: string) {
     this.apiSuccessSubject.next(v);

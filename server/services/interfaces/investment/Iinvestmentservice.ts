@@ -1,16 +1,15 @@
-import { InvestmentRequest } from "@models/investment/investment-request";
-import { InvestmentRequestLog } from "@models/investment/investment-request-log";
-import { IInvestmentRequestLogService } from "./Iinvestment-log-request-service";
-import { IInvestmentRequestService } from "./Iinvestment-request-service";
+import { Customer } from "@models/customer";
+import { EarningPayload } from "@models/investment/investment-payload";
+import { EarningRequest } from "@models/investment/investment-request";
+import { EarningRequestLog } from "@models/investment/investment-request-log";
 
+export interface IEarningService{
 
-export interface IInvestmentService{
-
-    restructure:(disbursedInvestmentId:number,repayment:number)=>Promise<boolean>
-    getAllInvestmentRequests:()=>Promise<InvestmentRequest[]>
-    getAllInvestmentRequestLogs:()=>Promise<InvestmentRequestLog[]>
-    getInvestmentRequestById:()=>Promise<InvestmentRequest>
-    getInvestmentRequestLogById:()=>Promise<InvestmentRequestLog>
-    updateInvestmentRequest:(investmentRequest:InvestmentRequest)=> Promise<InvestmentRequest>
-    process:({name,email,payout,duration,rate,maturity,amount}: any) => Promise<any>
+    restructure:(disbursedEarningId:number,repayment:number)=>Promise<boolean>
+    getAllEarningRequests:()=>Promise<EarningRequest[]>
+    getAllEarningRequestLogs:()=>Promise<EarningRequestLog[]>
+    getEarningRequestById:()=>Promise<EarningRequest>
+    getEarningRequestLogById:()=>Promise<EarningRequestLog>
+    updateEarningRequest:(investmentRequest:EarningRequest)=> Promise<EarningRequest>
+    process:(customer:Customer,payload:EarningPayload) => Promise<any>
 }

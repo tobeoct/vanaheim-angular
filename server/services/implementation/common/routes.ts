@@ -1,10 +1,16 @@
-export const newSessionRoutes = [{ path: '/api/auth/login', method: 'POST' }, { path: '/api/auth/register', method: 'POST' },
-{ path: '/api/auth/token', method: 'POST' },
-{ path: '/api/repayment/plan', method: 'POST' },
-{ path: '/api/earnings/apply', method: 'POST' },
-{ path: '/api/account/enquiry', method: 'POST' }, { path: '/api/common/validatebvn', method: 'POST' }, { path: '/api/auth/verify', method: 'POST' }, { path: '/api/auth/resetpassword', method: 'POST' }];
+export const newSessionRoutes = [
+  { path: '/api/auth/login', method: 'POST' },
+  { path: '/api/auth/register', method: 'POST' },
+  { path: '/api/auth/token', method: 'POST' },
+  { path: '/api/repayment/plan', method: 'POST' },
+  { path: '/api/account/enquiry', method: 'POST' },
+  { path: '/api/common/validatebvn', method: 'POST' },
+  { path: '/api/auth/verify', method: 'POST' },
+  { path: '/api/auth/resetpassword', method: 'POST' }
+];
 export const authRoutes = [
   { path: "/api/auth/refresh-session", method: "GET" },
+  { path: '/api/earnings/apply', method: 'POST' },
   { path: '/api/auth/password', method: 'PUT' },
   { path: '/api/notification/send', method: 'POST' },
   { path: '/api/notification/sendtomultiple', method: 'POST' },

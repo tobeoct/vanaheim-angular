@@ -36,7 +36,7 @@ import DocumentService from '@services/implementation/document-service';
 import { TemplateService } from '@services/implementation/common/template-service';
 import db = require('server/db/models');
 import { RepaymentService } from '@services/implementation/repayment-service';
-import { InvestmentService } from '@services/implementation/investment/investment-service';
+import { EarningService } from '@services/implementation/investment/investment-service';
 import { LoanTypeRequirementService } from '@services/implementation/loan/loan-type-requirement-service';
 import { StaffRepository } from '@repository/implementation/staff-repository';
 import { DisbursedLoanRepository } from '@repository/implementation/loan/disbursed-loan-repository';
@@ -44,6 +44,9 @@ import { RepaymentRepository } from '@repository/implementation/repayment-reposi
 import { DisbursedLoanService } from '@services/implementation/loan/disbursed-loan-service';
 import { Cloudinary } from '@services/implementation/image/cloudinary-service';
 import { AWSService } from '@services/implementation/image/aws-service';
+import { EarningRequestLogRepository } from '@repository/implementation/investment/investment-request-log-repository';
+import { EarningRequestRepository } from '@repository/implementation/investment/investment-request-repository';
+import AccountService from '@services/implementation/account-service';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -94,6 +97,8 @@ export default class Bootstrap {
             _subscriptionRepository: asClass(SubscriptionRepository).singleton(),
             _loanRequestRepository: asClass(LoanRequestRepository).singleton(),
             _loanRequestLogRepository: asClass(LoanRequestLogRepository).singleton(),
+            _earningRequestRepository: asClass(EarningRequestRepository).singleton(),
+            _earningRequestLogRepository: asClass(EarningRequestLogRepository).singleton(),
             _documentRepository:asClass(DocumentRepository).singleton(),
             _companyRepository:asClass(CompanyRepository).singleton(),
             _employmentRepository:asClass(EmploymentRepository).singleton(),
@@ -115,7 +120,7 @@ export default class Bootstrap {
             _loanRequestLogService: asClass(LoanRequestLogService).singleton(),
             _loanService: asClass(LoanService).singleton(),
             _disbursedLoanService: asClass(DisbursedLoanService).singleton(),
-            _investmentService: asClass(InvestmentService).singleton(),
+            _earningService: asClass(EarningService).singleton(),
             _notificationService: asClass(NotificationService).singleton(),
             _clientService: asClass(ClientService).singleton(),
             _templateService: asClass(TemplateService).singleton(),
@@ -124,6 +129,7 @@ export default class Bootstrap {
             _userService: asClass(UserService).singleton(),
             _emailService: asClass(EmailService).singleton(),
             _documentService: asClass(DocumentService).singleton(),
+            _accountService: asClass(AccountService).singleton(),
             _cloudinaryService: asClass(Cloudinary).singleton(),
             _awsService: asClass(AWSService).singleton()
         });

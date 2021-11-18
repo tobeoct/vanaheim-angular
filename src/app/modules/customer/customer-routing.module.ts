@@ -5,6 +5,7 @@ import { LoanComponent } from '../loan/loan.component';
 import { AccountComponent } from './account/account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DocumentsComponent } from './document/document.component';
+import { EarningsComponent } from './earnings/earnings.component';
 import { LoansComponent } from './loans/loans.component';
 const LOAN_ROUTES: Routes = [
   {path:"",loadChildren:()=>import('../loan/loan.module').then(m=>m.LoanModule)}
@@ -15,6 +16,8 @@ const routes: Routes = [
 {path:"loans/:id", component:LoansComponent},
 {path:"loans", component:LoansComponent},
 { path: 'loans/apply', component: LoanComponent, children: LOAN_ROUTES, canActivate:[FlowGuard] },
+{path:"earnings/:id", component:EarningsComponent},
+{path:"earnings", component:EarningsComponent},
 {path:"documents", component:DocumentsComponent},
 {path:"profile", component:AccountComponent},
 {path:"**", redirectTo:"dashboard"},

@@ -317,6 +317,8 @@ export class Store {
   private documents$: Observable<any[]> = this.documentsSubject.asObservable();
 
 
+  private investmentSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
   constructor(private _router: Router, private _authService: AuthService) {
     this.applyingAsSubject.next(this.getFromCurrentApplication("applyingAs") || '');
     this.loanTypeSubject.next(this.getFromCurrentApplication("loanType") || '');
@@ -355,6 +357,7 @@ export class Store {
     this.removeItem("category");
     this.removeItem("previous");
   }
+
   clear(category: string) {
     let application = this.getLoanApplication();
     delete application[category];
@@ -484,5 +487,20 @@ export class Store {
     console.log(this.pageSubject.value);
     this.setPage(this.pageSubject.value);
 
+  }
+
+  //Earning
+
+  getEarningApplication() {
+    return this.investmentSubject.value|| JSON.parse(this.getItem("Earning") || "{}")
+  }
+
+  saveEarningApplication(application: any) {
+    this.investmentSubject.next(application);
+    return this.setItem("Earning", JSON.stringify(application));
+  }
+  removeEarningApplication() {
+    this.removeItem("Earning");
+    this.investmentSubject.next({})
   }
 }

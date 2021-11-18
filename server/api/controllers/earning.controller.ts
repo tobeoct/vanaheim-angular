@@ -1,16 +1,16 @@
 
-import { IInvestmentService } from '@services/interfaces/investment/Iinvestmentservice';
+import { IEarningService } from '@services/interfaces/investment/Iinvestmentservice';
 import { POST, route } from 'awilix-express'; 
 @route('/api/earnings')
 export default class EarningsController {
 
-    constructor(private _investmentService:IInvestmentService) {
+    constructor(private _earningService:IEarningService) {
 
     }
     @route('/apply')
     @POST()
     apply =async (req:any, res:any,next:any) => {
-        let response:any = await this._investmentService.process(req.body);
+        let response:any = await this._earningService.process(req.session.userData.customer,req.body);
         if(response.status==true){
             res.statusCode = 200;
             res.data = response.data;
@@ -22,4 +22,5 @@ export default class EarningsController {
     
         next()
     }
+
 }

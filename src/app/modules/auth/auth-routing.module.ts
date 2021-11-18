@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 const routes: Routes = [
   {path:"", component: AccountComponent,canActivate:[PreventAdminGuard]},
   {path:"account", component: AccountComponent,canActivate:[PreventAdminGuard]},
+  {path:"account/:username", component: AccountComponent,canActivate:[PreventAdminGuard]},
   {path:"forgot-password", component: ForgotpasswordComponent},
   {path:"forgot-password/:username", component: ForgotpasswordComponent},
     {path:"login", component: LoginComponent},

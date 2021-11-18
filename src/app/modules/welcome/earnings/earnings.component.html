@@ -6,8 +6,10 @@
     <div style="font-size:1.1em; transform: rotateZ(90deg); margin-left: 10px;">👆🏾</div>
 </div>
 <app-header [myclass]="headerclass"></app-header>
+
 <div class="investment_content theme_inline-block grid-padding-3x">
     <div class="theme_row" style=" padding-top: 2.5%;">
+
         <div class="main_container">
             <div>
                 <app-navigation [type]="mobile"></app-navigation>
@@ -28,8 +30,24 @@
                         </div>
                     </div>
                     <div class="theme_col-12" style="height: 100%; z-index: 2;">
-
-                        <app-investment-form></app-investment-form>
+                        <div class="theme_bg--white theme_col-5 investment_background theme_dropshadow--light animate__animated animate__fadeInUp"
+                            style="height: 100%;">
+                            <app-banner [class]="'banner--small no-margin--top'" color="tertiary"
+                                *ngIf="!(isLoggedIn$|async)">
+                                <ng-container slot="content"><span [routerLink]="['/auth/account']"
+                                        [queryParams]="{ username: email.value }" style="cursor: pointer;"><b><u>Sign up
+                                                required</u> </b></span> to be able to
+                                    submit your application</ng-container>
+                            </app-banner>
+                            <div class=" theme_bg"
+                                style=" width: 100%; height: 60px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
+                                <p class="theme_color--yellow theme_text--heading3"
+                                    style="text-align: center; margin: auto;">Earnings Application
+                                </p>
+                            </div>
+                            <app-earning-form (onEmailEntered)="emailEntered($event)"></app-earning-form>
+                            <app-footer></app-footer>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,64 +59,20 @@
 
 
 
-<app-modal *ngIf="(show$|async)" (onChange)="close()">
+<app-modal *ngIf="(showLogin$|async)==true && !(isLoggedIn$|async)" (onChange)="closeLogin()">
     <app-modal-header slot="header">
-        <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
-            <app-lottie assetPath="vanir-capital-badge"></app-lottie>
-
-        </div>
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Sign In Required</h3>
     </app-modal-header>
     <app-modal-body slot="body">
-
-        <div class="modal_content" style="text-align: center;">
-            <h1>Earnings Indication</h1>
-            <div class="form_group">
-                <p class="theme_text--heading theme_text--heading3">{{apiSuccess$|async}}</p>
-
-            </div>
-            <div class="form_group">
-                <!-- <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You would be notified as your request is processed. </p> -->
-                <button class="widget_button" (click)="close()" id="submit" type="submit" style="margin: 5px auto;"
-                    tabindex="0">
-                    <div>Done</div>
-                </button>
-                <p class="theme_color--grey">Are you looking to get some funds? <span class="theme_color--yellow"><a
-                            href="welcome/loans"><u>Go to Loans</u></a></span></p>
-
-            </div>
-
+        <p style="text-align: center; margin: auto;">Don't worry, your application would be submitted automatically once
+            you've signed in.</p>
+        <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
+            <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;"
+                (click)="login()">Login</button>
         </div>
-
-
-    </app-modal-body>
-</app-modal>
-
-
-
-<app-modal *ngIf="(show2$|async)" (onChange)="close()">
-    <app-modal-header slot="header">
-        <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
-            <app-lottie assetPath="vanir-capital-error"></app-lottie>
-
-        </div>
-    </app-modal-header>
-    <app-modal-body slot="body">
-
-        <div class="modal_content" style="text-align: center;">
-
-            <h1>Oops</h1>
-            <div class="form_group">
-                <p class="theme_text--heading theme_text--heading3">There seems to be a problem</p>
-            </div>
-            <div class="form_group">
-                <p class="theme_color--grey">{{apiError$|async}} </p>
-                <app-button (onClick)="close()">
-                    <ng-container slot="button">Close</ng-container>
-                </app-button>
-
-            </div>
-        </div>
-
-
     </app-modal-body>
 </app-modal>
