@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import moment = require('moment');
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { AdminEarningService } from 'src/app/shared/services/earning/admin-earning.service';
 import { EarningPayoutService } from 'src/app/shared/services/earning/earning-payout.service';
@@ -51,7 +52,7 @@ export class EarningsComponent implements OnInit {
     this._utils.toggleLoading(true);
     this._requestService.topUp(id).subscribe(c => {
       this._utils.setSuccess(c);
-      this.topUps$ =this._requestService.getTopUps();
+      this.topUps$ = this._requestService.getTopUps();
     }, error => {
       this._utils.setError(error);
 
@@ -60,8 +61,15 @@ export class EarningsComponent implements OnInit {
   declineTopUp(id: number) {
 
   }
-  liquidate(id: number) {
+  liquidate(id: number, status: string) {
+    this._utils.toggleLoading(true);
+    this._requestService.liquidate(id, status).subscribe(c => {
+      this._utils.setSuccess(c);
+      this.liquidations$ = this._requestService.getLiquidations();
+    }, error => {
+      this._utils.setError(error);
 
+    })
   }
   trackByFn(index: any, item: any) {
     return index;

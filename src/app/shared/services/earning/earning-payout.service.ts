@@ -33,7 +33,7 @@ export class EarningPayoutService {
   }
 
   getEarningPayout = (approvedEarningID: number) => {
-    const url = `${environment.apiUrl}/earningspayout/getEarningPayouts?approvedEarningID=${approvedEarningID}`;
+    const url = `${environment.apiUrl}/earningspayout?approvedEarningID=${approvedEarningID}`;
     return this._http.get<any>(url)
       .pipe(map(response => {
         if (response && response.status == true) {

@@ -31,7 +31,7 @@ export class EarningsComponent implements OnInit {
   base: string;
   loanRequestID: number
   loanRequestLogID: number
-  get topUpAmount():FormControl {
+  get topUpAmount(): FormControl {
     return this.form.get("amount") as FormControl || new FormControl(0)
   }
   pagingSubject: BehaviorSubject<any>;
@@ -42,20 +42,23 @@ export class EarningsComponent implements OnInit {
   activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
 
+  payouts$: Observable<any[]>
+  showPayoutSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showPayout$: Observable<boolean> = this.showPayoutSubject.asObservable();
   earningDetailsFromDb$: Observable<any>
   requestIDSubject: BehaviorSubject<any> = new BehaviorSubject<any>('');
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
   showTopUpSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showTopUp$: Observable<boolean> = this.showTopUpSubject.asObservable();
-  constructor(private _route: ActivatedRoute, private _fb: FormBuilder,private _validators:VCValidators, private _earningService: EarningService, private _earningPayoutService: EarningPayoutService, private _requestService: AdminEarningService, private _utils: Utility) { }
+  constructor(private _route: ActivatedRoute, private _fb: FormBuilder, private _validators: VCValidators, private _earningService: EarningService, private _earningPayoutService: EarningPayoutService, private _requestService: AdminEarningService, private _utils: Utility) { }
 
   ngOnInit(): void {
     this._route.params
       .subscribe(params => {
         const id = +params['id'];
         console.log(id)
-        if (id && id>0) {
+        if (id && id > 0) {
           this.selectEarning(id);
         }
       });
@@ -78,6 +81,11 @@ export class EarningsComponent implements OnInit {
     if (status == "NotQualified" || status == "Declined" || status == "Defaulting") return 'danger';
     return status == "Processing" || status == 'TopUpRequest' || status == 'LiquidationRequest' ? '' : 'info';
   }
+  
+  getStatusColor(status: string) {
+    if (status == "Paid In Full" || status == "Fully Paid") return 'success';
+    return status == "Defaulted" ? 'danger' : status == 'Partial' ? 'info' : '';
+  }
   trackByFn(index: any, item: any) {
     return index;
   }
@@ -88,21 +96,30 @@ export class EarningsComponent implements OnInit {
     this._requestService.selectEarningLog(id);
     this.showSubject.next(true);
   }
+  closePayout() {
+    this.showPayoutSubject.next(false);
+  }
+  showPayouts(id: number) {
+    console.log("Show payouts")
+    this.payouts$ = this._earningPayoutService.getEarningPayout(id)
+    this.showPayoutSubject.next(true);
+    this._earningPayoutService.selectEarning(id);
+  }
 
   liquidate(requestID: number) {
-    this.loadingSubject.next(true)
+    this._utils.toggleLoading(true);
     this._earningService.notifyLiquidate(requestID).pipe(take(1)).subscribe(
       data => {
 
-        this.loadingSubject.next(false)
         this._utils.setSuccess(data.message);
         this.showTopUpSubject.next(false)
+        this._requestService.selectEarningLog(requestID);
+        this.showSubject.next(false);
 
       },
       (error: string) => {
         if (error == "Not Found") error = "You do not seem to be connected to the internet";
 
-        this.loadingSubject.next(false)
         this._utils.setError(error)
 
       });
@@ -113,14 +130,19 @@ export class EarningsComponent implements OnInit {
     this.requestIDSubject.next(requestID);
     this.showTopUpSubject.next(true)
   }
-  notifyTopUp(form:any) {
+  notifyTopUp(form: any) {
     const requestID = this.requestIDSubject.value;
     const amount = this.topUpAmount.value;
     this._utils.toggleLoading(true);
     this._earningService.notifyTopUp(requestID, amount).pipe(take(1)).subscribe(
       data => {
 
-        setTimeout(() => { this._utils.setSuccess(data.message); }, 0);
+        setTimeout(() => {
+          this._utils.setSuccess(data.message);
+          this.showTopUpSubject.next(false);
+          this._requestService.selectEarningLog(requestID);
+          this.showSubject.next(false);
+        }, 0);
 
       },
       (error: string) => {
@@ -149,9 +171,6 @@ export class EarningsComponent implements OnInit {
   }
 
   onError(err: any) {
-
-  }
-  showPayouts(id:number){
 
   }
 }

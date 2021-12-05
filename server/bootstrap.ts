@@ -128,7 +128,7 @@ export default class Bootstrap {
             _customerRepository: asClass(CustomerRepository).singleton(),
             _earningTopUpRepository: asClass(EarningTopUpRepository),
             _earningLiquidationRepository: asClass(EarningLiquidationRepository),
-
+            _earningPayOutRepository: asClass(EarningPayoutRepository),
             //Inject Services
             _loanRequestService: asClass(LoanRequestService).singleton(),
             _loanRequestLogService: asClass(LoanRequestLogService).singleton(),

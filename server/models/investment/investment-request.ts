@@ -5,7 +5,7 @@ import { BaseEntity } from "../base-entity";
 import { Customer } from "../customer";
 
 export class EarningRequest extends BaseEntity {
-    customer: Customer;
+    Customer: Customer;
     customerID:number;
     duration: number;
     amount: number;
@@ -15,7 +15,7 @@ export class EarningRequest extends BaseEntity {
     topUpPayout:number;
     monthlyPayment: number;
     maturityDate:string;
-    account: Account;
+    Account: Account;
     accountID:number;
     requestDate: Date;
     // dateFunded: Date;

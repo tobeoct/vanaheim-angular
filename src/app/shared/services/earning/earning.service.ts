@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import moment = require('moment');
-import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
+import { BehaviorSubject, combineLatest, EMPTY, from, Observable, of, timer } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 export enum EarningType {
   EndOfTenor = "End Of Tenor",
@@ -13,8 +13,8 @@ export enum EarningType {
 })
 export class EarningService {
 
-  MGT_FEE:number = 5/100;
-  TAX:number = 10/100;
+  MGT_FEE: number = 5 / 100;
+  TAX: number = 10 / 100;
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$: Observable<boolean> = this.showSubject.asObservable();
   show2Subject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -28,7 +28,7 @@ export class EarningService {
   apiErrorSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   apiError$: Observable<string> = this.apiErrorSubject.asObservable();
 
-  
+
   filterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   filter$: Observable<string> = this.filterSubject.asObservable();
   searchSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -101,7 +101,7 @@ export class EarningService {
 
   }
 
-  
+
   earningPayoutPlan = (payload: any) => {
     // console.log(payload)
     return this._http.post<any>(`${environment.apiUrl}/earningspayout/plan`, payload)
@@ -126,8 +126,8 @@ export class EarningService {
       }));
   }
 
-  notifyTopUp = (earningRequestId: number, amount:number) => {
-    const url =  `${environment.apiUrl}/earnings/notifyTopUp?id=${earningRequestId}&amount=${amount}`;
+  notifyTopUp = (earningRequestId: number, amount: number) => {
+    const url = `${environment.apiUrl}/earnings/notifyTopUp?id=${earningRequestId}&amount=${amount}`;
     return this._http.get<any>(url)
       .pipe(map(response => {
         if (response && response.status == true) {
@@ -137,7 +137,7 @@ export class EarningService {
       }));
   }
   notifyLiquidate = (earningRequestId: number) => {
-    const url =  `${environment.apiUrl}/earnings/notifyLiquidate?id=${earningRequestId}`;
+    const url = `${environment.apiUrl}/earnings/notifyLiquidation?id=${earningRequestId}`;
     return this._http.get<any>(url)
       .pipe(map(response => {
         if (response && response.status == true) {
@@ -160,7 +160,7 @@ export class EarningService {
           return EMPTY;
         }))),
         // shareReplay({bufferSize:1, refCount:true})
-         catchError(err => {
+        catchError(err => {
           console.error(err);
           this.runningEarningSubject.next(false)
           return EMPTY;
@@ -172,8 +172,10 @@ export class EarningService {
 
   earnings$: Observable<any> = this.search({ pageNumber: 1, maxSize: 10 });
   latestEarnings$: Observable<any[]> = this.getLatest().pipe(tap(earnings => {
-    if (earnings.some(c=>!c || c.requestStatus == "NotQualified" || c.requestStatus == "Closed")) { this.runningEarningSubject.next(false) } else {
-      this.runningEarningSubject.next(true)
+    if (earnings) {
+      if (earnings.some(c => !c || c.requestStatus == "NotQualified" || c.requestStatus == "Closed")) { this.runningEarningSubject.next(false) } else {
+        this.runningEarningSubject.next(true)
+      }
     }
   }
   ));//combineLatest([this.getLatest(),this.timer$]).pipe(map(([earnings,timer])=>earnings),shareReplay(1));
@@ -202,21 +204,21 @@ export class EarningService {
       )
     );
 
-    getNextDueDate(dateFunded: any, tenure: number, denominator: string) {
-      let funded = moment(dateFunded);
-      let now = moment();
-      let d: any = denominator == "Months" ? "months" : "days";
-      let maturityDate = funded.add(tenure, d);
-      let diff = now.diff(funded, d);
-      let nextMonth = funded.add(diff, d);
-      return nextMonth < maturityDate ? nextMonth : maturityDate;
-    }
-    getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
-      return this.getNextDueDate(dateFunded, tenure, denominator).format("MMMM Do YYYY");
-    }
-    getDaysLeft(dateFunded: any, tenure: number, denominator: string) {
-      let d = this.getNextDueDate(dateFunded, tenure, denominator);
-      let now = moment();
-      return d.diff(now, "days");
-    }
+  getNextDueDate(dateFunded: any, tenure: number, denominator: string) {
+    let funded = moment(dateFunded);
+    let now = moment();
+    let d: any = denominator == "Months" ? "months" : "days";
+    let maturityDate = funded.add(tenure, d);
+    let diff = now.diff(funded, d);
+    let nextMonth = funded.add(diff, d);
+    return nextMonth < maturityDate ? nextMonth : maturityDate;
+  }
+  getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
+    return this.getNextDueDate(dateFunded, tenure, denominator).format("MMMM Do YYYY");
+  }
+  getDaysLeft(dateFunded: any, tenure: number, denominator: string) {
+    let d = this.getNextDueDate(dateFunded, tenure, denominator);
+    let now = moment();
+    return d.diff(now, "days");
+  }
 }

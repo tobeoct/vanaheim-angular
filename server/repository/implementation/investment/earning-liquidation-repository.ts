@@ -35,7 +35,7 @@ import { BaseRepository } from "../base-repository";
           where: {
             approvedEarningID
           },
-          order: [["dateCreated", "DESC"]]
+          order: [["createdAt", "DESC"]]
         });
         resolve(response);
       } catch (err: any) {

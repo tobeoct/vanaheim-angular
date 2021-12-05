@@ -1,6 +1,6 @@
 <ng-container *ngIf="earnings">
     <ng-container
-        *ngIf="earnings.requestStatus=='Active'||earnings.requestStatus=='TopUpRequest'||earnings.requestStatus=='LiquidationRequest'">
+        *ngIf="(earnings.requestStatus=='Active'||earnings.requestStatus=='TopUpRequest'||earnings.requestStatus=='LiquidationRequest') && earnings.approvedEarnings?.earningStatus!='Paused'">
         <ng-container *ngIf="(approvedEarnings$|async|get:index) as details">
             <div id="active-earnings" class="stroke" *ngIf="!details.approvedEarnings?.isClosed" style="width: 100%;">
                 <!-- <small>Active Earnings</small> -->
@@ -29,7 +29,7 @@
 
                         </div>
                         <div>
-                            <app-progress-circular [daysLeft]="getDaysLeft(details?.approvedEarnings?.nextPaymentDate)">
+                            <app-progress-circular [max]="getMaxDays(details?.approvedEarnings?.lastPaymentDate,details?.approvedEarnings?.nextPaymentDate)"  [daysLeft]="getDaysLeft(details?.approvedEarnings?.nextPaymentDate)">
                             </app-progress-circular>
                         </div>
                     </ng-container>
@@ -43,13 +43,14 @@
                             <small>Due on <b>{{earnings.maturityDate|date:'MMMM d YYYY'}}</b></small>
                         </div>
                         <div>
-                            <app-progress-circular [daysLeft]="getDaysLeft(earnings.maturityDate)">
+                            <app-progress-circular [max]="getMaxDays(details?.approvedEarnings?.createdAt,earnings.maturityDate)" [daysLeft]="getDaysLeft(earnings.maturityDate)">
                             </app-progress-circular>
                         </div>
                     </ng-container>
                 </div>
             </div>
-            <div class="paid-earnings box-shadow stroke" *ngIf="details.approvedEarnings?.isClosed" style="width: 100%;">
+            <div class="paid-earnings box-shadow stroke" *ngIf="details.approvedEarnings?.isClosed"
+                style="width: 100%;">
                 <div class="margin--x" id="payout">
                     <div style="text-align: center;">
                         <div>
@@ -71,5 +72,13 @@
                 </div>
             </ng-container>
         </ng-container>
+    </ng-container>
+    <ng-container *ngIf="earnings.approvedEarnings?.earningStatus=='Paused'">
+        <div style="width: 100%;" class="margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <h2>Earning Paused</h2>
+            <i class="material-icons">
+                pause
+            </i>
+        </div>
     </ng-container>
 </ng-container>

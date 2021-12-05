@@ -10,6 +10,15 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
   constructor(_db: any) {
     super(_db.EarningTopUp)
   }
+  getActiveTopUps= (approvedEarningID: number) => {
+    return new Promise<SearchResponse<EarningTopUp[]>>(async (resolve,reject)=>{
+      let response = await this._db.findAndCountAll({
+        where:{approvedEarningID, status:["Pending"]},
+        order: [["updatedAt", "DESC"]]
+      });
+      resolve(response);
+    })
+  }
   getByStatus= (status?:TopUpStatus) => new Promise<SearchResponse<EarningTopUp[]>>(async (resolve, reject) => {
     try {
       let where:any = {
@@ -37,7 +46,7 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
           approvedEarningID,
           amount
         },
-        order: [["dateCreated", "DESC"]]
+        order: [["createdAt", "DESC"]]
       });
       resolve(response);
     } catch (err: any) {

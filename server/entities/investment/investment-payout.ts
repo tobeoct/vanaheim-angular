@@ -4,7 +4,7 @@ import { BaseEntity } from "server/entities/base-entity";
 import { ApprovedEarning } from "./approved-investment";
 
 export class EarningPayout extends BaseEntity{
-    approvedInvestment:ApprovedInvestment;
+    approvedInvestment:ApprovedEarning;
     amount:string;
     datePaid:Date;
     payoutType:PaymentType;

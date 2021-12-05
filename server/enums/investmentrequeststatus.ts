@@ -4,5 +4,6 @@ export enum EarningRequestStatus{
     UpdateRequired,
     NotQualified,
     Error,
-    Approved
+    Approved,
+    Matured
 }

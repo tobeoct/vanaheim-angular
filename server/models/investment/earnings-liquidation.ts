@@ -14,5 +14,6 @@ export class EarningLiquidation extends BaseEntity {
 export enum LiquidationStatus{
     Pending="Pending",
     EarningPaused='EarningPaused',
-    Processed="Processed"
+    Processed="Processed",
+    Declined="Declined"
 }

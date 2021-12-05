@@ -41,6 +41,7 @@ export class AdminEarningService {
   // earningLogDetailsSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
   earningLogDetails$: Observable<any>; //= this.earningLogDetailsSubject.asObservable();
   constructor(private _http: HttpClient) {
+    this.pollRequests()
     this.earningDetails$ = this.selectedId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getEarningDetails(id)), shareReplay(1),
       map(value => ({ id: this.selectedIdSubject.value, ...value })),
       catchError(err => {
@@ -114,6 +115,13 @@ export class AdminEarningService {
 
   }
 
+  pollRequests(){
+    timer(0, POLLING_INTERVAL).subscribe(c=>{
+      this.searchSubject.next({ from: moment().startOf("day").subtract(1, "month").toDate(), to: moment().endOf("day").toDate() })
+      this.selectedIdSubject.next(0)
+    })
+  }
+
   updateSearch({ from, to }: any) {
     this.searchSubject.next({ from, to });
   }
@@ -167,6 +175,7 @@ export class AdminEarningService {
     this.selectedLogIdSubject.next(id);
   }
   getEarningDetails = (id: number, type?: string) => {
+    if(!id) return EMPTY;
     const url = !type ? `${environment.apiUrl}/earnings/getEarningDetails?id=${id}` : `${environment.apiUrl}/earnings/getEarningLogDetails?id=${id}`;
     return this._http.get<any>(url)
       .pipe(map(response => {

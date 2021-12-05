@@ -50,4 +50,12 @@ export class EarningsTrackerComponent implements OnInit {
   onNavigate(route: string, params: any = {}): void {
     this._router.navigate([route], { queryParams: params })
   }
+  getMaxDays(startDate:Date, endDate:Date){
+
+    if(!startDate|| !endDate) return 30;
+    let start = moment(startDate);
+    let end = moment(endDate);
+    console.log(end.diff(start, "days"))
+    return end.diff(start, "days");
+  }
 }

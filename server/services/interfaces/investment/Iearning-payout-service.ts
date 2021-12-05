@@ -1,3 +1,4 @@
+import { Customer } from "@models/customer";
 import { EarningPayout } from "@models/investment/investment-payout";
 import { IBaseService } from "@services/interfaces/Ibaseservice";
 

@@ -8,7 +8,7 @@ import { Store } from '../../helpers/store';
 import { Utility } from '../../helpers/utility.service';
 import { LoanResponse } from '../../poco/loan/loan-response';
 // import { LoanResponse } from '../../poco/loan/loan-response';
-
+const POLLING_INTERVAL = 30000;
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +32,7 @@ export class LoanService {
 
 
   activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  interval = environment.production ? 30000 : 30000000000000000;
+  interval = environment.production ? POLLING_INTERVAL : 30000000000000000;
   constructor(
     private _http: HttpClient,
     private _utility: Utility,

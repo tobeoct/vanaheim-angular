@@ -30,7 +30,7 @@ module.exports = {
         defaultValue: 'Active'
       },
       liquidationStatus:{
-        type: Sequelize.ENUM('Pending','EarningPaused','Processed'),
+        type: Sequelize.ENUM('Pending','EarningPaused','Processed','Declined'),
         allowNull: false,
         defaultValue: 'Pending'
       },

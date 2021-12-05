@@ -288,11 +288,11 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
     if (this._authService.isLoggedIn()) {
       this.disableInputSubject.next(false);
       this.loadingSubject.next(true);
+      this._utility.toggleLoading(true);
       this._earningService.apply(this.form.value).pipe(take(1)).subscribe(
         data => {
           this._zone.run(() => {
             this.loadingSubject.next(false);
-            this._utility.toggleLoading(true);
             setTimeout(() => { 
               this._utility.toggleLoading(false);this._earningService.success(data.message); this._earningService.showSuccess(true); }, 0);
             this.changedSubject.next(false)

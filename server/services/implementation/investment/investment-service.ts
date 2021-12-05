@@ -53,7 +53,6 @@ export class EarningService implements IEarningService {
           resolve({ status: false, data: "Cannot find Top Up request" });
           return;
         }
-        console.log(earningTopUp);
         earningTopUp = (earningTopUp as any).dataValues as EarningTopUp;
         earningTopUp.topUpStatus = TopUpStatus.Processed;
         const amount = (+earningTopUp.amount);
@@ -97,8 +96,8 @@ export class EarningService implements IEarningService {
           earningRequest.requestStatus = EarningRequestStatus.Active;
 
           earningRequestLog.requestStatus = EarningRequestStatus.Active;
-          earningRequestLog.topUpPayout = (earningRequestLog.topUpPayout ?? 0) + payout;
-          earningRequestLog.topUp = (earningRequestLog.topUp ?? 0) + amount;
+          earningRequestLog.topUpPayout = ((+earningRequestLog.topUpPayout) ?? 0) + (+payout);
+          earningRequestLog.topUp = ((+earningRequestLog.topUp) ?? 0) + (+amount);
 
           earningRequestLog.amount= newPrincipal;
           earningRequestLog.payout = newPayout;
@@ -145,13 +144,39 @@ export class EarningService implements IEarningService {
         }
         earningLiquidation = (earningLiquidation as any).dataValues as EarningLiquidation;
         let approvedEarning: ApprovedEarning = earningLiquidation.ApprovedEarning;
-        if (approvedEarning || Object.keys(approvedEarning).length == 0) {
+        if (!approvedEarning || Object.keys(approvedEarning).length == 0) {
 
           resolve({ status: false, data: "Cannot find request" });
           return;
         }
         approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
 
+        if(status && status==LiquidationStatus.Declined){
+          let earningRequest: EarningRequest = await this._earningRequestRepository.getById(approvedEarning.earningRequestID);
+          if (!earningRequest || Object.keys(earningRequest).length == 0) {
+            resolve({ status: false, data: "Cannot find request" });
+            return;
+          }
+          earningRequest = (earningRequest as any).dataValues as EarningRequest;
+          earningRequest.requestStatus = EarningRequestStatus.Active;
+          earningRequest.updatedAt = moment().toDate();
+          let earningRequestLog: EarningRequestLog = await this._earningRequestLogRepository.getById(approvedEarning.earningRequestLogID);
+          if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
+            resolve({ status: false, data: "Cannot find request" });
+            return;
+          }
+          earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
+          earningRequestLog.requestStatus = EarningRequestStatus.Active;
+          earningRequestLog.updatedAt = moment().toDate();
+          earningLiquidation.liquidationStatus = LiquidationStatus.Declined;
+          approvedEarning.earningStatus = ApprovedEarningStatus.OnTrack;
+          await this._earningLiquidationRepository.update(earningLiquidation);
+          await this._earningRequestRepository.update(earningRequest);
+          await this._earningRequestLogRepository.update(earningRequestLog);
+          await this._approvedEarningRepository.update(approvedEarning);
+          resolve({ status: true, data: "Request Declined" });
+          return;
+        }
         if (status && status == LiquidationStatus.EarningPaused) {
           earningLiquidation.liquidationStatus = LiquidationStatus.EarningPaused;
           earningLiquidation.datePaused = moment().toDate();
@@ -263,10 +288,10 @@ export class EarningService implements IEarningService {
               { key: "Type", value: request.type },
               { key: "Duration", value: request.duration + " Months" },
               { key: "Maturity Date", value: moment(request.maturityDate).format("MMMM Do YYYY") },
-              { key: "Rate", value: request.rate + "%" },
+              { key: "Rate", value: request.rate + "% per annum" },
               { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
               { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
-              { key: "Total Interest", value: request.payout - request.amount },
+              { key: "Total Interest", value: this._utils.currencyFormatter(request.payout - request.amount) },
               { key: "Monthly Payment", value: this._utils.currencyFormatter(request.monthlyPayment) },
             ]
           },
@@ -295,8 +320,8 @@ export class EarningService implements IEarningService {
           //   documents = response?.data as Document[];
 
           // }
-          // if (approved?.status == true && approved.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: approvedEarning?.status == true ? approvedEarning.data : {} } })
+          // if (approved?.status == true && approved.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(approvedEarnings.data.id)
+          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} } })
 
         }
         else {
@@ -373,7 +398,7 @@ export class EarningService implements IEarningService {
             //   documents = response?.data as Document[];
 
             // }
-            // if (approved?.status == true && approved.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
+            // if (approved?.status == true && approved.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(approvedEarnings.data.id)
             responses.push({ id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} })
 
           }
@@ -470,7 +495,7 @@ export class EarningService implements IEarningService {
         approvedEarning.maturityDate = earningRequest.maturityDate;
           await this._approvedEarningRepository.create(approvedEarning);
         } else {
-          approvedEarning.nextPayment = earningRequest.monthlyPayment;
+          approvedEarning.nextPayment =earningRequest.type == EarningType.EndOfTenor? earningRequest.payout: earningRequest.monthlyPayment;
           approvedEarning.nextPaymentDate =earningRequest.type == EarningType.EndOfTenor? maturityDate.toDate(): start.set("date",24).toDate();//maturityDate.subtract(earningRequest.duration,"months").set("date",24).add(1,  "month").toDate();
           approvedEarning.earningStatus = ApprovedEarningStatus.AwaitingFirstPayment;
           approvedEarning.maturityDate = earningRequest.maturityDate;
@@ -529,7 +554,7 @@ export class EarningService implements IEarningService {
         const payout = this._utils.convertToPlainNumber(payload.payout);
         const amount = this._utils.convertToPlainNumber(payload.amount);
         investment.maturityDate = moment(payload.maturity).set("date", 24).format("MMMM Do YYYY");
-        investment.monthlyPayment =  payout / payload.duration;
+        investment.monthlyPayment = payload.type == EarningType.EndOfTenor?payout: payout / payload.duration;
         investment.type = payload.type;
         investment.payout = payout;
         investment.duration = payload.duration;
@@ -547,7 +572,7 @@ export class EarningService implements IEarningService {
           let account = await this._accountRepository.getById(payload.accountInfo?.id);
           if (!account || Object.keys(account).length == 0) throw "Invalid Account Specified";
           account = (account as any).dataValues as Account;
-          investment.account = account;
+          investment.Account = account;
           investment.accountID = payload.accountInfo.id;
         } else {
           const account = await this._accountService.createAccount(customerID, payload.accountInfo);

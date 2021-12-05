@@ -164,6 +164,12 @@ export default class EarningsController {
                 res.data = "Cannot find request";
                 next()
             }
+            //Only one active top up is allowed
+            if(earningRequest.requestStatus == EarningRequestStatus.TopUpRequest){
+                res.statusCode = 400;
+                res.data = "You currently have a Top Up request processing";
+                next()
+            }
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
             earningRequest.requestStatus = EarningRequestStatus.TopUpRequest;
 
@@ -184,6 +190,13 @@ export default class EarningsController {
             }
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
 
+            //Only one active top up is allowed
+            // const activeTopUps = await this._earningTopUpRepository.getActiveTopUps(approvedEarning.id);
+            // if(activeTopUps.count>0){
+            //     res.statusCode = 400;
+            //     res.data = "You currently have a Top Up request processing";
+            //     next()
+            // }
             const earningTopUp = new EarningTopUp();
             earningTopUp.amount = amount;
             earningTopUp.code = this._utils.autogenerate({ prefix: "ETU" })
@@ -265,7 +278,7 @@ export default class EarningsController {
             let earningRequestLog = await this._earningRequestLogService.getById(id);
             if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
                 res.statusCode = 400;
-                res.data = "Cannot find request";
+                res.data = { status: false,data:"Cannot find request"};
                 next()
             }
             // earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
@@ -274,13 +287,20 @@ export default class EarningsController {
             let approvedEarning = await this._approvedEarningRepository.getByRequestAndLogID(earningRequest.id, earningRequestLog.id);
             if (!approvedEarning || Object.keys(approvedEarning).length == 0) {
                 res.statusCode = 400;
-                res.data = "Cannot find request";
+                res.data = { status: false,data:"Cannot find request"};
                 next()
             }
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
             // approvedEarning.earningStatus = ApprovedEarningStatus.Pause;
 
-            const earningLiquidation = new EarningLiquidation();
+            let earningLiquidation = await  this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
+            if (earningLiquidation && (Object.keys(earningLiquidation).length > 0 && (earningLiquidation as any).dataValues.liquidationStatus!=LiquidationStatus.Declined)) {
+                res.statusCode = 400;
+                res.data = { status: false,data:"Liquidation request currently processing"};
+                next()
+            }
+
+            earningLiquidation = new EarningLiquidation();
             earningLiquidation.code = this._utils.autogenerate({ prefix: "ETU" })
             earningLiquidation.status = BaseStatus.Active;
             earningLiquidation.liquidationStatus = LiquidationStatus.Pending;
@@ -288,6 +308,14 @@ export default class EarningsController {
             earningLiquidation.amount = (earningRequest.payout / earningRequest.duration) * earningLiquidation.duration;
             earningLiquidation.approvedEarningID = approvedEarning.id;
 
+            if(earningLiquidation.amount==0){
+                res.statusCode = 400;
+                res.data = { status: false,data:"No Earning accrued to liquidate yet"};
+                next();
+                return
+            }
+
+            
             await this._earningLiquidationRepository.create(earningLiquidation);
 
             await this._earningRequestService.update(earningRequest);
