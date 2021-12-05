@@ -21,7 +21,8 @@ export enum EmailType {
   Earning,
   Feedback,
   Repayment,
-  Loan
+  Loan,
+  EarningPayout
 }
 type EmailPayload = {
   subject?: string,

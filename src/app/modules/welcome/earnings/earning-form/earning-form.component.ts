@@ -59,6 +59,9 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
   get name() {
     return this.form.get("name") as FormControl || new FormControl();
   }
+  get taxId() {
+    return this.form.get("taxId") as FormControl || new FormControl();
+  }
   get rate() {
     return this.form.get("rate") as FormControl || new FormControl();
   }
@@ -142,22 +145,11 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
     this.titles = this._store.titles;
     this.banks = this._store.banks;
     let accountInfo: AccountInfo = this._store.getEarningApplication()?.accountInfo;
-    this.form = this._fb.group({
-      amount: ["100,000", [Validators.required, Validators.minLength(6), Validators.maxLength(10), this._validators.numberRange(this.minAmount, this.maxAmount)]],
-      duration: [0, [Validators.required]],
-      maturity: ['', [Validators.required]],
-      rate: [0, [Validators.required, Validators.min(15)]],
-      payout: [0, [Validators.required]],
-      emailAddress: [this._authService.userValue?.email ?? "", [Validators.required, Validators.email]],
-      name: [this._authService.userValue?.firstName ?? "", [Validators.required, Validators.minLength(3)]],
-      type: ["Monthly ROI", [Validators.required]],
-      accountInfo: this.buildAccountGroup(accountInfo),
-    })
+    this.form = this.createForm(accountInfo);
     this.email.valueChanges.subscribe(value => {
       this.onEmailEntered.emit(value)
     })
     this.form.valueChanges.subscribe(form => {
-      console.log(form)
       this._store.saveEarningApplication(form);
     })
     this.isLoggedIn$.subscribe(s => {
@@ -168,6 +160,21 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
         this.name.updateValueAndValidity();
 
       }
+    })
+  }
+
+  createForm = (accountInfo: any) => {
+    return this._fb.group({
+      amount: ["100,000", [Validators.required, Validators.minLength(6), Validators.maxLength(10), this._validators.numberRange(this.minAmount, this.maxAmount)]],
+      duration: [0, [Validators.required]],
+      maturity: ['', [Validators.required]],
+      taxId: [''],
+      rate: [0, [Validators.required, Validators.min(15)]],
+      payout: [0, [Validators.required]],
+      emailAddress: [this._authService.userValue?.email ?? "", [Validators.required, Validators.email]],
+      name: [this._authService.userValue?.firstName ?? "", [Validators.required, Validators.minLength(3)]],
+      type: ["Monthly ROI", [Validators.required]],
+      accountInfo: this.buildAccountGroup(accountInfo),
     })
   }
   buildAccountGroup = (accountInfo: AccountInfo) => {
@@ -285,15 +292,23 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
         data => {
           this._zone.run(() => {
             this.loadingSubject.next(false);
-            setTimeout(() => { this._earningService.success(data.message); this._earningService.showSuccess(true); }, 0);
-
+            this._utility.toggleLoading(true);
+            setTimeout(() => { 
+              this._utility.toggleLoading(false);this._earningService.success(data.message); this._earningService.showSuccess(true); }, 0);
+            this.changedSubject.next(false)
+            this.form.reset();
+            this.form = this.createForm(null);
+            this.form.updateValueAndValidity();
+            this._store.removeEarningApplication();
 
           })
         },
         (error: string) => {
           this.loadingSubject.next(false);
           if (error == "Not Found") error = "You do not seem to be connected to the internet";
-          setTimeout(() => { this._earningService.error(error); this._earningService.showError(true); }, 0);
+          setTimeout(() => { 
+            this._utility.toggleLoading(false);this._earningService.error(error); this._earningService.showError(true); }, 0);
+          this._store.removeEarningApplication();
 
         });
     } else {

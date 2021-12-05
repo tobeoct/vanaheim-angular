@@ -53,7 +53,6 @@
                     <ng-container slot="header">
                         <tr>
                             <th>Date</th>
-                            <th>Loan ID</th>
                             <th>Amount</th>
                             <th>Loan Product</th>
                             <th>Tenure</th>
@@ -73,7 +72,6 @@
                         <ng-container *ngIf="data.rows.length>0">
                             <tr *ngFor="let row of data.rows;trackBy:trackByFn">
                                 <td>{{row.requestDate | date :'MMMM d, y'}}</td>
-                                <td>{{row.requestId}}</td>
                                 <td>{{row.amount|currency:'₦'}}</td>
                                 <td>{{row.loanProduct}}</td>
                                 <td>{{row.tenure}} {{row.denominator}}</td>
@@ -83,7 +81,7 @@
                                 </td>
                                 <td>
                                     <app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)"
-                                        fieldClass="no-margin--all">
+                                        fieldClass="no-margin">
                                         <ng-container slot="button">View Details</ng-container>
                                     </app-button>
                                 </td>
@@ -236,7 +234,7 @@
                                 <app-form [form]="repaymentForm" (onSubmit)="onSubmit2($event)" (errorMessageChange) = "onError2($event)">
                                     <app-input [placeholder]="'Enter email address'" id="email" [control]="email" class="form-control" [error]="(errorMessage2$|async)?.email" >
                                         <label for="email">Send Repayment Plan To Email</label>
-                                        <ng-container slot="button"><app-button [form]="repaymentForm" [class]="'no-margin--all widget_button--medium'" [loading$]="planLoading$">Send</app-button></ng-container>
+                                        <ng-container slot="button"><app-button [form]="repaymentForm" [class]="'no-margin widget_button--medium'" [loading$]="planLoading$">Send</app-button></ng-container>
                                     </app-input>
                                 </app-form>
                             </div> -->
@@ -285,9 +283,9 @@
                                             Repayments</b></u></a>
                             </ng-container>
                             <ng-container *ngIf="loanDetails?.status=='UpdateRequired'">
-                                <app-button fieldClass="no-margin--all"
+                                <app-button fieldClass="no-margin"
                                     (onClick)="documentUpload(loanDetails?.loanType, loanDetails?.applyingAs, loanDetails?.loanRequestID, loanDetails?.id)"
-                                    [class]="'widget_button--small no-margin--all'" class="no-margin--all">
+                                    [class]="'widget_button--small no-margin'" class="no-margin">
                                     <ng-container slot="button">Upload Document</ng-container>
                                 </app-button>
                             </ng-container>

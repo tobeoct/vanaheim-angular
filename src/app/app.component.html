@@ -34,3 +34,8 @@
     </div>
     
 </div>
+
+<ng-container *ngIf="loading$|async">
+
+    <app-loading></app-loading>
+</ng-container>

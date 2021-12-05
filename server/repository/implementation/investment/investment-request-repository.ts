@@ -9,7 +9,23 @@ export class EarningRequestRepository extends BaseRepository<EarningRequest> imp
   constructor(_db: any) {
     super(_db.EarningRequest)
   }
-  getEarningByStatus = (customerID: number, status: EarningRequestStatus|any) => {
+  getByCustomerID = (customerID: number) => {
+    return new Promise<EarningRequest>(async (resolve, reject) => {
+      try {
+        let response = await this._db.findOne({
+          where: {
+            customerID: customerID
+          }
+        });
+        let dataValues = response?.dataValues as EarningRequest;
+        resolve(dataValues);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  getEarningByStatus = (customerID: number, status: EarningRequestStatus|any, include?:any[]) => {
 
     return new Promise<EarningRequest[]>(async (resolve, reject) => {
       try {
@@ -18,7 +34,8 @@ export class EarningRequestRepository extends BaseRepository<EarningRequest> imp
             customerID,
             requestStatus: status
           },
-          order: [["requestDate", "DESC"]]
+          order: [["requestDate", "DESC"]],
+          include
         });
         resolve(response);
       } catch (err) {

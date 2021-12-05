@@ -13,11 +13,13 @@ import { DocumentsComponent } from './document/document.component';
 import { NavComponent } from 'src/app/shared/layout/nav/nav.component';
 import { AccountComponent } from './account/account.component';
 import { EarningsComponent } from './earnings/earnings.component';
+import { EarningStatusComponent } from './shared/features/earning-status/earning-status.component';
+import { EarningsTrackerComponent } from './shared/earnings-tracker/earnings-tracker.component';
 
 
 
 @NgModule({
-  declarations: [DashboardComponent, NavigationComponent,NavComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent, LoanStatusComponent, DocumentsComponent, AccountComponent, EarningsComponent],
+  declarations: [DashboardComponent,EarningStatusComponent, NavigationComponent,NavComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent, LoanStatusComponent, DocumentsComponent, AccountComponent, EarningsComponent, EarningsTrackerComponent],
   imports: [
     SharedModule,
     CustomerRoutingModule

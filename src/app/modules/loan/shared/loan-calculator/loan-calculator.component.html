@@ -21,7 +21,7 @@
             <app-form [form]="repaymentForm" (onSubmit)="onSubmit2($event)" (errorMessageChange) = "onError2($event)">
                 <app-input [placeholder]="'Enter email address'" id="email" [control]="email" class="form-control" [error]="(errorMessage2$|async)?.email" >
                     <label for="email">Send Repayment Plan To Email</label>
-                    <ng-container slot="button"><app-button [form]="repaymentForm" [class]="'no-margin--all widget_button--medium'" [loading$]="planLoading$">Send</app-button></ng-container>
+                    <ng-container slot="button"><app-button [form]="repaymentForm" [class]="'no-margin widget_button--medium'" [loading$]="planLoading$">Send</app-button></ng-container>
                 </app-input>
             </app-form>
         </div>

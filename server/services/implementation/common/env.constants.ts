@@ -1,24 +1,26 @@
 export const EnvConstants = {
+
+    MAX_ACTIVE_EARNING_REQUESTS: 1000,
     verify: {
 
         v2: {
             baseUrl: 'https://app.verified.ng',
             accountInquiry: {
-                apiKey: "7UBUKPMxF8i99DgB",
-                userId: '1543318849803',
+                apiKey: process.env.VERIFY_ACCOUNTINQUIRY_APIKEY,
+                userId: process.env.VERIFY_USERID,
                 endpoint: '/inquiry/api/sacctinq/bvn/wrapper'
             },
-            bvnValidation:{
-                apiKey: "zeb'V8U*-h*e-jO'",
-                userId: '1543318849803',
-                endpoint:'/bvn-service/api/svalidate/wrapper'
+            bvnValidation: {
+                apiKey: process.env.VERIFY_BVN_APIKEY,
+                userId: process.env.VERIFY_USERID,
+                endpoint: '/bvn-service/api/svalidate/wrapper'
             }
         },
         v3: {
             baseUrl: "https://api.verified.africa",
             accountInquiry: {
-                apiKey: "7UBUKPMxF8i99DgB",
-                userId: '1543318849803',
+                apiKey: process.env.VERIFY_ACCOUNTINQUIRY_APIKEY,
+                userId: process.env.VERIFY_USERID,
                 endpoint: "/sfx-verify/v3/id-service/"
             }
         }

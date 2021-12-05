@@ -1,5 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Form, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { VCValidators } from '@validators/default.validators';
+import moment = require('moment');
 import { Observable, BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { Utility } from 'src/app/shared/helpers/utility.service';
+import { AdminEarningService } from 'src/app/shared/services/earning/admin-earning.service';
+import { EarningPayoutService } from 'src/app/shared/services/earning/earning-payout.service';
 import { EarningService } from 'src/app/shared/services/earning/earning.service';
 
 @Component({
@@ -8,6 +16,8 @@ import { EarningService } from 'src/app/shared/services/earning/earning.service'
   styleUrls: ['./earnings.component.scss']
 })
 export class EarningsComponent implements OnInit {
+  form: FormGroup;
+  @ViewChild('applyNow') applyNow: ElementRef;
   earnings$: Observable<any>;
   activeEarnings: boolean = false;
   totalEarnings: any[] = [];
@@ -19,33 +29,129 @@ export class EarningsComponent implements OnInit {
   show$: Observable<boolean> = this.showSubject.asObservable();
 
   base: string;
-
+  loanRequestID: number
+  loanRequestLogID: number
+  get topUpAmount():FormControl {
+    return this.form.get("amount") as FormControl || new FormControl(0)
+  }
   pagingSubject: BehaviorSubject<any>;
-  latestEarning$: Observable<any>;
+  latestEarnings$: Observable<any[]>;
   runningEarning$: Observable<any>;
+  approvedEarnings$: Observable<any>;
+  earningPayouts$: Observable<any[]>;
   activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
-  constructor(private _earningService: EarningService) { }
+
+  earningDetailsFromDb$: Observable<any>
+  requestIDSubject: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  loading$: Observable<boolean> = this.loadingSubject.asObservable();
+  showTopUpSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showTopUp$: Observable<boolean> = this.showTopUpSubject.asObservable();
+  constructor(private _route: ActivatedRoute, private _fb: FormBuilder,private _validators:VCValidators, private _earningService: EarningService, private _earningPayoutService: EarningPayoutService, private _requestService: AdminEarningService, private _utils: Utility) { }
 
   ngOnInit(): void {
+    this._route.params
+      .subscribe(params => {
+        const id = +params['id'];
+        console.log(id)
+        if (id && id>0) {
+          this.selectEarning(id);
+        }
+      });
+    this.earningDetailsFromDb$ = this._requestService.earningLogDetails$;
+    this.latestEarnings$ = this._earningService.latestEarnings$;
+    this.runningEarning$ = this._earningService.runningEarning$;
+    this.approvedEarnings$ = this._requestService.allEarningDetails$;
+    this.earningPayouts$ = this._earningPayoutService.myEarningPayouts$;
+    this.earnings$ = this._earningService.earningWithFilter$;
+    this.pagingSubject = this._earningService.pagingSubject;
+    this.form = this._fb.group({
+      amount: ["10,000", [Validators.required, this._validators.numberRange(10000, 10000000)]]
+    })
   }
-  
+  moveToApply(): void {
+    this.applyNow.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+  }
   getEarningStatusColor(status: string) {
-    if (status == "Approved" || status == "Funded" || status == "Completed") return 'success';
+    if (status == "Active" || status == "Matured" || status == "Completed") return 'success';
     if (status == "NotQualified" || status == "Declined" || status == "Defaulting") return 'danger';
-    return status == "Processing" ? '' : 'info';
+    return status == "Processing" || status == 'TopUpRequest' || status == 'LiquidationRequest' ? '' : 'info';
   }
   trackByFn(index: any, item: any) {
     return index;
   }
-
+  close() {
+    this.showSubject.next(false);
+  }
   selectEarning(id: number) {
-    // this._requestService.selectLoanLog(id);
-    // this.showSubject.next(true);
-  }  
-  changeFilter(value: any) {
-    // this.activate(value);
-    // this._loanService.filterSubject.next(value);
+    this._requestService.selectEarningLog(id);
+    this.showSubject.next(true);
   }
 
+  liquidate(requestID: number) {
+    this.loadingSubject.next(true)
+    this._earningService.notifyLiquidate(requestID).pipe(take(1)).subscribe(
+      data => {
+
+        this.loadingSubject.next(false)
+        this._utils.setSuccess(data.message);
+        this.showTopUpSubject.next(false)
+
+      },
+      (error: string) => {
+        if (error == "Not Found") error = "You do not seem to be connected to the internet";
+
+        this.loadingSubject.next(false)
+        this._utils.setError(error)
+
+      });
+
+  }
+
+  topUp(requestID: number) {
+    this.requestIDSubject.next(requestID);
+    this.showTopUpSubject.next(true)
+  }
+  notifyTopUp(form:any) {
+    const requestID = this.requestIDSubject.value;
+    const amount = this.topUpAmount.value;
+    this._utils.toggleLoading(true);
+    this._earningService.notifyTopUp(requestID, amount).pipe(take(1)).subscribe(
+      data => {
+
+        setTimeout(() => { this._utils.setSuccess(data.message); }, 0);
+
+      },
+      (error: string) => {
+        if (error == "Not Found") error = "You do not seem to be connected to the internet";
+        setTimeout(() => { this._utils.setError(error) }, 0);
+
+      });
+
+  }
+
+  getDaysLeft(date: any) {
+    let d = moment(date);
+    let now = moment();
+    return d.diff(now, "days");
+  }
+
+  getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
+    return this._earningService.getNextDueDateFormatted(dateFunded, tenure, denominator);
+  }
+  changeFilter(value: any) {
+    // this.activate(value);
+    this._earningService.filterSubject.next(value);
+  }
+  closeTopUpModal() {
+    this.showTopUpSubject.next(false)
+  }
+
+  onError(err: any) {
+
+  }
+  showPayouts(id:number){
+
+  }
 }

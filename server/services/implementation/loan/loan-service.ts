@@ -215,6 +215,7 @@ export class LoanService implements ILoanService {
     try {
       let loanRequest = await this._loanRequestService.getById(id);
       if (!loanRequest || Object.keys(loanRequest).length == 0) throw "Invalid Loan Request";
+      loanRequest = (loanRequest as any).dataValues as LoanRequest;
       let customer: any = await this._customerRepository.getById(loanRequest.customerID);
       if (!customer || Object.keys(customer).length == 0) throw "Invalid Customer";
       customer = customer.dataValues as Customer;

@@ -13,6 +13,7 @@ const $browser = () => {
   providedIn: 'root'
 })
 export class Utility {
+  dashboardHeadingToggleSubject:BehaviorSubject<string> = new BehaviorSubject<string>("Loans");
   activeNavigationSubject: BehaviorSubject<SideNavigationList> = new BehaviorSubject<SideNavigationList>(SideNavigationList.faq);
   activeNavigation$: Observable<SideNavigationList> = this.activeNavigationSubject.asObservable();
   isSideNavOpenedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -25,7 +26,6 @@ export class Utility {
   apiInfoSubject: Subject<string> = new Subject<string>();
 
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
   constructor(private _router: Router) {
     _router.events.pipe(filter(event => event instanceof NavigationEnd))
@@ -59,6 +59,10 @@ export class Utility {
 
   get $browser() { return $browser()(); }
   get $browserID() { return this.getBrowserID() }
+
+  toggleDashbooardHeading(heading:string){
+    this.dashboardHeadingToggleSubject.next(heading);
+  }
   toggleSideNav = (type: SideNavigationList) => {
     // if(type!=this.activeNavigationSubject.value){
     // this.isSideNavOpenedSubject.next(!this.isSideNavOpenedSubject.value);
@@ -71,7 +75,9 @@ export class Utility {
       this.isSideNavOpenedSubject.next(false);
     }
   }
-
+toggleLoading(value:boolean){
+  this.loadingSubject.next(value);
+}
   toggleLoanInvalid() {
     this.showLoanInvalidSubject.next(!this.showLoanInvalidSubject.value);
   }
@@ -80,17 +86,17 @@ export class Utility {
   }
   setError(message: string) {
     setTimeout(() => { this.apiErrorSubject.next(message); }, 1000)
-    setTimeout(() => { this.apiErrorSubject.next("") }, 5000)
+    setTimeout(() => {this.toggleLoading(false); this.apiErrorSubject.next(""); }, 5000)
   }
   setSuccess(message: string) {
     // 
     setTimeout(() => { this.apiSuccessSubject.next(message); }, 1000)
-    setTimeout(() => { this.apiSuccessSubject.next("") }, 5000)
+    setTimeout(() => { this.toggleLoading(false); this.apiSuccessSubject.next("") }, 5000)
   }
   setInfo(message: string) {
     // 
     setTimeout(() => { this.apiInfoSubject.next(message); }, 0)
-    setTimeout(() => { this.apiInfoSubject.next("") }, 5000)
+    setTimeout(() => {this.toggleLoading(false); this.apiInfoSubject.next("") }, 5000)
   }
   onNavigate(route: string, params: any = {}): void {
     this._router.navigate([route], { queryParams: params })

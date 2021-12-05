@@ -6,7 +6,7 @@ import { FooterComponent } from '../layout/footer/footer.component';
 import { SideNavigationComponent } from '../layout/side-navigation/side-navigation.component';
 import { AccordionComponent } from './accordion/accordion.component';
 import { BannerComponent } from './banner/banner.component';
-import { DragAndDropComponent } from './drag-and-drop/drag-and-drop.component';
+import { LoanDragAndDropComponent } from './drag-and-drop/loan/drag-and-drop.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { DropdownOptionComponent } from './dropdown/option/option.component';
 import { FormComponent } from './form/form.component';
@@ -29,13 +29,15 @@ import { DateComponent } from './date/date.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { ProgressComponent } from './progress/progress.component';
 import { RadioComponent } from './radio/radio.component';
-import { LoadingComponent } from './loading/loading.component';
+// import { LoadingComponent } from './loading/loading.component';
 import { ProgressCircularComponent } from './progress/circular/circular.component';
 import { BadgeComponent } from './badge/badge.component';
 import { CopyComponent } from './copy/copy.component';
 import { TypeAheadComponent } from './type-ahead/type-ahead.component';
 import { TypeAheadOptionComponent } from './type-ahead/option/option.component';
 import { DocumentComponent } from 'src/app/modules/loan/shared/document-upload/document/document.component';
+import { EarningDragAndDropComponent } from './drag-and-drop/earning/drag-and-drop.component';
+import { CountdownComponent } from './countdown/countdown.component';
 
 export function playerFactory() {
   return player;
@@ -46,7 +48,8 @@ export function playerFactory() {
     LottieComponent,
     InputComponent,
     ButtonComponent,
-    DragAndDropComponent,
+    LoanDragAndDropComponent,
+    EarningDragAndDropComponent,
     AccordionComponent,
     FormComponent,
     FooterComponent,
@@ -68,13 +71,14 @@ export function playerFactory() {
     PaginationComponent,
     ProgressComponent,
     RadioComponent,
-    LoadingComponent,
+    // LoadingComponent,
     ProgressCircularComponent,
     BadgeComponent,
     CopyComponent,
     TypeAheadComponent,
     TypeAheadOptionComponent,
-    DocumentComponent
+    DocumentComponent,
+    CountdownComponent
   ],
   imports: [
     BaseModule, 
@@ -86,7 +90,8 @@ export function playerFactory() {
     CheckboxComponent,
     LottieComponent,
     InputComponent,
-    DragAndDropComponent,
+    LoanDragAndDropComponent,
+    EarningDragAndDropComponent,
     AccordionComponent,
     FormComponent,
     FooterComponent,
@@ -108,13 +113,14 @@ export function playerFactory() {
     DateComponent,
     PaginationComponent,
     ProgressComponent,
-    LoadingComponent,
+    // LoadingComponent,
     ProgressCircularComponent,
     BadgeComponent,
     CopyComponent,
     TypeAheadComponent,
     TypeAheadOptionComponent,
-    DocumentComponent
+    DocumentComponent,
+    CountdownComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA]
 })

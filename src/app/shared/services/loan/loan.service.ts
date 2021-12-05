@@ -136,7 +136,19 @@ export class LoanService {
   getTotalRepayment = (monthlyRepayment: number, tenure: number) => {
     return monthlyRepayment * tenure;
   }
-
+  validateLoanApplication() {
+    let application = this._store.loanApplication;
+    let category = this._store.loanCategory;
+    if (application && category) {
+      application = application[category];
+      if (!application) return false;
+      if (!application["loanType"] || !application["loanProduct"] || !application["applyingAs"] || !application["accountInfo"] || !application["loanCalculator"]) return false;
+      if (category == 'personal' && (!application["bvn"] || !application["personalInfo"] || !application["employmentInfo"] || !application["nokInfo"])) return false;
+      if (category == 'business' && (!application["collateralInfo"] || !application["companyInfo"] || !application["shareholderInfo"])) return false;
+      return true;
+    }
+    return false;
+  }
   apply = (payload: LoanResponse) => {
     // console.log(payload)
     return this._http.post<any>(`${environment.apiUrl}/loans/create`, payload)
@@ -174,19 +186,7 @@ export class LoanService {
       }));
   }
 
-  validateLoanApplication() {
-    let application = this._store.loanApplication;
-    let category = this._store.loanCategory;
-    if (application && category) {
-      application = application[category];
-      if (!application) return false;
-      if (!application["loanType"] || !application["loanProduct"] || !application["applyingAs"] || !application["accountInfo"] || !application["loanCalculator"]) return false;
-      if (category == 'personal' && (!application["bvn"] || !application["personalInfo"] || !application["employmentInfo"] || !application["nokInfo"])) return false;
-      if (category == 'business' && (!application["collateralInfo"] || !application["companyInfo"] || !application["shareholderInfo"])) return false;
-      return true;
-    }
-    return false;
-  }
+  
   getLatest = () => {
     return timer(0, this.interval)
       .pipe(switchMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
@@ -213,7 +213,6 @@ export class LoanService {
 
   loans$: Observable<any> = this.search({ pageNumber: 1, maxSize: 10 });
   latestLoan$: Observable<any> = this.getLatest().pipe(tap(c => {
-    console.log(c)
     if (!c || c.requestStatus == "NotQualified" || c.requestStatus == "Completed") { this.runningLoanSubject.next(false) } else {
       this.runningLoanSubject.next(true)
     }

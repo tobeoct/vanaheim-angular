@@ -1,13 +1,53 @@
 <div id="main-content">
-    <div id="no-data"  class="animate__animated animate__fadeIn">
-    <div class="image">
-        <img src="../../../../../assets/icons/bell-spark.svg"/>
-        </div>
-        <h3>Make the wise choice 
-            and earn more </h3>
+    <ng-container *ngIf="!(latestEarnings$|async)">
+        <div id="no-data" class="animate__animated animate__fadeIn">
+            <div class="image">
+                <img src="../../../../../assets/icons/bell-spark.svg" />
+            </div>
+            <h3>Make the wise choice
+                and earn more </h3>
             <p>We are here to provide you with the funds you need quickly and easily</p>
-        
-            <!-- <button class="widget_button widget_button--small theme_bg--lightgrey animate__animated animate__fadeInUp" (click)="onNavigate('my/earnings')">I am interested</button> -->
-            <button class="widget_button widget_button--small theme_bg--lightgrey animate__animated animate__fadeInUp" >Coming Soon</button>
-    </div> 
+
+            <button class="widget_button widget_button--small theme_bg--lightgrey animate__animated animate__fadeInUp"
+                (click)="onNavigate('my/earnings')">I am interested</button>
+            <!-- <button
+                class="widget_button widget_button--small theme_bg--lightgrey animate__animated animate__fadeInUp">Coming
+                Soon</button> -->
+        </div>
+    </ng-container>
+    <ng-container *ngIf="latestEarnings$|async as allEarnings">
+        <div id="in-progress" class="animate__animated animate__fadeIn">
+            <div class="theme_scrolling--wrapper" style="min-width: 100%;">
+                <div style="display: inline-block; vertical-align: top; width: 100%; margin-right: 10px;"
+                    *ngFor="let earnings of allEarnings;let i=index">
+                    <ng-container
+                        *ngIf="earnings.requestStatus!='Active'&&earnings.requestStatus!='TopUpRequest'&&earnings.requestStatus!='LiquidationRequest'">
+                        <app-earning-status [earnings]="earnings" [index]="i" [total]="allEarnings.length" [showHistory]="true">
+                        </app-earning-status>
+                    </ng-container>
+                   
+                    <app-earnings-tracker [earnings]="earnings" [index]="i"></app-earnings-tracker> 
+                    <div id="details">
+                        <div class="item">
+                            <p>Total Payout</p>
+                            <p><b>{{earnings.payout|currency:"₦":'symbol':'1.0-2' }}</b></p>
+                        </div>
+                        <div class="item">
+                            <p>Account Number</p>
+                            <p><b>{{earnings.Account.number}}</b></p>
+                        </div>
+                        <div class="item">
+                            <p>Monthly Earnings</p>
+                            <p><b>{{earnings.monthlyPayment|currency:"₦":'symbol':'1.0-2'}}</b></p>
+                        </div>
+                        <div class="item">
+                            <p>Maturity Date</p>
+                            <p><b>{{earnings.maturityDate|date:'MMMM d
+                                    YYYY'}}</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
 </div>

@@ -40,6 +40,10 @@
         <label for="emailId">Email</label>
       </app-input>
     </ng-container>
+    <app-input id="taxId" placeholder="Enter your tax id" [control]="taxId" class="form-control"
+      [error]="(errorMessage$ | async)?.taxId">
+      <label for="taxId">Tax ID <small> (optional)</small></label>
+    </app-input>
     <div class="margin--3x no-margin--bottom">
       <ng-container *ngIf="isLoggedIn$|async">
         <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
@@ -89,6 +93,7 @@
 
       </ng-container>
     </div>
+
     <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="payoutId" [control]="payout" class="form-control">
     </app-input>
 

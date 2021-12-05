@@ -2,14 +2,14 @@
   <div id="main-content">
     <div class="item ">
 
-      <app-tabs>
-        <app-tab>
-          <app-tab-header>Loans</app-tab-header>
+      <app-tabs (onClick)="headerClicked($event)">
+        <app-tab label="Loans">
+          <app-tab-header >Loans</app-tab-header>
           <app-tab-body>
             <app-loan-summary></app-loan-summary>
           </app-tab-body>
         </app-tab>
-        <app-tab>
+        <app-tab label="Earnings">
           <app-tab-header>Earnings</app-tab-header>
           <app-tab-body>
             <app-investment-summary></app-investment-summary>
@@ -20,7 +20,7 @@
     </div>
     <div class="item box-shadow animate__animated animate__fadeIn">
       <div class="heading" style="text-align: center;">
-        <h3>{{(latestLoan$|async)?"Thanks for coming back":"Let's get you started"}}</h3>
+        <h3>{{(latestLoan$|async)||(latestEarnings$|async)?"Thanks for coming back":"Let's get you started"}}</h3>
       </div>
       <div class="animate__animated animate__fadeInUp ">
         <ng-container *ngTemplateOutlet="templates.LoanCard">

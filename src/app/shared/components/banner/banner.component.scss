@@ -14,9 +14,15 @@
     overflow: hidden;
     // position: absolute;
     z-index: 99999;
-    top: 0;
     transition: ease-in-out 0.3s;
     height: map-get($sizings, "px") * 2;
+    &.top{
+        top: 0;
+    }
+    &.bottom{
+        position: fixed;
+        bottom: 0;
+    }
     &_button {
         // width: 80px;
         margin-left: 10px;

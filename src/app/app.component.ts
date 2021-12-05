@@ -25,6 +25,7 @@ export class AppComponent implements OnChanges, OnInit {
   isEnabled: boolean;
   isGranted: boolean;
   updateAvailable = false;
+  loading$:Observable<boolean>
   showLogoutSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showLogout$: Observable<boolean> = this.showLogoutSubject.asObservable();
   @ViewChild('templates') templates: any;
@@ -129,6 +130,7 @@ export class AppComponent implements OnChanges, OnInit {
         this.isLoggedIn = false;
       }
     })
+    this.loading$ = this._utility.loadingSubject.asObservable();
     this.allSubscriptions.push(authSub)
     this.apiError$ = this._utility.apiErrorSubject.asObservable();
     this.apiSuccess$ = this._utility.apiSuccessSubject.asObservable();

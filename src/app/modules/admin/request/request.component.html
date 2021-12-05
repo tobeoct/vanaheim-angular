@@ -7,31 +7,28 @@
       </app-input>
       <app-input fieldClass="no-margin--top" type="date" id="toDate" [control]="toDate" class="form-control">
       </app-input>
-      <!-- <app-dropdown [fieldClass]="'no-margin--all'" [class]="'no-margin--all'" [current]="'Today'">
+      <!-- <app-dropdown [fieldClass]="'no-margin'" [class]="'no-margin'" [current]="'Today'">
                 <option value="Today">Today</option>
             </app-dropdown> -->
     </div>
   </div>
-  <app-tabs>
+  <app-loan-request [fromDate] = "fromDate" [toDate]="toDate"></app-loan-request>
+  <!-- <app-tabs>
     <app-tab>
       <app-tab-header>Loans</app-tab-header>
       <app-tab-body>
-        <div class="padding--2x">
-          <app-drag-and-drop (onClick)="selectLoan($event)" [control]="failureReason" [items$]="loans$">
-          </app-drag-and-drop>
-        </div>
+        <app-loan-request [fromDate] = "fromDate" [toDate]="toDate"></app-loan-request>
       </app-tab-body>
     </app-tab>
     <app-tab>
       <app-tab-header>Investment</app-tab-header>
       <app-tab-body>
-        <div class="padding--2x">
-          <app-drag-and-drop></app-drag-and-drop>
-        </div>
+        
+        <app-earnings-request [fromDate] = "fromDate" [toDate]="toDate"></app-earnings-request>
       </app-tab-body>
     </app-tab>
 
-  </app-tabs>
+  </app-tabs> -->
 </div>
 
 <ng-container *ngIf="show$|async">
@@ -64,8 +61,9 @@
               <p><b>Status</b></p>
             </div>
             <div>
-              <app-dropdown current="{{ctrl.value?ctrl.value=='NotQualified'?'Declined':ctrl.value:loanDetails.status=='NotQualified'?'Declined':loanDetails.status}}" [control]="ctrl"
-                [fieldClass]="'no-margin--top'" [id]="'status'" aria-placeholder="Change loan status">
+              <app-dropdown
+                current="{{ctrl.value?ctrl.value=='NotQualified'?'Declined':ctrl.value:loanDetails.status=='NotQualified'?'Declined':loanDetails.status}}"
+                [control]="ctrl" [fieldClass]="'no-margin--top'" [id]="'status'" aria-placeholder="Change loan status">
                 <app-option *ngFor="let t of loanStatuses; let i =index" [value]="t.label">{{t.label}}</app-option>
               </app-dropdown>
             </div>
@@ -116,7 +114,8 @@
         <h3>Change Notice</h3>
       </app-modal-header>
       <app-modal-body slot="body">
-        <p>Are you sure you want to change the status of this loan to <b>{{ctrl.value=='NotQualified'?'Declined':ctrl.value}}</b>?</p>
+        <p>Are you sure you want to change the status of this loan to
+          <b>{{ctrl.value=='NotQualified'?'Declined':ctrl.value}}</b>?</p>
         <div class="d-flex d-flex_horizontal--space-between">
           <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'"
             (onClick)="closeConfirmModal()">
@@ -168,7 +167,7 @@
     </app-modal-header>
     <app-modal-body slot="body">
       <app-form [form]="uForm" (onSubmit)="onUpdateRequired($event)" (errorMessageChange)="onError($event)">
-        
+
         <div class="vc_form-field margin--2x" style="max-width: 500px;">
           <label for="uMailMessage">Personalised Message</label>
           <textarea id="uMailMessage" placeholder="Enter personalised message" [formControl]="uMailMessage"
@@ -278,7 +277,7 @@
                   </td>
                   <!-- <td>{{row.tenure}} {{row.denominator}}</td>
                               <td>{{row.requestStatus}}</td>
-                              <td><app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)" fieldClass="no-margin--all"><ng-container slot="button">View Details</ng-container></app-button></td> -->
+                              <td><app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)" fieldClass="no-margin"><ng-container slot="button">View Details</ng-container></app-button></td> -->
                 </tr>
               </ng-container>
             </ng-container>

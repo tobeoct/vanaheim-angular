@@ -9,17 +9,23 @@ export class EarningRequest extends BaseEntity {
     customerID:number;
     duration: number;
     amount: number;
+    taxId:string;
+    payout: number;
+    topUp: number;
+    topUpPayout:number;
+    monthlyPayment: number;
+    maturityDate:string;
     account: Account;
     accountID:number;
     requestDate: Date;
-    dateApproved: Date;
+    // dateFunded: Date;
     dateProcessed: Date;
     dateDeclined: Date;
     failureReason: string;
     rate: any;
     type: EarningType;
     requestStatus: EarningRequestStatus;
-    dateDueForFunding: Date;
+    dateActive: Date;
     workflow: any;
     requestId: string;
 

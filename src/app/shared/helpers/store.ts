@@ -484,7 +484,6 @@ export class Store {
 
   updateStore() {
     this.setLoanCategory(this.loanCategorySubject.value);
-    console.log(this.pageSubject.value);
     this.setPage(this.pageSubject.value);
 
   }
@@ -492,12 +491,14 @@ export class Store {
   //Earning
 
   getEarningApplication() {
-    return this.investmentSubject.value|| JSON.parse(this.getItem("Earning") || "{}")
+    return this.investmentSubject.value || JSON.parse(this.getItem("Earning") || "{}")
   }
 
   saveEarningApplication(application: any) {
-    this.investmentSubject.next(application);
-    return this.setItem("Earning", JSON.stringify(application));
+    if (!this._authService.isLoggedIn()) {
+      this.investmentSubject.next(application);
+      return this.setItem("Earning", JSON.stringify(application));
+    }
   }
   removeEarningApplication() {
     this.removeItem("Earning");

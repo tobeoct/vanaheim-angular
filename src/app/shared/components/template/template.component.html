@@ -1,6 +1,6 @@
 <ng-template #loanCard>
-<!-- appTemplatePortal [outlet]="'LoanCard'" > -->
-    <div class="card card-cta card-cta--active">
+    <!-- appTemplatePortal [outlet]="'LoanCard'" > -->
+    <div class="card card-cta card-cta--active" [ngClass]="{'card-cta--active':(activeDashboard$|async)=='Loans'}">
         <div class="thumbnail">
             <div class="image">
                 <app-lottie [assetPath]="assetPaths.loan"></app-lottie>
@@ -11,28 +11,40 @@
             </div>
         </div>
         <div class="actions" style="display: flex; justify-content: flex-end;">
-            <app-button [title]="(runningLoan$|async)?'You currently have a loan processing':'Proceed'" [fieldClass]="'no-margin--all'"  [class]="'widget_button widget_button--small no-margin--all'"  (onClick)="onNavigate()"><ng-container slot="button">{{(latestLoan$|async)?'Explore':'Get Started'}}</ng-container></app-button>
+            <app-button [title]="(runningLoan$|async)?'You currently have a loan processing':'Proceed'"
+                [fieldClass]="'no-margin'" [class]="'widget_button widget_button--small no-margin'"
+                (onClick)="onNavigate()">
+                <ng-container slot="button">{{(latestLoan$|async)?'Explore':'Get Started'}}</ng-container>
+            </app-button>
         </div>
     </div>
 </ng-template>
 
 <ng-template #investmentCard>
     <!-- appTemplatePortal [outlet]="'LoanCard'" > -->
-        <div class="card card-cta">
-            <div class="thumbnail">
-                <div class="image">
-                    <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
-                </div>
-                <div>
-                    <h3>Earn More</h3>
-                    <p>Grow your wealth, make money
-                        moves</p>
-                </div>
+    <div class="card card-cta" [ngClass]="{'card-cta--active':(activeDashboard$|async)=='Earnings'}">
+        <div class="thumbnail">
+            <div class="image">
+                <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
             </div>
-            <div class="actions" style="display: flex; justify-content: flex-end;">
-                <button class="widget_button widget_button--small ">
-                    Coming Soon
-                </button>
+            <div>
+                <h3>Earn More</h3>
+                <p>Grow your wealth, make money
+                    moves</p>
             </div>
         </div>
-    </ng-template>
+        <div class="actions" style="display: flex; justify-content: flex-end;">
+            <!-- <button class="widget_button widget_button--small ">
+                    Coming Soon
+                </button> -->
+
+            <app-button
+                [title]="(runningEarnings$|async)?'You currently have a the maximum amount of applications processing':'Proceed'"
+                [fieldClass]="'no-margin'" [class]="'widget_button widget_button--small no-margin'"
+                (onClick)="onNavigate()">
+                <ng-container slot="button">{{(latestEarnings$|async)?'Explore':'Get Started'}}</ng-container>
+            </app-button>
+
+        </div>
+    </div>
+</ng-template>

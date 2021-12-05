@@ -14,7 +14,7 @@
         Notifications are not available in the browser or enabled in the application
       </p> -->
     <ng-container slot="action">
-      <app-button [class]="'widget_button--small no-margin--all'" *ngIf="!isGranted" [outline]="true" (onClick)="submitNotification()">
+      <app-button [class]="'widget_button--small no-margin'" *ngIf="!isGranted" [outline]="true" (onClick)="submitNotification()">
         <ng-container slot="button">Notify Me</ng-container>
       </app-button>
     </ng-container>
@@ -76,7 +76,7 @@
 
           </div>
           <div class="form_group">
-              <!-- <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You would be notified as your request is processed. </p> -->
+              <p class="theme_color--grey">You can liquidate anytime. Note: Liquidation requires a 1 month notice in which the interest for that 1 month period would not be amassed.</p>
               <button class="widget_button" (click)="close()" id="submit" type="submit" style="margin: 5px auto;"
                   tabindex="0">
                   <div>Done</div>

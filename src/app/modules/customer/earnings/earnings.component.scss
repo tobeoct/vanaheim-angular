@@ -1,172 +1,161 @@
-@import '../../../../styles/abstracts/_abstracts-dir';
-@import '../../../../styles/themes/_theme-dir';
-#earning-content{
-    @include flex(true,space-between);
+@import "../../../../styles/abstracts/_abstracts-dir";
+@import "../../../../styles/themes/_theme-dir";
+#earning-content {
+    @include flex(true, space-between);
     height: 100%;
     width: 100%;
-    .layout{
+    .layout {
         flex-direction: column;
         width: 30%;
-        &:first-child{
-            width:65%;
+        &:first-child {
+            width: 65%;
         }
-        .heading{
-            @include flex(horizontal,space-between);  
-            @include marginVertical(false,"px",0,0.5);
+        .heading {
+            @include flex(horizontal, space-between);
+            @include marginVertical(false, "px", 0, 0.5);
         }
-       
     }
-    #earning-details-summary{
+    #earning-details-summary {
         max-width: 500px;
         // margin-left: auto;
         // margin-right: auto;
-        .item{
-            
-        @include paddingHorizontal(true,"px",0.25);
-        // width: 47.5%;
+        .item {
+            @include paddingHorizontal(true, "px", 0.25);
+            // width: 47.5%;
         }
-       .details:nth-child(2) {
-           
-        @include marginVertical(false,"px",1,0);
+        .details:nth-child(2) {
+            @include marginVertical(false, "px", 1, 0);
         }
     }
-    #earning-summary{
-        width: 100%; 
-    
-    #summary-card{
-        @include flex(horizontal,space-between);
-        @include flex(vertical,center);
-        @include paddingHorizontal(true,"px",1);
-        background: map-get($colors, black );
-        width: 100%; 
-        height: 120px;
-        border-radius: $border-radius * 2;
-        div{
-            display: flex;
-            flex-direction: column;
-            color: map-get($colors, white);
-            &:first-child{
-                color: map-get($colors, midYellow);
-            }
-            p{
-                margin-top: 0;
-                padding-top: 0;
-            }
-        }
-    }
-    #earning-history{
-        @include marginVertical(false,"px",1,0); 
-        padding-bottom: 5%;        
-    overflow: hidden;
-    overflow-x: auto;
-    }
-}
+    #earning-summary {
+        width: 100%;
 
-    #current-earning-status{
-        @include paddingHorizontal(true,"px",1);
-        min-height: 150px;  
-        @include flex(true,center); 
-        #active-earnings{
-            @include flex(horizontal,space-between);  
-            @include flex(vertical,center); 
+        #summary-card {
+            @include flex(horizontal, space-between);
+            @include flex(vertical, center);
+            @include paddingHorizontal(true, "px", 1);
+            background: map-get($colors, black);
+            width: 100%;
+            height: 120px;
+            border-radius: $border-radius * 2;
+            div {
+                display: flex;
+                flex-direction: column;
+                color: map-get($colors, white);
+                &:first-child {
+                    color: map-get($colors, midYellow);
+                }
+                p {
+                    margin-top: 0;
+                    padding-top: 0;
+                }
+            }
+        }
+        #earning-history {
+            @include marginVertical(false, "px", 1, 0);
+            padding-bottom: 5%;
+            overflow: hidden;
+            overflow-x: auto;
+        }
+    }
+
+    #current-earning-status {
+        @include paddingHorizontal(true, "px", 1);
+        min-height: 150px;
+        @include flex(true, center);
+        #active-earnings {
+            @include flex(horizontal, space-between);
+            @include flex(vertical, center);
             height: 100%;
-
         }
-        #no-active-earnings{
-             &.no-data{
-        height: 100%;
-             }
-       
+        #no-active-earnings {
+            &.no-data {
+                height: 100%;
+            }
         }
-        .progress{
-            @include flex(true,center);  
+        .progress {
+            @include flex(true, center);
             flex-direction: column;
             height: 90px;
             width: 90px;
-            h1{
+            h1 {
                 margin-top: 0;
                 line-height: 1;
             }
-            p{
+            p {
                 margin: 0;
             }
         }
-
     }
 }
 
-#calculator{
-
-    @include paddingVertical(false,"px",0,2);
-    #form{
-         #heading
-         {
-             @include flex(true,center); 
-             height: map-get($sizings, "px")*2;
-             background: map-get($colors, black);
-             color: map-get($colors, white);
-            }
-            #content{
-                @include paddingHorizontal(true,"px",0.5);
-                @include paddingVertical(false,"px",0.5,1);
-
-            }
+#calculator {
+    @include paddingVertical(false, "px", 0, 2);
+    #form {
+        #heading {
+            @include flex(true, center);
+            height: map-get($sizings, "px") * 2;
+            background: map-get($colors, black);
+            color: map-get($colors, white);
+        }
+        #content {
+            @include paddingHorizontal(true, "px", 0.5);
+            @include paddingVertical(false, "px", 0.5, 1);
+        }
     }
 }
 
-#earning-details{
-    .item{
+#earning-details {
+    .item {
         display: inline-block;
         width: 47.5%;
-        @include border(1px,solid,lightGrey);
+        @include border(1px, solid, lightGrey);
         border-radius: $border-radius;
-        @include paddingHorizontal(true,"px",0.5);
+        @include paddingHorizontal(true, "px", 0.5);
         box-sizing: border-box;
-        height: map-get($sizings, "px")*2;
+        height: map-get($sizings, "px") * 2;
         margin-right: 5%;
         margin-bottom: 10px;
-        &:nth-child(2n){
+        &:nth-child(2n) {
             margin-right: 0;
         }
         vertical-align: middle;
-
     }
 }
 
-#earning-details{
-    .title{
-        @include padding(true,"px",0.5);
+#earning-details {
+    .title {
+        @include padding(true, "px", 0.5);
         @include background(lightGrey);
         border-radius: $border-radius;
     }
-    .detail-card{
-        @include border(1px,solid,lightGrey);
-        @include padding(true,"px",0.5);
+    .detail-card {
+        @include border(1px, solid, lightGrey);
+        @include padding(true, "px", 0.5);
         border-radius: $border-radius;
         width: 48.5%;
         display: inline-block;
-        margin-right:3%;
-        margin-bottom: map-get($sizings, "px")*0.5;
-        &:nth-child(2n){
+        margin-right: 3%;
+        margin-bottom: map-get($sizings, "px") * 0.5;
+        &:nth-child(2n) {
             margin-right: 0;
         }
     }
 }
-@media all and (max-width:1233px){
-    #earning-content{
+@media all and (max-width: 1233px) {
+    #earning-content {
         flex-direction: column;
-        .left{
+        .left {
             width: 100% !important;
         }
-        .right{
+        .right {
             width: auto !important;
-            #calculator{
+            #calculator {
                 max-width: 500px;
-                @include marginVertical(false,"px",2,0); 
+                @include marginVertical(false, "px", 2, 0);
             }
-            #most-recent{
+            #most-recent {
                 max-width: 500px;
-
             }
         }
     }

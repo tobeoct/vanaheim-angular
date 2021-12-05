@@ -3,15 +3,15 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { RequestService } from 'src/app/modules/admin/request/request.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Utility } from '../../helpers/utility.service';
+import { Utility } from '../../../helpers/utility.service';
 
 @Component({
-  selector: 'app-drag-and-drop',
+  selector: 'app-loan-drag-and-drop',
   templateUrl: './drag-and-drop.component.html',
   styleUrls: ['./drag-and-drop.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DragAndDropComponent implements OnInit {
+export class LoanDragAndDropComponent implements OnInit {
   nativeElement: any[] = [];
   fForm: FormGroup;
   uForm: FormGroup;

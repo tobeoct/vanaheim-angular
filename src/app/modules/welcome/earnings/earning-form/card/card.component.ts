@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Utility } from 'src/app/shared/helpers/utility.service';
+import { EarningService } from 'src/app/shared/services/earning/earning.service';
 
 @Component({
   selector: 'app-earning-card',
@@ -8,7 +9,7 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 })
 export class CardComponent implements OnInit {
 
-  constructor(private _utility:Utility) { }
+  constructor(private _utility:Utility, private _earningService:EarningService) { }
   @Input()
   show:boolean = false;
 @Input()
@@ -32,8 +33,8 @@ mgtFee:string="--";
     const amount= this._utility.convertToPlainNumber(this.amount);
     if(this.payout && this.maturity!="--" && this.amount!=0 && amount>=this.min && amount<=this.max){
     const interest =+this.payout- amount;
-                 this.tax ="₦ "+this._utility.currencyFormatter((interest*0.1));
-                 this.mgtFee = "₦ "+this._utility.currencyFormatter(amount*0.005);
+                 this.tax ="₦ "+this._utility.currencyFormatter((interest*this._earningService.TAX));
+                 this.mgtFee = "₦ "+this._utility.currencyFormatter(amount*this._earningService.MGT_FEE);
     this.myPayout = +this.payout;//this._utility.currencyFormatter(this.payout);
     }else{
       this.myPayout =0;

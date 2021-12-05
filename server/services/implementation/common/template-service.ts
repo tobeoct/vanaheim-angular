@@ -42,6 +42,58 @@ export class TemplateService {
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
+
+    EARNING_STATUS_UPDATE(status: string, id: string) {
+        return `   EARNING ID: ${id} <br/><br/>
+        Your earning request status has been updated to ${status};<br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
+
+    EARNING_LIQUIDATION_NOTIFICATION(customer: string, requestCode: string) {
+        return `Dear ${customer}, <br/><br/> We have received your liquidation request for EARNING ID: ${requestCode} <br/><br/>
+        Your request is being attended to.  You would be contacted shortly<br/><br/>
+       
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
+
+    EARNING_TOPUP_NOTIFICATION(customer: string, requestCode: string, amount:string) {
+        return `Dear ${customer}, <br/><br/> We have received your top up request for EARNING ID: ${requestCode} with an amount of ${amount} <br/><br/>
+        Your request is being attended to. You would be contacted shortly<br/><br/>
+       
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
+    EARNING_STATUS_UPDATE_REQUIRED(status: string, id: string, url: string, message: string) {
+        return `   EARNING ID: ${id} <br/><br/>
+        Your earning request status has been updated to ${status};<br/><br/>
+        Go to ${url} to provide the required document <br/><br/>
+        ${message} <br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
+    EARNING_UPDATE(customerName: string, code: string, requirement: string) {
+        return `   EARNING ID: ${code} <br/><br/>
+        Customer:${customerName}<br/><br/>
+        Requirement: ${requirement}<br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
+    EARNING_STATUS_UPDATE_DECLINED(name: string, message: string, id: string) {
+        return `  Dear ${name.trim()},<br/><br/>
+ 
+        Thank you for your interest in Vanir Capital Limited’s earning services.<br/><br/>
+         
+        Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/><br/>
+        ${message}<br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+    }
     NOTIFICATION(message: string, type: string, id?: string) {
         if (id) {
             return `${type} -   LOAN ID: ${id} <br/><br/>

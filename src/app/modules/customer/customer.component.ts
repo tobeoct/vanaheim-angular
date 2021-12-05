@@ -84,11 +84,13 @@ export class CustomerComponent implements OnInit {
         data => {
 
           setTimeout(() => { this._earningService.success(data.message); this._earningService.showSuccess(true); }, 0);
+          this._store.removeEarningApplication();
 
         },
         (error: string) => {
           if (error == "Not Found") error = "You do not seem to be connected to the internet";
           setTimeout(() => { this._earningService.error(error); this._earningService.showError(true); }, 0);
+          this._store.removeEarningApplication();
 
         });
 

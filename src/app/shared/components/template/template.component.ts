@@ -4,6 +4,8 @@ import { Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { AssetPath } from "src/app/shared/constants/variables";
 import { IAssetPath } from "src/app/shared/interfaces/assetpath";
+import { Utility } from "../../helpers/utility.service";
+import { EarningService } from "../../services/earning/earning.service";
 import { LoanService } from "../../services/loan/loan.service";
 
 // @Directive({
@@ -39,14 +41,14 @@ import { LoanService } from "../../services/loan/loan.service";
 })
 export class TemplatePortalService {
   // outlets:any = new Map<string, TemplatePortalOutletDirective>();
-  templates:any;
-// constructor(private viewContainerRef: ViewContainerRef) {
-//   const _injector = this.viewContainerRef.parentInjector;
-//   const _parent: AppComponent = _injector.get<AppComponent>(AppComponent); 
-//   this.templates = _parent.templates;
-// }
+  templates: any;
+  // constructor(private viewContainerRef: ViewContainerRef) {
+  //   const _injector = this.viewContainerRef.parentInjector;
+  //   const _parent: AppComponent = _injector.get<AppComponent>(AppComponent); 
+  //   this.templates = _parent.templates;
+  // }
   // registerOutlet(outlet: TemplatePortalOutletDirective){
- 
+
   //   this.outlets[outlet.appTemplatePortalOutlet] = outlet;
   // }
 }
@@ -61,27 +63,33 @@ export class TemplatePortalService {
 export class TemplateComponent implements OnInit {
 
   assetPaths: IAssetPath = new AssetPath;
-  base:string;
-  runningLoan$:Observable<boolean>;
-  latestLoan$:Observable<boolean>;
-  path:string="/my/loans";
-  @ViewChild('loanCard', { read: TemplateRef }) LoanCard:TemplateRef<any>;
-  @ViewChild('investmentCard', { read: TemplateRef }) InvestmentCard:TemplateRef<any>;
-  constructor(private _router:Router,private _loanService:LoanService) {
-  
-   }
+  base: string;
+  runningLoan$: Observable<boolean>;
+  runningEarnings$: Observable<boolean>;
+  latestLoan$: Observable<any>;
+  latestEarnings$: Observable<any[]>;
+  path: string = "/my/loans";
+  activeDashboard$: Observable<string>
+  @ViewChild('loanCard', { read: TemplateRef }) LoanCard: TemplateRef<any>;
+  @ViewChild('investmentCard', { read: TemplateRef }) InvestmentCard: TemplateRef<any>;
+  constructor(private _router: Router, private _loanService: LoanService, private _earningService: EarningService, private _utils: Utility) {
+
+  }
 
   ngOnInit(): void {
-   this.runningLoan$= this._loanService.runningLoan$;
-   this.latestLoan$ = this._loanService.latestLoan$.pipe(map(c=>{
-    this.path = c?'/my/loans':'/my/loans/apply'
-     return c;
-   }));
-  
+    this.activeDashboard$ = this._utils.dashboardHeadingToggleSubject.asObservable();
+    this.runningLoan$ = this._loanService.runningLoan$;
+    this.runningEarnings$ = this._earningService.runningEarning$;
+    this.latestEarnings$ = this._earningService.latestEarnings$;
+    this.latestLoan$ = this._loanService.latestLoan$.pipe(map(c => {
+      this.path = c ? '/my/loans' : '/my/loans/apply'
+      return c;
+    }));
+
   }
- 
-onNavigate():void{
-  this._router.navigate([this.path])
-}
+
+  onNavigate(): void {
+    this._router.navigate([this.path])
+  }
 
 }

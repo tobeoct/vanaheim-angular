@@ -5,8 +5,8 @@ const customBackoff = (retryCount:any) => {
     return 1000
   }
 const s3 = new AWS.S3({
-  accessKeyId: 'AKIAS3L5FNEBI6DNNCWV',//process.env.AWS_ACCESS_KEY,
-  secretAccessKey: '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',//process.env.AWS_SECRET_ACCESS_KEY
+  accessKeyId:process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'us-east-2',
   signatureVersion: 'v4',
   maxRetries: 2,
@@ -21,7 +21,6 @@ const s3 = new AWS.S3({
 export class AWSService {
    
     constructor() {
-        // this.test("server/uploads/CUST_10362021023642/a27cc300709fc621a61523c04ac65f06.png","a27cc300709fc621a61523c04ac65f06.png")
     }
 
     upload = (path: string,fileName:string,customerID:string) => new Promise<any>((resolve, reject) => {
