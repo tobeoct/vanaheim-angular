@@ -1,14 +1,11 @@
 
 import AppConfig from '@api/config';
 import { Customer } from '@models/customer';
-import { ApprovedEarningStatus } from '@models/helpers/enums/approvedEarningStatus';
 import { EarningRequestStatus } from '@models/helpers/enums/investmentrequeststatus';
 import { BaseStatus } from '@models/helpers/enums/status';
 import { ApprovedEarning } from '@models/investment/approved-investment';
 import { EarningLiquidation, LiquidationStatus } from '@models/investment/earnings-liquidation';
 import { EarningTopUp, TopUpStatus } from '@models/investment/earnings-topup';
-import { EarningRequest } from '@models/investment/investment-request';
-import { EarningRequestLog } from '@models/investment/investment-request-log';
 import { IApprovedEarningRepository } from '@repository/interface/investment/Iapproved-earning-repository';
 import { IEarningLiquidationRepository } from '@repository/interface/investment/Iearning-liquidation-repository';
 import { IEarningTopUpRepository } from '@repository/interface/investment/Iearning-topup-repository';

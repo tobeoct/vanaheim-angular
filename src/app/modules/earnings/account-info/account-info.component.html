@@ -1,0 +1,75 @@
+<div id="form" class="{{side?'':'theme_col-6'}} animate__animated animate__fadeInUp animate__fast">
+    <div class=" content {{!side?'box-shadow':''}} {{!side?'':'content--smaller'}}" style="box-sizing: border-box;">
+        <ng-container *ngIf="!(dataLoading$|async)">
+            <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+                <ng-container *ngIf="isLoggedIn">
+                    <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
+                        <app-dropdown
+                            current="{{(accountArrayGroups[0].get('bank')|toControl).value}} - {{(accountArrayGroups[0].get('accountNumber')|toControl).value}}"
+                            [fieldClass]="'no-margin--top'" [id]="'account'"
+                            [control]="(accountArrayGroups[0].get('id')|toControl)"
+                            aria-placeholder="Select your account">
+                            <ng-container slot="label"><label for="account">Account</label>
+                            </ng-container>
+                            <app-option *ngFor="let t of (accountsFromDb$|async); let i =index" [value]="t.id"
+                                label="{{t.bank}} - {{t.number}}">{{t.bank}} - {{t.number}}</app-option>
+                        </app-dropdown>
+                        <p class="text-button" (click)="showForm()">Enter a different account</p>
+
+                     
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!(accountsFromDb$|async) || (showForm$|async)">
+
+                    <div id="accounts"
+                        class="theme_row no-margin--top animate__animated animate__fadeInUp animate__fast"
+                        *ngFor="let accountGroup of accountArrayGroups;let i =index">
+                        <p><b> Account Details</b></p>
+                       
+                        <ng-container [formGroup]="accountGroup">
+                            <app-dropdown [current]="(accountGroup.get('bank')|toControl).value"
+                                [fieldClass]="'no-margin--top'" [id]="'bank'"
+                                [control]="accountGroup.get('bank')|toControl" aria-placeholder="Select your bank">
+                                <ng-container slot="label"><label for="bank">Bank</label></ng-container>
+                                <app-option *ngFor="let t of banks; let i =index" [value]="t.title" [label]="t.title">
+                                    {{t.title}}</app-option>
+                            </app-dropdown>
+
+                            <app-input [focus$]="focus$" id="accountNumber" [loading$]="loading$"
+                                [placeholder]="'Enter your account number'"
+                                [control]="accountGroup.get('accountNumber')|toControl" class="form-control"
+                                [error]="(errorMessage$ | async)?.accountNumber">
+                                <label for="accountNumber">Account Number</label>
+
+                            </app-input>
+                            <fieldset [disabled]="(disableInput$|async)">
+                                <app-input id="accountName" [placeholder]="'Enter your account name'"
+                                    [control]="accountGroup.get('accountName')|toControl" class="form-control"
+                                    [error]="(errorMessage$ | async)?.accountName">
+                                    <label for="accountName">Account Name</label>
+                                </app-input>
+                            </fieldset>
+                        </ng-container>
+                    </div>
+
+                   
+                </ng-container>
+                <div style="margin-top: 60px;">
+                    <app-button [form]="form">{{side?'Save':'Next'}}</app-button>
+                </div>
+            </app-form>
+        </ng-container>
+        <ng-container *ngIf="(dataLoading$|async) && !(accountsFromDb$|async)">
+            <app-loading></app-loading>
+        </ng-container>
+    </div>
+</div>
+<div class="snackbar_container ">
+    <div *ngIf="apiError$|async as error"
+        class="snackbar snackbar-danger mt-3 mb-0 animate__animated animate__fadeInUp">{{error}}
+    </div>
+    <div *ngIf="apiSuccess$|async as success"
+        class="snackbar snackbar-success mt-3 mb-0 animate__animated animate__fadeInUp">{{success}}
+    </div>
+
+</div>

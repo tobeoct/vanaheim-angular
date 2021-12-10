@@ -1,10 +1,13 @@
+import { EarningType } from "src/app/shared/services/earning/admin-earning.service";
+
 export class EarningIndication{
     constructor(){
 
     }
     amount:number;
-    preferredName:string;
-    emailAddress:string;
+    type:EarningType;
+    // preferredName:string;
+    // emailAddress:string;
     duration:number;
     payout:number;
     rate:number;

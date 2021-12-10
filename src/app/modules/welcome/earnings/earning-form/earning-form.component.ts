@@ -3,7 +3,7 @@ import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { Subject, Observable, BehaviorSubject, from, EMPTY } from 'rxjs';
-import { catchError, delay, map, take, tap } from 'rxjs/operators';
+import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
 import { ElementStyle, ElementSize, ElementState } from 'src/app/shared/constants/enum';
 import { ButtonOptions, AssetPath } from 'src/app/shared/constants/variables';
 import { Utility } from 'src/app/shared/helpers/utility.service';
@@ -11,8 +11,8 @@ import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
 import { EarningIndication, RateDetail } from '../earning';
 import { EarningService } from '../../../../shared/services/earning/earning.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { Store } from 'src/app/shared/helpers/store';
-import { Router } from '@angular/router';
+import { EarningsStore, Store } from 'src/app/shared/helpers/store';
+import { NavigationEnd, Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { AccountInfo } from 'src/app/modules/loan/shared/account-info/account-info';
 
@@ -53,15 +53,15 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
   get amount() {
     return this.form.get("amount") as FormControl || new FormControl();
   }
-  get email() {
-    return this.form.get("emailAddress") as FormControl || new FormControl();
-  }
-  get name() {
-    return this.form.get("name") as FormControl || new FormControl();
-  }
-  get taxId() {
-    return this.form.get("taxId") as FormControl || new FormControl();
-  }
+  // get email() {
+  //   return this.form.get("emailAddress") as FormControl || new FormControl();
+  // }
+  // get name() {
+  //   return this.form.get("name") as FormControl || new FormControl();
+  // }
+  // get taxId() {
+  //   return this.form.get("taxId") as FormControl || new FormControl();
+  // }
   get rate() {
     return this.form.get("rate") as FormControl || new FormControl();
   }
@@ -72,18 +72,18 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
     return this.form.get("maturity") as FormControl || new FormControl();
   }
 
-  get accountGroup() {
-    return this.form.get("accountInfo") as FormGroup || new FormControl();
-  }
-  get bank() {
-    return this.form.get("accountGroup.bank") as FormControl || new FormControl();
-  }
-  get accountNumber() {
-    return this.form.get("accountGroup.accountNumber") as FormControl || new FormControl();
-  }
-  get accountName() {
-    return this.form.get("accountGroup.accountName") as FormControl || new FormControl();
-  }
+  // get accountGroup() {
+  //   return this.form.get("accountInfo") as FormGroup || new FormControl();
+  // }
+  // get bank() {
+  //   return this.form.get("accountGroup.bank") as FormControl || new FormControl();
+  // }
+  // get accountNumber() {
+  //   return this.form.get("accountGroup.accountNumber") as FormControl || new FormControl();
+  // }
+  // get accountName() {
+  //   return this.form.get("accountGroup.accountName") as FormControl || new FormControl();
+  // }
   get valid() {
     return this.form.get("valid") as FormControl || new FormControl();
   }
@@ -113,7 +113,7 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
   changedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   changed$: Observable<boolean> = this.changedSubject.asObservable();
 
-  fromSignIn = "fromSignIn";
+  fromSignIn = "earningFromSignIn";
 
   accounts: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   accountsFromDb$: Observable<any[]> = this.accounts.asObservable();
@@ -123,8 +123,13 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
 
   showFormSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showForm$: Observable<boolean> = this.showFormSubject.asObservable();
-  constructor(private _fb: FormBuilder, private _router: Router, private _commonService: CommonService, private _store: Store, private _zone: NgZone, private _utility: Utility, private _validators: VCValidators, private _earningService: EarningService, private _authService: AuthService) {
+  base: string;
+  constructor(private _fb: FormBuilder, private _router: Router, private _commonService: CommonService, private _store: Store,private _earningsStore:EarningsStore, private _zone: NgZone, private _utility: Utility, private _validators: VCValidators, private _earningService: EarningService, private _authService: AuthService) {
+    this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
+      this.base = x.url.replace(/\/[^\/]*$/, '/');
+    });
   }
+
   ngAfterViewInit(): void {
     this.delay$.subscribe(c => {
       this.focus();
@@ -144,115 +149,38 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
     }
     this.titles = this._store.titles;
     this.banks = this._store.banks;
-    let accountInfo: AccountInfo = this._store.getEarningApplication()?.accountInfo;
-    this.form = this.createForm(accountInfo);
-    this.email.valueChanges.subscribe(value => {
-      this.onEmailEntered.emit(value)
-    })
+    const earningsCalculator = this._earningsStore.earningsCalculator;
+    this.form = this.createForm(earningsCalculator);
+    // this.email.valueChanges.subscribe(value => {
+    //   this.onEmailEntered.emit(value)
+    // })
     this.form.valueChanges.subscribe(form => {
-      this._store.saveEarningApplication(form);
+      this._earningsStore.setEarningsCalculator(form);
     })
-    this.isLoggedIn$.subscribe(s => {
-      if (s) {
-        this.email.setValidators(null);
-        this.email.updateValueAndValidity();
-        this.name.setValidators(null);
-        this.name.updateValueAndValidity();
+    // this.isLoggedIn$.subscribe(s => {
+    //   if (s) {
+    //     this.email.setValidators(null);
+    //     this.email.updateValueAndValidity();
+    //     this.name.setValidators(null);
+    //     this.name.updateValueAndValidity();
 
-      }
-    })
+    //   }
+    // })
   }
 
-  createForm = (accountInfo: any) => {
+  createForm = (earningsCalculator:EarningIndication) => {
+    if(earningsCalculator && Object.keys(earningsCalculator).length>0){ 
+      this.changedSubject.next(true);
+      if(earningsCalculator.amount) this.amountSubject.next(this._utility.convertToPlainNumber(earningsCalculator.amount));
+    }
     return this._fb.group({
-      amount: ["100,000", [Validators.required, Validators.minLength(6), Validators.maxLength(10), this._validators.numberRange(this.minAmount, this.maxAmount)]],
-      duration: [0, [Validators.required]],
-      maturity: ['', [Validators.required]],
-      taxId: [''],
-      rate: [0, [Validators.required, Validators.min(15)]],
-      payout: [0, [Validators.required]],
-      emailAddress: [this._authService.userValue?.email ?? "", [Validators.required, Validators.email]],
-      name: [this._authService.userValue?.firstName ?? "", [Validators.required, Validators.minLength(3)]],
-      type: ["Monthly ROI", [Validators.required]],
-      accountInfo: this.buildAccountGroup(accountInfo),
+      amount: [earningsCalculator?.amount?earningsCalculator.amount:"100,000", [Validators.required, Validators.minLength(6), Validators.maxLength(10), this._validators.numberRange(this.minAmount, this.maxAmount)]],
+      duration: [earningsCalculator?.duration?earningsCalculator.duration:0, [Validators.required]],
+      maturity: [earningsCalculator?.maturity?earningsCalculator.maturity:'', [Validators.required]],
+      rate: [earningsCalculator?.rate?earningsCalculator.rate:0, [Validators.required, Validators.min(15)]],
+      payout: [earningsCalculator?.payout?earningsCalculator.payout:0, [Validators.required]],
+      type: [earningsCalculator?.type?earningsCalculator.type:"Monthly ROI", [Validators.required]],
     })
-  }
-  buildAccountGroup = (accountInfo: AccountInfo) => {
-    if (accountInfo) this.accounts.next([accountInfo]);
-    let group = new FormGroup({
-      id: new FormControl(accountInfo?.id ? accountInfo?.id : 0),
-      bank: new FormControl(accountInfo?.bank ? accountInfo?.bank : '', [Validators.required]),
-      accountNumber: new FormControl(accountInfo?.accountNumber ? accountInfo?.accountNumber : '', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]),
-      accountName: new FormControl(accountInfo?.accountName ? accountInfo?.accountName : '', [Validators.required])
-    }, { validators: [Validators.required] })
-    let nameCtrl = group.get("accountName") as FormControl;
-    group.get("bank")?.valueChanges.subscribe(v => {
-
-      if (group.get("accountNumber")?.valid && group.get("bank")?.valid) {
-        if (!group.get("id")?.value) {
-          this.onValidate(group.get("accountNumber")?.value, v, nameCtrl);
-        }
-      }
-    })
-    group.get("accountNumber")?.valueChanges.subscribe(v => {
-      if (group.get("bank")?.valid && group.get("accountNumber")?.valid) {
-        // console.log(v)
-        if (!group.get("id")?.value) {
-          this.onValidate(v, group.get("bank")?.value, nameCtrl);
-        }
-      }
-    })
-
-    group.get("id")?.valueChanges.subscribe(v => {
-      let id = group.get("id")?.value;
-      if (id && id > 0) {
-        let a = this.accounts.value.find(c => c.id == id);
-        if (a) {
-          group.get("bank")?.patchValue(a.bank);
-          group.get("bank")?.updateValueAndValidity();
-          group.get("accountNumber")?.patchValue(a.number);
-          group.get("accountNumber")?.updateValueAndValidity();
-          group.get("accountName")?.patchValue(a.name);
-          group.get("accountName")?.updateValueAndValidity();
-        }
-      }
-    })
-    return group;
-  }
-  displayMessage(success: boolean) {
-    this.loadingSubject.next(false);
-    if (success) {
-      this.valid.setErrors(null);
-      this._utility.setSuccess("Account Verification Successful");
-    } else {
-      this._utility.setError("Account Verification Failed");
-    }
-  }
-  onValidate(accountNumber: string, bank: string, accountName: FormControl) {
-    this.loadingSubject.next(true);
-    this.valid.setErrors({
-      validating: true
-    })
-    accountName.patchValue(''); accountName.updateValueAndValidity();
-    const bankCode = this.banks.find(c => c.title == bank)?.code;
-    if (bankCode) {
-      let data = { bankcode: bankCode, accountnumber: accountNumber };
-      this._commonService.accountEnquiry(data).pipe(map(r => {
-        if (r.status == true) { accountName.patchValue(r.response.data); accountName.updateValueAndValidity(); this.displayMessage(true) } else {
-          this.displayMessage(false)
-        }
-        return r;
-      }), catchError(err => {
-        this.displayMessage(false)
-        console.error(err);
-        return EMPTY;
-      })).subscribe(c => {
-
-
-      });
-    } else {
-      this.loadingSubject.next(false);
-    }
   }
   showForm() {
     this.showFormSubject.next(true);
@@ -284,35 +212,22 @@ export class EarningFormComponent implements OnInit, AfterViewInit {
   setType(type: string) {
     this.type.patchValue(type);
   }
+
+  onNavigate(route: string, params: any = {}): void {
+    const r = this.base + route;
+    this._router.navigate([r], { queryParams: params })
+  }
   onSubmit(event: any) {
     if (this._authService.isLoggedIn()) {
       this.disableInputSubject.next(false);
       this.loadingSubject.next(true);
-      this._utility.toggleLoading(true);
-      this._earningService.apply(this.form.value).pipe(take(1)).subscribe(
-        data => {
-          this._zone.run(() => {
-            this.loadingSubject.next(false);
-            setTimeout(() => { 
-              this._utility.toggleLoading(false);this._earningService.success(data.message); this._earningService.showSuccess(true); }, 0);
-            this.changedSubject.next(false)
-            this.form.reset();
-            this.form = this.createForm(null);
-            this.form.updateValueAndValidity();
-            this._store.removeEarningApplication();
-
-          })
-        },
-        (error: string) => {
-          this.loadingSubject.next(false);
-          if (error == "Not Found") error = "You do not seem to be connected to the internet";
-          setTimeout(() => { 
-            this._utility.toggleLoading(false);this._earningService.error(error); this._earningService.showError(true); }, 0);
-          this._store.removeEarningApplication();
-
-        });
+      let url = "earnings/apply/personal-info";
+      if (this._router.url.includes("apply")) url = "personal-info";
+      this.onNavigate(url);
+     
     } else {
       this._store.setItem(this.fromSignIn, true);
+      // this._earningService.continueApplication(true);
       this._earningService.showLogin(true);
     }
 

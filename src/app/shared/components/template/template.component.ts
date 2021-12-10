@@ -68,7 +68,8 @@ export class TemplateComponent implements OnInit {
   runningEarnings$: Observable<boolean>;
   latestLoan$: Observable<any>;
   latestEarnings$: Observable<any[]>;
-  path: string = "/my/loans";
+  loanPath: string = "/my/loans";
+  earningPath: string = "/my/earnings";
   activeDashboard$: Observable<string>
   @ViewChild('loanCard', { read: TemplateRef }) LoanCard: TemplateRef<any>;
   @ViewChild('investmentCard', { read: TemplateRef }) InvestmentCard: TemplateRef<any>;
@@ -80,16 +81,22 @@ export class TemplateComponent implements OnInit {
     this.activeDashboard$ = this._utils.dashboardHeadingToggleSubject.asObservable();
     this.runningLoan$ = this._loanService.runningLoan$;
     this.runningEarnings$ = this._earningService.runningEarning$;
-    this.latestEarnings$ = this._earningService.latestEarnings$;
+    this.latestEarnings$ = this._earningService.latestEarnings$.pipe(map(c => {
+      this.earningPath = c ? '/my/earnings' : '/my/earnings/apply'
+      return c;
+    }));
     this.latestLoan$ = this._loanService.latestLoan$.pipe(map(c => {
-      this.path = c ? '/my/loans' : '/my/loans/apply'
+      this.loanPath = c ? '/my/loans' : '/my/loans/apply'
       return c;
     }));
 
   }
 
-  onNavigate(): void {
-    this._router.navigate([this.path])
+  onLoanNavigate(): void {
+    this._router.navigate([this.loanPath])
   }
 
+  onEarningNavigate(): void {
+    this._router.navigate([this.loanPath])
+  }
 }

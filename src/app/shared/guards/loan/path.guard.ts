@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute } from '@angular/router';
 import { businessRoutes, personalRoutes } from '../../helpers/routes';
-import { Store } from '../../helpers/store';
+import { LoanStore, Store } from '../../helpers/store';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class PathGuard implements CanActivate {
   base = '';
   constructor(
     private _router: Router,
-    private _store: Store,
+    private _store: LoanStore,
     private _route: ActivatedRoute
   ) {
   }

@@ -23,12 +23,12 @@
       class="form-control">
     </app-input>
 
-    <app-rate (rateDetailChange)="rateDetailChange($event)" [type]="type.value" [amount$]="amount$"></app-rate>
+    <app-rate (rateDetailChange)="rateDetailChange($event)" [type]="type.value" [activeDuration]="duration.value" [amount$]="amount$"></app-rate>
 
     <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="rateId" [control]="rate" class="form-control">
     </app-input>
 
-    <ng-container *ngIf="!(isLoggedIn$|async)">
+    <!-- <ng-container *ngIf="!(isLoggedIn$|async)">
       <app-input id="nameId" placeholder="Enter your preferred name" [control]="name" class="form-control"
         [error]="(errorMessage$ | async)?.name">
         <label for="nameId">Preferred Name</label>
@@ -39,12 +39,10 @@
         class="form-control" [error]="(errorMessage$ | async)?.email">
         <label for="emailId">Email</label>
       </app-input>
-    </ng-container>
-    <app-input id="taxId" placeholder="Enter your tax id" [control]="taxId" class="form-control"
-      [error]="(errorMessage$ | async)?.taxId">
-      <label for="taxId">Tax ID <small> (optional)</small></label>
-    </app-input>
-    <div class="margin--3x no-margin--bottom">
+    </ng-container> -->
+
+
+    <!-- <div class="margin--3x no-margin--bottom">
       <ng-container *ngIf="isLoggedIn$|async">
         <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
           <app-dropdown
@@ -92,7 +90,7 @@
 
 
       </ng-container>
-    </div>
+    </div> -->
 
     <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="payoutId" [control]="payout" class="form-control">
     </app-input>
@@ -102,6 +100,6 @@
     </app-input>
   </div>
   <div class="theme_row" style="width: 90%; margin:0px auto;">
-    <app-button [form]="form" [loading$]="loading$">{{!(isLoggedIn$|async)?'I Am Interested':'Submit'}}</app-button>
+    <app-button [form]="form" [loading$]="loading$">{{!(isLoggedIn$|async)?'I Am Interested':'Continue Applying'}}</app-button>
   </div>
 </app-form>

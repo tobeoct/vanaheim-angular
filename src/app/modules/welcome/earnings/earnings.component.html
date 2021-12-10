@@ -32,13 +32,13 @@
                     <div class="theme_col-12" style="height: 100%; z-index: 2;">
                         <div class="theme_bg--white theme_col-5 investment_background theme_dropshadow--light animate__animated animate__fadeInUp"
                             style="height: 100%;">
-                            <app-banner [class]="'banner--small no-margin--top'" color="tertiary"
+                            <!-- <app-banner [class]="'banner--small no-margin--top'" color="tertiary"
                                 *ngIf="!(isLoggedIn$|async)">
                                 <ng-container slot="content"><span [routerLink]="['/auth/account']"
                                         [queryParams]="{ username: email.value }" style="cursor: pointer;"><b><u>Sign up
                                                 required</u> </b></span> to be able to
                                     submit your application</ng-container>
-                            </app-banner>
+                            </app-banner> -->
                             <div class=" theme_bg"
                                 style=" width: 100%; height: 60px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
                                 <p class="theme_color--yellow theme_text--heading3"
@@ -68,7 +68,7 @@
         <h3>Sign In Required</h3>
     </app-modal-header>
     <app-modal-body slot="body">
-        <p style="text-align: center; margin: auto;">Don't worry, your application would be submitted automatically once
+        <p style="text-align: center; margin: auto;">Don't worry, you would be able to continue your application once
             you've signed in.</p>
         <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
             <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;"

@@ -13,7 +13,7 @@
         <div class="actions" style="display: flex; justify-content: flex-end;">
             <app-button [title]="(runningLoan$|async)?'You currently have a loan processing':'Proceed'"
                 [fieldClass]="'no-margin'" [class]="'widget_button widget_button--small no-margin'"
-                (onClick)="onNavigate()">
+                (onClick)="onLoanNavigate()">
                 <ng-container slot="button">{{(latestLoan$|async)?'Explore':'Get Started'}}</ng-container>
             </app-button>
         </div>
@@ -41,7 +41,7 @@
             <app-button
                 [title]="(runningEarnings$|async)?'You currently have a the maximum amount of applications processing':'Proceed'"
                 [fieldClass]="'no-margin'" [class]="'widget_button widget_button--small no-margin'"
-                (onClick)="onNavigate()">
+                (onClick)="onEarningNavigate()">
                 <ng-container slot="button">{{(latestEarnings$|async)?'Explore':'Get Started'}}</ng-container>
             </app-button>
 

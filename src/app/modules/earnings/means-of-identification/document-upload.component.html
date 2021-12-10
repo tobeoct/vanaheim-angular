@@ -1,0 +1,71 @@
+<div id="document-upload" [ngClass]="{'disabled':!isLoggedIn}">
+    <app-form [form]="form" [class]="'box-shadow content theme_col-5'" (onSubmit)="onSubmit($event)"
+        (errorMessageChange)="onError($event)">
+        <div style="margin:auto; width:fit-content;" class=" margin--2x">
+            <app-badge>
+                <p style="text-align: center; display: flex; align-items: center; justify-content: center;"><span
+                        class="material-icons" style="margin-right: 10px;">info</span><span>Only images and text
+                        documents are allowed</span></p>
+            </app-badge>
+        </div>
+            <app-document (onClick)="onClick($event)" title="Valid Means of Identification"
+                fieldClass="document no-margin--top" description="(International Passport / Driver’s License / National
+            Identity Card / Voters Card / Others)
+            " [control]="document" (onChange)="onFileChange($event)">
+
+            </app-document>
+        <app-input id="idNumber" placeholder="Enter your tax id" [control]="idNumber" class="form-control"
+            [error]="(errorMessage$ | async)?.idNumber">
+            <label for="idNumber">ID Number</label>
+        </app-input>
+        <app-input type="date" id="issueDate" placeholder="Enter your tax id" [control]="issueDate" class="form-control"
+            [error]="(errorMessage$ | async)?.issueDate">
+            <label for="issueDate">Issue Date</label>
+        </app-input>
+        <app-input type="date" id="expiryDate" placeholder="Enter your tax id" [control]="expiryDate"
+            class="form-control" [error]="(errorMessage$ | async)?.expiryDate">
+            <label for="expiryDate">Expiry Date</label>
+        </app-input>
+        <div class="margin--2x">
+            <app-button [form]="form" [loading$]="loading$" [class]="'no-margin--top'"
+                fieldClass="no-margin--top">Next</app-button>
+
+        </div>
+    </app-form>
+</div>
+
+<app-modal *ngIf="(show$|async)==true && !isLoggedIn" (onChange)="close()">
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Sign In Required</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+        <p style="text-align: center; margin: auto;">Sorry you can't upload a document without signing in.</p>
+        <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
+            <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;"
+                (click)="login()">Login</button>
+        </div>
+    </app-modal-body>
+</app-modal>
+
+
+<app-modal *ngIf="(show2$|async)==true && !isLoggedIn" (onChange)="close()">
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Attention</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+        <p style="text-align: center; margin: auto;">Invalid file type</p>
+        <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
+            <app-badge size="small">
+                <p><b>Only images and text documents allowed</b></p>
+            </app-badge>
+        </div>
+    </app-modal-body>
+</app-modal>

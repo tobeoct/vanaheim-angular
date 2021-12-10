@@ -57,7 +57,6 @@ export class EarningsComponent implements OnInit {
     this._route.params
       .subscribe(params => {
         const id = +params['id'];
-        console.log(id)
         if (id && id > 0) {
           this.selectEarning(id);
         }

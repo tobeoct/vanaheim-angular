@@ -4,7 +4,7 @@ import { environment } from '@environments/environment';
 import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
 import { catchError, concatMap, filter, map, mergeMap, retry, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
-import { Store } from '../../helpers/store';
+import { LoanStore, Store } from '../../helpers/store';
 import { Utility } from '../../helpers/utility.service';
 import { LoanResponse } from '../../poco/loan/loan-response';
 // import { LoanResponse } from '../../poco/loan/loan-response';
@@ -36,7 +36,8 @@ export class LoanService {
   constructor(
     private _http: HttpClient,
     private _utility: Utility,
-    private _store: Store) {
+    private _store: Store,
+    private _loanStore:LoanStore) {
 
   }
   continueApplication(value:boolean){
@@ -137,8 +138,8 @@ export class LoanService {
     return monthlyRepayment * tenure;
   }
   validateLoanApplication() {
-    let application = this._store.loanApplication;
-    let category = this._store.loanCategory;
+    let application = this._loanStore.loanApplication;
+    let category = this._loanStore.loanCategory;
     if (application && category) {
       application = application[category];
       if (!application) return false;

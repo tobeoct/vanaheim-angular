@@ -5,7 +5,7 @@ import { VCValidators } from '@validators/default.validators';
 import { BehaviorSubject, Observable, from, Subject, EMPTY, Subscription } from 'rxjs';
 import { filter, delay, map, take, tap, catchError, first } from 'rxjs/operators';
 import { AccountInfo } from 'src/app/modules/loan/shared/account-info/account-info';
-import { Store } from '../../helpers/store';
+import { LoanStore, Store } from '../../helpers/store';
 import { User } from '../../interfaces/user';
 import { AuthService } from '../../services/auth/auth.service';
 import { CommonService } from '../../services/common/common.service';
@@ -25,7 +25,7 @@ export class SideAccountComponent implements OnInit {
   loanCategorySubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   loanCategory$: Observable<string> = this.loanCategorySubject.asObservable();
   loanCategory: string//= localStorage.getItem("category")||'';
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -61,7 +61,7 @@ export class SideAccountComponent implements OnInit {
   // get loanAccountId(){
   //   return this.form.get("loanAccountId") as FormControl|| new FormControl();
   // }
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _loanStore:LoanStore,
     private _validators: VCValidators, private _customerService: CustomerService, private _authService: AuthService, private _route: ActivatedRoute, private _commonService: CommonService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -109,7 +109,7 @@ export class SideAccountComponent implements OnInit {
     } else {
       this.showForm();
     }
-    let accountInfo = this._store.accountInfo as AccountInfo[];
+    let accountInfo = this._loanStore.accountInfo as AccountInfo[];
     if (accountInfo.length == 0) accountInfo = [new AccountInfo()];
     let account2: AccountInfo = new AccountInfo();
     this.form = this._fb.group({
@@ -142,7 +142,7 @@ export class SideAccountComponent implements OnInit {
     this.loanCategory$ = this.loanCategory$;
     // console.log(this._store.loanCategory);
     // this.loanCategory = this._store.loanCategory;
-    this.loanCategorySubject.next(this._store.loanCategory)
+    this.loanCategorySubject.next(this._loanStore.loanCategory)
   }
   ngOnDestroy(): void {
     this.allSubscriptions.forEach(sub => sub.unsubscribe());

@@ -115,7 +115,7 @@ export class EarningService implements IEarningService {
       }
       catch (err) {
         console.log("Earning Service Top Up: ", err);
-        resolve({ status: false, data: err ?? "Sorry we can not process your request at the moment. Kindly contact our support team." });
+        resolve({ status: false, data:  "Sorry we can not process your request at the moment. Kindly contact our support team." });
       }
     })
   }
@@ -259,7 +259,7 @@ export class EarningService implements IEarningService {
     }
     catch (err) {
       console.log("Earning Service: ", err);
-      resolve({ status: false, data: err ?? "Sorry we can not process your request at the moment. Kindly contact our support team." });
+      resolve({ status: false, data:  "Sorry we can not process your request at the moment. Kindly contact our support team." });
     }
   })
 

@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
 import { catchError, delay, distinctUntilChanged, filter, map, take, tap } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { CompanyInfo } from './company-info';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
@@ -22,7 +22,7 @@ export class CompanyInfoComponent implements OnInit {
   states:string[];
   timeInBusinessList:string[];
   natureOfBusinessList:string[];
-  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -99,7 +99,7 @@ export class CompanyInfoComponent implements OnInit {
   }
 
 
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _loanStore:LoanStore,private _authService:AuthService,private _customerService:CustomerService,
     private _validators:VCValidators, private _route: ActivatedRoute) { 
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -117,7 +117,7 @@ export class CompanyInfoComponent implements OnInit {
     }else{
       this.showForm();
     }
-    const companyInfo = this._store.companyInfo as CompanyInfo;
+    const companyInfo = this._loanStore.companyInfo as CompanyInfo;
     this.form = this._fb.group({
       id:[0],
       companyName: [companyInfo.companyName?companyInfo.companyName:"",[Validators.required,Validators.minLength(3),Validators.maxLength(20)]],
@@ -146,7 +146,7 @@ export class CompanyInfoComponent implements OnInit {
       this.setValue(company);
     }
   })
-    this._store.titleSubject.next("Company Information");
+    this._loanStore.titleSubject.next("Company Information");
     this.titles = this._store.titles;
     this.states = this._store.states;
     this.natureOfBusinessList =this._store.natureOfBusiness;
@@ -272,7 +272,7 @@ ngOnDestroy(): void {
   onSubmit=(form:FormGroup)=>{
     if(!form.valid) return;
     const companyInfo:CompanyInfo ={id:this.companyId.value,timeInBusiness:this.timeInBusiness.value, companyRCNo: this.companyRCNo.value, companyName: this.companyName.value, natureOfBusiness: this.natureOfBusiness.value, email: this.email.value, phoneNumber:this.phone.value, dateOfIncorporation:{day:this.day.value, month: this.month.value, year:this.year.value},address:{street:this.street.value, city:this.city.value, state:this.state.value}};
-     this._store.setCompanyInfo(companyInfo);
+     this._loanStore.setCompanyInfo(companyInfo);
     this.onNavigate("shareholder-info");
   }
   onNavigate(route:string,params:any={}):void{

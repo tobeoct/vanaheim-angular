@@ -1,0 +1,20 @@
+#title{
+    font-size: 1.6em;
+}
+
+#earnings-header{
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 5vh; cursor: pointer;
+    &.loggedIn{
+        margin-bottom: 2vh;
+    }
+}
+
+@media all and (max-width:900px){
+    #earnings-header{
+        display: block;
+        .item{
+            display: inline-block;
+            margin-right: 7.5px;
+        }
+    }
+}

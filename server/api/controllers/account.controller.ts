@@ -16,7 +16,7 @@ export default class AccountController {
   accountEnquiryInstance = axios.create({
     method: 'post',
     baseURL: EnvConstants.verify.v3.baseUrl,
-    timeout: 60000,
+    timeout:120000,
     headers: { 'Content-Type': 'application/json', 'apiKey': EnvConstants.verify.v3.accountInquiry.apiKey, 'userid': EnvConstants.verify.v3.accountInquiry.userId }, //,'accountNumber':body.accountNumber,'bankcode':key},
   });
 

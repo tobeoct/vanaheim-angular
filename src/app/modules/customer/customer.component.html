@@ -58,6 +58,14 @@
   </div>
 </ng-container>
 
+<ng-container *ngIf="activeEarning$|async">
+  <div class="snackbar_container " style="cursor: pointer;">
+    <div class="snackbar snackbar-info animate__animated animate__fadeInUp mt-3 mb-0 box-shadow"
+      (click)="routeToEarningPage()"><small><b>Click to continue your
+          Earning application</b></small>
+    </div>
+  </div>
+</ng-container>
 
 
 <app-modal *ngIf="(showSuccess$|async)" (onChange)="close()">

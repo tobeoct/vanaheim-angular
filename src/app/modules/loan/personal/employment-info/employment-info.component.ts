@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
 import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { EmploymentInfo } from './employment-info';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
@@ -25,7 +25,7 @@ export class EmploymentInfoComponent implements OnInit {
   form: FormGroup;
   businessSectors: string[];
   states: string[];
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -68,7 +68,7 @@ export class EmploymentInfoComponent implements OnInit {
     return this.form.get("contactGroup.addressGroup.state") as FormControl || new FormControl();
   }
   base: string;
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _authService: AuthService, private _customerService: CustomerService,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _loanStore:LoanStore, private _authService: AuthService, private _customerService: CustomerService,
     private _validators: VCValidators, private _route: ActivatedRoute) {
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -105,7 +105,7 @@ export class EmploymentInfoComponent implements OnInit {
       this.showForm();
     }
 
-    const employmentInfo = this._store.employmentInfo as EmploymentInfo;
+    const employmentInfo = this._loanStore.employmentInfo as EmploymentInfo;
     this.form = this._fb.group({
       id: [0],
       netMonthlyAmount: [employmentInfo.netMonthlySalary ? employmentInfo.netMonthlySalary : "", [Validators.required]],
@@ -127,7 +127,7 @@ export class EmploymentInfoComponent implements OnInit {
 
     });
 
-    this._store.titleSubject.next("Employment Information");
+    this._loanStore.titleSubject.next("Employment Information");
     this.businessSectors = this._store.businessSectors;
     this.states = this._store.states;
     this.employerId.valueChanges.subscribe(c => {
@@ -231,7 +231,7 @@ export class EmploymentInfoComponent implements OnInit {
   onSubmit = (form: FormGroup) => {
     if (!form.valid) return;
     const employmentInfo: EmploymentInfo = { id: this.employerId.value, payDay: this.payDay.value, businessSector: this.businessSector.value, netMonthlySalary: this.netMonthlySalary.value, employer: this.employer.value, email: this.email.value, phoneNumber: this.phone.value, address: { street: this.street.value, city: this.city.value, state: this.state.value } };
-    this._store.setEmploymentInfo(employmentInfo);
+    this._loanStore.setEmploymentInfo(employmentInfo);
     this.onNavigate("nok-info");
   }
   onNavigate(route: string, params: any = {}): void {

@@ -221,4 +221,11 @@ export class EarningService {
     let now = moment();
     return d.diff(now, "days");
   }
+
+  validateApplication(){
+    return true;
+  }
+  continueApplication(value:boolean){
+    this.activeEarningSubject.next(value);
+  }
 }

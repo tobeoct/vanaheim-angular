@@ -14,6 +14,9 @@ export class RateComponent implements OnInit {
   amount: number;
   @Input()
   type: string;
+  
+  @Input()
+  activeDuration: number;
   @Output() rateDetailChange = new EventEmitter();
   rateSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   payoutSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -26,6 +29,9 @@ export class RateComponent implements OnInit {
 
   ngOnInit(): void {
     this.amount$.subscribe(v => this.amount = v);
+    if(this.activeDuration){
+      this.activate(this.activeDuration);
+    }
   }
   trackByFn(index: any, item: any) {
     return index; 

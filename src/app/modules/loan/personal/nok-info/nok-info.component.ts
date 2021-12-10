@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, filter, first, take } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { NOKInfo } from './nok-info';
 import { DateRange } from 'src/app/shared/components/date/date';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -27,7 +27,7 @@ export class NOKInfoComponent implements OnInit {
   @Input()
   side: boolean = false;
   range: DateRange = DateRange.all;
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -77,7 +77,7 @@ export class NOKInfoComponent implements OnInit {
 
   base: string;
   nokFromDb$: Observable<any>;
-  constructor(private _router: Router, private _utility: Utility, private _fb: FormBuilder, private _store: Store,
+  constructor(private _router: Router, private _utility: Utility, private _fb: FormBuilder, private _store: Store,private _loanStore:LoanStore,
     private _validators: VCValidators, private _route: ActivatedRoute, private _authService: AuthService, private _customerService: CustomerService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -101,7 +101,7 @@ export class NOKInfoComponent implements OnInit {
       this.nokFromDb$ = this._customerService.nok().pipe(take(1));
     }
     let max = new Date().getFullYear();
-    const nokInfo = this._store.nokInfo as NOKInfo;
+    const nokInfo = this._loanStore.nokInfo as NOKInfo;
     this.form = this._fb.group({
       id: [0],
       surname: [nokInfo.surname ? nokInfo.surname : "", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
@@ -128,7 +128,7 @@ export class NOKInfoComponent implements OnInit {
         this.patchValue(c)
       });
     }
-    this._store.titleSubject.next("Next Of Kin Information");
+    this._loanStore.titleSubject.next("Next Of Kin Information");
     this.titles = this._store.titles;
     this.states = this._store.states;
     this.months = this._store.months;
@@ -152,7 +152,7 @@ export class NOKInfoComponent implements OnInit {
   onSubmit = (form: FormGroup) => {
     if (!form.valid) return;
     const nokInfo: NOKInfo = { id: 0, title: this.title.value, relationship: this.relationship.value, surname: this.surname.value, otherNames: this.otherNames.value, email: this.email.value, phoneNumber: this.phone.value, dob: { day: this.day.value, month: this.month.value, year: this.year.value } };
-    this._store.setNOKInfo(nokInfo);
+    this._loanStore.setNOKInfo(nokInfo);
     if (!this.side) {
       this.onNavigate("upload");
     } else {

@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanDetails } from './loan-details';
@@ -59,7 +59,7 @@ export class LoanCalculatorComponent implements OnInit {
   errorMessage2Subject: Subject<any> = new Subject<any>();
   errorMessage2$: Observable<any> = this.errorMessage2Subject.asObservable();
   loanPurposes: string[] = [];
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -85,7 +85,7 @@ export class LoanCalculatorComponent implements OnInit {
     return this.repaymentForm.get("email") as FormControl || new FormControl();
   }
   base: string;
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _zone: NgZone,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _loanStore:LoanStore, private _zone: NgZone,
     private _validators: VCValidators, private _route: ActivatedRoute, private _loanService: LoanService, private _utility: Utility, private _authService: AuthService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -94,11 +94,11 @@ export class LoanCalculatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = this._authService.isLoggedIn();
-    this.loanDetails = this._store.loanCalculator as LoanDetails;
-    this.lType = this._store.loanType;
-    this.applyingAs = this._store.applyingAs;
-    this.loanProduct = this._store.loanProduct;
-    this._store.titleSubject.next("Loan Calculator");
+    this.loanDetails = this._loanStore.loanCalculator as LoanDetails;
+    this.lType = this._loanStore.loanType;
+    this.applyingAs = this._loanStore.applyingAs;
+    this.loanProduct = this._loanStore.loanProduct;
+    this._loanStore.titleSubject.next("Loan Calculator");
     this.range = this._loanService.getMinMax(this.lType);
     this.loanPurposes = this._loanService.getLoanPurposes(this.lType);
     let tenureRange = this._loanService.getTenureRange(this.lType);
@@ -160,8 +160,8 @@ export class LoanCalculatorComponent implements OnInit {
         currency: 'NGN',
       })
     };
-    this._store.setLoanCalculator(loanDetails);
-    this.onNavigate(this._store.loanCategory == "personal" ? "bvn-info" : this._authService.isLoggedIn() ? "company-info" : "contact-info");
+    this._loanStore.setLoanCalculator(loanDetails);
+    this.onNavigate(this._loanStore.loanCategory == "personal" ? "bvn-info" : this._authService.isLoggedIn() ? "company-info" : "contact-info");
   }
   onSubmit2 = (event: any) => {
     this.planLoadingSubject.next(true);

@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, from, Subject, Subscription } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
 import { AssetPath } from 'src/app/shared/constants/variables';
 import { IAssetPath } from 'src/app/shared/interfaces/assetpath';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanDetails } from '../../loan/shared/loan-calculator/loan-details';
@@ -106,14 +106,14 @@ export class LoansComponent implements OnInit, OnDestroy {
   latestLoanSubscription: Subscription;
   activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
-  constructor(private _fb: FormBuilder, private _route: ActivatedRoute, private _documentService: DocumentService, private _repaymentService: RepaymentService, private _store: Store, private _utility: Utility,
+  constructor(private _fb: FormBuilder, private _route: ActivatedRoute, private _documentService: DocumentService, private _repaymentService: RepaymentService, private _store: Store,private _loanStore:LoanStore, private _utility: Utility,
     private _router: Router,
     private _validators: VCValidators,
     private _loanService: LoanService, private _requestService: RequestService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url + '/';
     });
-    this.loanProducts = this._store.loanProducts;
+    this.loanProducts = this._loanStore.loanProducts;
 
   }
   ngOnDestroy(): void {
@@ -130,11 +130,11 @@ export class LoansComponent implements OnInit, OnDestroy {
           this.selectLoan(id);
         }
       });
-    this.loanDetails = this._store.loanCalculator as LoanDetails;
+    this.loanDetails = this._loanStore.loanCalculator as LoanDetails;
     this.loanDetailsFromDb$ = this._requestService.loanLogDetails$;
     this.disbursedLoan$ = this._requestService.loanDetails$;
-    this.loanCalculator = this._store.loanCalculator;
-    this.loanDetailsSubject.next(this._store.loanCalculator)
+    this.loanCalculator = this._loanStore.loanCalculator;
+    this.loanDetailsSubject.next(this._loanStore.loanCalculator)
     this.latestLoan$ = this._loanService.latestLoan$;
     this.runningLoan$ = this._loanService.runningLoan$;
     this.repayments$ = this._repaymentService.myRepayments$;
@@ -149,11 +149,11 @@ export class LoansComponent implements OnInit, OnDestroy {
       }
     })
     this.loans$ = this._loanService.loanWithFilter$;
-    let lType = this._store.loanType || "PayMe Loan";
+    let lType = this._loanStore.loanType || "PayMe Loan";
     let tenureRange = this._loanService.getTenureRange(lType);
     this.minTenure = tenureRange["min"];
     this.maxTenure = tenureRange["max"];
-    this._store.titleSubject.next("Loan Calculator");
+    this._loanStore.titleSubject.next("Loan Calculator");
     this.range = this._loanService.getMinMax(lType);
     this.form = this._fb.group({
       loanAmount: [this.loanDetails.loanAmount ? this.loanDetails.loanAmount : this._utility.currencyFormatter(this.range.min), [Validators.required, Validators.minLength(6), Validators.maxLength(10), this._validators.numberRange(this.range.min, this.range.max)]],
@@ -203,7 +203,7 @@ export class LoansComponent implements OnInit, OnDestroy {
     if (!this._loanService.runningLoanSubject.value) {
       this.loadingSubject.next(true);
 
-      this._store.setLoanType(this.loanType.value);
+      this._loanStore.setLoanType(this.loanType.value);
       const loanDetails: LoanDetails = {
         rate: this.rate, monthlyRepayment: this.monthlyRepaymentSubject.value.toLocaleString('en-NG', {
           style: 'currency',
@@ -213,7 +213,7 @@ export class LoansComponent implements OnInit, OnDestroy {
           currency: 'NGN'
         })
       };
-      this._store.setLoanCalculator(loanDetails);
+      this._loanStore.setLoanCalculator(loanDetails);
       this._utility.showLoanInvalid(false);
       this.onNavigate('apply/applying-as');
     } else {
@@ -282,7 +282,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   }
 
   getRequirements(loanType: string, applyingAs: string) {
-    let loanTypes: any = this._store.loanTypes.find(type => type.title == loanType);
+    let loanTypes: any = this._loanStore.loanTypes.find(type => type.title == loanType);
     this.requirements = loanTypes?.applyingAs?.find((type: any) => type.title == applyingAs)?.requirements || [];
     console.log(this.requirements)
   }

@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
 import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { ShareholderInfo } from './shareholder-info';
 import { EmploymentInfo } from '../../personal/employment-info/employment-info';
 import { Address } from 'src/app/shared/interfaces/address';
@@ -34,7 +34,7 @@ export class ShareholderInfoComponent implements OnInit {
   genders:string[];
   maritalStatuses:string[];
   designations:string[]
-  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -62,7 +62,7 @@ export class ShareholderInfoComponent implements OnInit {
   get shareholderArray(){
     return this.form.get("shareholderArray") as FormArray|| new FormControl();
   }
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _authService:AuthService,private _customerService:CustomerService,
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _loanStore:LoanStore,private _authService:AuthService,private _customerService:CustomerService,
     private _validators:VCValidators, private _route: ActivatedRoute) { this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
      });}
@@ -70,7 +70,7 @@ export class ShareholderInfoComponent implements OnInit {
   ngOnInit(): void { 
     this.isLoggedIn=this._authService.isLoggedIn();
     if(this.isLoggedIn){
-      let companyId = this._store.companyInfo?this._store.companyInfo.id:0;
+      let companyId = this._loanStore.companyInfo?this._loanStore.companyInfo.id:0;
       if(companyId>0){
         this.dataLoadingSubject.next(true);
       this.shareholdersFromDb$ = this._customerService.shareholders(companyId).pipe(map((c:any[])=>{
@@ -84,7 +84,7 @@ export class ShareholderInfoComponent implements OnInit {
       else{
         this.showForm();
       }
-    let shareholderInfos= this._store.shareholderInfo as ShareholderInfo[];
+    let shareholderInfos= this._loanStore.shareholderInfo as ShareholderInfo[];
     if(shareholderInfos.length==0) shareholderInfos = [new ShareholderInfo()];
     // let shareholder2:ShareholderInfo= new ShareholderInfo();
     this.form = this._fb.group({
@@ -96,7 +96,7 @@ export class ShareholderInfoComponent implements OnInit {
   //   shareholder2 = shareholderInfos[1];
   // }
   
-    this._store.titleSubject.next("Shareholder Information");
+    this._loanStore.titleSubject.next("Shareholder Information");
     this.businessSectors = this._store.businessSectors;
     this.states = this._store.states;
     this.months =this._store.months;
@@ -245,7 +245,7 @@ ngOnDestroy(): void {
      shareholderInfos.push(shareholderInfo);
     });
     // [...form.value["shareholderArray"]]; 
-    this._store.setShareholderInfo(shareholderInfos);
+    this._loanStore.setShareholderInfo(shareholderInfos);
     this.onNavigate("collateral-info");
   }
   onNavigate(route:string,params:any={}):void{
