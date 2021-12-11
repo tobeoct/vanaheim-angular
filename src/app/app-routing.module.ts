@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AdminGuard } from './shared/guards/admin.guard';
 import { AuthenticationGuard } from './shared/guards/authentication.guard';
 import { CustomerGuard } from './shared/guards/customer.guard';
 import { WelcomeGuard } from './shared/guards/welcome.guard';

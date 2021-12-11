@@ -59,11 +59,11 @@ export class EmploymentInfoComponent implements OnInit {
     return this.form.get("contactGroup.addressGroup.state") as FormControl || new FormControl();
   }
   base: string;
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _earningsStore:EarningsStore, private _authService: AuthService, private _customerService: CustomerService,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _earningsStore: EarningsStore, private _authService: AuthService, private _customerService: CustomerService,
     private _validators: VCValidators, private _route: ActivatedRoute) {
-      this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
-        this.base = x.url.replace(/\/[^\/]*$/, '/');
-      });
+    this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
+      this.base = x.url.replace(/\/[^\/]*$/, '/');
+    });
   }
 
   focusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -99,7 +99,8 @@ export class EmploymentInfoComponent implements OnInit {
     const employmentInfo = this._earningsStore.employmentInfo as EarningsEmploymentInfo;
     this.form = this._fb.group({
       id: [0],
-      employer: [employmentInfo.employer ? employmentInfo.employer : "", [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      employer: [employmentInfo.employer ? employmentInfo.employer : "", [
+        Validators.minLength(3), Validators.maxLength(50)]],
       previousEmployer: [employmentInfo.previousEmployer ? employmentInfo.previousEmployer : "", [Validators.minLength(3), Validators.maxLength(50)]],
       businessSector: [employmentInfo.businessSector ? employmentInfo.businessSector : "", [Validators.required]],
 

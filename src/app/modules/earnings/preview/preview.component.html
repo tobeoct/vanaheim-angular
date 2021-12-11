@@ -2,7 +2,7 @@
     
     <div class="preview-container" *ngIf="earningsApplication['earningsCalculator']">
         <div class="preview-title">
-            <h3>Loan Details</h3>
+            <h3>Earnings Details</h3>
             <app-button (onClick)="onNavigate('earnings-calculator')" [class]="'widget_button--small'">
                 <ng-container slot="button">Edit</ng-container>
             </app-button>
@@ -24,7 +24,7 @@
             </div>
 
             <div class="preview-item" > 
-                    <p><span><b>Rate</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["rate"]}}%</span></p>
+                    <p><span><b>Rate</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["rate"]}}% per Annum</span></p>
                     </div>
 
 

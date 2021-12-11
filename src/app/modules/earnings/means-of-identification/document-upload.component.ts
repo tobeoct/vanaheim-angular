@@ -6,7 +6,7 @@ import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
 import { EarningsStore, LoanStore, Store } from 'src/app/shared/helpers/store';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { MeansOfIdentification } from '../earnings-application';
+import { IdentificationType, MeansOfIdentification } from '../earnings-application';
 
 @Component({
   selector: 'app-document-upload',
@@ -33,6 +33,7 @@ export class DocumentUploadComponent implements OnInit {
   show$: Observable<boolean> = this.showSubject.asObservable();
   show2Subject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show2$: Observable<boolean> = this.show2Subject.asObservable();
+  types:any[] = Object.values(IdentificationType);
   get document() {
     return this.form.get("document") as FormControl|| new FormControl();
   }
@@ -44,6 +45,9 @@ export class DocumentUploadComponent implements OnInit {
   }
   get expiryDate() {
     return this.form.get("expiryDate") as FormControl|| new FormControl();
+  }
+  get type() {
+    return this.form.get("type") as FormControl|| new FormControl();
   }
   constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _earningStore:EarningsStore,
     private _validators: VCValidators, private _route: ActivatedRoute, private _cd: ChangeDetectorRef, private _authenticationService: AuthService) {
@@ -57,11 +61,11 @@ export class DocumentUploadComponent implements OnInit {
  
     this.meansOfIdentification = this._earningStore.meansOfIdentification as MeansOfIdentification;
     this.form = this._fb.group({
-
+      type: [this.meansOfIdentification?.type ? this.meansOfIdentification?.type:"", [Validators.required]],
       document: [this.meansOfIdentification?.document ? this.meansOfIdentification?.document.label : '', [Validators.required]],
       idNumber: [this.meansOfIdentification?.idNumber ? this.meansOfIdentification?.idNumber:"", [Validators.required]],
-      issueDate: [this.meansOfIdentification?.issueDate ? this.meansOfIdentification?.issueDate:"", [Validators.required]],
-      expiryDate: [this.meansOfIdentification?.expiryDate ? this.meansOfIdentification?.expiryDate:"", [Validators.required]]
+      issueDate: [this.meansOfIdentification?.issueDate ? this.meansOfIdentification?.issueDate:""],
+      expiryDate: [this.meansOfIdentification?.expiryDate ? this.meansOfIdentification?.expiryDate:""]
     });
     this.isLoggedIn = this._authenticationService.isLoggedIn();
   }
@@ -70,7 +74,7 @@ export class DocumentUploadComponent implements OnInit {
 
   onSubmit = (form: FormGroup) => {
     if (!form.valid) return;
-    let meansOfIdentification: MeansOfIdentification = {document:{ fileName: this.docsToUpload? this.docsToUpload.name:this.meansOfIdentification?.document?.fileName, id: this.docsToUpload? this.docsToUpload.id:this.meansOfIdentification?.document?.id, label: this.docsToUpload? this.docsToUpload.requirement:this.meansOfIdentification?.document?.label },idNumber:this.idNumber.value, issueDate:this.issueDate.value, expiryDate:this.expiryDate.value};
+    let meansOfIdentification: MeansOfIdentification = {type:this.type.value,document:{ fileName: this.docsToUpload? this.docsToUpload.name:this.meansOfIdentification?.document?.fileName, id: this.docsToUpload? this.docsToUpload.id:this.meansOfIdentification?.document?.id, label: this.docsToUpload? this.docsToUpload.requirement:this.meansOfIdentification?.document?.label },idNumber:this.idNumber.value, issueDate:this.issueDate.value, expiryDate:this.expiryDate.value};
     this._earningStore.setMeansOfIdentification(meansOfIdentification);
     this.onNavigate("preview");
   }

@@ -8,29 +8,39 @@
                         documents are allowed</span></p>
             </app-badge>
         </div>
+        <!-- <div class="margin--2x"> -->
+        <label>Type Of Identification</label>
+        <app-dropdown [control]="type" [current]="type.value" [fieldClass]="'no-margin--top'" [id]="'types'" aria-placeholder="Select Identification Type">
+            <app-option *ngFor="let t of types; let i =index" [value]="t" label="{{t}}">{{t}}</app-option>
+
+        </app-dropdown>
+        <!-- </div> -->
+
+        <ng-container *ngIf="type.value">
             <app-document (onClick)="onClick($event)" title="Valid Means of Identification"
-                fieldClass="document no-margin--top" description="(International Passport / Driver’s License / National
-            Identity Card / Voters Card / Others)
+                fieldClass="document no-margin--top" description="{{type.value}}
             " [control]="document" (onChange)="onFileChange($event)">
 
             </app-document>
-        <app-input id="idNumber" placeholder="Enter your tax id" [control]="idNumber" class="form-control"
-            [error]="(errorMessage$ | async)?.idNumber">
-            <label for="idNumber">ID Number</label>
-        </app-input>
-        <app-input type="date" id="issueDate" placeholder="Enter your tax id" [control]="issueDate" class="form-control"
-            [error]="(errorMessage$ | async)?.issueDate">
-            <label for="issueDate">Issue Date</label>
-        </app-input>
-        <app-input type="date" id="expiryDate" placeholder="Enter your tax id" [control]="expiryDate"
-            class="form-control" [error]="(errorMessage$ | async)?.expiryDate">
-            <label for="expiryDate">Expiry Date</label>
-        </app-input>
-        <div class="margin--2x">
-            <app-button [form]="form" [loading$]="loading$" [class]="'no-margin--top'"
-                fieldClass="no-margin--top">Next</app-button>
+            <app-input id="idNumber" placeholder="Enter your tax id" [control]="idNumber" class="form-control"
+                [error]="(errorMessage$ | async)?.idNumber">
+                <label for="idNumber">ID Number</label>
+            </app-input>
+            <app-input type="date" id="issueDate" placeholder="Enter your tax id" [control]="issueDate"
+                class="form-control" [error]="(errorMessage$ | async)?.issueDate">
+                <label for="issueDate">Issue Date</label>
+            </app-input>
+            <app-input type="date" id="expiryDate" placeholder="Enter your tax id" [control]="expiryDate"
+                class="form-control" [error]="(errorMessage$ | async)?.expiryDate">
+                <label for="expiryDate">Expiry Date</label>
+            </app-input>
+            <div class="margin--2x">
+                <app-button [form]="form" [loading$]="loading$" [class]="'no-margin--top'" fieldClass="no-margin--top">
+                    Next
+                </app-button>
 
-        </div>
+            </div>
+        </ng-container>
     </app-form>
 </div>
 
