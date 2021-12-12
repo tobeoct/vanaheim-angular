@@ -9,6 +9,7 @@ import { CustomerRepository } from '@repository/implementation/customer-reposito
 import { EmploymentRepository } from '@repository/implementation/employment-repository';
 import { NOKRepository } from '@repository/implementation/nok-repository';
 import { ShareholderRepository } from '@repository/implementation/shareholder-repository';
+import { IEarningsEmploymentRepository } from '@repository/interface/investment/Iearnings-employment-repository';
 import UtilService from '@services/implementation/common/util';
 import { GET, POST, PUT, route } from 'awilix-express';
 const expAutoSan = require('express-autosanitizer');
@@ -17,7 +18,7 @@ const expAutoSan = require('express-autosanitizer');
 @route('/api/customer')
 export default class CustomerController {
 
-  constructor(private sanitizer: any, private _utils: UtilService, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: CollateralRepository) {
+  constructor(private sanitizer: any, private _utils: UtilService,private _earningsEmploymentRepository:IEarningsEmploymentRepository, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: CollateralRepository) {
 
   }
 
@@ -45,6 +46,8 @@ export default class CustomerController {
     }
     next();
   }
+
+  
 
   @route('/all')
   @GET()
@@ -192,6 +195,30 @@ export default class CustomerController {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
         let employers = await this._employmentRepository.getByCustomerID(customer.id);
+
+        res.statusCode = 200;
+        res.data = employers;
+      } else {
+        res.statusCode = 400;
+        res.data = { status: false, message: "Invalid user" }
+
+      }
+    }
+    catch (err:any) {
+      res.statusCode = 400;
+      res.data = { status: false, message: "Failed to get employers info" }
+    }
+    next();
+  }
+
+
+  @route('/earningEmployment')
+  @GET()
+  earningEmployment = async (req: any, res: any, next: any) => {
+    try {
+      let customer = req.session?.userData?.customer as Customer;
+      if (customer) {
+        let employers = await this._earningsEmploymentRepository.getByCustomerID(customer.id);
 
         res.statusCode = 200;
         res.data = employers;

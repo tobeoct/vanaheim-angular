@@ -87,7 +87,7 @@ export class EmploymentInfoComponent implements OnInit {
     this.isLoggedIn = this._authService.isLoggedIn();
     if (this.isLoggedIn) {
       this.dataLoadingSubject.next(true);
-      this.employersFromDb$ = this._customerService.employers().pipe(map((c: any[]) => {
+      this.employersFromDb$ = this._customerService.earningEmployment().pipe(map((c: any[]) => {
         this.employers.next(c);
         this.patchValue(c)
         return c;
@@ -152,8 +152,8 @@ export class EmploymentInfoComponent implements OnInit {
       if (!this.phone.value && employer.phoneNumber) {
         this.phone.patchValue(employer.phoneNumber);
       }
-      if (!this.employer.value && employer.employer) {
-        this.employer.patchValue(employer.employer);
+      if (!this.employer.value && employer.currentEmployer) {
+        this.employer.patchValue(employer.currentEmployer);
       }
       if (!this.previousEmployer.value && employer.previousEmployer) {
         this.previousEmployer.patchValue(employer.previousEmployer);
@@ -187,8 +187,8 @@ export class EmploymentInfoComponent implements OnInit {
       if (employer.phoneNumber) {
         this.phone.patchValue(employer.phoneNumber);
       }
-      if (employer.employer) {
-        this.employer.patchValue(employer.employer);
+      if (employer.currentEmployer) {
+        this.employer.patchValue(employer.currentEmployer);
       }
       if (employer.previousEmployer) {
         this.employer.patchValue(employer.previousEmployer);

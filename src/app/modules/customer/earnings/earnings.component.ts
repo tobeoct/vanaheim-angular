@@ -6,6 +6,7 @@ import moment = require('moment');
 import { Observable, BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Utility } from 'src/app/shared/helpers/utility.service';
+import { DocumentService } from 'src/app/shared/services/document/document.service';
 import { AdminEarningService } from 'src/app/shared/services/earning/admin-earning.service';
 import { EarningPayoutService } from 'src/app/shared/services/earning/earning-payout.service';
 import { EarningService } from 'src/app/shared/services/earning/earning.service';
@@ -51,7 +52,7 @@ export class EarningsComponent implements OnInit {
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
   showTopUpSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showTopUp$: Observable<boolean> = this.showTopUpSubject.asObservable();
-  constructor(private _route: ActivatedRoute, private _fb: FormBuilder, private _validators: VCValidators, private _earningService: EarningService, private _earningPayoutService: EarningPayoutService, private _requestService: AdminEarningService, private _utils: Utility) { }
+  constructor(private _route: ActivatedRoute, private _fb: FormBuilder,private _documentService:DocumentService, private _validators: VCValidators, private _earningService: EarningService, private _earningPayoutService: EarningPayoutService, private _requestService: AdminEarningService, private _utils: Utility) { }
 
   ngOnInit(): void {
     this._route.params
@@ -172,4 +173,9 @@ export class EarningsComponent implements OnInit {
   onError(err: any) {
 
   }
+  download(url: string, filename: string) {
+
+    this._documentService.download(url, filename)
+  }
+
 }

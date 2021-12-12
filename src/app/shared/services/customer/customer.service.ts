@@ -49,6 +49,17 @@ export class CustomerService {
       }));
   }
 
+  
+  earningEmployment = () => {
+    return this._http.get<any>(`${environment.apiUrl}/customer/earningEmployment`)
+      .pipe(map(response => {
+        if (response.status == true && Object.keys(response.response).length > 0) { return response.response; } return null;
+      }), catchError(err => {
+        console.error(err);
+        return throwError(err);
+      }));
+  }
+
   companies = () => {
     return this._http.get<any>(`${environment.apiUrl}/customer/companies`)
       .pipe(map(response => {
