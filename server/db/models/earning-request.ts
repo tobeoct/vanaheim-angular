@@ -67,10 +67,6 @@ module.exports = (sequelize:any, DataTypes:any) => {
       allowNull: false,
       defaultValue: 'Pending'
     },
-    taxId:{
-     type: DataTypes.STRING,
-     allowNull: true,
-   },
      code:{
       type: DataTypes.STRING,
       allowNull: false,
@@ -89,6 +85,12 @@ module.exports = (sequelize:any, DataTypes:any) => {
    
     EarningRequest.belongsTo(models.Customer, {
       foreignKey: 'customerID',
+    });
+    EarningRequest.belongsTo(models.EarningsEmployment, {
+      foreignKey: 'employmentID',
+    });
+    EarningRequest.belongsTo(models.MeansOfIdentification, {
+      foreignKey: 'meansOfIdentificationID',
     });
      EarningRequest.hasMany(models.ApprovedEarning, {
       foreignKey: 'earningRequestID',

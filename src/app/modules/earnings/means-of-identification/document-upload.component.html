@@ -17,11 +17,13 @@
         <!-- </div> -->
 
         <ng-container *ngIf="type.value">
-            <app-document (onClick)="onClick($event)" title="Valid Means of Identification"
+            <div class="margin--x no-margin--bottom">
+                <app-document (onClick)="onClick($event)" title="Valid Means of Identification"
                 fieldClass="document no-margin--top" description="{{type.value}}
             " [control]="document" (onChange)="onFileChange($event)">
 
             </app-document>
+            </div>
             <app-input id="idNumber" placeholder="Enter your tax id" [control]="idNumber" class="form-control"
                 [error]="(errorMessage$ | async)?.idNumber">
                 <label for="idNumber">ID Number</label>

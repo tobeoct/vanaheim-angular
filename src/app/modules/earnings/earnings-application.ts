@@ -1,16 +1,17 @@
-import { EmploymentInfo } from "../loan/personal/employment-info/employment-info";
+
 import { NOKInfo } from "../loan/personal/nok-info/nok-info";
 import { AccountInfo } from "../earnings/account-info/account-info";
 import { Document } from "../loan/shared/document-upload/document";
 import { EarningIndication } from "../welcome/earnings/earning";
 import { EarningsPersonalInfo } from "./personal-info/personal-info";
+import { EarningsEmploymentInfo } from "./employment-info/employment-info";
 
 export interface EarningApplication {
-    investmentDetails: EarningIndication,
+    earningsCalculator: EarningIndication,
     meansOfIdentification: MeansOfIdentification;
     personalInfo: EarningsPersonalInfo;
-    employmentInfo: EmploymentInfo;
-    accountInfo: AccountInfo;
+    employmentInfo: EarningsEmploymentInfo;
+    accountInfo: AccountInfo[];
     nokInfo: NOKInfo
 }
 

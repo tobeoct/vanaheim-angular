@@ -30,14 +30,10 @@ module.exports = (sequelize:any, DataTypes:any) => {
     type: DataTypes.STRING,
     allowNull: true,
   },
-   loanRequestID:{
+   requestId:{
     type: DataTypes.STRING,
     allowNull: true,
    },
-  //  loanRequestLogID:{
-  //   type: DataTypes.INTEGER,
-  //   allowNull: true,
-  //  },
     status:{
       type: DataTypes.ENUM('Active', 'Inactive'),
       allowNull: false,

@@ -59,7 +59,7 @@ export class CustomerComponent implements OnInit {
 
   }
   close = () => {
-    setTimeout(() => { this._earningService.showError(false); this._earningService.showSuccess(false) }, 0);
+    setTimeout(() => { this._earningService.showError(false); this._earningService.showSuccess(false); this._router.navigate(["/my/earnings"]) }, 0);
     // this.apiErrorSubject.next();
     // this.apiSuccessSubject.next();
   }

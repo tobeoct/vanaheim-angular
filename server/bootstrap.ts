@@ -55,6 +55,8 @@ import { EarningRequestLogService } from '@services/implementation/investment/in
 import { EarningRequestService } from '@services/implementation/investment/investment-request-service';
 import { EarningTopUpRepository } from '@repository/implementation/investment/earning-topup-repository';
 import { EarningLiquidationRepository } from '@repository/implementation/investment/earning-liquidation-repository';
+import { EarningsEmploymentRepository } from '@repository/implementation/investment/earnings-employment-repository';
+import { MeansOfIdentificationRepository } from '@repository/implementation/means-of-identification-repository';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const webPush = require('web-push');
@@ -129,6 +131,8 @@ export default class Bootstrap {
             _earningTopUpRepository: asClass(EarningTopUpRepository),
             _earningLiquidationRepository: asClass(EarningLiquidationRepository),
             _earningPayOutRepository: asClass(EarningPayoutRepository),
+            _earningsEmploymentRepository: asClass(EarningsEmploymentRepository),
+            _meansOfIdentificationRepository:asClass(MeansOfIdentificationRepository),
             //Inject Services
             _loanRequestService: asClass(LoanRequestService).singleton(),
             _loanRequestLogService: asClass(LoanRequestLogService).singleton(),

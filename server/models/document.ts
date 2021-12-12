@@ -10,6 +10,5 @@ export class Document extends BaseEntity{
    path:string;
    requirement:string;
    customerID:number;
-   loanRequestID:string;
-   loanRequestLogID:number;
+   requestId:string;
 }

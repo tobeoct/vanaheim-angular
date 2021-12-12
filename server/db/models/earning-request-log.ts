@@ -75,10 +75,6 @@ module.exports = (sequelize:any, DataTypes:any) => {
      type: DataTypes.STRING,
      allowNull: false,
    },
-   taxId:{
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
     status:{
       type: DataTypes.ENUM('Active', 'Inactive'),
       allowNull: false,
@@ -92,6 +88,12 @@ module.exports = (sequelize:any, DataTypes:any) => {
     });
      EarningRequestLog.hasMany(models.ApprovedEarning, {
       foreignKey: 'earningRequestLogID',
+    });
+    EarningRequestLog.belongsTo(models.EarningsEmployment, {
+      foreignKey: 'employmentID',
+    });
+    EarningRequestLog.belongsTo(models.MeansOfIdentification, {
+      foreignKey: 'meansOfIdentificationID',
     });
     EarningRequestLog.belongsTo(models.Account, {
       foreignKey: 'accountID',

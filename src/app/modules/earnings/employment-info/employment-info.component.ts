@@ -99,7 +99,7 @@ export class EmploymentInfoComponent implements OnInit {
     const employmentInfo = this._earningsStore.employmentInfo as EarningsEmploymentInfo;
     this.form = this._fb.group({
       id: [0],
-      employer: [employmentInfo.employer ? employmentInfo.employer : "", [
+      employer: [employmentInfo.currentEmployer ? employmentInfo.currentEmployer : "", [
         Validators.minLength(3), Validators.maxLength(50)]],
       previousEmployer: [employmentInfo.previousEmployer ? employmentInfo.previousEmployer : "", [Validators.minLength(3), Validators.maxLength(50)]],
       businessSector: [employmentInfo.businessSector ? employmentInfo.businessSector : "", [Validators.required]],
@@ -215,7 +215,7 @@ export class EmploymentInfoComponent implements OnInit {
 
   onSubmit = (form: FormGroup) => {
     if (!form.valid) return;
-    const employmentInfo: EarningsEmploymentInfo = { id: this.employerId.value, businessSector: this.businessSector.value, previousEmployer: this.previousEmployer.value, employer: this.employer.value, email: this.email.value, phoneNumber: this.phone.value, address: { street: this.street.value, city: this.city.value, state: this.state.value } };
+    const employmentInfo: EarningsEmploymentInfo = { id: this.employerId.value, businessSector: this.businessSector.value, previousEmployer: this.previousEmployer.value, currentEmployer: this.employer.value, email: this.email.value, phoneNumber: this.phone.value, address: { street: this.street.value, city: this.city.value, state: this.state.value } };
     this._earningsStore.setEmploymentInfo(employmentInfo);
     this.onNavigate("nok-info");
   }

@@ -32,9 +32,9 @@ export default class DocumentController {
 
         if (docInDb && Object.keys(docInDb).length > 0) {
           let loanRequest = await this._loanRequestRepository.getById(loanRequestID) as LoanRequest;
-          let doc = docInDb.dataValues
-          doc.loanRequestID =loanRequest.requestId;
-          doc.loanRequestLogID = loanRequestLogID;
+          let doc = docInDb.dataValues as Document
+          doc.requestId =loanRequest.requestId;
+          // doc.loanRequestLogID = loanRequestLogID;
           await this._documentService.update(doc)
           try {
             let sent = await this._emailService.SendEmail({ type: EmailType.Update, to: this._appConfig.OPS_EMAIL, attachment: doc.path, html: this._templateService.LOAN_UPDATE(customer.firstName+" "+customer.lastName, loanRequest.code,doc.requirement), toCustomer: false })

@@ -174,7 +174,7 @@ export class LoanService implements ILoanService {
           let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest.id);
           let totalRepayment = 0;
           let documents: Document[] = [];
-          let response = await this._documentService.getByLoanRequestId(request.requestId);
+          let response = await this._documentService.getByRequestId(request.requestId);
           if (response.status) {
             documents = response?.data as Document[];
 
@@ -307,13 +307,13 @@ export class LoanService implements ILoanService {
         let documents = JSON.parse(loanApplication.documents)
         for (let key in documents) {
           const d = documents[key];
-          let docInDb: any = await this._documentService.getById(d.id);
+          let docInDb: Document = await this._documentService.getById(d.id);
           if (docInDb && Object.keys(docInDb).length > 0) {
             // let doc: Document = new Document();
             // Object.assign(doc, docInDb.dataValues as Document)
             documentPath.push(docInDb.path);
-            docInDb.loanRequestID = loanRequest.requestId;
-            docInDb.loanRequestLogID = loanRequestLog?.id;
+            docInDb.requestId = loanRequest.requestId;
+            // docInDb.loanRequestLogID = loanRequestLog?.id;
             await this._documentService.update(docInDb)
           }
         }
