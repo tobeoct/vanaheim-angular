@@ -4,6 +4,7 @@ import moment = require('moment');
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, first } from 'rxjs/operators';
 import { Utility } from 'src/app/shared/helpers/utility.service';
+import { DocumentService } from 'src/app/shared/services/document/document.service';
 import { AdminEarningService } from 'src/app/shared/services/earning/admin-earning.service';
 import { EarningPayoutService } from 'src/app/shared/services/earning/earning-payout.service';
 
@@ -76,7 +77,7 @@ export class EarningsRequestComponent implements OnInit {
   get amount() {
     return this.pform.get("amount") as FormControl || new FormControl();
   }
-  constructor(private _requestService: AdminEarningService,private _fb:FormBuilder, private _earningsPayoutService:EarningPayoutService,private _utils:Utility) { }
+  constructor(private _requestService: AdminEarningService,private _documentService:DocumentService,private _fb:FormBuilder, private _earningsPayoutService:EarningPayoutService,private _utils:Utility) { }
 
   ngOnInit(): void {
     this.fForm = this._fb.group({
@@ -141,7 +142,10 @@ export class EarningsRequestComponent implements OnInit {
     this.enterFailureSubject.next(false);
     this.showSubject.next(false)
   }
+  download(url: string, filename: string) {
 
+    this._documentService.download(url, filename)
+  }
   closeFailureModal() {
     // this.proceed();
     this.enterFailureSubject.next(false);
