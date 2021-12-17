@@ -25,7 +25,9 @@ export class EarningsRequestComponent implements OnInit {
   toDate: FormControl = new FormControl(moment().endOf("day").format('yyyy-MM-dd'));
   ctrl: FormControl = new FormControl("");
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
-  earningsStatuses: any[] = [{ label: "Processing", key: "processing" }, { label: "Declined", key: "declined" }, { label: "Active", key: "active" }];
+  earningsStatuses: any[] = [{ label: "Processing", key: "processing" },
+  //  { label: "Declined", key: "declined" },
+   { label: "Active", key: "active" }];
  
   payouts$: Observable<any>
   earningDetails$: Observable<any>

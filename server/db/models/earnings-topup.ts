@@ -31,6 +31,9 @@ module.exports = (sequelize:any, DataTypes:any) => {
       EarningTopUp.belongsTo(models.ApprovedEarning, {
         foreignKey: 'approvedEarningID'
       });
+      EarningTopUp.belongsTo(models.Customer, {
+        foreignKey: 'customerID'
+      });
     };
     return EarningTopUp;
   };

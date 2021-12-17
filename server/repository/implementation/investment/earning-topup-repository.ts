@@ -10,16 +10,17 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
   constructor(_db: any) {
     super(_db.EarningTopUp)
   }
-  getActiveTopUps= (approvedEarningID: number) => {
+  getActiveTopUps= (approvedEarningID: number,include?:any[]) => {
     return new Promise<SearchResponse<EarningTopUp[]>>(async (resolve,reject)=>{
       let response = await this._db.findAndCountAll({
         where:{approvedEarningID, status:["Pending"]},
-        order: [["updatedAt", "DESC"]]
+        order: [["updatedAt", "DESC"]],
+        include
       });
       resolve(response);
     })
   }
-  getByStatus= (status?:TopUpStatus) => new Promise<SearchResponse<EarningTopUp[]>>(async (resolve, reject) => {
+  getByStatus= (status?:TopUpStatus,include?:any[]) => new Promise<SearchResponse<EarningTopUp[]>>(async (resolve, reject) => {
     try {
       let where:any = {
       }
@@ -29,7 +30,8 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
       }
       let response = await this._db.findAndCountAll({
         where,
-        order: [["updatedAt", "DESC"]]
+        order: [["updatedAt", "DESC"]],
+        include
       });
       resolve(response);
     } catch (err:any) {
@@ -38,7 +40,7 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
     }
   });
    
-  getByApprovedEarningID = (approvedEarningID: number, amount: number) => new Promise<EarningTopUp>(async (resolve, reject) => {
+  getByApprovedEarningID = (approvedEarningID: number, amount: number,include?:any[]) => new Promise<EarningTopUp>(async (resolve, reject) => {
     try {
 
       let response = await this._db.findOne({
@@ -46,7 +48,8 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
           approvedEarningID,
           amount
         },
-        order: [["createdAt", "DESC"]]
+        order: [["createdAt", "DESC"]],
+        include
       });
       resolve(response);
     } catch (err: any) {

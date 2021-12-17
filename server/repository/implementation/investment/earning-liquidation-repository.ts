@@ -9,7 +9,7 @@ import { BaseRepository } from "../base-repository";
      constructor(_db: any) {
        super(_db.EarningLiquidation)
      }
-     getByStatus= (status?:LiquidationStatus) => new Promise<SearchResponse<EarningLiquidation[]>>(async (resolve, reject) => {
+     getByStatus= (status?:LiquidationStatus,include?:any[]) => new Promise<SearchResponse<EarningLiquidation[]>>(async (resolve, reject) => {
       try {
         let where:any = {
         }
@@ -19,7 +19,8 @@ import { BaseRepository } from "../base-repository";
         }
         let response = await this._db.findAndCountAll({
           where,
-          order: [["updatedAt", "DESC"]]
+          order: [["updatedAt", "DESC"]],
+          include
         });
         resolve(response);
       } catch (err:any) {
@@ -28,14 +29,15 @@ import { BaseRepository } from "../base-repository";
       }
     });
      
-    getByApprovedEarningID = (approvedEarningID: number) => new Promise<EarningLiquidation>(async (resolve, reject) => {
+    getByApprovedEarningID = (approvedEarningID: number,include?:any[]) => new Promise<EarningLiquidation>(async (resolve, reject) => {
       try {
   
         let response = await this._db.findOne({
           where: {
             approvedEarningID
           },
-          order: [["createdAt", "DESC"]]
+          order: [["createdAt", "DESC"]],
+          include
         });
         resolve(response);
       } catch (err: any) {

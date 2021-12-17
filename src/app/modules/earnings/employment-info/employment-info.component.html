@@ -7,7 +7,7 @@
             <ng-container *ngIf="(employersFromDb$|async) && !(showForm$|async) ">
                 <app-dropdown current="{{employer.value}}"  [fieldClass]="'no-margin--top'" [id]="'employers'" [control]="employerId"  aria-placeholder="Select your employer">
                     <ng-container slot="label">Employers</ng-container>
-                    <app-option *ngFor="let t of (employersFromDb$|async); let i =index" [value]="t.id" label="{{t.employer}}">{{t.employer}}</app-option>
+                    <app-option *ngFor="let t of (employersFromDb$|async); let i =index" [value]="t.id" label="{{t.previousEmployer}} - {{t.currentEmployer}}">{{t.previousEmployer}} - {{t.currentEmployer}}</app-option>
                 </app-dropdown>
                 <p class="text-button" (click)="showForm()">Enter a different employer</p>
                 

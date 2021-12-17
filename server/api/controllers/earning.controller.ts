@@ -6,6 +6,7 @@ import { BaseStatus } from '@models/helpers/enums/status';
 import { ApprovedEarning } from '@models/investment/approved-investment';
 import { EarningLiquidation, LiquidationStatus } from '@models/investment/earnings-liquidation';
 import { EarningTopUp, TopUpStatus } from '@models/investment/earnings-topup';
+import { SearchResponse } from '@models/search-response';
 import { IApprovedEarningRepository } from '@repository/interface/investment/Iapproved-earning-repository';
 import { IEarningLiquidationRepository } from '@repository/interface/investment/Iearning-liquidation-repository';
 import { IEarningTopUpRepository } from '@repository/interface/investment/Iearning-topup-repository';
@@ -21,7 +22,7 @@ import moment = require('moment');
 @route('/api/earnings')
 export default class EarningsController {
 
-    constructor(private _earningService: IEarningService, private _earningTopUpRepository: IEarningTopUpRepository, private _earningLiquidationRepository: IEarningLiquidationRepository, private _approvedEarningRepository: IApprovedEarningRepository, private _appConfig: AppConfig, private _templateService: TemplateService, private _utils: UtilService, private _emailService: EmailService, private _approvedEarningService: IApprovedEarningService, private _earningRequestLogService: IEarningRequestLogService, private _earningRequestService: IEarningRequestService, private sanitizer: any) {
+    constructor(private _earningService: IEarningService, private _db: any, private _earningTopUpRepository: IEarningTopUpRepository, private _earningLiquidationRepository: IEarningLiquidationRepository, private _approvedEarningRepository: IApprovedEarningRepository, private _appConfig: AppConfig, private _templateService: TemplateService, private _utils: UtilService, private _emailService: EmailService, private _approvedEarningService: IApprovedEarningService, private _earningRequestLogService: IEarningRequestLogService, private _earningRequestService: IEarningRequestService, private sanitizer: any) {
 
     }
     @route('/apply')
@@ -120,7 +121,7 @@ export default class EarningsController {
             const id = this.sanitizer.escape(req.query.id);
             const amount = this.sanitizer.escape(req.query.amount);
             const status = this.sanitizer.escape(req.query.status) ?? TopUpStatus.Pending;
-            let response: any = !id ? await this._earningTopUpRepository.getByStatus(status) : await this._earningTopUpRepository.getByApprovedEarningID(id, amount);
+            let response: any = !id ? await this._earningTopUpRepository.getByStatus(status, [{ model: this._db.Customer, required: false }]) : await this._earningTopUpRepository.getByApprovedEarningID(id, amount, [{ model: this._db.Customer, required: false }]);
             res.statusCode = 200;
             res.data = response
 
@@ -162,7 +163,7 @@ export default class EarningsController {
                 next()
             }
             //Only one active top up is allowed
-            if(earningRequest.requestStatus == EarningRequestStatus.TopUpRequest){
+            if (earningRequest?.requestStatus == EarningRequestStatus.TopUpRequest) {
                 res.statusCode = 400;
                 res.data = "You currently have a Top Up request processing";
                 next()
@@ -170,7 +171,7 @@ export default class EarningsController {
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
             earningRequest.requestStatus = EarningRequestStatus.TopUpRequest;
 
-            let earningRequestLog = await this._earningRequestLogService.getById(id);
+            let earningRequestLog = await this._earningRequestLogService.getByEarningRequestIDAndRequestDate({ earningRequestID: id, requestDate: earningRequest.requestDate });
             if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
                 res.statusCode = 400;
                 res.data = "Cannot find request";
@@ -195,11 +196,12 @@ export default class EarningsController {
             //     next()
             // }
             const earningTopUp = new EarningTopUp();
+            earningTopUp.customerID = customer.id;
             earningTopUp.amount = amount;
             earningTopUp.code = this._utils.autogenerate({ prefix: "ETU" })
             earningTopUp.status = BaseStatus.Active;
             earningTopUp.topUpStatus = TopUpStatus.Pending;
-            earningTopUp.duration =  moment(earningRequestLog.maturityDate).diff(moment().endOf("month"), "month")
+            earningTopUp.duration = moment(earningRequestLog.maturityDate).diff(moment().endOf("month"), "month")
             earningTopUp.approvedEarningID = approvedEarning.id;
 
             await this._earningTopUpRepository.create(earningTopUp);
@@ -245,7 +247,7 @@ export default class EarningsController {
         try {
             const id = this.sanitizer.escape(req.query.id);
             const status = this.sanitizer.escape(req.query.status);
-            let response: any = !id ? await this._earningLiquidationRepository.getByStatus(status) : await this._earningLiquidationRepository.getByApprovedEarningID(id)
+            let response: any = !id ? await this._earningLiquidationRepository.getByStatus(status, [{ model: this._db.Customer, required: false }]) : await this._earningLiquidationRepository.getByApprovedEarningID(id, [{ model: this._db.Customer, required: false }])
 
             res.statusCode = 200;
             res.data = response
@@ -272,10 +274,10 @@ export default class EarningsController {
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
             earningRequest.requestStatus = EarningRequestStatus.LiquidationRequest;
 
-            let earningRequestLog = await this._earningRequestLogService.getById(id);
+            let earningRequestLog = await this._earningRequestLogService.getByEarningRequestIDAndRequestDate({ earningRequestID: id, requestDate: earningRequest.requestDate });
             if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
                 res.statusCode = 400;
-                res.data = { status: false,data:"Cannot find request"};
+                res.data = { status: false, data: "Cannot find request" };
                 next()
             }
             // earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
@@ -284,20 +286,21 @@ export default class EarningsController {
             let approvedEarning = await this._approvedEarningRepository.getByRequestAndLogID(earningRequest.id, earningRequestLog.id);
             if (!approvedEarning || Object.keys(approvedEarning).length == 0) {
                 res.statusCode = 400;
-                res.data = { status: false,data:"Cannot find request"};
+                res.data = { status: false, data: "Cannot find request" };
                 next()
             }
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
             // approvedEarning.earningStatus = ApprovedEarningStatus.Pause;
 
-            let earningLiquidation = await  this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
-            if (earningLiquidation && (Object.keys(earningLiquidation).length > 0 && (earningLiquidation as any).dataValues.liquidationStatus!=LiquidationStatus.Declined)) {
+            let earningLiquidation = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
+            if (earningLiquidation && (Object.keys(earningLiquidation).length > 0 && (earningLiquidation as any).dataValues.liquidationStatus != LiquidationStatus.Declined)) {
                 res.statusCode = 400;
-                res.data = { status: false,data:"Liquidation request currently processing"};
+                res.data = { status: false, data: "Liquidation request currently processing" };
                 next()
             }
 
             earningLiquidation = new EarningLiquidation();
+            earningLiquidation.customerID = customer.id;
             earningLiquidation.code = this._utils.autogenerate({ prefix: "ETU" })
             earningLiquidation.status = BaseStatus.Active;
             earningLiquidation.liquidationStatus = LiquidationStatus.Pending;
@@ -305,14 +308,14 @@ export default class EarningsController {
             earningLiquidation.amount = (earningRequest.payout / earningRequest.duration) * earningLiquidation.duration;
             earningLiquidation.approvedEarningID = approvedEarning.id;
 
-            if(earningLiquidation.amount==0){
+            if (earningLiquidation.amount == 0) {
                 res.statusCode = 400;
-                res.data = { status: false,data:"No Earning accrued to liquidate yet"};
+                res.data = { status: false, data: "No Earning accrued to liquidate yet" };
                 next();
                 return
             }
 
-            
+
             await this._earningLiquidationRepository.create(earningLiquidation);
 
             await this._earningRequestService.update(earningRequest);
@@ -378,8 +381,8 @@ export default class EarningsController {
     @route('/updateStatus')
     @POST()
     updateStatus = async (req: any, res: any, next: any) => {
-        let { status, id, failureReason, message,startDate } = req.body
-        let response: any = await this._earningService.updateStatus({ requestStatus: status, id, failureReason, message,startDate });
+        let { status, id, failureReason, message, startDate } = req.body
+        let response: any = await this._earningService.updateStatus({ requestStatus: status, id, failureReason, message, startDate });
         if (response.status == true) {
             res.statusCode = 200;
             res.data = response.data

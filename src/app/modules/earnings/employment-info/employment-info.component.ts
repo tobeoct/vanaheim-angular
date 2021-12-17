@@ -32,7 +32,7 @@ export class EmploymentInfoComponent implements OnInit {
     return this.form.get("previousEmployer") as FormControl || new FormControl();
   }
   get employer() {
-    return this.form.get("employer") as FormControl || new FormControl();
+    return this.form.get("currentEmployer") as FormControl || new FormControl();
   }
   get employerId() {
     return this.form.get("id") as FormControl || new FormControl();
@@ -99,18 +99,18 @@ export class EmploymentInfoComponent implements OnInit {
     const employmentInfo = this._earningsStore.employmentInfo as EarningsEmploymentInfo;
     this.form = this._fb.group({
       id: [0],
-      employer: [employmentInfo.currentEmployer ? employmentInfo.currentEmployer : "", [
+      currentEmployer: [employmentInfo.currentEmployer ? employmentInfo.currentEmployer : "", [
         Validators.minLength(3), Validators.maxLength(50)]],
       previousEmployer: [employmentInfo.previousEmployer ? employmentInfo.previousEmployer : "", [Validators.minLength(3), Validators.maxLength(50)]],
-      businessSector: [employmentInfo.businessSector ? employmentInfo.businessSector : "", [Validators.required]],
+      businessSector: [employmentInfo.businessSector ? employmentInfo.businessSector : ""],
 
       contactGroup: this._fb.group({
-        email: [employmentInfo.email ? employmentInfo.email : "", [Validators.required, Validators.email]],
-        phone: [employmentInfo.phoneNumber ? employmentInfo.phoneNumber : "", [Validators.required, this._validators.phone]],
+        email: [employmentInfo.email ? employmentInfo.email : "", [ Validators.email]],
+        phone: [employmentInfo.phoneNumber ? employmentInfo.phoneNumber : "", [ this._validators.phone]],
         addressGroup: this._fb.group({
-          street: [employmentInfo.address?.street ? employmentInfo.address.street : "", [Validators.required]],
-          city: [employmentInfo.address?.city ? employmentInfo.address.city : "", [Validators.required]],
-          state: [employmentInfo.address?.state ? employmentInfo.address.state : "", [Validators.required]]
+          street: [employmentInfo.address?.street ? employmentInfo.address.street : ""],
+          city: [employmentInfo.address?.city ? employmentInfo.address.city : ""],
+          state: [employmentInfo.address?.state ? employmentInfo.address.state : ""]
         },
           { validator: Validators.required })
       },

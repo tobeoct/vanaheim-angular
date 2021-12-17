@@ -1,6 +1,6 @@
 <app-banner color="info" size="small">
     <ng-container slot="content">Note: Liquidation requires a 1 month notice in which the interest for that 1 month
-        period would not be amassed.</ng-container>
+        period would be forfeited.</ng-container>
 </app-banner>
 <div id="earning-content" class="grid-padding-4x margin--3x">
     <div class="left layout">
@@ -50,8 +50,8 @@
                                 (click)="changeFilter('Processing')">Processing</div>
                             <!-- <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Defaulting'}"
                                 (click)="changeFilter('Defaulting')">Defaulting</div> -->
-                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='NotQualified'}"
-                                (click)="changeFilter('NotQualified')">Declined</div>
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Active'}"
+                                (click)="changeFilter('Active')">Active</div>
                         </div>
                     </ng-container>
                     <ng-container slot="header">
@@ -175,16 +175,16 @@
                         <div class="d-flex d-flex_vertical--center">
                             <ng-container *ngIf="earningDetails?.status=='Matured'||earningDetails?.status=='Active'">
                                 <ng-container *ngIf="earningDetails?.status!=='Matured'">
-                                    <button type="button" (click)="topUp(earningDetails.id)"
+                                    <button type="button" (click)="topUp(earningDetails.earningRequestID)"
                                         class="widget_button widget_button--small widget_button--fill">Top Up</button>
                                 </ng-container>
                                 <div style="margin-left:5px; margin-right:5px;">
 
-                                    <button type="button" (click)="liquidate(earningDetails.id)"
+                                    <button type="button" (click)="liquidate(earningDetails.earningRequestID)"
                                         class="widget_button widget_button--small widget_button--stroke">Liquidate</button>
                                 </div>
                                 <button type="button" class="widget_button widget_button--small widget_button--stroke"
-                                    (click)="showPayouts(earningDetails?.approvedEarnings.id)">
+                                    (click)="showPayouts(earningDetails?.approvedEarnings?.id)">
                                     <u><b>View Payments</b></u></button>
                             </ng-container>
                             <!-- <ng-container *ngIf="earningDetails?.status=='UpdateRequired'">

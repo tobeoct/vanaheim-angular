@@ -80,7 +80,7 @@ export class CustomerComponent implements OnInit {
     })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
-    if (Object.keys(this._earningsStore.earningsApplication).length>0) {
+    if (Object.keys(this._earningsStore.earningsApplication).length>0 && !this._router.url.includes("apply")) {
       this._earningService.continueApplication(true);
     }
     

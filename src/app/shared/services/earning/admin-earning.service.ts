@@ -13,7 +13,11 @@ export enum EarningType {
   providedIn: 'root'
 })
 export class AdminEarningService {
-  containers: any[] = [{ title: "NEW", indicator: "new", totalCount: 0, data: [] }, { title: "PROCESSING", indicator: "processing", totalCount: 0, data: [] }, { title: "DECLINED", indicator: "declined", totalCount: 0, data: [] }, { title: "ACTIVE", indicator: "active", totalCount: 0, data: [] }, { title: "MATURED", indicator: "matured", disabled: true, totalCount: 0, data: [] }]
+  containers: any[] = [{ title: "NEW", indicator: "new", totalCount: 0, data: [] }, 
+  { title: "PROCESSING", indicator: "processing", totalCount: 0, data: [] },
+  //  { title: "DECLINED", indicator: "declined", totalCount: 0, data: [] }, 
+   { title: "ACTIVE", indicator: "active", totalCount: 0, data: [] }, 
+   { title: "MATURED", indicator: "matured", disabled: true, totalCount: 0, data: [] }]
   updateSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   update$: Observable<any> = this.updateSubject.asObservable();
   requestsSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
@@ -83,10 +87,14 @@ export class AdminEarningService {
           const newRequests = requests.filter((c: any) => c.requestStatus == "Pending");
           const procRequests = requests.filter((c: any) => c.requestStatus == "Processing");
           // const updateRequests = requests.filter((c: any) => c.requestStatus == "UpdateRequired");
-          const declinedRequests = requests.filter((c: any) => c.requestStatus == "Declined");
+          // const declinedRequests = requests.filter((c: any) => c.requestStatus == "Declined");
           const activeRequests = requests.filter((c: any) => c.requestStatus == "Active");
           const maturedRequests = requests.filter((c: any) => c.requestStatus == "Matured");
-          return [{ title: "NEW", indicator: "new", totalCount: newRequests.length, data: newRequests }, { title: "PROCESSING", indicator: "processing", totalCount: procRequests.length, data: procRequests }, { title: "DECLINED", indicator: "declined", totalCount: declinedRequests.length, data: declinedRequests }, { title: "ACTIVE", indicator: "active", totalCount: activeRequests.length, data:activeRequests }, { title: "MATURED", indicator: "matured", disabled: true, totalCount: maturedRequests.length, data: maturedRequests }];
+          return [{ title: "NEW", indicator: "new", totalCount: newRequests.length, data: newRequests }, 
+          { title: "PROCESSING", indicator: "processing", totalCount: procRequests.length, data: procRequests }, 
+          // { title: "DECLINED", indicator: "declined", totalCount: declinedRequests.length, data: declinedRequests }, 
+          { title: "ACTIVE", indicator: "active", totalCount: activeRequests.length, data:activeRequests }, 
+          { title: "MATURED", indicator: "matured", disabled: true, totalCount: maturedRequests.length, data: maturedRequests }];
         }),
         catchError(err => {
           console.error(err);

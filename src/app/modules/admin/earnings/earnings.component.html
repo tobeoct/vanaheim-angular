@@ -30,6 +30,7 @@
             </ng-container>
             <ng-container slot="header">
                 <tr>
+                    <th>Customer Name</th>
                     <th>Date</th>
                     <th>Amount</th>
                     <th>Duration</th>
@@ -49,6 +50,7 @@
                 </ng-container>
                 <ng-container *ngIf="data.rows.length>0">
                     <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                        <td>{{row.Customer?.title}} {{row.Customer?.firstName}} {{row.Customer?.lastName}}</td>
                         <td>{{row.createdAt | date :'MMMM d, y'}}</td>
                         <td>{{row.amount|currency:'₦'}}</td>
                         <td>{{row.duration}} Months</td>
@@ -110,6 +112,7 @@
         </ng-container> -->
             <ng-container slot="header">
                 <tr>
+                    <th>Customer Name</th>
                     <th>Date</th>
                     <th>Amount</th>
                     <th>Duration</th>
@@ -128,6 +131,7 @@
                 </ng-container>
                 <ng-container *ngIf="data.rows.length>0">
                     <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                        <td>{{row.Customer?.title}} {{row.Customer?.firstName}} {{row.Customer?.lastName}}</td>
                         <td>{{row.createdAt | date :'MMMM d, y'}}</td>
                         <td>{{row.amount|currency:'₦'}}</td>
                         <td>{{row.duration}} Months</td>

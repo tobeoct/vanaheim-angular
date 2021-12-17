@@ -513,9 +513,9 @@ export class EarningService implements IEarningService {
       let start: moment.Moment = moment();
       if (!earningRequest || Object.keys(earningRequest).length == 0) throw "Invalid Earning Request";
       earningRequest = (earningRequest as any).dataValues as EarningRequest;
-      let customer: any = await this._customerRepository.getById(earningRequest.customerID);
+      let customer: Customer = await this._customerRepository.getById(earningRequest.customerID);
       if (!customer || Object.keys(customer).length == 0) throw "Invalid Customer";
-      customer = customer.dataValues as Customer;
+      customer = ((customer as any).dataValues) as Customer;
       let earningRequestLog = await this._earningRequestLogService.getByEarningRequestIDAndRequestDate({ earningRequestID: earningRequest.id, requestDate: earningRequest.requestDate })
       if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) throw "Invalid Earning Request log";
       earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
@@ -593,7 +593,7 @@ export class EarningService implements IEarningService {
       notification.data.url = this._appConfig.WEBURL + "/my/earnings";
       try {
         //requestStatus == EarningRequestStatus.UpdateRequired ? this._templateService.EARNING_STATUS_UPDATE_REQUIRED(requestStatus, earningRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${earningRequestLog.id}`, message) :
-        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html: failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) : this._templateService.EARNING_STATUS_UPDATE(requestStatus, earningRequest.requestId), to: customer.email, toCustomer: true });
+        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html: failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) : this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestId,`${customer.title} ${customer.firstName} ${customer.lastName}`,earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [earningRequest.customerID], notification })
 
       }
@@ -634,7 +634,7 @@ export class EarningService implements IEarningService {
         const payload = application.earningsCalculator;
         const payout = this._utils.convertToPlainNumber(payload.payout);
         const amount = this._utils.convertToPlainNumber(payload.amount);
-        investment.maturityDate = moment(payload.maturity).set("date", 24).format("MMMM Do YYYY");
+        investment.maturityDate = moment().add(payload.duration).set("date", 24).format("MMMM Do YYYY");
         investment.monthlyPayment = payload.type == EarningType.EndOfTenor ? payout : payout / payload.duration;
         investment.type = payload.type;
         investment.payout = payout;
@@ -768,7 +768,7 @@ export class EarningService implements IEarningService {
             customer.firstName = personalInfo.firstName;
             customer.lastName = personalInfo.surname;
             customer.otherNames = personalInfo.otherNames;
-            customer.address = this._utils.toAddress(personalInfo.address.street, personalInfo.address.city, personalInfo.address.state);
+            customer.address = this._utils.toAddress(personalInfo.address.street.trim(), personalInfo.address.city.trim(), personalInfo.address.state.trim());
             customer.gender = personalInfo.gender as unknown as Gender;
             customer.phoneNumber = personalInfo.phoneNumber;
             customer.title = personalInfo.title;

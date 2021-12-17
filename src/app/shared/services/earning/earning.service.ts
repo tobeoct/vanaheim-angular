@@ -4,6 +4,8 @@ import { environment } from '@environments/environment';
 import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, of, timer } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { EarningApplication } from 'src/app/modules/earnings/earnings-application';
+import { EarningsStore } from '../../helpers/store';
 export enum EarningType {
   EndOfTenor = "End Of Tenor",
   Monthly = "Monthly ROI"
@@ -42,7 +44,7 @@ export class EarningService {
 
   activeEarningSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   interval = environment.production ? 30000 : 30000000000000000;
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient, private _earningsStore: EarningsStore) { }
   apply = (payload: any) => {
     // console.log(payload)
     return this._http.post<any>(`${environment.apiUrl}/earnings/apply`, payload)
@@ -222,10 +224,12 @@ export class EarningService {
     return d.diff(now, "days");
   }
 
-  validateApplication(){
-    return true;
+  validateApplication() {
+    const application = this._earningsStore.earningsApplication as EarningApplication;
+    if (application.accountInfo && application.earningsCalculator && application.meansOfIdentification && application.nokInfo && application.personalInfo) return true;
+    return false;
   }
-  continueApplication(value:boolean){
+  continueApplication(value: boolean) {
     this.activeEarningSubject.next(value);
   }
 }

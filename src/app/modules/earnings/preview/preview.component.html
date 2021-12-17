@@ -195,17 +195,6 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="!earningsApplication['employmentInfo']">
-            <div class="preview-title">
-                <h3>Employment Information</h3>
-                <app-button (onClick)="onNavigate('employment-info')" [class]="'widget_button--small'">
-                    <ng-container slot="button">Edit</ng-container>
-                </app-button>
-            </div>
-            <div class="missing">
-                Provide your Employment Information
-            </div>
-        </ng-container>
         <ng-container *ngIf="earningsApplication['nokInfo']">
             <div class="preview-container">
                 <div class="preview-title">

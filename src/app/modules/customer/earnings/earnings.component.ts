@@ -111,7 +111,7 @@ export class EarningsComponent implements OnInit {
     this._earningService.notifyLiquidate(requestID).pipe(take(1)).subscribe(
       data => {
 
-        this._utils.setSuccess(data.message);
+        this._utils.setSuccess(data);
         this.showTopUpSubject.next(false)
         this._requestService.selectEarningLog(requestID);
         this.showSubject.next(false);
@@ -138,7 +138,7 @@ export class EarningsComponent implements OnInit {
       data => {
 
         setTimeout(() => {
-          this._utils.setSuccess(data.message);
+          this._utils.setSuccess(data);
           this.showTopUpSubject.next(false);
           this._requestService.selectEarningLog(requestID);
           this.showSubject.next(false);
