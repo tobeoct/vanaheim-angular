@@ -123,6 +123,8 @@ export class AccountInfoComponent implements OnInit {
   }
 
   showForm() {
+    (<FormGroup>this.accountArray.controls[0]).get("id")?.patchValue(0);
+    (<FormGroup>this.accountArray.controls[0]).get("id")?.updateValueAndValidity()
     this.showFormSubject.next(true);
   }
 
