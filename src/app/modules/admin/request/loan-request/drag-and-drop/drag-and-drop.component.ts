@@ -3,20 +3,19 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { RequestService } from 'src/app/modules/admin/request/request.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Utility } from '../../../helpers/utility.service';
-import { AdminEarningService } from 'src/app/shared/services/earning/admin-earning.service';
-import moment = require('moment');
+import { Utility } from '../../../../../shared/helpers/utility.service';
 
 @Component({
-  selector: 'app-earning-drag-and-drop',
+  selector: 'app-loan-drag-and-drop',
   templateUrl: './drag-and-drop.component.html',
   styleUrls: ['./drag-and-drop.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EarningDragAndDropComponent implements OnInit {
+export class LoanDragAndDropComponent implements OnInit {
   nativeElement: any[] = [];
   fForm: FormGroup;
-  form: FormGroup;
+  uForm: FormGroup;
+  sform: FormGroup;
   eventSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   event$: Observable<any> = this.eventSubject.asObservable();
 
@@ -28,10 +27,10 @@ export class EarningDragAndDropComponent implements OnInit {
   get mailMessage() {
     return this.fForm.get("mailMessage") as FormControl || new FormControl();
   }
-  get startDate(){
-    return this.form.get("start") as FormControl || new FormControl();
+  get serialNumber() {
+    return this.sform.get("serialNumber") as FormControl || new FormControl();
   }
-  
+
   idSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   classListSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
@@ -41,21 +40,27 @@ export class EarningDragAndDropComponent implements OnInit {
   enterFailureSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   enterFailure$: Observable<boolean> = this.enterFailureSubject.asObservable();
 
-  enterStartDateSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  enterStartDate$: Observable<boolean> = this.enterStartDateSubject.asObservable();
+  enterUpdateSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  enterUpdate$: Observable<boolean> = this.enterUpdateSubject.asObservable();
+
+  enterSerialNumberSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  enterSerialNumber$: Observable<boolean> = this.enterSerialNumberSubject.asObservable();
 
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$: Observable<boolean> = this.showSubject.asObservable();
   @Output()
   onClick: EventEmitter<any> = new EventEmitter<any>();
-  constructor(private _requestService: AdminEarningService, private _fb: FormBuilder, private _utility: Utility) { }
+  constructor(private _requestService: RequestService, private _fb: FormBuilder, private _utility: Utility) { }
   ngOnInit(): void {
     this.fForm = this._fb.group({
       failureReason: [""],
       mailMessage: [""]
     });
-    this.form = this._fb.group({
-      start: [moment().toDate(),[Validators.required]],
+    this.uForm = this._fb.group({
+      mailMessage: [""]
+    });
+    this.sform = this._fb.group({
+      serialNumber: [0, [Validators.required]],
     });
   }
 
@@ -78,12 +83,12 @@ export class EarningDragAndDropComponent implements OnInit {
     } else {
       let data = event.previousContainer.data[event.previousIndex];
       let classList = event.container.element.nativeElement.classList;
-      if (this.getStatus(classList)=='New') return
+      if (this.getStatus(classList) == 'New') return
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
-  
+
       let id = event.item.element.nativeElement.id;
       this.idSubject.next(id);
       this.classListSubject.next(classList);
@@ -93,16 +98,22 @@ export class EarningDragAndDropComponent implements OnInit {
     }
   }
   confirm() {
-
-    if (this.getStatus(this.classListSubject.value) != "Declined"  && this.getStatus(this.classListSubject.value) != "Active" ) {
+    const skip = ["NotQualified", "UpdateRequired","Processing"]
+    if (!skip.includes(this.getStatus(this.classListSubject.value))) {
       let event = this.eventSubject.value;
       this.handleUpdate(event, this.idSubject.value, this.classListSubject.value)();
       this.showSubject.next(false);
     } else {
-      if ((this.getStatus(this.classListSubject.value) == "Active")) {
-        this.enterStartDateSubject.next(true)
-      } else {
-        this.enterFailureSubject.next(true);
+      switch (this.getStatus(this.classListSubject.value)) {
+        case "UpdateRequired":
+          this.enterUpdateSubject.next(true)
+          break;
+        case "Processing":
+          this.enterSerialNumberSubject.next(true)
+          break;
+        default:
+          this.enterFailureSubject.next(true);
+          break;
       }
     }
 
@@ -126,7 +137,7 @@ export class EarningDragAndDropComponent implements OnInit {
   handleUpdate = (event: any, id: any, classList: any) => {
     return () => {
 
-      this._requestService.updateStatus(id, this._requestService.getStatus(classList), (this.getStatus(this.classListSubject.value) == "Active")?undefined:this.failureReason.value, this.mailMessage.value, this.startDate.value).then(c => {
+      this._requestService.updateStatus(id, this._requestService.getStatus(classList), (this.getStatus(this.classListSubject.value) == "UpdateRequired") ? undefined : this.failureReason.value, (this.getStatus(this.classListSubject.value) == "UpdateRequired") ? this.uMailMessage.value : this.mailMessage.value,this.serialNumber.value).then(c => {
         this.loadingSubject.next(false)
         this._utility.setSuccess("Successfully updated status and sent email to customer")
         if (!c || c.requestStatus != this._requestService.getStatus(classList)) {
@@ -163,7 +174,12 @@ export class EarningDragAndDropComponent implements OnInit {
 
     this._requestService.updaterequests(!failed ? { from: fromClassList, to: toClassList } : {});
   }
-  
+
+
+  get uMailMessage() {
+
+    return this.uForm.get("mailMessage") as FormControl || new FormControl();
+  }
   onFailure(event: any) {
     this.proceed();
     this.showSubject.next(false)
@@ -175,19 +191,31 @@ export class EarningDragAndDropComponent implements OnInit {
     this.enterFailureSubject.next(false);
 
   }
-  closeStartDateModal() {
+  closeUpdateModal() {
     // this.proceed();
-    this.enterStartDateSubject.next(false);
+    this.enterUpdateSubject.next(false);
+  }
+
+  onUpdateRequired(event: any) {
+    this.proceed();
+    this.enterUpdateSubject.next(false);
+    this.showSubject.next(false)
+  }
+
+  closeSerialNumber() {
+    this.enterSerialNumberSubject.next(false);
+  }
+  onSerialNumberEntered(event: any) {
+    this.proceed();
+    this.enterSerialNumberSubject.next(false);
+    this.showSubject.next(false)
   }
   proceed() {
+    // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
+
     this.handleUpdate(this.eventSubject.value, this.idSubject.value, this.classListSubject.value)();
   }
   onError(value: any): void {
     // this.errorMessageSubject.next(value);
-  }
-  onStartDate(event: any) {
-    this.proceed();
-    this.enterStartDateSubject.next(false);
-    this.showSubject.next(false)
   }
 }

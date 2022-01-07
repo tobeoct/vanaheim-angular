@@ -68,12 +68,12 @@
                             <ng-container *ngIf="row.liquidationStatus=='EarningPaused'">
                                 <app-button [class]="'widget_button--small'" (onClick)="liquidate(row.id,'Processed')"
                                     fieldClass="no-margin">
-                                    <ng-container slot="button">Approve for processing</ng-container>
+                                    <ng-container slot="button">Approve</ng-container>
                                 </app-button>
                             </ng-container>
 
                         </td>
-                        <td> <ng-container *ngIf="row.liquidationStatus!=='Declined'">
+                        <td> <ng-container *ngIf="row.liquidationStatus!=='Declined'&&row.liquidationStatus!=='Processed'">
                             
                             <app-button [class]="'widget_button--small'" color="danger" (onClick)="liquidate(row.id,'Declined')"
                                 fieldClass="no-margin">

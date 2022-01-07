@@ -10,7 +10,6 @@ export class EarningFlowGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
     if(!this._authService.isLoggedInSubject.value){
       return false;
     }

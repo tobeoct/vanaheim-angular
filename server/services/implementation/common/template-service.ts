@@ -1,6 +1,8 @@
 import { IBaseEntity } from "@models/base-entity";
 import { Customer } from "@models/customer";
 import { EarningRequestStatus } from "@models/helpers/enums/investmentrequeststatus";
+import { LoanRequestStatus } from "@models/helpers/enums/loanrequeststatus";
+import { LoanStatus } from "@models/helpers/enums/loanstatus";
 import mkdirsSync from "@models/helpers/utils/dir";
 import UtilService from "./util";
 
@@ -8,38 +10,78 @@ const mailHeader = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAxgAAAB1CAYAAA
 const pdfGenerator = require('template-pdf-generator');
 
 export class TemplateService {
-    constructor(private fs: any, private fsExtra: any, private _utils:UtilService) { }
-    STATUS_UPDATE(status: string, id: string) {
+    constructor(private fs: any, private fsExtra: any, private _utils: UtilService) { }
+    STATUS_UPDATE(status: LoanRequestStatus, id: string, customer:string, amount:string, tenure:string) {
+
+        switch(status){
+            case LoanRequestStatus.Processing:
+                return `We acknowledge receipt of your request and supporting documents and its now receiving attention.<br/>
+                We will review and provide and update soon.<br/><br/>
+                
+                Best regards.`;
+            case LoanRequestStatus.Approved:
+                return `Dear ${customer}<br/><br/>,
+ 
+                We acknowledge receipt of your request for a loan of ${amount} Thousand Naira for a repayment period of ${tenure} and supporting documents provided and its currently receiving attention.<br/><br/>
+                 
+                Please find attached your loan agreement to be signed and scanned back to us and Remita mandate form to be taken to any branch of your bank for activation. ------ if remita Activation is required.<br/><br/>
+                 
+                Loan disbursement will be done upon fulfilment of these pending items.<br/><br/>
+                 
+                Thank you for your patronage.<br/><br/>
+                 
+                Best regards.`
+            case LoanRequestStatus.Funded:
+                return `Hello  ${customer}<br/><br/>,
+
+                Trust this meets you well.<br/><br/>
+                
+                Kindly acknowledge receipt of the ${amount} (${this._utils.amountToWords(this._utils.convertToPlainNumber(amount), 'Naira Only')}) as disbursed into your account.<br/><br/>
+                
+                Thank you and best regards`
+            default:
         return `   LOAN ID: ${id} <br/><br/>
         Your loan request status has been updated to ${status};<br/><br/>
         Kind Regards<br/><br/>
         <b>Vanir Capital Loans and Capital Finance Team</b>
+        
+        `;
+        }
+    }
+    STATUS_UPDATE_REQUIRED(name: string, message: string,url:string) {
+        return `Dear ${name.trim()},<br/><br/>
+        Thank you for your mail.<br/>
+        We acknowledge receipt of your request and documents provided. Kindly see below the documents outstanding to enable us proceed with request evaluation:<br/><br/>
+        ${message}<br/><br/>
+
+        Go to ${url} to provide the required documents <br/><br/>
+        We look forward to your response to enable us proceed with evaluation.<br/><br/>
+        Best regards.`
+        // return `   LOAN ID: ${id} <br/><br/>
+        // Your loan request status has been updated to ${status};<br/><br/>
+        // Go to ${url} to provide the required document <br/><br/>
+        // ${message} <br/><br/>
+        // Kind Regards<br/><br/>
+        // <b>Vanir Capital Loans and Capital Finance Team</b>
+        // `;
+    }
+   
+    STATUS_UPDATE_DECLINED(name: string, message: string, id: string) {
+        return `Dear ${name.trim()},<br/><br/>
+        Thank you for your interest in Vanir Capital Limited’s loan services.<br/><br/>
+        
+        Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/><br/>
+        ${message}<br/><br/>
+        Thank you for your interest and we hope to be able to serve you in the near future.<br/><br/>
+
+        Best regards.<br/><br/>
         `;
     }
-    STATUS_UPDATE_REQUIRED(status: string, id: string, url: string, message: string) {
-        return `   LOAN ID: ${id} <br/><br/>
-        Your loan request status has been updated to ${status};<br/><br/>
-        Go to ${url} to provide the required document <br/><br/>
-        ${message} <br/><br/>
-        Kind Regards<br/><br/>
-        <b>Vanir Capital Loans and Capital Finance Team</b>
-        `;
-    }
+
     LOAN_UPDATE(customerName: string, code: string, requirement: string) {
         return `   LOAN ID: ${code} <br/><br/>
         Customer:${customerName}<br/><br/>
         Requirement: ${requirement}<br/><br/>
-        Kind Regards<br/><br/>
-        <b>Vanir Capital Loans and Capital Finance Team</b>
-        `;
-    }
-    STATUS_UPDATE_DECLINED(name: string, message: string, id: string) {
-        return `  Dear ${name.trim()},<br/><br/>
- 
-        Thank you for your interest in Vanir Capital Limited’s loan services.<br/><br/>
-         
-        Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/><br/>
-        ${message}<br/><br/>
         Kind Regards<br/><br/>
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
@@ -82,11 +124,15 @@ export class TemplateService {
     }
 
     EARNING_TOPUP_NOTIFICATION(customer: string, requestCode: string, amount: string) {
-        return `Dear ${customer}, <br/><br/> We have received your top up request for EARNING ID: ${requestCode} with an amount of ${amount} <br/><br/>
-        Your request is being attended to. You would be contacted shortly<br/><br/>
-       
-        <b>Vanir Capital Loans and Capital Finance Team</b>
+        return `
+        Congratulations! Your earnings Top Up request has been approved.<br/><br/>
+Kind Regards.
         `;
+        // return `Dear ${customer}, <br/><br/> We have received your top up request for EARNING ID: ${requestCode} with an amount of ${amount} <br/><br/>
+        // Your request is being attended to. You would be contacted shortly<br/><br/>
+       
+        // <b>Vanir Capital Loans and Capital Finance Team</b>
+        // `;
     }
     EARNING_STATUS_UPDATE_REQUIRED(status: string, id: string, url: string, message: string) {
         return `   EARNING ID: ${id} <br/><br/>

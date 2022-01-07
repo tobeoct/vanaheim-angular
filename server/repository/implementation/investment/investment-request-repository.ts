@@ -25,6 +25,22 @@ export class EarningRequestRepository extends BaseRepository<EarningRequest> imp
     });
   };
 
+  getByRequestID=(requestId: string) => {
+    return new Promise<EarningRequest>(async (resolve, reject) => {
+      try {
+        let response = await this._db.findOne({
+          where: {
+            requestId
+          }
+        });
+        let dataValues = response?.dataValues as EarningRequest;
+        resolve(dataValues);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
   getEarningByStatus = (customerID: number, status: EarningRequestStatus|any, include?:any[]) => {
 
     return new Promise<EarningRequest[]>(async (resolve, reject) => {

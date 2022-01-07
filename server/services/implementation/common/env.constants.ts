@@ -22,6 +22,11 @@ export const EnvConstants = {
                 apiKey: process.env.VERIFY_ACCOUNTINQUIRY_APIKEY,
                 userId: process.env.VERIFY_USERID,
                 endpoint: "/sfx-verify/v3/id-service/"
+            },
+            bvnValidation:{
+                apiKey: process.env.VERIFY_BVN_APIKEY,
+                userId: process.env.VERIFY_USERID,
+                endpoint:'/sfx-verify/v3/id-service/'
             }
         }
     }

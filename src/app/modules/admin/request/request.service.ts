@@ -124,8 +124,8 @@ export class RequestService {
         return {};
       }));
   }
-  updateStatus = (id: number, status: string, failureReason:string,message:string) => {
-    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason,message })
+  updateStatus = (id: number, status: string, failureReason:string,message:string,serialNumber?:string) => {
+    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason,message,serialNumber })
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;

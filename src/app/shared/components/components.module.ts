@@ -6,7 +6,6 @@ import { FooterComponent } from '../layout/footer/footer.component';
 import { SideNavigationComponent } from '../layout/side-navigation/side-navigation.component';
 import { AccordionComponent } from './accordion/accordion.component';
 import { BannerComponent } from './banner/banner.component';
-import { LoanDragAndDropComponent } from './drag-and-drop/loan/drag-and-drop.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { DropdownOptionComponent } from './dropdown/option/option.component';
 import { FormComponent } from './form/form.component';
@@ -36,7 +35,6 @@ import { CopyComponent } from './copy/copy.component';
 import { TypeAheadComponent } from './type-ahead/type-ahead.component';
 import { TypeAheadOptionComponent } from './type-ahead/option/option.component';
 import { DocumentComponent } from 'src/app/modules/loan/shared/document-upload/document/document.component';
-import { EarningDragAndDropComponent } from './drag-and-drop/earning/drag-and-drop.component';
 import { CountdownComponent } from './countdown/countdown.component';
 
 export function playerFactory() {
@@ -48,8 +46,6 @@ export function playerFactory() {
     LottieComponent,
     InputComponent,
     ButtonComponent,
-    LoanDragAndDropComponent,
-    EarningDragAndDropComponent,
     AccordionComponent,
     FormComponent,
     FooterComponent,
@@ -90,8 +86,6 @@ export function playerFactory() {
     CheckboxComponent,
     LottieComponent,
     InputComponent,
-    LoanDragAndDropComponent,
-    EarningDragAndDropComponent,
     AccordionComponent,
     FormComponent,
     FooterComponent,

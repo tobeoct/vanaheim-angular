@@ -33,6 +33,22 @@
             </div>
         </div>
         <div
+        class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+        <div class="margin--x">
+            <small class="no-margin">Email</small>
+            <p class="no-margin"><b>earnings@vanircapital.org </b></p>
+        </div>
+        <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <app-copy [message]="'earnings@vanircapital.org '"> </app-copy>
+            <div style="margin-left: 10px;">
+                <app-button class="no-margin" fieldClass="no-margin--top"
+                    [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
+                    <ng-container slot="button"><a href="mailto:earnings@vanircapital.org ">Email</a></ng-container>
+                </app-button>
+            </div>
+        </div>
+    </div>
+        <div
             class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
             <div class="margin--x">
                 <small class="no-margin">Phone Number</small>

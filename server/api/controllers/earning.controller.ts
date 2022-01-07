@@ -168,6 +168,12 @@ export default class EarningsController {
                 res.data = "You currently have a Top Up request processing";
                 next()
             }
+
+            if (earningRequest?.requestStatus == EarningRequestStatus.Matured) {
+                res.statusCode = 400;
+                res.data = "Earning has matured, you cannot top it up";
+                next()
+            }
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
             earningRequest.requestStatus = EarningRequestStatus.TopUpRequest;
 
@@ -308,12 +314,12 @@ export default class EarningsController {
             earningLiquidation.amount = (earningRequest.payout / earningRequest.duration) * earningLiquidation.duration;
             earningLiquidation.approvedEarningID = approvedEarning.id;
 
-            if (earningLiquidation.amount == 0) {
-                res.statusCode = 400;
-                res.data = { status: false, data: "No Earning accrued to liquidate yet" };
-                next();
-                return
-            }
+            // if (earningLiquidation.amount == 0) {
+            //     res.statusCode = 400;
+            //     res.data = { status: false, data: "No Earning accrued to liquidate yet" };
+            //     next();
+            //     return
+            // }
 
 
             await this._earningLiquidationRepository.create(earningLiquidation);
@@ -381,8 +387,8 @@ export default class EarningsController {
     @route('/updateStatus')
     @POST()
     updateStatus = async (req: any, res: any, next: any) => {
-        let { status, id, failureReason, message, startDate } = req.body
-        let response: any = await this._earningService.updateStatus({ requestStatus: status, id, failureReason, message, startDate });
+        let { status, id, failureReason, message, startDate,serialNumber } = req.body
+        let response: any = await this._earningService.updateStatus({ requestStatus: status, id, failureReason, message, startDate,serialNumber });
         if (response.status == true) {
             res.statusCode = 200;
             res.data = response.data

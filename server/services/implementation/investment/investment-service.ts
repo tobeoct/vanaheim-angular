@@ -18,7 +18,7 @@ import { EarningRequestLog } from "@models/investment/investment-request-log";
 import { MeansOfIdentification } from "@models/investment/means-of-identification";
 import { NOK } from "@models/nok";
 import { SearchResponse } from "@models/search-response";
-import { WebNotification, WebNotData } from "@models/webnotification";
+import { WebNotification, WebNotificationData } from "@models/webnotification";
 import { NOKRepository } from "@repository/implementation/nok-repository";
 import { IDocumentRepository } from "@repository/interface/document/Idocument-repository";
 import { IAccountRepository } from "@repository/interface/Iaccount-repository";
@@ -401,7 +401,7 @@ export class EarningService implements IEarningService {
 
           }
           // if (approvedEarning?.status == true && approvedEarning.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(approvedEarning.data.id)
-          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} } })
+          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} } })
 
         }
         else {
@@ -506,7 +506,7 @@ export class EarningService implements IEarningService {
     }
   })
 
-  updateStatus = ({ requestStatus, startDate, id, failureReason, message }: any) => new Promise<any>(async (resolve, reject) => {
+  updateStatus = ({ requestStatus, startDate, id, failureReason, message, serialNumber }: any) => new Promise<any>(async (resolve, reject) => {
     try {
       let earningRequest = await this._earningRequestRepository.getById(id) as EarningRequest;
       let maturityDate = moment();
@@ -525,6 +525,16 @@ export class EarningService implements IEarningService {
       if (requestStatus == EarningRequestStatus.Processing) {
         earningRequest.dateProcessed = new Date();
         earningRequestLog.dateProcessed = new Date();
+        // earningRequest.code = earningRequest.autogenerateID(serialNumber);
+        if(serialNumber){
+          const requestByUniqueID = await this._earningRequestRepository.getByRequestID(new EarningRequest().autogenerateID(serialNumber));
+
+          if(requestByUniqueID && Object.keys(requestByUniqueID).length>0){
+            throw "Earning ID has already been assigned to another earning";
+          }
+        earningRequest.requestId = new EarningRequest().autogenerateID(serialNumber);
+        earningRequestLog.requestId = new EarningRequest().autogenerateID(serialNumber);
+        }
       }
       // else if (requestStatus == EarningRequestStatus.Approved) {
       //   earningRequest.dateApproved = new Date();
@@ -589,7 +599,7 @@ export class EarningService implements IEarningService {
       notification.body = `Your earning request status for LOAN ID:${earningRequest.requestId} has been updated to ${requestStatus}`;
       if (failureReason) notification.body += `<br/><br/> Reason for Failure: ${failureReason}`;
       notification.title = `Vanaheim: Loan Status Update`
-      notification.data = new WebNotData();
+      notification.data = new WebNotificationData();
       notification.data.url = this._appConfig.WEBURL + "/my/earnings";
       try {
         //requestStatus == EarningRequestStatus.UpdateRequired ? this._templateService.EARNING_STATUS_UPDATE_REQUIRED(requestStatus, earningRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${earningRequestLog.id}`, message) :

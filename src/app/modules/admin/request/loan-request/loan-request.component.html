@@ -161,6 +161,26 @@
   </ng-container>
   
   
+<ng-container *ngIf="(enterSerialNumber$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeSerialNumber()">
+    <app-modal-header slot="header">
+      <h3>Enter Unique Serial Number e.g 0123456, 123345</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="sform" (onSubmit)="onSerialNumberEntered($event)" (errorMessageChange)="onError($event)">
+        <app-input type="text"  id="serialNumber" [control]="serialNumber" class="form-control">
+          <label>Serial Number</label>
+        </app-input>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="sform">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+  
   <ng-container *ngIf="showRepayment$|async">
     <app-modal size="large" (onChange)="closeRepayment()">
   

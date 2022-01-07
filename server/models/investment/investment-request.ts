@@ -1,5 +1,6 @@
 import { EarningRequestStatus } from "@enums/investmentrequeststatus";
 import { EarningType } from "@models/helpers/enums/earningtype";
+import moment = require("moment");
 import { Account } from "../account";
 import { BaseEntity } from "../base-entity";
 import { Customer } from "../customer";
@@ -34,5 +35,11 @@ export class EarningRequest extends BaseEntity {
     dateActive: Date;
     workflow: any;
     requestId: string;
+
+    
+  autogenerateID(serialNumber:number){
+      const now =moment();
+    return `VCAP-${serialNumber}-${now.format("MMM").toUpperCase()}${now.format("YYYY")}`
+  }
 
 }

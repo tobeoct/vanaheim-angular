@@ -20,6 +20,7 @@ export class LoanRequestComponent implements OnInit {
   notifyForm: FormGroup;
   fForm: FormGroup;
   uForm: FormGroup;
+  sform: FormGroup;
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
   loanStatuses: any[] = [{ label: "Processing", key: "processing" }, { label: "UpdateRequired", key: "update" }, { label: "Declined", key: "declined" }, { label: "Approved", key: "approved" }, { label: "Funded", key: "funded" }];
   ctrl: FormControl = new FormControl("");
@@ -72,6 +73,9 @@ export class LoanRequestComponent implements OnInit {
   enterFailure$: Observable<boolean> = this.enterFailureSubject.asObservable();
   enterUpdateSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   enterUpdate$: Observable<boolean> = this.enterUpdateSubject.asObservable();
+  enterSerialNumberSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  enterSerialNumber$: Observable<boolean> = this.enterSerialNumberSubject.asObservable();
+
   get amount() {
     return this.form.get("amount") as FormControl || new FormControl();
   }
@@ -90,6 +94,9 @@ export class LoanRequestComponent implements OnInit {
   get uMailMessage() {
 
     return this.uForm.get("mailMessage") as FormControl || new FormControl();
+  }
+  get serialNumber() {
+    return this.sform.get("serialNumber") as FormControl || new FormControl();
   }
   constructor(private _fb: FormBuilder, private _documentService: DocumentService, private _notifyService: NotifyService, private _utilityService: Utility, private _requestService: RequestService, private _disbursedLoanService: DisbursedLoanService, private _repaymentService: RepaymentService) {
     this.loanDetails$ = this._requestService.loanDetails$;
@@ -114,7 +121,9 @@ export class LoanRequestComponent implements OnInit {
       failureReason: [""],
       mailMessage: [""]
     });
-
+    this.sform = this._fb.group({
+      serialNumber: [0, [Validators.required]],
+    });
     this.uForm = this._fb.group({
       mailMessage: [""]
     });
@@ -127,17 +136,24 @@ export class LoanRequestComponent implements OnInit {
     this.lastStatusSubject.next(c);
     const indicator = this.loanStatuses.find(l => l.label == c)?.key;
     this.indicatorSubject.next(indicator);
-    if ((c.toLowerCase() != "notqualified" && c.toLowerCase() != "declined") && (c.toLowerCase() != "updateRequired")) {
-      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "").then(response => {
+    const skip=["processing","notqualified","declined" ,"updaterequired"]
+    if (!skip.includes(c.toLowerCase())) {
+      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "",undefined).then(response => {
         this.loadingSubject.next(false)
         this._utilityService.setSuccess("Successfully updated status and sent email to customer")
         this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))
       });
     } else {
-      if (c.toLowerCase() == "updateRequired") {
-        this.enterUpdateSubject.next(true)
-      } else {
-        this.enterFailureSubject.next(true);
+      switch (c.toLowerCase()) {
+        case "updaterequired":
+          this.enterUpdateSubject.next(true)
+          break;
+        case "processing":
+          this.enterSerialNumberSubject.next(true)
+          break;
+        default:
+          this.enterFailureSubject.next(true);
+          break;
       }
     }
     setTimeout(() => this.showConfirmSubject.next(false), 0);
@@ -145,7 +161,7 @@ export class LoanRequestComponent implements OnInit {
   proceed() {
     // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
     this.loadingSubject.next(true)
-    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.lastStatusSubject.value.toLowerCase() == "updaterequired" ? undefined : this.failureReason.value, this.lastStatusSubject.value.toLowerCase() == "updaterequired" ? this.uMailMessage.value : this.mailMessage.value).then(response => {
+    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.lastStatusSubject.value.toLowerCase() == "updaterequired" ? undefined : this.failureReason.value, this.lastStatusSubject.value.toLowerCase() == "updaterequired" ? this.uMailMessage.value : this.mailMessage.value,this.serialNumber.value).then(response => {
       this.loadingSubject.next(false)
       this._utilityService.setSuccess("Successfully updated status and sent email to customer")
       this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))
@@ -281,5 +297,13 @@ export class LoanRequestComponent implements OnInit {
   }
   download(url: string, filename: string) {
     this._documentService.download(url, filename)
+  }
+  closeSerialNumber() {
+    this.enterSerialNumberSubject.next(false);
+  }
+  onSerialNumberEntered(event: any) {
+    this.proceed();
+    this.enterSerialNumberSubject.next(false);
+    this.showSubject.next(false)
   }
 }

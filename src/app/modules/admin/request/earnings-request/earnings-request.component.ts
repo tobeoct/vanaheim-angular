@@ -18,6 +18,7 @@ export class EarningsRequestComponent implements OnInit {
   fForm: FormGroup;
   form: FormGroup;
   pform: FormGroup;
+  sform: FormGroup;
   @Input()
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
 
@@ -27,8 +28,8 @@ export class EarningsRequestComponent implements OnInit {
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
   earningsStatuses: any[] = [{ label: "Processing", key: "processing" },
   //  { label: "Declined", key: "declined" },
-   { label: "Active", key: "active" }];
- 
+  { label: "Active", key: "active" }];
+
   payouts$: Observable<any>
   earningDetails$: Observable<any>
   showPayoutSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -49,9 +50,9 @@ export class EarningsRequestComponent implements OnInit {
 
   showNotifySubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showNotify$: Observable<boolean> = this.showNotifySubject.asObservable();
-  
-  earningsDetails$:Observable<any>
-  
+
+  earningsDetails$: Observable<any>
+
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
@@ -63,7 +64,10 @@ export class EarningsRequestComponent implements OnInit {
   focus$: Observable<boolean> = this.focusSubject.asObservable();
   delay$ = from([1]).pipe(delay(3000));
 
-  
+
+  enterSerialNumberSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  enterSerialNumber$: Observable<boolean> = this.enterSerialNumberSubject.asObservable();
+
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
 
@@ -73,13 +77,16 @@ export class EarningsRequestComponent implements OnInit {
   get mailMessage() {
     return this.fForm.get("mailMessage") as FormControl || new FormControl();
   }
-  get startDate(){
+  get startDate() {
     return this.form.get("start") as FormControl || new FormControl();
   }
   get amount() {
     return this.pform.get("amount") as FormControl || new FormControl();
   }
-  constructor(private _requestService: AdminEarningService,private _documentService:DocumentService,private _fb:FormBuilder, private _earningsPayoutService:EarningPayoutService,private _utils:Utility) { }
+  get serialNumber() {
+    return this.sform.get("serialNumber") as FormControl || new FormControl();
+  }
+  constructor(private _requestService: AdminEarningService, private _documentService: DocumentService, private _fb: FormBuilder, private _earningsPayoutService: EarningPayoutService, private _utils: Utility) { }
 
   ngOnInit(): void {
     this.fForm = this._fb.group({
@@ -87,10 +94,13 @@ export class EarningsRequestComponent implements OnInit {
       mailMessage: [""]
     });
     this.form = this._fb.group({
-      start: [moment().toDate(),[Validators.required]],
+      start: [moment().toDate(), [Validators.required]],
     });
     this.pform = this._fb.group({
       amount: ["", [Validators.required]]
+    });
+    this.sform = this._fb.group({
+      serialNumber: [0, [Validators.required]],
     });
     this.earningsDetails$ = this._requestService.earningDetails$;
     this.earnings$ = this._requestService.filteredRequests$;
@@ -106,17 +116,24 @@ export class EarningsRequestComponent implements OnInit {
     this.lastStatusSubject.next(c);
     const indicator = this.earningsStatuses.find(l => l.label == c)?.key;
     this.indicatorSubject.next(indicator);
-    if (( c.toLowerCase() != "declined") && (c.toLowerCase() != "active")) {
-      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "").then(response => {
+    const skip = ["declined", "active", "processing"]
+    if (!skip.includes(c.toLowerCase())) {
+      this._requestService.updateStatus(this._requestService.selectedIdSubject.value, c, '', "", null, null).then(response => {
         this.loadingSubject.next(false)
         this._utils.setSuccess("Successfully updated status and sent email to customer")
         this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))
       });
     } else {
-      if (c.toLowerCase() == "active") {
-        this.enterStartDateSubject.next(true)
-      } else {
-        this.enterFailureSubject.next(true);
+      switch (c.toLowerCase()) {
+        case "active":
+          this.enterStartDateSubject.next(true);
+          break;
+        case "processing":
+          this.enterSerialNumberSubject.next(true);
+          break;
+        default:
+          this.enterFailureSubject.next(true);
+          break;
       }
     }
     setTimeout(() => this.showConfirmSubject.next(false), 0);
@@ -124,7 +141,7 @@ export class EarningsRequestComponent implements OnInit {
   proceed() {
     // if(this.ctrl.value=="NotQualified"){this.enterFailureSubject.next(true)}
     this.loadingSubject.next(true)
-    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.lastStatusSubject.value.toLowerCase() == "active" ? undefined : this.failureReason.value, this.mailMessage.value,this.startDate.value).then(response => {
+    this._requestService.updateStatus(this._requestService.selectedIdSubject.value, this._requestService.getStatus(this.lastStatusSubject.value), this.lastStatusSubject.value.toLowerCase() == "active" ? undefined : this.failureReason.value, this.mailMessage.value, this.startDate.value, this.serialNumber.value).then(response => {
       this.loadingSubject.next(false)
       this._utils.setSuccess("Successfully updated status and sent email to customer")
       this._requestService.updateSearch(this.getCriteria(this.fromDate.value, this.toDate.value))
@@ -158,7 +175,7 @@ export class EarningsRequestComponent implements OnInit {
   }
   showPayouts(id: number) {
     console.log("Show payouts")
-   this.payouts$ = this._earningsPayoutService.getEarningPayout(id)
+    this.payouts$ = this._earningsPayoutService.getEarningPayout(id)
     this.showPayoutSubject.next(true);
     this._earningsPayoutService.selectEarning(id);
   }
@@ -212,4 +229,12 @@ export class EarningsRequestComponent implements OnInit {
     // this.loadingSubject.next(true);
   }
 
+  closeSerialNumber() {
+    this.enterSerialNumberSubject.next(false);
+  }
+  onSerialNumberEntered(event: any) {
+    this.proceed();
+    this.enterSerialNumberSubject.next(false);
+    this.showSubject.next(false)
+  }
 }

@@ -178,7 +178,7 @@
                                     <button type="button" (click)="topUp(earningDetails.earningRequestID)"
                                         class="widget_button widget_button--small widget_button--fill">Top Up</button>
                                 </ng-container>
-                                <div style="margin-left:5px; margin-right:5px;">
+                                <div *ngIf="earningDetails?.approvedEarnings?.earningStatus!='Liquidated'" style="margin-left:5px; margin-right:5px;">
 
                                     <button type="button" (click)="liquidate(earningDetails.earningRequestID)"
                                         class="widget_button widget_button--small widget_button--stroke">Liquidate</button>

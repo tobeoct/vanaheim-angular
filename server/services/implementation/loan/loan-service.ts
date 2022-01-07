@@ -8,13 +8,14 @@ import { BaseStatus } from "@models/helpers/enums/status";
 import { DisbursedLoan } from "@models/loan/disbursed-loan";
 import { LoanRequest } from "@models/loan/loan-request";
 import { LoanRequestLog } from "@models/loan/loan-request-log";
-import { WebNotData, WebNotification } from "@models/webnotification";
+import { WebNotificationData, WebNotification } from "@models/webnotification";
 import { AccountRepository } from "@repository/implementation/account-repository";
 import { NOKRepository } from "@repository/implementation/nok-repository";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
 import { ILoanTypeRequirementRepository } from "@repository/interface/Iloantyperequirement-repository";
 import { IDisbursedLoanRepository } from "@repository/interface/loan/Idisbursed-loan-repository";
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
+import { ILoanRequestRepository } from "@repository/interface/loan/Iloan-request-repository";
 import { IDocumentService } from "@services/interfaces/Idocument-service";
 import { INotificationService } from "@services/interfaces/Inotification-service";
 import { IRepaymentService } from "@services/interfaces/Irepayment-service";
@@ -32,7 +33,7 @@ import UtilService from "../common/util";
 import { SearchResponse } from "./loan-request-service";
 
 export class LoanService implements ILoanService {
-  constructor(private _db: any, private _appConfig: AppConfig, private _repaymentService: IRepaymentService, private _disbursedLoanService: IDisbursedLoanService, private _disbursedLoanRepository: IDisbursedLoanRepository, private _nokRepository: NOKRepository, private _accountRepository: AccountRepository, private _notificationService: INotificationService, private _loanTypeRequirementService: ILoanTypeRequirementService, private _documentService: IDocumentService, private _templateService: TemplateService, private _emailService: EmailService, private _customerRepository: ICustomerRepository, private _loanRequestService: ILoanRequestService, private _utils: UtilService, private _loanRequestLogService: ILoanRequestLogService, private _loanRequestLogRepository: ILoanRequestLogRepository) {
+  constructor(private _db: any, private _appConfig: AppConfig, private _repaymentService: IRepaymentService, private _disbursedLoanService: IDisbursedLoanService, private _disbursedLoanRepository: IDisbursedLoanRepository, private _nokRepository: NOKRepository, private _accountRepository: AccountRepository, private _notificationService: INotificationService, private _loanTypeRequirementService: ILoanTypeRequirementService, private _documentService: IDocumentService, private _templateService: TemplateService, private _emailService: EmailService, private _customerRepository: ICustomerRepository, private _loanRequestService: ILoanRequestService, private _utils: UtilService, private _loanRequestLogService: ILoanRequestLogService, private _loanRequestRepository: ILoanRequestRepository, private _loanRequestLogRepository: ILoanRequestLogRepository) {
 
   }
   getLoanDetails = (id: number, type = "loanRequest") => new Promise<any>(async (resolve, reject) => {
@@ -180,7 +181,7 @@ export class LoanService implements ILoanService {
 
           }
           if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-          resolve({ status: true, data: { id: request.id, loanRequestID: loanRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+          resolve({ status: true, data: { id: request.id, loanRequestID: loanRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
 
         } else {
 
@@ -211,14 +212,13 @@ export class LoanService implements ILoanService {
     let d: any = denominator == "Months" ? "months" : "days";
     return funded.add(tenure, d);
   }
-  updateStatus = ({ requestStatus, id, failureReason, message }: any) => new Promise<any>(async (resolve, reject) => {
+  updateStatus = ({ requestStatus, id, failureReason, message, serialNumber }: any) => new Promise<any>(async (resolve, reject) => {
     try {
       let loanRequest = await this._loanRequestService.getById(id);
       if (!loanRequest || Object.keys(loanRequest).length == 0) throw "Invalid Loan Request";
-      loanRequest = (loanRequest as any).dataValues as LoanRequest;
-      let customer: any = await this._customerRepository.getById(loanRequest.customerID);
+      let customer: Customer = await this._customerRepository.getById(loanRequest.customerID);
       if (!customer || Object.keys(customer).length == 0) throw "Invalid Customer";
-      customer = customer.dataValues as Customer;
+      // customer = (customer as any).dataValues as Customer;
       let loanRequestLog = await this._loanRequestLogService.getByLoanRequestIDAndRequestDate({ loanRequestID: loanRequest.id, requestDate: loanRequest.requestDate })
       if (!loanRequestLog || Object.keys(loanRequestLog).length == 0) throw "Invalid Loan Request log";
       loanRequestLog = loanRequestLog.dataValues;
@@ -228,6 +228,15 @@ export class LoanService implements ILoanService {
       if (requestStatus == LoanRequestStatus.Processing) {
         loanRequest.dateProcessed = new Date();
         loanRequestLog.dateProcessed = new Date();
+        if (serialNumber) {
+          const requestByUniqueID = await this._loanRequestRepository.getByRequestID(serialNumber);
+
+          if (requestByUniqueID && Object.keys(requestByUniqueID).length > 0) {
+            throw "Earning ID has already been assigned to another earning";
+          }
+          loanRequest.requestId = serialNumber;
+          loanRequestLog.requestId = serialNumber;
+        }
       } else if (requestStatus == LoanRequestStatus.Approved) {
         loanRequest.dateApproved = new Date();
         loanRequestLog.dateApproved = new Date();
@@ -268,10 +277,11 @@ export class LoanService implements ILoanService {
       notification.body = `Your loan request status for LOAN ID:${loanRequest.requestId} has been updated to ${requestStatus}`;
       if (failureReason) notification.body += `<br/><br/> Reason for Failure: ${failureReason}`;
       notification.title = `Vanaheim: Loan Status Update`
-      notification.data = new WebNotData();
+      notification.data = new WebNotificationData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
       try {
-        await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: failureReason ? this._templateService.STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, loanRequest.requestId) : requestStatus == LoanRequestStatus.UpdateRequired ? this._templateService.STATUS_UPDATE_REQUIRED(requestStatus, loanRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${loanRequestLog.id}`, message) : this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId), to: customer.email, toCustomer: true });
+        const customerName =customer.title + ' '+customer.firstName;
+        await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: failureReason ? this._templateService.STATUS_UPDATE_DECLINED(customerName, message ?? requestStatus, loanRequest.requestId) : requestStatus == LoanRequestStatus.UpdateRequired ? this._templateService.STATUS_UPDATE_REQUIRED(customerName,message, `https://vanaheim2.herokuapp.com/my/loans/${loanRequestLog.id}`) : this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId,customerName,this._utils.currencyFormatter(loanRequest.amount),`${loanRequest.tenure} ${loanRequest.denominator}`), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
 
       }
@@ -334,7 +344,7 @@ export class LoanService implements ILoanService {
       notification.body = "Your have successfully applied for a loan";
       notification.vibrate = [100, 50, 100]
       notification.icon = 'https://i.tracxn.com/logo/company/Capture_6b9f9292-b7c5-405a-93ff-3081c395624c.PNG?height=120&width=120';
-      notification.data = new WebNotData();
+      notification.data = new WebNotificationData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
       await this._notificationService.sendNotificationToMany({ customerIds: [customer.id], notification })
       resolve({ status: true, data: { loanRequestId: loanRequest.requestId } });

@@ -8,11 +8,15 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { LoanRequestComponent } from './request/loan-request/loan-request.component';
 import { EarningsRequestComponent } from './request/earnings-request/earnings-request.component';
 import { EarningsComponent } from './earnings/earnings.component';
+import { EarningDragAndDropComponent } from './request/earnings-request/drag-and-drop/drag-and-drop.component';
+import { LoanDragAndDropComponent } from './request/loan-request/drag-and-drop/drag-and-drop.component';
 
 
 
 @NgModule({
-  declarations: [RequestComponent, NotifyComponent, AdminComponent, NavigationComponent, LoanRequestComponent, EarningsRequestComponent, EarningsComponent],
+  declarations: [RequestComponent,
+    LoanDragAndDropComponent,
+    EarningDragAndDropComponent, NotifyComponent, AdminComponent, NavigationComponent, LoanRequestComponent, EarningsRequestComponent, EarningsComponent],
   imports: [
     SharedModule,
     AdminRoutingModule

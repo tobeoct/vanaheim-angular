@@ -119,8 +119,8 @@ export default class UserController {
     @route('/updateStatus')
     @POST()
     updateStatus =async (req:any, res:any,next:any) => {
-        let {status,id,failureReason,message} = req.body
-        let response:any = await this._loanService.updateStatus({requestStatus:status,id,failureReason,message});
+        let {status,id,failureReason,message,serialNumber} = req.body
+        let response:any = await this._loanService.updateStatus({requestStatus:status,id,failureReason,message,serialNumber});
         if(response.status==true){
             res.statusCode = 200;
             res.data = response.data

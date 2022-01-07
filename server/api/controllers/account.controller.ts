@@ -1,11 +1,15 @@
 import { Account } from '@models/account';
 import { Customer } from '@models/customer';
+import { VerifyAccountEnquiryRequest } from '@models/verify/request';
+import { VerifyAccountEnquiryResponsePayload, VerifyResponse } from '@models/verify/response';
 import { AccountRepository } from '@repository/implementation/account-repository';
 import { EnvConstants } from '@services/implementation/common/env.constants';
 import UtilService from '@services/implementation/common/util';
 import { GET, POST, route, before, PUT } from 'awilix-express';
 import axios, { AxiosResponse } from 'axios';
 import { Request, Response } from 'express';
+import { VerifyVerificationStatus } from 'server/enums/verify/verification-status';
+import { VerifyVerificationType } from 'server/enums/verify/verification-type';
 import RedisMiddleware from 'server/middleware/redis-middleware';
 const expAutoSan = require('express-autosanitizer');
 
@@ -40,7 +44,7 @@ export default class AccountController {
         const key = `${body.bankCode}-${body.searchParameter}`;
         // console.log(accountList, accountList[key])
         if (!this._utils.hasValue(accountList[key])) {
-          let result = await this.accountEnquiryInstance.post<VerifyAccountEnquiryRequest, AxiosResponse<VerifyAccountEnquiryResponse>>(endpoint, body);
+          let result = await this.accountEnquiryInstance.post<VerifyAccountEnquiryRequest, AxiosResponse<VerifyResponse<VerifyAccountEnquiryResponsePayload>>>(endpoint, body);
 
           console.log("Fetch Account Result", result?.data);
           if (this._utils.hasValue(result.data) && result.data.responseCode == "00") {
@@ -135,39 +139,39 @@ export default class AccountController {
 }
 
 
-type VerifyAccountEnquiryRequest = {
-  transactionReference: string
-  searchParameter: string
-  bankCode: string
-  verificationType: VerifyVerificationType
-}
+// type VerifyAccountEnquiryRequest = {
+//   transactionReference: string
+//   searchParameter: string
+//   bankCode: string
+//   verificationType: VerifyVerificationType
+// }
 
-type VerifyAccountEnquiryResponse = {
-  responseCode: string,
-  description: string,
-  verificationType: VerifyVerificationType,
-  verificationStatus: VerifyVerificationStatus,
-  transactionStatus: string,
-  transactionReference: string,
-  transactionDate: string,
-  searchParameter: string,
-  response: VerifyAccountEnquiryResponsePayload,
-  faceMatch: string,
-}
-type VerifyAccountEnquiryResponsePayload = {
+// type VerifyAccountEnquiryResponse = {
+//   responseCode: string,
+//   description: string,
+//   verificationType: VerifyVerificationType,
+//   verificationStatus: VerifyVerificationStatus,
+//   transactionStatus: string,
+//   transactionReference: string,
+//   transactionDate: string,
+//   searchParameter: string,
+//   response: VerifyAccountEnquiryResponsePayload,
+//   faceMatch: string,
+// }
+// type VerifyAccountEnquiryResponsePayload = {
 
-  full_name: string,
-  bank_name: string,
-  account_number: string,
-  bank_code: string,
-  message: string,
+//   full_name: string,
+//   bank_name: string,
+//   account_number: string,
+//   bank_code: string,
+//   message: string,
 
-}
-enum VerifyVerificationType {
-  AccountEnquiry = "ACCOUNT-INQUIRY-VERIFICATION"
-}
+// }
+// enum VerifyVerificationType {
+//   AccountEnquiry = "ACCOUNT-INQUIRY-VERIFICATION"
+// }
 
-enum VerifyVerificationStatus {
-  Verified = "VERIFIED",
-  NotVerified = "NOT VERIFIED"
-}
+// enum VerifyVerificationStatus {
+//   Verified = "VERIFIED",
+//   NotVerified = "NOT VERIFIED"
+// }

@@ -152,8 +152,8 @@ export class AdminEarningService {
         return {};
       }));
   }
-  updateStatus = (id: number, status: string, failureReason:string,message:string,startDate?:any) => {
-    return this._http.post<any>(`${environment.apiUrl}/earnings/updateStatus`, { id, status, failureReason,message,startDate })
+  updateStatus = (id: number, status: string, failureReason:string,message:string,startDate:any,serialNumber:any) => {
+    return this._http.post<any>(`${environment.apiUrl}/earnings/updateStatus`, { id, status, failureReason,message,startDate,serialNumber })
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;

@@ -105,13 +105,13 @@ export class Store {
 
 
   getItem(key: string) {
-    if (this._authService.isLoggedIn()) {
+    if (this._authService.isLoggedInSubject.value) {
       return localStorage.getItem(key);
     }
     return ""
   }
   setItem(key: string, value: any) {
-    if (this._authService.isLoggedIn() || ["page", "previous"].includes(key)) {
+    if (this._authService.isLoggedInSubject.value || ["page", "previous"].includes(key)) {
       localStorage.setItem(key, value);
     }
   }
@@ -123,7 +123,7 @@ export class Store {
 export class EarningsStore {
   EARNINGS_KEY = "earnings-application"
 
-  private pageSubject: BehaviorSubject<string> = new BehaviorSubject<string>('earnings-calculator');
+   pageSubject: BehaviorSubject<string> = new BehaviorSubject<string>('earnings-calculator');
   page$: Observable<string> = this.pageSubject.asObservable();
 
   private previousSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');

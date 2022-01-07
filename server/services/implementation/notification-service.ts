@@ -9,7 +9,7 @@ import { IPushNotificationRepository } from "@repository/interface/Ipushnotifica
 import { ISubscriptionRepository } from "@repository/interface/Isubscription-repository";
 import { INotificationService } from "@services/interfaces/Inotification-service";
 import { IUserService } from "@services/interfaces/Iuser-service";
-import { WebNotData, WebNotification } from "@models/webnotification";
+import { WebNotificationData, WebNotification } from "@models/webnotification";
 import { BaseService } from "./base-service";
 import AppConfig from "@api/config";
 
@@ -200,7 +200,7 @@ class NotificationService extends BaseService<any> implements INotificationServi
                         notification.body = "Thanks for subscribing to our notifications. We would be sure to keep you posted";
                         notification.vibrate = [100, 50, 100]
                         notification.icon = 'https://i.tracxn.com/logo/company/Capture_6b9f9292-b7c5-405a-93ff-3081c395624c.PNG?height=120&width=120',//'https://www.shareicon.net/data/256x256/2015/10/02/110808_blog_512x512.png';
-                            notification.data = new WebNotData();
+                            notification.data = new WebNotificationData();
                         notification.data.url = this._appConfig.WEBURL + "/my/dashboard";
                         if (subscriptionInDb && Object.keys(subscriptionInDb).length > 0) {
                             console.log("Sending Notification for First Timer")

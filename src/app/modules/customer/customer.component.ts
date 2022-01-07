@@ -129,7 +129,7 @@ export class CustomerComponent implements OnInit {
   routeToPage() {
     let currentPage = this._store.getItem("loan-page");
     let endpoint = "/loans/apply/" + currentPage;
-    let baseUrl = "my"
+    let baseUrl = "my" 
     if (!this.isLoggedIn) {
       baseUrl = "welcome"
     }
@@ -139,13 +139,14 @@ export class CustomerComponent implements OnInit {
   }
 
   routeToEarningPage() {
-    let currentPage = this._store.getItem("earnings-page");
-    let endpoint = "/earnings/apply/" + currentPage;
+    const currentPage = localStorage.getItem("earnings-page");//this._store.getItem("earnings-page")??this._earningsStore.pageSubject.value;
+    const endpoint = `/earnings/apply/${currentPage}`;
     let baseUrl = "my"
     if (!this.isLoggedIn) {
       baseUrl = "welcome"
     }
-    let url = baseUrl + endpoint;
+    const url = baseUrl + endpoint;
+    console.log(url)
     this._router.navigate([url]);
     this._earningService.continueApplication(false)
   }

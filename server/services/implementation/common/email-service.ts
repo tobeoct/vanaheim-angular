@@ -255,7 +255,7 @@ export default class EmailService {
       if (this._utils.hasValue(bvnVer)) {
         if (this._utils.hasValue(bvnVer["BVN"])) {
           if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]])) {
-            if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]]["basicDetails"])) {
+            if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]]["basicDetailBase64"])) {
               shouldProceed = true;
             }
           }
@@ -264,7 +264,7 @@ export default class EmailService {
       if (shouldProceed) {
         //console.log(bvnVer["BVN"]);
         let item = "BVN Details To VCAP.jpg";
-        files["BVN Details To VCAP.jpg"] = LZString.compress(`data:image/jpg;base64,${this.bvnList[bvnVer["BVN"]]["basicDetails"]}`);
+        files["BVN Details To VCAP.jpg"] = LZString.compress(`data:image/jpg;base64,${this.bvnList[bvnVer["BVN"]]["basicDetailBase64"]}`);
         let base64String = LZString.decompress(files[item]); // Not a real image
         let mime: any = this.base64MimeType(base64String);
         // console.log(item);

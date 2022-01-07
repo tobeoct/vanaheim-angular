@@ -1,6 +1,6 @@
 import AppConfig from "@api/config";
 import { Customer } from "@models/customer";
-import { WebNotData, WebNotification } from "@models/webnotification";
+import { WebNotificationData, WebNotification } from "@models/webnotification";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
 import EmailService from "@services/implementation/common/email-service";
 import { TemplateService } from "@services/implementation/common/template-service";
@@ -38,7 +38,7 @@ export default class NotificationController {
           notification.body = message;
           notification.vibrate = [100, 50, 100]
           notification.icon = 'https://i.tracxn.com/logo/company/Capture_6b9f9292-b7c5-405a-93ff-3081c395624c.PNG?height=120&width=120';
-          notification.data = new WebNotData();
+          notification.data = new WebNotificationData();
           notification.data.url = this._appConfig.WEBURL + "/my/dashboard";
 
           let response = await this._notificationService.sendNotificationToMany({ notification, customerIds: [customerID] });
