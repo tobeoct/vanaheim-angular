@@ -42,8 +42,8 @@
                         </div>
                         <div class="item">
                             <p>Maturity Date</p>
-                            <p><b>{{earnings.maturityDate|date:'MMMM d
-                                    YYYY'}}</b></p>
+                            <p><b>{{earnings.requestStatus=='Pending'?earnings.maturityDate:(earnings.maturityDate|date:'MMMM d
+                                    YYYY')}}</b></p>
                         </div>
                     </div>
                 </div>
