@@ -6,6 +6,7 @@ import { ApprovedEarningStatus } from "@models/helpers/enums/approvedEarningStat
 import { EarningType } from "@models/helpers/enums/earningtype";
 import { Gender } from "@models/helpers/enums/gender";
 import { EarningRequestStatus } from "@models/helpers/enums/investmentrequeststatus";
+import { LoanRequestStatus } from "@models/helpers/enums/loanrequeststatus";
 import { MaritalStatus } from "@models/helpers/enums/maritalstatus";
 import { Relationship } from "@models/helpers/enums/relationship";
 import { BaseStatus } from "@models/helpers/enums/status";
@@ -324,7 +325,7 @@ export class EarningService implements IEarningService {
             data: [
               { key: "Type", value: request.type },
               { key: "Duration", value: request.duration + " Months" },
-              { key: "Maturity Date", value: moment(request.maturityDate).format("MMMM Do YYYY") },
+              { key: "Maturity Date", value:request.requestStatus==LoanRequestStatus.Pending?request.maturityDate: moment(request.maturityDate).format("MMMM Do YYYY") },
               { key: "Rate", value: request.rate + "% per annum" },
               { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
               { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
@@ -443,7 +444,7 @@ export class EarningService implements IEarningService {
               data: [
                 { key: "Type", value: request.type },
                 { key: "Duration", value: request.duration + " Months" },
-                { key: "Maturity Date", value: request.maturityDate },
+                { key: "Maturity Date", value: request.requestStatus==LoanRequestStatus.Pending?request.maturityDate: moment(request.maturityDate).format("MMMM Do YYYY")  },
                 { key: "Rate", value: request.rate + "%" },
                 { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
                 { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },

@@ -79,7 +79,7 @@
                                 <td>{{row.requestDate | date :'MMMM d, y'}}</td>
                                 <td>{{row.amount|currency:'₦'}}</td>
                                 <td>{{row.duration}} Months</td>
-                                <td>{{row.maturityDate| date :'MMMM d, y'}}</td>
+                                <td>{{row.requestStatus=='Pending'?row.maturityDate:(row.maturityDate| date :'MMMM d, y')}}</td>
                                 <td>{{row.type}}</td>
                                 <td>
                                     <app-badge [color]="getEarningStatusColor(row.requestStatus)">{{row.requestStatus}}
