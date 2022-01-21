@@ -1,10 +1,10 @@
 
 import { PaymentType } from "server/enums/paymenttype";
 import { BaseEntity } from "server/entities/base-entity";
-import { ApprovedInvestment } from "./approved-investment";
+import { ApprovedEarning } from "./approved-investment";
 
-export class InvestmentPayout extends BaseEntity{
-    approvedInvestment:ApprovedInvestment;
+export class EarningPayout extends BaseEntity{
+    approvedInvestment:ApprovedEarning;
     amount:string;
     datePaid:Date;
     payoutType:PaymentType;

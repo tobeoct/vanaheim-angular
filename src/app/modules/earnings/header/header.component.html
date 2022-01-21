@@ -1,0 +1,7 @@
+<div id="earnings-header" class="animate__animated animate__fadeInUp" [ngClass]="{'no-margin--bottom':isLoggedIn}">
+    <p  id="title" *ngIf="(title$|async) && isLoggedIn"><b>{{title$|async}}</b></p>
+    
+    <div id="back" (click)="back()"><span class="material-icons">
+    arrow_back
+    </span><h3>Back</h3></div>
+</div>

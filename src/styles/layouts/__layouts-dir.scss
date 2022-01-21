@@ -79,7 +79,22 @@
      padding-bottom: map-get($sizings, "px")*0.75 !important;
   }
 }
+.no-padding{
+   padding: 0 !important;
+&--top{
+    padding-top: 0 !important;
+}
+&--bottom{
+    padding-bottom: 0 !important;
+}
+&--left{
+    padding-left: 0 !important;
+}
+&--right{
+    padding-right: 0 !important;
+}
 
+}
 
 .margin{
   &--x{
@@ -96,6 +111,7 @@
  }
 }
 .no-margin{
+      margin: 0 !important;
    &--top{
        margin-top: 0 !important;
    }
@@ -108,9 +124,7 @@
    &--right{
        margin-right: 0 !important;
    }
-   &--all{
-      margin: 0 !important;
-   }
+  
 }
 @media all and (max-width:1233px){
    .grid-padding-2x{

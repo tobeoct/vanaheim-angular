@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {VCValidators} from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
 import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { CollateralInfo } from './collateral-info';
 import { Document } from '../../shared/document-upload/document';
 import { Utility } from 'src/app/shared/helpers/utility.service';
@@ -20,7 +20,7 @@ import { CustomerService } from 'src/app/shared/services/customer/customer.servi
 export class CollateralInfoComponent implements OnInit {
   form:FormGroup;
   types:string[];
-  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$:Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -54,7 +54,7 @@ export class CollateralInfoComponent implements OnInit {
   collaterals:BehaviorSubject<any[]>=new BehaviorSubject<any[]>([]);
   collateralsFromDb$:Observable<any[]> = this.collaterals.asObservable();
     base:string;
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _customerService:CustomerService,
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store, private _loanStore:LoanStore,private _customerService:CustomerService,
     private _validators:VCValidators,private _utility:Utility, private _route: ActivatedRoute, private _authService:AuthService) {
       this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
         this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -88,7 +88,7 @@ export class CollateralInfoComponent implements OnInit {
       }else{
         this.showForm();
       }
-    const collateralInfo = this._store.collateralInfo as CollateralInfo;
+    const collateralInfo = this._loanStore.collateralInfo as CollateralInfo;
     this.form = this._fb.group({
       id:[0],
       type: [collateralInfo.type?collateralInfo.type:"",[Validators.required]],
@@ -99,7 +99,7 @@ export class CollateralInfoComponent implements OnInit {
       hasDocument: [collateralInfo.document?.fileName?'true':'']
       
   });
-    this._store.titleSubject.next("Collateral Information");
+    this._loanStore.titleSubject.next("Collateral Information");
     this.types = this._store.collateralTypes;
     this.hasDocument.valueChanges.subscribe(d=>{
       if(this.hasDocument.value=="true"){
@@ -188,7 +188,7 @@ ngOnDestroy(): void {
     let d = new Document();
     d.fileName = this.document.value;
     const collateralInfo:CollateralInfo ={id:0,document:d,owner:this.owner.value, valuation: this._utility.currencyFormatter(this.valuation.value), type: this.type.value, description: this.description.value};
-     this._store.setCollateralInfo(collateralInfo);
+     this._loanStore.setCollateralInfo(collateralInfo);
     this.onNavigate("account-info");
   }
   onNavigate(route:string,params:any={}):void{

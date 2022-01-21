@@ -11,12 +11,14 @@ import { SplitCamelCasePipe } from './pipes/split/split-camel-case.pipe';
 import { ConvertToFormGroupPipe } from './pipes/form/convert-to-formgroup.pipe copy';
 import { ToasterComponent } from './components/toaster/toaster.component';
 import { HashPipe } from './pipes/replace/hash.pipe';
+import { GetPipe } from './pipes/get/get.pipe';
+import { LoadingComponent } from './components/loading/loading.component';
 
 
 
 @NgModule({
   declarations: [ToasterComponent,
-    ReplacePipe,ConvertToFormControlPipe,ConvertToFormGroupPipe,SplitCamelCasePipe, HashPipe],
+    ReplacePipe,ConvertToFormControlPipe,ConvertToFormGroupPipe,SplitCamelCasePipe, HashPipe,GetPipe, LoadingComponent],
   imports: [ ScrollingModule,
     DragDropModule,
     OverlayModule,
@@ -38,7 +40,8 @@ import { HashPipe } from './pipes/replace/hash.pipe';
     ConvertToFormControlPipe,
     ConvertToFormGroupPipe,
     SplitCamelCasePipe,
-    HashPipe
+    HashPipe,
+    GetPipe, LoadingComponent
   ]
 })
 export class BaseModule { }

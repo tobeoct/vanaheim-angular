@@ -4,11 +4,11 @@ import { environment } from '@environments/environment';
 import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
 import { catchError, concatMap, filter, map, mergeMap, retry, shareReplay, switchMap, take, tap, toArray } from 'rxjs/operators';
-import { Store } from '../../helpers/store';
+import { LoanStore, Store } from '../../helpers/store';
 import { Utility } from '../../helpers/utility.service';
 import { LoanResponse } from '../../poco/loan/loan-response';
 // import { LoanResponse } from '../../poco/loan/loan-response';
-
+const POLLING_INTERVAL = 30000;
 @Injectable({
   providedIn: 'root'
 })
@@ -32,11 +32,12 @@ export class LoanService {
 
 
   activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  interval = environment.production ? 30000 : 30000000000000000;
+  interval = environment.production ? POLLING_INTERVAL : 30000000000000000;
   constructor(
     private _http: HttpClient,
     private _utility: Utility,
-    private _store: Store) {
+    private _store: Store,
+    private _loanStore:LoanStore) {
 
   }
   continueApplication(value:boolean){
@@ -136,7 +137,19 @@ export class LoanService {
   getTotalRepayment = (monthlyRepayment: number, tenure: number) => {
     return monthlyRepayment * tenure;
   }
-
+  validateLoanApplication() {
+    let application = this._loanStore.loanApplication;
+    let category = this._loanStore.loanCategory;
+    if (application && category) {
+      application = application[category];
+      if (!application) return false;
+      if (!application["loanType"] || !application["loanProduct"] || !application["applyingAs"] || !application["accountInfo"] || !application["loanCalculator"]) return false;
+      if (category == 'personal' && (!application["bvn"] || !application["personalInfo"] || !application["employmentInfo"] || !application["nokInfo"])) return false;
+      if (category == 'business' && (!application["collateralInfo"] || !application["companyInfo"] || !application["shareholderInfo"])) return false;
+      return true;
+    }
+    return false;
+  }
   apply = (payload: LoanResponse) => {
     // console.log(payload)
     return this._http.post<any>(`${environment.apiUrl}/loans/create`, payload)
@@ -174,19 +187,7 @@ export class LoanService {
       }));
   }
 
-  validateLoanApplication() {
-    let application = this._store.loanApplication;
-    let category = this._store.loanCategory;
-    if (application && category) {
-      application = application[category];
-      if (!application) return false;
-      if (!application["loanType"] || !application["loanProduct"] || !application["applyingAs"] || !application["accountInfo"] || !application["loanCalculator"]) return false;
-      if (category == 'personal' && (!application["bvn"] || !application["personalInfo"] || !application["employmentInfo"] || !application["nokInfo"])) return false;
-      if (category == 'business' && (!application["collateralInfo"] || !application["companyInfo"] || !application["shareholderInfo"])) return false;
-      return true;
-    }
-    return false;
-  }
+  
   getLatest = () => {
     return timer(0, this.interval)
       .pipe(switchMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
@@ -213,7 +214,6 @@ export class LoanService {
 
   loans$: Observable<any> = this.search({ pageNumber: 1, maxSize: 10 });
   latestLoan$: Observable<any> = this.getLatest().pipe(tap(c => {
-    console.log(c)
     if (!c || c.requestStatus == "NotQualified" || c.requestStatus == "Completed") { this.runningLoanSubject.next(false) } else {
       this.runningLoanSubject.next(true)
     }

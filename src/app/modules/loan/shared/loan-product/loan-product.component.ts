@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 const data:any[] = [
   {title:"PayMe Loan",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["PayMe Loan", "FloatMe (Personal)"], description:"Spread your loan payment, repay when you get your salary"},
   {title:"Personal Line Of Credit",allowedApplicant:["Salary Earner","Business Owner"],allowedTypes:["PayMe Loan", "FloatMe (Personal)"], description:"Spread your loan payment, repay when you get your salary"},
@@ -23,7 +23,7 @@ export class LoanProductComponent implements OnInit {
    applyingAs:string;
   form:FormGroup;
   base:string;
-  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject:BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$:Observable<string> = this.activeTabSubject.asObservable();
 
   showSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -38,19 +38,19 @@ export class LoanProductComponent implements OnInit {
     return this.form.get("loanProduct") as FormControl|| new FormControl();
   }
 
-  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store, private _route:ActivatedRoute) {
+  constructor(private _router:Router, private _fb:FormBuilder, private _store:Store,private _loanStore:LoanStore, private _route:ActivatedRoute) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url;//.replace(/\/[^\/]*$/, '/');
      });
    }
 
   ngOnInit(): void {
-    this.loanType = this._store.loanType;
-    this._store.titleSubject.next("Loan Product");
-    this.applyingAs = this._store.applyingAs;
-    this.requirementsSubject.next(this._store.loanTypes.find(type=>type.title==this._store.loanProduct)?.requirements || []);
+    this.loanType = this._loanStore.loanType;
+    this._loanStore.titleSubject.next("Loan Product");
+    this.applyingAs = this._loanStore.applyingAs;
+    this.requirementsSubject.next(this._loanStore.loanTypes.find(type=>type.title==this._loanStore.loanProduct)?.requirements || []);
     this.form = this._fb.group({
-      loanProduct: [this._store.loanProduct?this._store.loanProduct:"",[Validators.required]],
+      loanProduct: [this._loanStore.loanProduct?this._loanStore.loanProduct:"",[Validators.required]],
       
     })
     let d = data.filter(d=>d.allowedTypes.includes(this.loanType)&&d.allowedApplicant.includes(this.applyingAs));
@@ -63,7 +63,7 @@ export class LoanProductComponent implements OnInit {
   }
 
   next=(event:any)=>{
-    this._store.setLoanProduct(this.loanProduct.value);
+    this._loanStore.setLoanProduct(this.loanProduct.value);
     // if(this._router.url!="/welcome/loans"){
       let url = "loans/apply/loan-calculator";
       if(this._router.url.includes("apply")) url = "loan-calculator";
@@ -76,7 +76,7 @@ export class LoanProductComponent implements OnInit {
     this._router.navigate([route],{queryParams: params, relativeTo:this._route.parent})
   }
 toggle(product:any){
-  this.requirementsSubject.next(this._store.loanTypes.find(type=>type.title==product)?.requirements || []);
+  this.requirementsSubject.next(this._loanStore.loanTypes.find(type=>type.title==product)?.requirements || []);
   this.showSubject.next(true);
 }
 close=()=>{

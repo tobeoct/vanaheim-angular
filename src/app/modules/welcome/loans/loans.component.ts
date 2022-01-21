@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AssetPath } from 'src/app/shared/constants/variables';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import {IAssetPath} from "src/app/shared/interfaces/assetpath";
 @Component({
   selector: 'app-loans',
@@ -18,12 +18,12 @@ export class LoansComponent implements OnInit {
   desktop:string="sm-desktop";
   headerclass:string ="header";
   page$:Observable<string>;
-  constructor(private _store:Store) {
+  constructor(private _loanStore:LoanStore) {
 
    }
 
   ngOnInit(): void {
-    this.page$ = this._store.page$;
+    this.page$ = this._loanStore.page$;
   }
 
   submit(event:any, type:string){

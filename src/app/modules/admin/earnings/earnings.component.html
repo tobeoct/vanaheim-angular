@@ -1,0 +1,167 @@
+<div class="content content--smaller" id="earnings">
+
+    <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center margin--2x">
+        <h2>All Requests</h2>
+        <div class="d-flex">
+            <app-input fieldClass="no-margin--top" type="date" id="fromDate" [control]="fromDate" class="form-control">
+            </app-input>
+            <app-input fieldClass="no-margin--top" type="date" id="toDate" [control]="toDate" class="form-control">
+            </app-input>
+            <!-- <app-dropdown [fieldClass]="'no-margin'" [class]="'no-margin'" [current]="'Today'">
+                  <option value="Today">Today</option>
+              </app-dropdown> -->
+        </div>
+    </div>
+
+    <app-earnings-request [fromDate]="fromDate" [toDate]="toDate"></app-earnings-request>
+    <div class="margin--3x">
+
+        <h3>Liquidation Requests</h3>
+        <app-table>
+            <ng-container slot="filter">
+                <!-- <div id="filters">
+                        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}"
+                            (click)="changeFilter('')">All</div>
+                        <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Pending'}"
+                            (click)="changeFilter('Pending')">Pending</div>
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Processing'}"
+                            (click)="changeFilter('Processing')">Processing</div>
+                    </div> -->
+            </ng-container>
+            <ng-container slot="header">
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </ng-container>
+            <ng-container slot="body" *ngIf="liquidations$|async as data">
+                <ng-container *ngIf="data.rows.length==0">
+                    <div class="no-data">
+                        <span class="material-icons material-icons-outlined">
+                            info
+                        </span>
+                        <h3>No data available</h3>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.rows.length>0">
+                    <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                        <td>{{row.Customer?.title}} {{row.Customer?.firstName}} {{row.Customer?.lastName}}</td>
+                        <td>{{row.createdAt | date :'MMMM d, y'}}</td>
+                        <td>{{row.amount|currency:'₦'}}</td>
+                        <td>{{row.duration}} Months</td>
+                        <td>
+                            <app-badge [color]="getEarningStatusColor(row.liquidationStatus)">{{row.liquidationStatus}}
+                            </app-badge>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="row.liquidationStatus=='Pending'">
+                                <app-button [class]="'widget_button--small'"
+                                    (onClick)="liquidate(row.id,'EarningPaused')" fieldClass="no-margin">
+                                    <ng-container slot="button">Approve for processing</ng-container>
+                                </app-button>
+                            </ng-container>
+                            <ng-container *ngIf="row.liquidationStatus=='EarningPaused'">
+                                <app-button [class]="'widget_button--small'" (onClick)="liquidate(row.id,'Processed')"
+                                    fieldClass="no-margin">
+                                    <ng-container slot="button">Approve for processing</ng-container>
+                                </app-button>
+                            </ng-container>
+
+                        </td>
+                        <td> <ng-container *ngIf="row.liquidationStatus!=='Declined'">
+                            
+                            <app-button [class]="'widget_button--small'" color="danger" (onClick)="liquidate(row.id,'Declined')"
+                                fieldClass="no-margin">
+                                <ng-container slot="button">Decline</ng-container>
+                            </app-button>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+            <ng-container slot="body" *ngIf="!(liquidations$|async)">
+                <div class="no-data">
+                    <span class="material-icons material-icons-outlined">
+                        info
+                    </span>
+                    <h3>No data available</h3>
+                </div>
+            </ng-container>
+            <ng-container slot="pagination">
+                <app-pagination [totalCount]="(liquidations$|async)?.count||0" [maxSize]="10"
+                    [pagingChangeSubject]="liquidationPagingSubject"></app-pagination>
+            </ng-container>
+        </app-table>
+    </div>
+    <div class="margin--3x">
+        <h3>Top Up Requests</h3>
+        <app-table>
+            <!-- <ng-container slot="filter">
+            <div id="filters">
+                <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}"
+                    (click)="changeFilter('')">All</div>
+                <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Processing'}"
+                    (click)="changeFilter('Processing')">Processing</div>
+               
+            </div>
+        </ng-container> -->
+            <ng-container slot="header">
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </ng-container>
+            <ng-container slot="body" *ngIf="topUps$|async as data">
+                <ng-container *ngIf="data.rows.length==0">
+                    <div class="no-data">
+                        <span class="material-icons material-icons-outlined">
+                            info
+                        </span>
+                        <h3>No data available</h3>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.rows.length>0">
+                    <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                        <td>{{row.Customer?.title}} {{row.Customer?.firstName}} {{row.Customer?.lastName}}</td>
+                        <td>{{row.createdAt | date :'MMMM d, y'}}</td>
+                        <td>{{row.amount|currency:'₦'}}</td>
+                        <td>{{row.duration}} Months</td>
+                        <td>
+                            <app-badge [color]="getEarningStatusColor(row.topUpStatus)">{{row.topUpStatus}}
+                            </app-badge>
+                        </td>
+                        <td>
+                            <app-button [class]="'widget_button--small'" (onClick)="topUp(row.id)"
+                                fieldClass="no-margin">
+                                <ng-container slot="button">Approve</ng-container>
+                            </app-button>
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+            <ng-container slot="body" *ngIf="!(topUps$|async)">
+                <div class="no-data">
+                    <span class="material-icons material-icons-outlined">
+                        info
+                    </span>
+                    <h3>No data available</h3>
+                </div>
+            </ng-container>
+            <ng-container slot="pagination">
+                <app-pagination [totalCount]="(topUps$|async)?.count||0" [maxSize]="10"
+                    [pagingChangeSubject]="topUpPagingSubject"></app-pagination>
+            </ng-container>
+        </app-table>
+    </div>
+
+
+</div>

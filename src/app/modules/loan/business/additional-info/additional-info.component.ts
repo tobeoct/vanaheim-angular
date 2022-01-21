@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { AdditionalInfo } from './additional-info';
 const data: any[] = [
   { title: "PayDay Loans", allowedApplicant: ["Salary Earner", "Business Owner"], allowedTypes: ["Personal Loans", "Float Me - Personal"], description: "Spread your loan payment, repay when you get your salary" },
@@ -24,7 +24,7 @@ export class AdditionalInfoComponent implements OnInit {
   applyingAs: string;
   loanProduct: string;
   form: FormGroup;
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -41,7 +41,7 @@ export class AdditionalInfoComponent implements OnInit {
   }
 
   base: string;
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _loanStore:LoanStore,
     private _validators: VCValidators, private _route: ActivatedRoute) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -56,10 +56,10 @@ export class AdditionalInfoComponent implements OnInit {
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
-    this.lType = this._store.loanType;
-    this.applyingAs = this._store.applyingAs;
-    this.loanProduct = this._store.loanProduct;
-    const additionalInfo = this._store.additionalInfo as AdditionalInfo;
+    this.lType = this._loanStore.loanType;
+    this.applyingAs = this._loanStore.applyingAs;
+    this.loanProduct = this._loanStore.loanProduct;
+    const additionalInfo = this._loanStore.additionalInfo as AdditionalInfo;
     this.form = this._fb.group({
       name: [additionalInfo.preferredName ? additionalInfo.preferredName : "", [Validators.required, Validators.minLength(3)]],
       email: [additionalInfo.preferredEmail ? additionalInfo.preferredEmail : "", [Validators.required, Validators.email]],
@@ -67,7 +67,7 @@ export class AdditionalInfoComponent implements OnInit {
     });
     let d = data.filter(d => d.allowedTypes.includes(this.lType) && d.allowedApplicant.includes(this.applyingAs));
     this.dataSelectionSubject.next(d);
-    this._store.titleSubject.next("Contact Information");
+    this._loanStore.titleSubject.next("Contact Information");
   }
 
   allSubscriptions: Subscription[] = [];
@@ -85,7 +85,7 @@ export class AdditionalInfoComponent implements OnInit {
     this.allSubscriptions.forEach(sub => sub.unsubscribe());
   }
   onSubmit = (event: any) => {
-    this._store.setAdditionalInfo({ preferredName: this.name.value, preferredEmail: this.email.value, preferredPhoneNumber: this.phoneNumber.value });
+    this._loanStore.setAdditionalInfo({ preferredName: this.name.value, preferredEmail: this.email.value, preferredPhoneNumber: this.phoneNumber.value });
     this.onNavigate("company-info");
   }
   onNavigate(route: string, params: any = {}): void {

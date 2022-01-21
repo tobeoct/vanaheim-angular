@@ -1,7 +1,7 @@
-import { InvestmentRequest } from "./investment-request";
+import { EarningRequest } from "./investment-request";
 
 
-export class InvestmentRequestLog extends InvestmentRequest{
+export class EarningRequestLog extends EarningRequest{
    
 
 }

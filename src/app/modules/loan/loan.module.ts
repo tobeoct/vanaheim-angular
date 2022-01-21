@@ -7,13 +7,13 @@ import { LoanCalculatorComponent } from './shared/loan-calculator/loan-calculato
 import { BVNComponent } from './personal/bvn/bvn.component';
 // import { PersonalInfoComponent } from './personal/personal-info/personal-info.component';
 import { EmploymentInfoComponent } from './personal/employment-info/employment-info.component';
-import { AccountInfoComponent } from './shared/account-info/account-info.component';
 import {  DocumentUploadComponent } from './shared/document-upload/document-upload.component';
 import { PreviewComponent } from './shared/preview/preview.component';
 import { CompanyInfoComponent } from './business/company-info/company-info.component';
 import { AdditionalInfoComponent } from './business/additional-info/additional-info.component';
 import { ShareholderInfoComponent } from './business/shareholder-info/shareholder-info.component';
 import { CollateralInfoComponent } from './business/collateral-info/collateral-info.component';
+import { AccountFormComponent } from './shared/account-info/account-form/account-form.component';
 
 
 
@@ -29,6 +29,7 @@ import { CollateralInfoComponent } from './business/collateral-info/collateral-i
      AdditionalInfoComponent,
      ShareholderInfoComponent,
      CollateralInfoComponent,
+     AccountFormComponent,
 
     ],
   imports: [

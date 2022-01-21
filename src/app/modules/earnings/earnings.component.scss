@@ -1,0 +1,72 @@
+@import '../../../styles/abstracts/_abstracts-dir';
+#earnings-flow.no-nav #earnings-content #main-content{
+    margin-left: 0 !important;
+    width: 100% !important;
+    #earnings-calculator.grid-padding-3x{
+        padding-left: 0 !important;
+    }
+}
+#header{
+    display: none;
+    box-sizing: border-box;
+    width: 100vw;
+    height:map-get($sizings, "vh")*3; 
+    align-items: center; 
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    .logo{
+        padding-top: 0 !important;
+    }
+}
+#cta .bordered_anchor:nth-child(2){
+    margin-left: 5px;
+}
+#earnings-content{
+    width: 85vw;
+    margin-left: 15vw;
+    position: relative;
+   &.loggedIn{
+    width: 100%;
+    margin-left: 0;
+    padding-top: 0 !important;
+    #main-content{
+        margin-left: 15%;
+        width: 85%;
+        #earnings-calculator{
+            display: flex;
+            flex-direction: column;
+            &.grid-padding-3x{@include paddingHorizontal(false,"%",0.5,0,$important:important);}
+        }
+    }
+   }
+}
+
+@media all and (max-width:900px){
+    #header{
+        display: flex;
+    }
+    #earnings-content{
+        width: 100%;
+    margin-left: 0;
+    position: relative;
+        #main-content{
+        width: 100% !important;
+        margin-left: 0 !important;
+        }
+    }
+    
+}
+
+
+@media all and (max-width:768px){
+    #earnings-content{
+        width: 100%;
+    margin-left: 0;
+    position: relative;
+        #main-content{
+        width: 100% !important;
+        margin-left: 0 !important;
+        }
+    }
+    
+}

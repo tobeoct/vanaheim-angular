@@ -33,7 +33,13 @@
     <div style="margin-top: 25px;" >
         <p class="theme_color--grey">Email Us At</p>
         <div class="bordered_anchor" style="border: 2px solid #333333; padding:5px 10px;"><p style="font-weight: 600;"><a href="mailto:support@vanircapital.org">support@vanircapital.org</a></p></div>
-        <div class="bordered_anchor margin--x" style="border: 2px solid #333333; padding:5px 10px;"><p style="font-weight: 600;"><a href="mailto:support@vanircapital.org">loans@vanircapital.org</a></p></div>
+        <ng-container *ngIf="email$|async as email">
+            <div class="bordered_anchor margin--x" style="border: 2px solid #333333; padding:5px 10px;">
+                <p style="font-weight: 600;">
+                    <a href="mailto:{{email}}">{{email}}</a>
+                </p>
+            </div>
+            </ng-container>
     </div>
     
 </div>

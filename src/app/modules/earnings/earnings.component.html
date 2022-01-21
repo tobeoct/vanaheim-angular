@@ -1,0 +1,35 @@
+<div class="theme_bg theme_flex theme_flex--spacebetween" id="header" *ngIf="!isLoggedIn">
+    <div class="logo">
+        <a href="/" target="_blank"><img src="../../assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
+    </div>
+
+    <div id="cta" style="display: flex; align-items: center; justify-content: space-between;min-width: 15%;">
+        <div class="bordered_anchor widget_button--icon theme_color--white" (click)="toggleSideNav()">
+            <div class="icon"><img src="../../../assets/icons/questions.svg" alt="question" /></div>
+            <span>Questions</span>
+        </div>
+
+        <div class="bordered_anchor theme_color--white" style="cursor: pointer;" [routerLink]="['/auth/account']">Login
+        </div>
+        <!-- <div style="margin-right: 15px;">
+            <app-button [form]="form">Get Started</app-button></div> -->
+    </div>
+</div>
+<div id="earnings-flow" [ngClass]="{'no-nav':!(show$|async)}">
+    <app-earnings-navigation *ngIf="!isLoggedIn"></app-earnings-navigation>
+    <div id="earnings-content" class="content" style="box-sizing:border-box;" [ngClass]="{'loggedIn':isLoggedIn}">
+
+        <app-earnings-navigation theme="light" *ngIf="isLoggedIn"></app-earnings-navigation>
+        <app-banner [class]="'banner--small margin--3x no-margin--top'" color="tertiary" *ngIf="!isLoggedIn">
+            <ng-container slot="content"><span [routerLink]="['/auth/account']" style="cursor: pointer;"><b><u>Sign up
+                            required</u> </b></span> to be able to
+                submit your application or upload documents</ng-container>
+        </app-banner>
+        <app-earnings-header></app-earnings-header>
+        <div id="main-content" class="margin--2x">
+            <div id="earnings-calculator">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

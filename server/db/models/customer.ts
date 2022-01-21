@@ -22,6 +22,10 @@ module.exports = (sequelize:any, DataTypes:any) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      taxId:{
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
        dateOfBirth:{
         type: DataTypes.DATE,
         allowNull: true,

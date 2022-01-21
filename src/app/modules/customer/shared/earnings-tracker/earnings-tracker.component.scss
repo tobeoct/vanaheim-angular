@@ -1,0 +1,7 @@
+@import '../../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../../styles/themes/_theme-dir';
+.stroke{
+    @include border(2px, solid, black);
+    @include color(black);
+    border-radius: $border-radius * 3;
+}

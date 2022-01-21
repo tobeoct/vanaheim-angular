@@ -19,15 +19,15 @@ module.exports = (sequelize:any, DataTypes:any) => {
       allowNull: false,
     },
     monthlyPayment: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
     },
     totalRepayment: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
     },
     rate: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
     },
     maturityDate: {
@@ -35,7 +35,7 @@ module.exports = (sequelize:any, DataTypes:any) => {
       allowNull: false,
     },
     amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
     },
     accountNumber:{

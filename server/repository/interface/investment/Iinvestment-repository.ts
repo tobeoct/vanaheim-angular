@@ -1,11 +1,11 @@
-import { InvestmentRequest } from "@models/investment/investment-request";
-import { InvestmentRequestLog } from "@models/investment/investment-request-log";
+import { EarningRequest } from "@models/investment/investment-request";
+import { EarningRequestLog } from "@models/investment/investment-request-log";
 
-export interface IInvestmentRepository{
-    restructure:(approvedInvestmentId:number,payout:number)=>Promise<boolean>
-    getAllInvestmentRequests:()=>Promise<InvestmentRequest[]>
-    getAllInvestmentRequestLogs:()=>Promise<InvestmentRequestLog[]>
-    getInvestmentRequestById:()=>Promise<InvestmentRequest>
-    getInvestmentRequestLogById:()=>Promise<InvestmentRequestLog>
-    updateInvestmentRequest:(investmentRequest:InvestmentRequest)=> Promise<InvestmentRequest>
+export interface IEarningRepository{
+    restructure:(approvedEarningId:number,payout:number)=>Promise<boolean>
+    getAllEarningRequests:()=>Promise<EarningRequest[]>
+    getAllEarningRequestLogs:()=>Promise<EarningRequestLog[]>
+    getEarningRequestById:()=>Promise<EarningRequest>
+    getEarningRequestLogById:()=>Promise<EarningRequestLog>
+    updateEarningRequest:(investmentRequest:EarningRequest)=> Promise<EarningRequest>
 }

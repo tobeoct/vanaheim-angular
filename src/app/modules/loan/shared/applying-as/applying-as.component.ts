@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 const data: any[] = [
   { title: "Salary Earner", allowedTypes: ["PayMe Loan", "FloatMe Loan (Individual)"], description: "A person who earns a fixed regular income made by an employer monthly." },
   { title: "Business Owner", allowedTypes: ["PayMe Loan"], description: "A person who manages a registered and functional business or organization and earns an income regularly from the business." },
@@ -23,7 +23,7 @@ export class ApplyingAsComponent implements OnInit {
   loanProduct: string;
   form: FormGroup;
   base: string;
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.applyingAs);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.applyingAs);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -37,21 +37,21 @@ export class ApplyingAsComponent implements OnInit {
     return this.form.get("applyingAs") as FormControl || new FormControl();
   }
 
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _route: ActivatedRoute) {
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _loanStore:LoanStore, private _route: ActivatedRoute) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
     });
   }
 
   ngOnInit(): void {
-    this.loanProduct = this._store.loanType;
-    this._store.titleSubject.next("Applying As");
+    this.loanProduct = this._loanStore.loanType;
+    this._loanStore.titleSubject.next("Applying As");
 
     this.form = this._fb.group({
-      applyingAs: [!this._store.applyingAs ? "" : this._store.applyingAs, [Validators.required]],
+      applyingAs: [!this._loanStore.applyingAs ? "" : this._loanStore.applyingAs, [Validators.required]],
 
     })
-    let loanTypes: any = this._store.loanTypes.find(type => type.title == this.loanProduct);
+    let loanTypes: any = this._loanStore.loanTypes.find(type => type.title == this.loanProduct);
     if (loanTypes) {
       this.requirementsSubject.next(loanTypes?.applyingAs?.find((type: any) => type.title == this.applyingAs.value)?.requirements || []);
     }
@@ -67,23 +67,23 @@ export class ApplyingAsComponent implements OnInit {
     this.toggle(this.applyingAs.value)
   }
   toggle(product: any) {
-    let loanTypes: any = this._store.loanTypes.find(type => type.title == this.loanProduct);
+    let loanTypes: any = this._loanStore.loanTypes.find(type => type.title == this.loanProduct);
     this.requirementsSubject.next(loanTypes?.applyingAs?.find((type: any) => type.title == this.applyingAs.value)?.requirements || []);
     // this.requirementsSubject.next(this._store.loanTypes.find(type=>type.title==product)?.requirements || []);
     this.showSubject.next(true);
   }
   next = () => {
     if(this.applyingAs.value=="Personal Line Of Credit"){
-      this._store.setLoanCategory("personal");
+      this._loanStore.setLoanCategory("personal");
     }
     if(this.applyingAs.value=="Business Line Of Credit"){
-      this._store.setLoanCategory("business");
+      this._loanStore.setLoanCategory("business");
     }
-    this._store.setApplyingAs(this.applyingAs.value);
+    this._loanStore.setApplyingAs(this.applyingAs.value);
     if (this.applyingAs.value.includes("Line Of Credit")) {
-      this._store.setLoanType("Line Of Credit");
+      this._loanStore.setLoanType("Line Of Credit");
     }
-    this._store.setLoanProduct(this.applyingAs.value);
+    this._loanStore.setLoanProduct(this.applyingAs.value);
     // if(this._router.url!="/welcome/loans"){
     let url = "loans/apply/loan-calculator";
     if (this._router.url.includes("apply")) url = "loan-calculator";
