@@ -1,8 +1,8 @@
 
 import { IUserRepository } from "@repository/interface/Iuser-repository";
-import { User } from "@models/user";
+import { User } from "@entities/user";
 import { BaseRepository } from "./base-repository";
-import { UserCategory } from "@models/helpers/enums/usercategory";
+import { UserCategory } from "@enums/usercategory";
 
  export class UserRepository extends BaseRepository<User> implements IUserRepository{
   constructor(_db:any){

@@ -1,6 +1,6 @@
 
 import { IShareholderRepository } from "@repository/interface/Ishareholder-repository";
-import { Shareholder } from "@models/shareholder";
+import { Shareholder } from "@entities/shareholder";
 import { BaseRepository } from "./base-repository";
 
  export class ShareholderRepository extends BaseRepository<Shareholder> implements IShareholderRepository{

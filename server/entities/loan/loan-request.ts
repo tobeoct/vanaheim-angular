@@ -1,10 +1,7 @@
-import { LoanRequestStatus } from "server/enums/loanrequeststatus";
-import { Account } from "server/entities/account";
-import { BaseEntity } from "server/entities/base-entity";
-import { Customer } from "server/entities/customer";
-import { LoanProduct } from "./loan-product";
-import { LoanType } from "./loan-type";
+import { LoanRequestStatus } from "@enums/loanrequeststatus";
+import { BaseEntity } from "../base-entity";
 import { LoanTypeRequirements } from "./loan-type-requirements";
+import { Customer } from "../customer";
 
 export class LoanRequest extends BaseEntity{
     Customer:Customer;
@@ -56,5 +53,4 @@ workflow:any;
   ]
     return {title,rows};
   }
-
 }

@@ -1,5 +1,5 @@
 
-import { ApprovedEarning } from "@models/investment/approved-investment";
+import { ApprovedEarning } from "@entities/investment/approved-investment";
 import { IBaseRepository } from "../Ibase-repository";
 
 export interface IApprovedEarningRepository extends IBaseRepository<ApprovedEarning> {

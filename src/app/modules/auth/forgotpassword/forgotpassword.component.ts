@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoginType } from '@models/helpers/enums/logintype';
-import { UserCategory } from '@models/helpers/enums/usercategory';
+import { UserCategory } from '@enums/usercategory';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, Observable, from, Subject, Subscription } from 'rxjs';
 import { delay, first } from 'rxjs/operators';

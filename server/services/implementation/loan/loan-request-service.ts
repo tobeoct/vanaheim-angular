@@ -1,10 +1,8 @@
-import { Account } from "@models/account";
-import { IBaseEntity } from "@models/base-entity";
-import { Customer } from "@models/customer";
-import { LoanRequestStatus } from "@models/helpers/enums/loanrequeststatus";
-import { BaseStatus } from "@models/helpers/enums/status";
-import { LoanRequest } from "@models/loan/loan-request";
-import { LoanRequestLog } from "@models/loan/loan-request-log";
+import { Account } from "@entities/account";
+import { LoanRequestStatus } from "@enums/loanrequeststatus";
+import { BaseStatus } from "@enums/status";
+import { LoanRequest } from "@entities/loan/loan-request";
+import { LoanRequestLog } from "@entities/loan/loan-request-log";
 import { IAccountRepository } from "@repository/interface/Iaccount-repository";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
 import { ILoanTypeRequirementRepository } from "@repository/interface/Iloantyperequirement-repository";
@@ -16,6 +14,8 @@ import { AccountInfo } from "src/app/modules/loan/shared/account-info/account-in
 import { LoanDetails } from "src/app/modules/loan/shared/loan-calculator/loan-details";
 import { BaseResponse, BaseService } from "../base-service";
 import UtilService from "../common/util";
+import { IBaseEntity } from "@entities/base-entity";
+import { Customer } from "@entities/customer";
 
 export type SearchResponse<T> = {
     count: number,

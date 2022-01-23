@@ -10,7 +10,7 @@ import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider, SocialUs
 import { Subject, Observable, Subscription, BehaviorSubject, from } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
-import { LoginType } from '@models/helpers/enums/logintype';
+import { LoginType } from '@enums/logintype';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { EarningsStore, LoanStore, Store } from 'src/app/shared/helpers/store';
 

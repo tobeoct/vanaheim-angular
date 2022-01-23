@@ -1,5 +1,5 @@
 import { IRepaymentRepository } from "@repository/interface/Irepayment-repository";
-import { Repayment } from "@models/loan/repayment";
+import { Repayment } from "@entities/loan/repayment";
 import { BaseRepository } from "./base-repository";
 
 

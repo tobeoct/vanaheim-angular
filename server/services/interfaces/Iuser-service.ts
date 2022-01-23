@@ -1,4 +1,4 @@
-import { User } from "@models/user";
+import { User } from "@entities/user";
 import { UserCategory } from "@enums/usercategory";
 import { IBaseService } from "./Ibaseservice";
 

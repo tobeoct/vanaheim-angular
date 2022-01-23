@@ -1,5 +1,6 @@
 
-import { EarningLiquidation, LiquidationStatus } from "@models/investment/earnings-liquidation";
+import { EarningLiquidation } from "@entities/investment/earnings-liquidation";
+import { LiquidationStatus } from "@enums/liquidationStatus";
 import { SearchResponse } from "@models/search-response";
 import { IBaseRepository } from "../Ibase-repository";
 

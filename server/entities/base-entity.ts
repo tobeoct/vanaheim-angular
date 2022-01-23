@@ -1,5 +1,4 @@
-import { BaseStatus } from "server/enums/status";
-import { TemplateService } from "@services/implementation/common/template-service";
+import { BaseStatus } from "@enums/status";
 export interface IBaseEntity{
     id:number;
     status:BaseStatus;

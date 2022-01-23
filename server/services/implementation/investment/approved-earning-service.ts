@@ -1,6 +1,6 @@
 
-import { ApprovedEarning } from "@models/investment/approved-investment";
-import { EarningRequest } from "@models/investment/investment-request";
+import { ApprovedEarning } from "@entities/investment/approved-investment";
+import { EarningRequest } from "@entities/investment/investment-request";
 import { IApprovedEarningRepository } from "@repository/interface/investment/Iapproved-earning-repository";
 import { IEarningRequestLogRepository } from "@repository/interface/investment/Iinvestment-request-log-repository";
 import { IEarningRequestRepository } from "@repository/interface/investment/Iinvestment-request-repository";

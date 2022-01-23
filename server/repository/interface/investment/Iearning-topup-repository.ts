@@ -1,5 +1,6 @@
 
-import { EarningTopUp, TopUpStatus } from "@models/investment/earnings-topup";
+import { EarningTopUp } from "@entities/investment/earnings-topup";
+import { TopUpStatus } from "@enums/topUpStatus";
 import { SearchResponse } from "@models/search-response";
 import { IBaseRepository } from "../Ibase-repository";
 

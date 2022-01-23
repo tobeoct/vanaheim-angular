@@ -1,8 +1,6 @@
 
-import { Device } from "@models/device";
-import { BaseStatus } from "@models/helpers/enums/status";
-import { PushNotification } from "@models/pushnotification";
-import { Subscription } from "@models/subscription";
+import { Device } from "@entities/device";
+import { BaseStatus } from "@enums/status";
 import { IBaseRepository } from "@repository/interface/Ibase-repository";
 import { IDeviceRepository } from "@repository/interface/Idevice-repository";
 import { IPushNotificationRepository } from "@repository/interface/Ipushnotification-repository";
@@ -11,7 +9,9 @@ import { INotificationService } from "@services/interfaces/Inotification-service
 import { IUserService } from "@services/interfaces/Iuser-service";
 import { WebNotificationData, WebNotification } from "@models/webnotification";
 import { BaseService } from "./base-service";
-import AppConfig from "@api/config";
+import AppConfig from "server/config";
+import { PushNotification } from "@entities/pushnotification";
+import { Subscription } from "@entities/subscription";
 
 class NotificationService extends BaseService<any> implements INotificationService {
     constructor(private webPush: any, private _appConfig: AppConfig, private _userService: IUserService, private _deviceRepository: IDeviceRepository, private _subscriptionRepository: ISubscriptionRepository, private _pushNotificationRepository: IPushNotificationRepository, _baseRepository: IBaseRepository<any>) {

@@ -1,7 +1,7 @@
-import { Customer } from "@models/customer";
-import { LiquidationStatus } from "@models/investment/earnings-liquidation";
-import { EarningRequest } from "@models/investment/investment-request";
-import { EarningRequestLog } from "@models/investment/investment-request-log";
+import { Customer } from "@entities/customer";
+import { EarningRequest } from "@entities/investment/investment-request";
+import { EarningRequestLog } from "@entities/investment/investment-request-log";
+import { LiquidationStatus } from "@enums/liquidationStatus";
 import { EarningApplication } from "src/app/modules/earnings/earnings-application";
 
 export interface IEarningService{

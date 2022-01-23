@@ -1,4 +1,4 @@
-import { LoanRequestLog } from "@models/loan/loan-request-log";
+import { LoanRequestLog } from "@entities/loan/loan-request-log";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
 import { ILoanRequestLogService } from "@services/interfaces/loan/Iloan-log-request-service";

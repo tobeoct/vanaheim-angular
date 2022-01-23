@@ -1,6 +1,6 @@
 import { BaseEntity } from "./base-entity";
-import { LoanProduct } from "./loan/loan-product";
-import { LoanType } from "./loan/loan-type";
+import { LoanProduct } from "../entities/loan/loan-product";
+import { LoanType } from "../entities/loan/loan-type";
 
 
 export class DocumentRequirement extends BaseEntity{

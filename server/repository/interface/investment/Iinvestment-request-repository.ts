@@ -1,4 +1,4 @@
-import { EarningRequestStatus } from "@models/helpers/enums/investmentrequeststatus";
+import { EarningRequestStatus } from "@enums/investmentrequeststatus";
 import { EarningRequest } from "@models/investment/investment-request";
 import { IBaseRepository } from "../Ibase-repository";
 

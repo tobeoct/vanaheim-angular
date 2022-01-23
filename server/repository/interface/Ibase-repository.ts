@@ -1,4 +1,4 @@
-import { BaseEntity } from "@models/base-entity";
+import { BaseEntity } from "@entities/base-entity";
 
 export interface IBaseRepository<T> {
     getAll: () => Promise<any[]>

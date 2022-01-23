@@ -1,4 +1,4 @@
-import { EarningPayout } from "@models/investment/investment-payout";
+import { EarningPayout } from "@entities/investment/investment-payout";
 import { IEarningPayoutRepository } from "@repository/interface/investment/Iearning-payout-repository";
 import sequelize = require("sequelize");
 import { BaseRepository } from "../base-repository";

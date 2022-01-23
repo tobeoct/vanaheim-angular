@@ -1,5 +1,5 @@
-import { Customer } from "@models/customer";
-import { Document } from "@models/document";
+import { Customer } from "@entities/customer";
+import { Document } from "@entities/document";
 import { DocumentUpload } from "src/app/modules/loan/shared/document-upload/document";
 import { IBaseService } from "./Ibaseservice";
 

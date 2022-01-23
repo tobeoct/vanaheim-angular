@@ -1,5 +1,5 @@
-import { LoanRequest } from "@models/loan/loan-request";
-import { LoanRequestLog } from "@models/loan/loan-request-log";
+import { LoanRequest } from "@entities/loan/loan-request";
+import { LoanRequestLog } from "@entities/loan/loan-request-log";
 
 export interface ILoanRepository{
     restructure:(disbursedLoanId:number,repayment:number)=>Promise<boolean>

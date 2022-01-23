@@ -1,11 +1,11 @@
 
 
-import { LoanStatus } from "server/enums/loanstatus";
-import { BaseEntity } from "server/entities/base-entity";
-import { BaseStatus } from "server/enums/status";
+import { LoanStatus } from "@enums/loanstatus";
+import { BaseStatus } from "@enums/status";
 import moment = require("moment");
 import { LoanRequest } from "./loan-request";
 import { LoanRequestLog } from "./loan-request-log";
+import { BaseEntity } from "../base-entity";
 
 export class DisbursedLoan extends BaseEntity {
     dateDisbursed: Date;

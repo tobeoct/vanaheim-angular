@@ -1,6 +1,6 @@
 
 import { INOKRepository } from "@repository/interface/Inok-repository";
-import { NOK } from "@models/nok";
+import { NOK } from "@entities/nok";
 import { BaseRepository } from "./base-repository";
 
  export class NOKRepository extends BaseRepository<NOK> implements INOKRepository{

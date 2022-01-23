@@ -1,5 +1,5 @@
-import { EarningRequest } from "@models/investment/investment-request";
-import { EarningRequestLog } from "@models/investment/investment-request-log";
+import { EarningRequest } from "@entities/investment/investment-request";
+import { EarningRequestLog } from "@entities/investment/investment-request-log";
 
 export interface IEarningRepository{
     restructure:(approvedEarningId:number,payout:number)=>Promise<boolean>

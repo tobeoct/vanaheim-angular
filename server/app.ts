@@ -20,7 +20,7 @@ const cookieParser = require('cookie-parser');
 // This serves static files from the specified directory
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
-import AppConfig, { Environment } from '@config';
+import AppConfig, { Environment } from 'server/config';
 import { AWSService } from '@services/implementation/image/aws-service';
 import { inject, loadControllers, scopePerRequest } from 'awilix-express';
 import helmet = require('helmet');

@@ -1,6 +1,6 @@
 
 import { IMeansOfIdentificationRepository } from "@repository/interface/Imeans-of-identification-repository";
-import { MeansOfIdentification } from "@models/investment/means-of-identification";
+import { MeansOfIdentification } from "@entities/investment/means-of-identification";
 import { BaseRepository } from "./base-repository";
 
  export class MeansOfIdentificationRepository extends BaseRepository<MeansOfIdentification> implements IMeansOfIdentificationRepository{

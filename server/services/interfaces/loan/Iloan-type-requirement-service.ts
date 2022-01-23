@@ -1,5 +1,6 @@
-import { Customer } from "@models/customer";
-import { LoanTypeRequirements } from "@models/loan/loan-type-requirements";
+
+import { Customer } from "@entities/customer";
+import { LoanTypeRequirements } from "@entities/loan/loan-type-requirements";
 import { IBaseService } from "../Ibaseservice";
 
 export interface ILoanTypeRequirementService extends IBaseService<LoanTypeRequirements>{

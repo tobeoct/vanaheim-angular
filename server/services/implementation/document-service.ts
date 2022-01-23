@@ -3,23 +3,20 @@ import { BaseService } from "./base-service";
 import { IDocumentRepository } from "@repository/interface/document/Idocument-repository";
 import { IDocumentService } from "@services/interfaces/Idocument-service";
 import { DocumentUpload } from "src/app/modules/loan/shared/document-upload/document";
-import { Customer } from "@models/customer";
-import mkdirsSync from "@models/helpers/utils/dir";
-import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
+import { Customer } from "@entities/customer";
+import mkdirsSync from "server/helpers/utils/dir";
 const path = require('path');
 import UtilService from "./common/util";
-import { Document } from "@models/document";
-import { BaseStatus } from "@models/helpers/enums/status";
+import { Document } from "@entities/document";
+import { BaseStatus } from "@enums/status";
 import RedisMiddleware from "server/middleware/redis-middleware";
-import { Cloudinary } from "./image/cloudinary-service";
-import LZString = require("lz-string");
 import { AWSService } from "./image/aws-service";
 
 class DocumentService extends BaseService<any> implements IDocumentService {
-    constructor(_documentRepository: IDocumentRepository,private _cloudinaryService:Cloudinary,private _awsService:AWSService, private _redis: RedisMiddleware, private fs: any, private fsExtra: any, private _utils: UtilService, private md5: any) {
+    constructor(_documentRepository: IDocumentRepository,private _awsService:AWSService, private _redis: RedisMiddleware, private fs: any, private fsExtra: any, private _utils: UtilService, private md5: any) {
         super(_documentRepository)
     }
-    getByRequestId = (requestId: string) => new Promise<any>(async (resolve, reject) => {
+    getByRequestId = (requestId: string) => new Promise<any>(async (resolve) => {
         try {
             let repo = this._baseRepository as IDocumentRepository;
             let documents = await repo.getByRequestId(requestId);
@@ -29,7 +26,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             resolve({ status: false, data: err });
         }
     });
-    getByCustomerID = (customerID: number) => new Promise<any>(async (resolve, reject) => {
+    getByCustomerID = (customerID: number) => new Promise<any>(async (resolve) => {
         try {
             // const customer = await this._customerRepository.getByUserID(userData.id);
             // let c = customer.dataValues as Customer;
@@ -69,7 +66,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             reject(err);
         }
     })
-    processDocument = (documentUpload: DocumentUpload, c: Customer) => new Promise<any>(async (resolve, reject) => {
+    processDocument = (documentUpload: DocumentUpload, c: Customer) => new Promise<any>(async (resolve) => {
         try {
             // const customer = await this._customerRepository.getByUserID(userData.id);
             // let c = customer.dataValues as Customer;
@@ -100,7 +97,7 @@ class DocumentService extends BaseService<any> implements IDocumentService {
             resolve({ status: false, data: "Error uploading document" });
         }
     })
-    getBVNDocument = (bvn: string, customerCode: string) => new Promise<any>(async (resolve, reject) => {
+    getBVNDocument = (bvn: string, customerCode: string) => new Promise<any>(async (resolve) => {
         try {
             let bvnList: any = await this._redis.get("bvnList", {});
             //Send bvn information to VCAP

@@ -1,6 +1,6 @@
 
 import { ICompanyRepository } from "@repository/interface/Icompany-repository";
-import { Company } from "@models/company";
+import { Company } from "@entities/company";
 import { BaseRepository } from "./base-repository";
 
  export class CompanyRepository extends BaseRepository<Company> implements ICompanyRepository{

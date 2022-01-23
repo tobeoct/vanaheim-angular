@@ -1,4 +1,4 @@
-import AppConfig from "@config"
+import AppConfig from "server/config"
 import RedisMiddleware from "./redis-middleware"
 
 

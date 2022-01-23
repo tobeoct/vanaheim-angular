@@ -1,4 +1,4 @@
-import { Account } from "@models/account";
+import { Account } from "@entities/account";
 import { IBaseService } from "./Ibaseservice";
 
 export type AccountInfo={

@@ -1,4 +1,4 @@
-import { DisbursedLoan } from "@models/loan/disbursed-loan";
+import { DisbursedLoan } from "@entities/loan/disbursed-loan";
 import { IBaseRepository } from "../Ibase-repository";
 
 export interface IDisbursedLoanRepository extends IBaseRepository<DisbursedLoan> {

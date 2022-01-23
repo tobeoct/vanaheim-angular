@@ -1,6 +1,5 @@
 
-import { EarningRequestLog } from "@models/investment/investment-request-log";
-import { BaseResponse } from "@services/implementation/base-service";
+import { EarningRequestLog } from "@entities/investment/investment-request-log";
 import {IBaseService } from "../Ibaseservice";
 
 export interface IEarningRequestLogService extends IBaseService<EarningRequestLog>{

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserCategory } from '@models/helpers/enums/usercategory';
+import { UserCategory } from '@enums/usercategory';
 import { Observable, Subscription } from 'rxjs';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { ElementStyle, ElementSize, ElementState, SideNavigationList } from '../../constants/enum';

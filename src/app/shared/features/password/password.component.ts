@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { LoginType } from '@models/helpers/enums/logintype';
+import { LoginType } from '@enums/logintype';
 import { VCValidators } from '@validators/default.validators';
 import { Subscription } from 'rxjs';
 import { BehaviorSubject, Observable, from, Subject } from 'rxjs';

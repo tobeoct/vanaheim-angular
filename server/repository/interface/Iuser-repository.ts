@@ -1,5 +1,5 @@
-import { UserCategory } from "@models/helpers/enums/usercategory";
-import { User } from "@models/user";
+import { UserCategory } from "@enums/usercategory";
+import { User } from "@entities/user";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface IUserRepository extends IBaseRepository<User>{

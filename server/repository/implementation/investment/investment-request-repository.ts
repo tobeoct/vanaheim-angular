@@ -1,5 +1,5 @@
-import { EarningRequestStatus } from "@models/helpers/enums/investmentrequeststatus";
-import { EarningRequest } from "@models/investment/investment-request";
+import { EarningRequestStatus } from "@enums/investmentrequeststatus";
+import { EarningRequest } from "@entities/investment/investment-request";
 import { IEarningRequestRepository } from "@repository/interface/investment/Iinvestment-request-repository";
 import { BaseRepository } from "../base-repository";
 

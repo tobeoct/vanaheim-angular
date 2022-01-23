@@ -1,4 +1,4 @@
-import { Device } from "@models/device";
+import { Device } from "@entities/device";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface IDeviceRepository extends IBaseRepository<Device>{

@@ -1,5 +1,5 @@
 import { IDocumentRepository } from "@repository/interface/document/Idocument-repository";
-import { Document } from "@models/document";
+import { Document } from "@entities/document";
 import { BaseRepository } from "../base-repository";
 
  export class DocumentRepository extends BaseRepository<Document> implements IDocumentRepository{

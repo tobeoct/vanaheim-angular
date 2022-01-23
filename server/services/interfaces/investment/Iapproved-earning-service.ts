@@ -1,4 +1,4 @@
-import { ApprovedEarning } from "@models/investment/approved-investment";
+import { ApprovedEarning } from "@entities/investment/approved-investment";
 import { BaseResponse } from "@services/implementation/base-service";
 import { IBaseService } from "../Ibaseservice";
 

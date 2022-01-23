@@ -1,4 +1,4 @@
-import AppConfig from "@api/config";
+import AppConfig from "server/config";
 import { IAuthService } from "@services/interfaces/Iauth-service";
 import { newSessionRoutes, authRoutes } from "./common/routes";
 class AuthService implements IAuthService{

@@ -1,4 +1,4 @@
-import { EarningsEmployment } from "@models/investment/earnings-employment";
+import { EarningsEmployment } from "@entities/investment/earnings-employment";
 import { IEarningsEmploymentRepository } from "@repository/interface/investment/Iearnings-employment-repository";
 import { BaseRepository } from "../base-repository";
 

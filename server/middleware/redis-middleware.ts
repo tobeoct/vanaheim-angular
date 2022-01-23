@@ -1,4 +1,4 @@
-import AppConfig, { Environment } from "@api/config";
+import AppConfig, { Environment } from "server/config";
 import { promisify } from "util";
 const redis = require('redis');
 const connectRedis = require('connect-redis');

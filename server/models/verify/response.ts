@@ -1,5 +1,5 @@
-import { VerifyVerificationStatus } from "server/enums/verify/verification-status";
-import { VerifyVerificationType } from "server/enums/verify/verification-type";
+import { VerifyVerificationStatus } from "@enums/verify/verification-status";
+import { VerifyVerificationType } from "@enums/verify/verification-type";
 
 export interface  VerifyResponse<T> {
     responseCode: string,

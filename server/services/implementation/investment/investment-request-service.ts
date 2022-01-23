@@ -1,4 +1,4 @@
-import { EarningRequest } from "@models/investment/investment-request";
+import { EarningRequest } from "@entities/investment/investment-request";
 import { SearchResponse } from "@models/search-response";
 import { IAccountRepository } from "@repository/interface/Iaccount-repository";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";

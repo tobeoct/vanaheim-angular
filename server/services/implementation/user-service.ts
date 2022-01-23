@@ -1,16 +1,16 @@
 import { UserCategory } from "@enums/usercategory";
-import { User } from "@models/user";
+import { User } from "@entities/user";
 import { BaseService } from "./base-service";
 import { IUserService } from "@services/interfaces/Iuser-service";
 import { IUserRepository } from "@repository/interface/Iuser-repository";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
-import { BaseStatus } from "@models/helpers/enums/status";
+import { BaseStatus } from "@enums/status";
 import Encryption from "@services/implementation/common/encryption-service";
-import { Customer } from "@models/customer";
+import { Customer } from "@entities/customer";
 import UtilService from "./common/util";
-import { LoginType } from "@models/helpers/enums/logintype";
+import { LoginType } from "@enums/logintype";
 import EmailService from "./common/email-service";
-import { Staff } from "@models/staff";
+import { Staff } from "@entities/staff";
 import { IStaffRepository } from "@repository/interface/Istaff-repository";
 import { TemplateService } from "./common/template-service";
 class UserService extends BaseService<User> implements IUserService {

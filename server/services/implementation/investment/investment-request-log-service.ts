@@ -1,4 +1,4 @@
-import { EarningRequestLog } from "@models/investment/investment-request-log";
+import { EarningRequestLog } from "@entities/investment/investment-request-log";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
 import { IEarningRequestLogRepository } from "@repository/interface/investment/Iinvestment-request-log-repository";
 import { IEarningRequestLogService } from "@services/interfaces/investment/Iinvestment-log-request-service";

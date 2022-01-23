@@ -1,4 +1,4 @@
-import { MeansOfIdentification } from "@models/investment/means-of-identification";
+import { MeansOfIdentification } from "@entities/investment/means-of-identification";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface IMeansOfIdentificationRepository extends IBaseRepository<MeansOfIdentification>{

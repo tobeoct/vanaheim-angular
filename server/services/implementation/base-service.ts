@@ -1,4 +1,4 @@
-import { BaseEntity } from "@models/base-entity";
+import { BaseEntity } from "@entities/base-entity";
 import { IBaseRepository } from "@repository/interface/Ibase-repository";
 import { IBaseService } from "@services/interfaces/Ibaseservice";
 export type BaseResponse<T>={

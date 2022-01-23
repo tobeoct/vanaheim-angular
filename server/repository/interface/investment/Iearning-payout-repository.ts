@@ -1,4 +1,4 @@
-import { EarningPayout } from "@models/investment/investment-payout";
+import { EarningPayout } from "@entities/investment/investment-payout";
 import { IBaseRepository } from "../Ibase-repository";
 
 export interface IEarningPayoutRepository extends IBaseRepository<EarningPayout>{

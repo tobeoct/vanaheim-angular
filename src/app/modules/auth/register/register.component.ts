@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserCategory } from '@models/helpers/enums/usercategory';
+import { UserCategory } from '@enums/usercategory';
 import { SocialUser, SocialAuthService, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { Subject, Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { LoginType } from '@models/helpers/enums/logintype';
+import { LoginType } from '@enums/logintype';
 import { EarningsStore, LoanStore, Store } from 'src/app/shared/helpers/store';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 

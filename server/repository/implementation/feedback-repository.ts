@@ -1,5 +1,5 @@
 import { IFeedbackRepository } from "@repository/interface/Ifeedback-repository";
-import { Feedback } from "@models/feedback";
+import { Feedback } from "@entities/feedback";
 import { BaseRepository } from "./base-repository";
 
 

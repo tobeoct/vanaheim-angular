@@ -1,4 +1,4 @@
-import { ApprovedEarning } from "@models/investment/approved-investment";
+import { ApprovedEarning } from "@entities/investment/approved-investment";
 import { IApprovedEarningRepository } from "@repository/interface/investment/Iapproved-earning-repository";
 import { BaseRepository } from "../base-repository";
 

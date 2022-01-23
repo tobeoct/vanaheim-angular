@@ -1,4 +1,4 @@
-import { Client } from "@models/client";
+import { Client } from "@entities/client";
 import { IBaseRepository } from "@repository/interface/Ibase-repository";
 import { IClientRepository } from "@repository/interface/Iclient-repository";
 import { IClientService } from "@services/interfaces/Iclient-service";

@@ -1,4 +1,4 @@
-import { Shareholder } from "@models/shareholder";
+import { Shareholder } from "@entities/shareholder";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface IShareholderRepository extends IBaseRepository<Shareholder>{

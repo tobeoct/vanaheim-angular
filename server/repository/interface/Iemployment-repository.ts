@@ -1,4 +1,4 @@
-import { Employment } from "@models/employment";
+import { Employment } from "@entities/employment";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface IEmploymentRepository extends IBaseRepository<Employment>{

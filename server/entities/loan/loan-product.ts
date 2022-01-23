@@ -1,5 +1,4 @@
 
-
 import { BaseEntity } from "../base-entity";
 import { InterestRate } from "./interest-rate";
 import { LoanType } from "./loan-type";

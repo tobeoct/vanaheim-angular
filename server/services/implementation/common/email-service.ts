@@ -1,4 +1,4 @@
-import AppConfig from "@config";
+import AppConfig from "server/config";
 import UtilService from "./util";
 const path = require('path');
 const nodemailer = require('nodemailer');

@@ -1,12 +1,17 @@
 
-import { PaymentType } from "server/enums/paymenttype";
-import { BaseEntity } from "server/entities/base-entity";
+import { EarningType } from "@enums/earningtype";
+import { PaymentType } from "@enums/paymenttype";
+import { BaseEntity } from "../base-entity";
 import { ApprovedEarning } from "./approved-investment";
 
 export class EarningPayout extends BaseEntity{
-    approvedInvestment:ApprovedEarning;
+    ApprovedEarning:ApprovedEarning;
+    approvedEarningID:number;
     amount:string;
     datePaid:Date;
     payoutType:PaymentType;
-    investmentRequestId:string;
+    earningRequestId:string;
+    type:EarningType;
+    accountNumber:string;
+    startingPrincipal:number
 }

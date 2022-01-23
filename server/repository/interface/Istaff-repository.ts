@@ -1,4 +1,4 @@
-import { Staff } from "@models/staff";
+import { Staff } from "@entities/staff";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface IStaffRepository extends IBaseRepository<Staff>{

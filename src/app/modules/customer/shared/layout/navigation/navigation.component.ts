@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserCategory } from '@models/helpers/enums/usercategory';
+import { UserCategory } from '@enums/usercategory';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ElementStyle, ElementSize, ElementState } from 'src/app/shared/constants/enum';
 import { ButtonOptions } from 'src/app/shared/constants/variables';

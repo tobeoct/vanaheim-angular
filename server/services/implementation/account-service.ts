@@ -2,7 +2,7 @@
 import { BaseService } from "./base-service";
 import { AccountInfo, IAccountService } from "@services/interfaces/Iaccount-service";
 import { IAccountRepository } from "@repository/interface/Iaccount-repository";
-import { Account } from "@models/account";
+import { Account } from "@entities/account";
 import UtilService from "./common/util";
 
 class AccountService extends BaseService<any> implements IAccountService {

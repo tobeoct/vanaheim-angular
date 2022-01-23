@@ -1,7 +1,7 @@
 import { asClass, InjectionMode, createContainer, asValue } from 'awilix';
 
 import App from './app';
-import AppConfig from "@config";
+import AppConfig from "server/config";
 import { LoanRequestRepository } from '@repository/implementation/loan/loan-request-repository';
 import { LoanRequestService } from '@services/implementation/loan/loan-request-service';
 import ClientService from '@services/implementation/client-service';
