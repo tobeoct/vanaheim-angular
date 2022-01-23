@@ -1,5 +1,5 @@
 import { EarningRequestStatus } from "@enums/investmentrequeststatus";
-import { EarningRequest } from "@models/investment/investment-request";
+import { EarningRequest } from "@entities/investment/investment-request";
 import { IBaseRepository } from "../Ibase-repository";
 
 export interface IEarningRequestRepository extends IBaseRepository<EarningRequest>{

@@ -16,9 +16,10 @@ import { GET, PATCH, POST, route } from 'awilix-express';
 import moment = require('moment');
 import { Customer } from '@entities/customer';
 import { ApprovedEarning } from '@entities/investment/approved-investment';
-import { LiquidationStatus, EarningLiquidation } from '@entities/investment/earnings-liquidation';
+import {  EarningLiquidation } from '@entities/investment/earnings-liquidation';
 import { EarningTopUp } from '@entities/investment/earnings-topup';
 import { TopUpStatus } from '@enums/topUpStatus';
+import { LiquidationStatus } from '@enums/liquidationStatus';
 @route('/api/earnings')
 export default class EarningsController {
 

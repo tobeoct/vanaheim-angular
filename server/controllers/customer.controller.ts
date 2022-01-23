@@ -1,8 +1,8 @@
-import { Customer } from '@models/customer';
+import { Customer } from '@entities/customer';
 import { Gender } from '@enums/gender';
 import { MaritalStatus } from '@enums/maritalstatus';
 import { Relationship } from '@enums/relationship';
-import { NOK } from '@models/nok';
+import { NOK } from '@entities/nok';
 import { CollateralRepository } from '@repository/implementation/collateral-repository';
 import { CompanyRepository } from '@repository/implementation/company-repository';
 import { CustomerRepository } from '@repository/implementation/customer-repository';
