@@ -13,13 +13,6 @@
                                 [startingDate]="details?.approvedEarnings?.lastPaymentDate"
                                 [endDate]="details?.approvedEarnings?.nextPaymentDate" [class]="'margin--x'">
                             </app-countdown>
-                            <!-- <div class="d-flex d-flex_vertical--center">
-                                <small style="margin-right: 10px;">Total So Far</small>
-                                <app-countdown [endValue]="earnings.payout"
-                                    [startingDate]="details?.approvedEarnings?.createdAt"
-                                    [endDate]="earnings.maturityDate" [class]="'margin--x'" size="small">
-                                </app-countdown>
-                            </div> -->
                             <div>
                                 <small>Due on <b>{{details?.approvedEarnings?.nextPaymentDate|date:'MMMM
                                         d
@@ -29,7 +22,9 @@
 
                         </div>
                         <div>
-                            <app-progress-circular [max]="getMaxDays(details?.approvedEarnings?.lastPaymentDate,details?.approvedEarnings?.nextPaymentDate)"  [daysLeft]="getDaysLeft(details?.approvedEarnings?.nextPaymentDate)">
+                            <app-progress-circular
+                                [max]="getMaxDays(details?.approvedEarnings?.lastPaymentDate,details?.approvedEarnings?.nextPaymentDate)"
+                                [daysLeft]="getDaysLeft(details?.approvedEarnings?.nextPaymentDate)">
                             </app-progress-circular>
                         </div>
                     </ng-container>
@@ -43,7 +38,9 @@
                             <small>Due on <b>{{earnings.maturityDate|date:'MMMM d YYYY'}}</b></small>
                         </div>
                         <div>
-                            <app-progress-circular [max]="getMaxDays(details?.approvedEarnings?.createdAt,earnings.maturityDate)" [daysLeft]="getDaysLeft(earnings.maturityDate)">
+                            <app-progress-circular
+                                [max]="getMaxDays(details?.approvedEarnings?.createdAt,earnings.maturityDate)"
+                                [daysLeft]="getDaysLeft(earnings.maturityDate)">
                             </app-progress-circular>
                         </div>
                     </ng-container>

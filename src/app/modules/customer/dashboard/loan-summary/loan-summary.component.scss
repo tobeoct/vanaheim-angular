@@ -56,13 +56,3 @@
         }
     }
 }
-
-.repaid-loan {
-    // @include background(lightGreen);
-    // @include border(2px, solid, green);
-    border:0;
-    span {
-        @include color(green);
-    }
-    border-radius: $border-radius;
-}

@@ -18,7 +18,6 @@ import { createCustomElement } from '@angular/elements';
 import { AccordionComponent } from './shared/components/accordion/accordion.component';
 import { BaseModule } from './shared/base.module';
 import { FeaturesModule } from './shared/features/features.module';
-import { LoadingComponent } from './shared/components/loading/loading.component';
 
  
 // Note we need a separate function as it's required

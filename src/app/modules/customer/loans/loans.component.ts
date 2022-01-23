@@ -104,8 +104,8 @@ export class LoansComponent implements OnInit, OnDestroy {
   requirementSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   requirement$: Observable<any> = this.requirementSubject.asObservable();
   latestLoanSubscription: Subscription;
-  activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
+  // activeFilterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  // activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
   constructor(private _fb: FormBuilder, private _route: ActivatedRoute, private _documentService: DocumentService, private _repaymentService: RepaymentService, private _store: Store,private _loanStore:LoanStore, private _utility: Utility,
     private _router: Router,
     private _validators: VCValidators,
@@ -190,9 +190,9 @@ export class LoansComponent implements OnInit, OnDestroy {
     this.showSubject.next(true);
   }
 
-  activate(value: string) {
-    this.activeFilterSubject.next(value);
-  }
+  // activate(value: string) {
+  //   this.activeFilterSubject.next(value);
+  // }
 
   onSubmit(form: FormGroup) {
 
@@ -227,10 +227,10 @@ export class LoansComponent implements OnInit, OnDestroy {
   onError(value: any): void {
     this.errorMessageSubject.next(value);
   }
-  changeFilter(value: any) {
-    this.activate(value);
-    this._loanService.filterSubject.next(value);
-  }
+  // changeFilter(value: any) {
+  //   this.activate(value);
+  //   this._loanService.filterSubject.next(value);
+  // }
 
   trackByFn(index: any, item: any) {
     return index;

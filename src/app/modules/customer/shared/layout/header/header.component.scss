@@ -1,5 +1,5 @@
-@import "../../../../../styles/abstracts/_abstracts-dir";
-@import "../../../../../styles/themes/_theme-dir";
+@import "../../../../../../styles/abstracts/_abstracts-dir";
+@import "../../../../../../styles/themes/_theme-dir";
 #customer-header {
     @include flex(horizontal, space-between);
     @include flex(vertical, center);

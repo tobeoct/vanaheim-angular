@@ -32,83 +32,14 @@
                     </div>
                 </div>
             </ng-container>
-            <div id="loan-history" class="animate__animated animate__fadeInUp"
-                [ngClass]="{'no-margin--top':totalLoans.length==0}">
-                <div class="heading">
-                    <h3>Loan History</h3>
-                </div>
-                <app-table>
-                    <ng-container slot="filter">
-                        <div id="filters">
-                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}"
-                                (click)="changeFilter('')">All</div>
-                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Processing'}"
-                                (click)="changeFilter('Processing')">Processing</div>
-                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Defaulting'}"
-                                (click)="changeFilter('Defaulting')">Defaulting</div>
-                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='NotQualified'}"
-                                (click)="changeFilter('NotQualified')">Declined</div>
-                        </div>
-                    </ng-container>
-                    <ng-container slot="header">
-                        <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Loan Product</th>
-                            <th>Tenure</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </ng-container>
-                    <ng-container slot="body" *ngIf="loans$|async as data">
-                        <ng-container *ngIf="data.rows.length==0">
-                            <div class="no-data">
-                                <span class="material-icons material-icons-outlined">
-                                    info
-                                </span>
-                                <h3>No data available</h3>
-                            </div>
-                        </ng-container>
-                        <ng-container *ngIf="data.rows.length>0">
-                            <tr *ngFor="let row of data.rows;trackBy:trackByFn">
-                                <td>{{row.requestDate | date :'MMMM d, y'}}</td>
-                                <td>{{row.amount|currency:'₦'}}</td>
-                                <td>{{row.loanProduct}}</td>
-                                <td>{{row.tenure}} {{row.denominator}}</td>
-                                <td>
-                                    <app-badge [color]="getLoanStatusColor(row.requestStatus)">{{row.requestStatus}}
-                                    </app-badge>
-                                </td>
-                                <td>
-                                    <app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)"
-                                        fieldClass="no-margin">
-                                        <ng-container slot="button">View Details</ng-container>
-                                    </app-button>
-                                </td>
-                            </tr>
-                        </ng-container>
-                    </ng-container>
-                    <ng-container slot="body" *ngIf="!(loans$|async)">
-                        <div class="no-data">
-                            <span class="material-icons material-icons-outlined">
-                                info
-                            </span>
-                            <h3>No data available</h3>
-                        </div>
-                    </ng-container>
-                    <ng-container slot="pagination">
-                        <app-pagination [totalCount]="(loans$|async)?.count||0" [maxSize]="10"
-                            [pagingChangeSubject]="pagingSubject"></app-pagination>
-                    </ng-container>
-                </app-table>
-            </div>
+            <app-loan-report [loans]="loans$|async" (selectLoan)="selectLoan($event)"></app-loan-report>
         </div>
     </div>
     <div class="right layout">
         <ng-container *ngIf="(latestLoan$|async) as loan">
             <ng-container *ngIf="loan.requestStatus=='Funded'">
 
-                <ng-container *ngIf="(disbursedLoan$|async) as details">
+                <!-- <ng-container *ngIf="(disbursedLoan$|async) as details">
 
                     <div id="active-loan" *ngIf="!details.disbursedLoan.isClosed" class="margin--3x no-margin--top"
                         style="width: 100%;">
@@ -147,30 +78,8 @@
                             </div>
                         </div>
                     </div>
-                </ng-container>
-                <!-- <div class="card card-stroke card-stroke--black" id="current-loan-status">
-                <ng-container *ngIf="activeLoan">
-                        <div id="active-loans">
-                    <div>
-                        <small>Next Payment</small>
-                        <h2>₦250,000</h2>
-                        <p style="margin-bottom: 0;">Due on the 8th Jun, 2021</p>
-                    </div>
-                    <div class="progress progress--stroke">
-                        <h1 style="margin-bottom: 0;">9</h1>
-                        <p>Months</p>
-                    </div>
-                </div>
-                </ng-container>
-                <ng-container *ngIf="!activeLoan">
-                    <div id="no-active-loans" class="no-data">
-                        <span class="material-icons material-icons-outlined">
-                            info
-                            </span>
-                        <h3>You have no active loans</h3>
-                    </div>
-                </ng-container>
-            </div> -->
+                </ng-container> -->
+              
             </ng-container>
             <ng-container *ngIf="loan.requestStatus!='Funded'">
                 <div id="most-recent">

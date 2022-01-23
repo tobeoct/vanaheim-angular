@@ -9,15 +9,14 @@
 
         <div class="theme_col-4 theme_bg theme_color--white" id="side-content">
             <div class="logo animate__animated animate__zoomIn" style="transform: translateY(-5px); width: 200px;">
-                <a href="http://vanircapital.org" rel="noreferrer" target="_blank"><img width="185px" src="assets/gifs/Vanir-Capital-Logo.gif"
-                        alt="Vanir Capital Logo" /></a>
+                <a href="http://vanircapital.org" rel="noreferrer" target="_blank"><img width="185px"
+                        src="assets/gifs/Vanir-Capital-Logo.gif" alt="Vanir Capital Logo" /></a>
             </div>
             <div class="theme_flex theme_flex--middle intro_thumbnail"
                 style="overflow: hidden; height: 70%; padding-right: 5%; padding-left: 5%; flex-direction: column;">
                 <h1 class=" animate__animated animate__fadeInLeft">Welcome to <span
                         class="theme_color--yellow">Vanaheim</span></h1>
                 <div class="animate__animated animate__fadeInLeft underline"></div>
-                <!-- <div class="theme_row"> -->
                 <p class="theme_text--heading3 theme_color--lightgrey animate__animated animate__fadeInLeft"
                     style="font-weight: 300">Get <span style="font-weight: 800 !important">quick loans</span> and easy
                     access to funds with a stress-free and flexible repayment period.</p>
@@ -25,8 +24,6 @@
                     style="font-weight: 300;width: 100%; margin-top: 5px !important;">Grow your wealth by <span
                         style="font-weight: 800 !important;">earning with Vanir Capital today</span>. </p>
 
-                <!-- <p class="theme_text--heading3 theme_color--lightgrey animate__animated animate__fadeInLeft" style="font-weight: 300;">Get quick loans and easy access to funds with a stress-free and flexible payment period</p>
-            </div> -->
             </div>
             <div id="supportedby" class="form_group" style="overflow: hidden;">
                 <p class=" animate__animated animate__fadeInLeft">Supported By:</p>
@@ -60,8 +57,6 @@
                                 <div class="card card_intro animate__animated animate__fadeInUp"
                                     style="margin-top: 20px;" (click)="onNavigate('/welcome/loans')">
                                     <div>
-                                        <!-- <img src="../../assets/gifs/Vanir-Capital-Loans.gif" alt="Get Loans"/> -->
-                                        <!-- <lottie-player src="../../assets/animations/vanir-capital-loans.json"  background="transparent"  speed="1"  style="width: 100%;"  loop autoplay></lottie-player> -->
                                         <app-lottie [assetPath]="assetPaths.loan"></app-lottie>
                                     </div>
                                     <div style="width: 100%; text-align: left;">
@@ -72,8 +67,6 @@
                                 <div class="card card_intro animate__animated animate__fadeInUp"
                                     (click)="onNavigate('/welcome/earnings')">
                                     <div>
-                                        <!-- <img src="../../assets/gifs/Vanir-Capital-Investment-2.gif" alt="Invest"/> -->
-                                        <!-- <lottie-player src="assets/animations/vanir-capital-investment-2.json"  background="transparent"  speed="1"  style="width: 100%;"  loop autoplay></lottie-player> -->
                                         <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
                                     </div>
                                     <div #invest style="width: 100%; text-align: left;">

@@ -1,4 +1,6 @@
 <div id="main-content">
+
+    <!-- If no earnings has been applied for -->
     <ng-container *ngIf="!(latestEarnings$|async)">
         <div id="no-data" class="animate__animated animate__fadeIn">
             <div class="image">
@@ -15,6 +17,8 @@
                 Soon</button> -->
         </div>
     </ng-container>
+
+    <!-- If earnings has been applied for -->
     <ng-container *ngIf="latestEarnings$|async as allEarnings">
         <div id="in-progress" class="animate__animated animate__fadeIn">
             <div class="theme_scrolling--wrapper" style="min-width: 100%;">
