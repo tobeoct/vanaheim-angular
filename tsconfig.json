@@ -38,7 +38,11 @@
       "@utils/*":["server/helpers/utils/*"],
       "@api/*": ["server/api/*"],
       "@config": ["server/config"]
-    }
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "server/types",
+    ]
   },
   "include": [
     "./src",

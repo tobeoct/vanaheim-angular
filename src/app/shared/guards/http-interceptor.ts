@@ -34,7 +34,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
                 headerSettings[key] = request.headers.getAll(key)||[];
                 }
                 if (token) {
-                headerSettings['Authorization'] = 'Bearer ' + token.response.token;
+                headerSettings['Authorization'] = 'Bearer ' + token.response;
                 }
                 headerSettings['Content-Type'] = 'application/json';
                 headerSettings['api_key'] = this._authenticationService.getApiKey();

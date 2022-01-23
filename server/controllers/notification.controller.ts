@@ -6,6 +6,8 @@ import EmailService from "@services/implementation/common/email-service";
 import { TemplateService } from "@services/implementation/common/template-service";
 import NotificationService from "@services/implementation/notification-service";
 import { route, POST } from "awilix-express";
+import { VanaheimBodyRequest } from "@models/express/request";
+import { VanaheimTypedResponse } from "@models/express/response";
 @route('/api/notification')
 export default class NotificationController {
   constructor(private _notificationService: NotificationService, private _templateService: TemplateService, private _customerRepository: ICustomerRepository, private _emailService: EmailService, private _appConfig: AppConfig, private sanitizer: any) {
@@ -14,13 +16,13 @@ export default class NotificationController {
 
   @route('/notifyCustomer')
   @POST()
-  notifyCustomer = async (req: any, res: any, next: any) => {
+  notifyCustomer = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     let { message, type, customerIDs, code } = req.body;
     let name = "";
     try {
       if (!customerIDs || !message || !type) {
         res.statusCode = 400;
-        res.data = "Please fill all necessary details";
+        res.payload = { message: "Please fill all necessary details" };
         next();
         return;
       }
@@ -46,62 +48,62 @@ export default class NotificationController {
           const template = this._templateService.NOTIFICATION(message, type, code);
           let emailResponse = await this._emailService.SendEmail({ subject: type.toString(), to: customer.email, html: template, toCustomer: true });
         }
-        catch (err:any) {
+        catch (err: any) {
           console.log(err);
           errorList.push("Notification Failed to send to " + name);
         }
       });
       res.statusCode = 200;
-      res.data = errorList.length > 0 ? errorList.join("; ") : "Notification was successful";
+      res.payload = { message: errorList.length > 0 ? errorList.join("; ") : "Notification was successful" };
       next();
-    } catch (err:any) {
+    } catch (err: any) {
       res.statusCode = 400;
-      res.data = "Notification Failed to send to " + name;
+      res.payload = { message: "Notification Failed to send to " + name };
       next();
     }
   }
   @route('/sendtomultiple')
   @POST()
-  sendToMultiple = async (req: any, res: any, next: any) => {
+  sendToMultiple = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     const { notification } = req.body;
     this._notificationService.sendNotificationToMany({ notification, type: "All" }).then(response => {
       res.statusCode = 200;
-      res.data = response;
+      res.payload = { data: response };
       next();
-    }).catch((err:any) => {
+    }).catch((err: any) => {
       res.statusCode = 400;
-      res.data = "Notification Failed to send";
+      res.payload = { message: "Notification Failed to send" };
       next();
     })
   }
   @route('/send')
   @POST()
-  send = async (req: any, res: any, next: any) => {
+  send = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     const { notification, browserID } = req.body;
     const { userData } = req.session;
     this._notificationService.sendNotification({ notification, userID: userData.id, browserID }).then(response => {
       res.statusCode = 200;
-      res.data = response;
+      res.payload = response;
       next();
-    }).catch((err:any) => {
+    }).catch((err: any) => {
       res.statusCode = 400;
-      res.data = "Notification Failed to send";
+      res.payload = { message: "Notification Failed to send" };
       next();
     })
   }
   @route('/subscribe')
   @POST()
-  subscribe = async (req: any, res: any, next: any) => {
+  subscribe = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     const { token, browserID } = req.body;
     const { userData } = req.session;
-    if (userData.id == 0) { res.statusCode = 200; res.data = { code: "01", message: "User is not yet registered" }; }
+    if (userData.id == 0) { res.statusCode = 200; res.payload = { data: { code: "01", message: "User is not yet registered" } }; }
     this._notificationService.subscribe({ token, userID: userData.id, browserID }).then(response => {
       res.statusCode = 200;
-      res.data = response;
+      res.payload = { data: response };
       next();
-    }).catch((err:any) => {
+    }).catch((err: any) => {
       res.statusCode = 400;
-      res.data = "Failed to subscribe";
+      res.payload = { message: "Failed to subscribe" };
       next();
     })
   }

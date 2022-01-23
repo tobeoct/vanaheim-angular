@@ -3,12 +3,12 @@ export interface TypedResponse<ResBody> extends Express.Response {
     json: Send<ResBody, this>;
  }
 
- export interface OrdenaTypedResponse<T> extends TypedResponse<T>{
+ export interface VanaheimTypedResponse<T> extends TypedResponse<T>{
      statusCode:number
-     payload:OrdenaResponse<T>
+     payload:VanaheimResponse<T>
  }
 
- export interface OrdenaResponse<T> {
+ export interface VanaheimResponse<T> {
     message?:string
     data?:T
 }

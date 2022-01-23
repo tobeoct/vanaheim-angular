@@ -12,19 +12,21 @@ import { ShareholderRepository } from '@repository/implementation/shareholder-re
 import { IEarningsEmploymentRepository } from '@repository/interface/investment/Iearnings-employment-repository';
 import UtilService from '@services/implementation/common/util';
 import { GET, POST, PUT, route } from 'awilix-express';
+import { VanaheimBodyRequest, VanaheimQueryRequest } from '@models/express/request';
+import { VanaheimTypedResponse } from '@models/express/response';
 const expAutoSan = require('express-autosanitizer');
 
 // const accountList:any={};
 @route('/api/customer')
 export default class CustomerController {
 
-  constructor(private sanitizer: any, private _utils: UtilService,private _earningsEmploymentRepository:IEarningsEmploymentRepository, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: CollateralRepository) {
+  constructor(private sanitizer: any, private _utils: UtilService, private _earningsEmploymentRepository: IEarningsEmploymentRepository, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: CollateralRepository) {
 
   }
 
   @route('/')
   @GET()
-  customer = async (req: any, res: any, next: any) => {
+  customer = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let user = req.session?.userData;
       if (user) {
@@ -33,48 +35,48 @@ export default class CustomerController {
           customer = customer.dataValues as Customer;
         }
         res.statusCode = 200;
-        res.data = customer;
+        res.payload = { data: customer };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid user" }
+        res.payload = { message: "Invalid user" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get customer info" }
+      res.payload = { message: "Failed to get customer info" }
     }
     next();
   }
 
-  
+
 
   @route('/all')
   @GET()
-  customers = async (req: any, res: any, next: any) => {
+  customers = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let user = req.session?.userData;
       if (user) {
         let customers: any = await this._customerRepository.getAll();
 
         res.statusCode = 200;
-        res.data = customers;
+        res.payload = { data: customers };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid user" }
+        res.payload = { message: "Invalid user" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get customer info" }
+      res.payload = { message: "Failed to get customer info" }
     }
     next();
   }
 
   @route('/bvn')
   @GET()
-  getCustomerBVN = async (req: any, res: any, next: any) => {
+  getCustomerBVN = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let user = req.session?.userData;
       if (user) {
@@ -83,30 +85,30 @@ export default class CustomerController {
           customer = customer.dataValues as Customer;
         }
         res.statusCode = 200;
-        res.data = customer.BVN;
+        res.payload = { data: customer.BVN };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid user" }
+        res.payload = { message: "Invalid user" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get customer info" }
+      res.payload = { message: "Failed to get customer info" }
     }
     next();
   }
 
   @route('/updateCustomerBVN')
   @PUT()
-  updateCustomerBVN = async (req: any, res: any, next: any) => {
+  updateCustomerBVN = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let user = req.session?.userData;
       let bvn = this.sanitizer.escape(req.body.bvn);
       if (user && bvn) {
         if (bvn.length != 11) {
           res.statusCode = 400;
-          res.data = { status: false, message: "Invalid request" }
+          res.payload = { message: "Invalid request" }
 
         }
         let customer: any = await this._customerRepository.getByUserID(user.id);
@@ -116,23 +118,23 @@ export default class CustomerController {
           await this._customerRepository.update(customer);
         }
         res.statusCode = 200;
-        res.data =  "Updated successfully";
+        res.payload = { message: "Updated successfully" };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid user" }
+        res.payload = { message: "Invalid user" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get customer info" }
+      res.payload = { message: "Failed to get customer info" }
     }
     next();
   }
 
   @route('/update')
   @PUT()
-  updateCustomer = async (req: any, res: any, next: any) => {
+  updateCustomer = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let user = req.session?.userData;
       let customerToUpdate = req.body;
@@ -153,23 +155,23 @@ export default class CustomerController {
           this._customerRepository.update(customer);
         }
         res.statusCode = 200;
-        res.data = "Updated successfully";
+        res.payload = { message: "Updated successfully" };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid user" }
+        res.payload = { message: "Invalid user" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to update your info" }
+      res.payload = { message: "Failed to update your info" }
     }
     next();
   }
 
   @route('/getById')
   @GET()
-  customerById = async (req: any, res: any, next: any) => {
+  customerById = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       var id = this.sanitizer.escape(req.query.id);
       let customer: any = await this._customerRepository.getById(id);
@@ -177,12 +179,12 @@ export default class CustomerController {
         customer = customer.dataValues as Customer;
       }
       res.statusCode = 200;
-      res.data = customer;
+      res.payload = { data: customer };
 
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get customer info" }
+      res.payload = { message: "Failed to get customer info" }
     }
     next();
   }
@@ -190,23 +192,23 @@ export default class CustomerController {
 
   @route('/employers')
   @GET()
-  employers = async (req: any, res: any, next: any) => {
+  employers = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
         let employers = await this._employmentRepository.getByCustomerID(customer.id);
 
         res.statusCode = 200;
-        res.data = employers;
+        res.payload = { data: employers };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid user" }
+        res.payload = { message: "Invalid user" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get employers info" }
+      res.payload = { message: "Failed to get employers info" }
     }
     next();
   }
@@ -214,23 +216,23 @@ export default class CustomerController {
 
   @route('/earningEmployment')
   @GET()
-  earningEmployment = async (req: any, res: any, next: any) => {
+  earningEmployment = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
         let employers = await this._earningsEmploymentRepository.getByCustomerID(customer.id);
 
         res.statusCode = 200;
-        res.data = employers;
+        res.payload = { data: employers };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid user" }
+        res.payload = { message: "Invalid user" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get employers info" }
+      res.payload = { message: "Failed to get employers info" }
     }
     next();
   }
@@ -239,7 +241,7 @@ export default class CustomerController {
 
   @route('/nok')
   @GET()
-  nok = async (req: any, res: any, next: any) => {
+  nok = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
@@ -248,17 +250,17 @@ export default class CustomerController {
           nok = nok.dataValues as NOK;
         }
         res.statusCode = 200;
-        res.data = nok ? nok : {};
+        res.payload = { data: nok ? nok : {} };
 
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid customer" }
+        res.payload = { message: "Invalid customer" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get Next Of Kin info" }
+      res.payload = { message: "Failed to get Next Of Kin info" }
     }
     next();
   }
@@ -266,7 +268,7 @@ export default class CustomerController {
 
   @route('/updateNOK')
   @PUT()
-  updateNOK = async (req: any, res: any, next: any) => {
+  updateNOK = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       let nokInfo = req.body;
@@ -285,17 +287,17 @@ export default class CustomerController {
           this._nokRepository.update(nok);
         }
         res.statusCode = 200;
-        res.data = "Updated successfully";
+        res.payload = { data: "Updated successfully" };
 
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid customer" }
+        res.payload = { message: "Invalid customer" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to update Next Of Kin info" }
+      res.payload = { message: "Failed to update Next Of Kin info" }
     }
     next();
   }
@@ -304,23 +306,23 @@ export default class CustomerController {
 
   @route('/companies')
   @GET()
-  companies = async (req: any, res: any, next: any) => {
+  companies = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
         let companies = await this._companyRepository.getByCustomerID(customer.id);
         res.statusCode = 200;
-        res.data = companies;
+        res.payload = { data: companies };
 
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid customer" }
+        res.payload = { message: "Invalid customer" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get Company info" }
+      res.payload = { message: "Failed to get Company info" }
     }
     next();
   }
@@ -328,28 +330,28 @@ export default class CustomerController {
 
   @route('/shareholders')
   @POST()
-  shareholders = async (req: any, res: any, next: any) => {
+  shareholders = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       console.log(req.body)
       if (customer) {
         if (!req.body) {
           res.statusCode = 400;
-          res.data = { status: false, message: "No company id specified" }
+          res.payload = { message: "No company id specified" }
         }
         let shareholders = await this._shareholderRepository.getByCompanyID(req.body.companyID);
         res.statusCode = 200;
-        res.data = shareholders;
+        res.payload = { data: shareholders };
 
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid customer" }
+        res.payload = { message: "Invalid customer" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get Shareholders info" }
+      res.payload = { message: "Failed to get Shareholders info" }
     }
     next();
   }
@@ -357,23 +359,23 @@ export default class CustomerController {
 
   @route('/collaterals')
   @GET()
-  collaterals = async (req: any, res: any, next: any) => {
+  collaterals = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
         let collaterals = await this._collateralRepository.getByCustomerID(customer.id);
         res.statusCode = 200;
-        res.data = collaterals;
+        res.payload = { data: collaterals };
 
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Invalid customer" }
+        res.payload = { message: "Invalid customer" }
 
       }
     }
-    catch (err:any) {
+    catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get Collateral info" }
+      res.payload = { message: "Failed to get Collateral info" }
     }
     next();
   }

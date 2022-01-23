@@ -11,6 +11,9 @@ import { IDocumentRepository } from '@repository/interface/document/Idocument-re
 import AppConfig, { Environment } from 'server/config';
 import EmailService, { EmailType } from '@services/implementation/common/email-service';
 import { TemplateService } from '@services/implementation/common/template-service';
+import { VanaheimBodyRequest, VanaheimQueryRequest } from '@models/express/request';
+import { VanaheimTypedResponse } from '@models/express/response';
+import { response } from 'express';
 @route('/api/document')
 export default class DocumentController {
 
@@ -23,7 +26,7 @@ export default class DocumentController {
 
   @route('/attachLoan')
   @GET()
-  attachLoan = async (req: any, res: any, next: any) => {
+  attachLoan = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session.userData.customer;
       if (customer) {
@@ -44,23 +47,23 @@ export default class DocumentController {
           }
         }
         res.statusCode = 200;
-        res.data = "Document Uploaded"
+        res.payload = {message:"Document Uploaded"}
         next();
       } else {
         res.statusCode = 400;
-        res.data = { message: "Invalid User" }
+        res.payload = { message: "Invalid User" }
         next();
 
       }
     } catch (err) {
       res.statusCode = 400;
-      res.data = { message: "An error occurred" }
+      res.payload = { message: "An error occurred" }
       next();
     }
   }
   @route('/upload')
   @POST()
-  upload = async (req: any, res: any, next: any) => {
+  upload = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
 
     if (req.session.userData.customer) {
       let documentUpload = req.body as DocumentUpload;
@@ -68,21 +71,21 @@ export default class DocumentController {
       let response = await this._documentService.processDocument(documentUpload, customer);
       if (response.status == true) {
         res.statusCode = 200;
-        res.data = response.data;
+        res.payload = {data:response.data};
       } else {
         res.statusCode = 400;
-        res.data = response;
+        res.payload = {message:response.message};
       }
       next();
     } else {
       res.statusCode = 400;
-      res.data = {message:"Invalid User"}
+      res.payload = {message:"Invalid User"}
       next()
     }
   }
   @route('/getAll')
   @GET()
-  getAll = async (req: any, res: any, next: any) => {
+  getAll = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
 
     if (req.session.userData.customer) {
       let customer = req.session.userData.customer as Customer;
@@ -92,10 +95,10 @@ export default class DocumentController {
       } else {
         res.statusCode = 400;
       }
-      res.data = response.data;
+      res.payload = {data:response.data};
     } else {
       res.statusCode = 400;
-      res.data = {}
+      res.payload = {message:"Couldn't fetch documents"}
 
     }
     next();
@@ -103,7 +106,7 @@ export default class DocumentController {
 
   @route('/download')
   @POST()
-  download = async (req: any, res: any) => {
+  download = async (req: VanaheimBodyRequest<any>, res: any) => {
     const url = req.body.url;
     // let base = this._appConfig.environment==Environment.development? "../": "../../" 
     // const root = path.dirname(require.main?.filename)

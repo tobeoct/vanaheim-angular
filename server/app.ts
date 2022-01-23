@@ -91,9 +91,9 @@ export default class App {
     app.use("/api", inject(clientApiKeyValidation), inject(authoriseRequest), expAutoSan.route)
     console.log("App.TS", this._appConfig.environment)
     if (this._appConfig.environment ==Environment.production) {
-      app.use(loadControllers('api/controllers/*.controller.js', { cwd: __dirname }));
+      app.use(loadControllers('controllers/*.controller.js', { cwd: __dirname }));
     } else {
-      app.use(loadControllers('api/controllers/*.controller.ts', { cwd: __dirname }));
+      app.use(loadControllers('controllers/*.controller.ts', { cwd: __dirname }));
     }
     app.use("/api", inject(authoriseResponse))
 

@@ -8,6 +8,8 @@ import axios, { AxiosResponse } from "axios";
 import { VerifyVerificationStatus } from "@enums/verify/verification-status";
 import { VerifyVerificationType } from "@enums/verify/verification-type";
 import RedisMiddleware from "server/middleware/redis-middleware";
+import { VanaheimBodyRequest } from "@models/express/request";
+import { VanaheimTypedResponse } from "@models/express/response";
 const { verify: { v3 } } = EnvConstants;
 @route('/api/common')
 export default class CommonController {
@@ -24,7 +26,7 @@ export default class CommonController {
 
     @route('/validatebvn')
     @POST()
-    validateBVN = async (req: any, res: any, next: any) => {
+    validateBVN = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         // if(verifyRequest(req,"validatebvn")&&spamChecker(req.ip,"validatebvn")){
         const cacheKey = "bvnList";
         const bvnList: any = await this._redis.get(cacheKey, {});
@@ -48,21 +50,21 @@ export default class CommonController {
 
                 if (result.data.responseCode == "00" && result.data.verificationStatus == VerifyVerificationStatus.Verified) {
 
-                    res.data = { message: "BVN Verified", data: key };
+                    res.payload = { message: "BVN Verified", data: key };
                     res.statusCode = 200;
                 } else {
                     res.statusCode = 400;
-                    res.data = { message: "BVN verification failed" };
+                    res.payload = { message: "BVN Verification failed" };
                 }
             } else {
                 res.statusCode = (bvnList[key] === null || bvnList[key] == VerifyVerificationStatus.NotVerified) ? 400 : 200;
-                res.data = { message: (bvnList[key] === null || bvnList[key] == VerifyVerificationStatus.NotVerified) ? "BVN Verification Failed" : "BVN Verified" };
+                res.payload = { message: (bvnList[key] === null || bvnList[key] == VerifyVerificationStatus.NotVerified) ? "BVN Verification Failed" : "BVN Verified" };
             }
         }
         catch (err: any) {
             console.log(err);
             res.statusCode = 500;
-            res.data = err;
+            res.payload = {message:err};
         }
 
         await this._redis.save(cacheKey, bvnList);

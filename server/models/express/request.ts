@@ -13,16 +13,17 @@ export interface TypedRequestBody<T> extends Express.Request {
     body: T
 }
 export interface DefaultRequest{
+    ip:string;
     originalUrl:string;
     method:string;
     header:any;
 }
-export interface OrdenaQueryRequest<T extends Query> extends TypedRequestQuery<T>, DefaultRequest{
+export interface VanaheimQueryRequest<T extends Query> extends TypedRequestQuery<T>, DefaultRequest{
     
 }
 
-export interface OrdenaBodyRequest<T> extends TypedRequestBody<T>, DefaultRequest{
+export interface VanaheimBodyRequest<T> extends TypedRequestBody<T>, DefaultRequest{
     
 }
-export interface OrdenaRequest<T  extends Query,U> extends TypedRequest<T,U>, DefaultRequest{
+export interface VanaheimRequest<T  extends Query,U> extends TypedRequest<T,U>, DefaultRequest{
 }

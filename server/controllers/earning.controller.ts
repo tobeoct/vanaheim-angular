@@ -16,10 +16,12 @@ import { GET, PATCH, POST, route } from 'awilix-express';
 import moment = require('moment');
 import { Customer } from '@entities/customer';
 import { ApprovedEarning } from '@entities/investment/approved-investment';
-import {  EarningLiquidation } from '@entities/investment/earnings-liquidation';
+import { EarningLiquidation } from '@entities/investment/earnings-liquidation';
 import { EarningTopUp } from '@entities/investment/earnings-topup';
 import { TopUpStatus } from '@enums/topUpStatus';
 import { LiquidationStatus } from '@enums/liquidationStatus';
+import { VanaheimBodyRequest, VanaheimQueryRequest } from '@models/express/request';
+import { VanaheimTypedResponse } from '@models/express/response';
 @route('/api/earnings')
 export default class EarningsController {
 
@@ -28,14 +30,14 @@ export default class EarningsController {
     }
     @route('/apply')
     @POST()
-    apply = async (req: any, res: any, next: any) => {
+    apply = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         let response: any = await this._earningService.process(req.session.userData.customer, req.body);
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data;
+            res.payload = { data: response.data };
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
 
@@ -44,11 +46,11 @@ export default class EarningsController {
 
     @route('/getAllEarningRequests')
     @GET()
-    getAllEarningRequests = async (req: any, res: any, next: any) => {
+    getAllEarningRequests = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         console.log("Earnings Controller", req.session)
         let earningRequests = await this._earningService.getAllEarningRequests();
         res.statusCode = 200;
-        res.data = earningRequests;
+        res.payload = { data: earningRequests };
 
         next()
 
@@ -56,60 +58,60 @@ export default class EarningsController {
 
     @route('/search')
     @POST()
-    search = async (req: any, res: any, next: any) => {
+    search = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         console.log("Searching Logs");
         let response: any = await this._earningRequestLogService.search(req.body, req.session.userData.customer);
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
     }
     @route('/searchToProcess')
     @POST()
-    searchForAdmin = async (req: any, res: any, next: any) => {
+    searchForAdmin = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         console.log("Searching Logs");
         let response: any = await this._earningRequestService.search(req.body);
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
     }
     @route('/getEarningDetails')
     @GET()
-    getEarningDetails = async (req: any, res: any, next: any) => {
+    getEarningDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getEarningDetails(id, "earningRequest");
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
     }
     @route('/getEarningLogDetails')
     @GET()
-    getEarningLogDetails = async (req: any, res: any, next: any) => {
+    getEarningLogDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getEarningDetails(id, "earningRequestLog");
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
@@ -117,18 +119,18 @@ export default class EarningsController {
 
     @route('/getTopUps')
     @GET()
-    topUps = async (req: any, res: any, next: any) => {
+    topUps = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         try {
             const id = this.sanitizer.escape(req.query.id);
             const amount = this.sanitizer.escape(req.query.amount);
             const status = this.sanitizer.escape(req.query.status) ?? TopUpStatus.Pending;
             let response: any = !id ? await this._earningTopUpRepository.getByStatus(status, [{ model: this._db.Customer, required: false }]) : await this._earningTopUpRepository.getByApprovedEarningID(id, amount, [{ model: this._db.Customer, required: false }]);
             res.statusCode = 200;
-            res.data = response
+            res.payload = { data: response }
 
         } catch (ex) {
             res.statusCode = 400;
-            res.data = "Sorry we could not process your requests";
+            res.payload = { message: "Sorry we could not process your requests" };
         }
 
         next()
@@ -136,15 +138,15 @@ export default class EarningsController {
 
     @route('/topUp')
     @PATCH()
-    topUp = async (req: any, res: any, next: any) => {
+    topUp = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.topUp(id);
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
@@ -152,7 +154,7 @@ export default class EarningsController {
 
     @route('/notifyTopUp')
     @GET()
-    notifyTopUp = async (req: any, res: any, next: any) => {
+    notifyTopUp = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         try {
             const id = this.sanitizer.escape(req.query.id);
             const amount = this._utils.convertToPlainNumber(this.sanitizer.escape(req.query.amount));
@@ -160,19 +162,19 @@ export default class EarningsController {
             let earningRequest = await this._earningRequestService.getById(id);
             if (!earningRequest || Object.keys(earningRequest).length == 0) {
                 res.statusCode = 400;
-                res.data = "Cannot find request";
+                res.payload = { message: "Cannot find request" };
                 next()
             }
             //Only one active top up is allowed
             if (earningRequest?.requestStatus == EarningRequestStatus.TopUpRequest) {
                 res.statusCode = 400;
-                res.data = "You currently have a Top Up request processing";
+                res.payload = { message: "You currently have a Top Up request processing" };
                 next()
             }
 
             if (earningRequest?.requestStatus == EarningRequestStatus.Matured) {
                 res.statusCode = 400;
-                res.data = "Earning has matured, you cannot top it up";
+                res.payload = { message: "Earning has matured, you cannot top it up" };
                 next()
             }
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
@@ -181,7 +183,7 @@ export default class EarningsController {
             let earningRequestLog = await this._earningRequestLogService.getByEarningRequestIDAndRequestDate({ earningRequestID: id, requestDate: earningRequest.requestDate });
             if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
                 res.statusCode = 400;
-                res.data = "Cannot find request";
+                res.payload = { message: "Cannot find request" };
                 next()
             }
             // earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
@@ -190,7 +192,7 @@ export default class EarningsController {
             let approvedEarning = await this._approvedEarningRepository.getByRequestAndLogID(earningRequest.id, earningRequestLog.id);
             if (!approvedEarning || Object.keys(approvedEarning).length == 0) {
                 res.statusCode = 400;
-                res.data = "Cannot find request";
+                res.payload = { message: "Cannot find request" };
                 next()
             }
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
@@ -221,28 +223,28 @@ export default class EarningsController {
             await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a top up on an earning with ID, ${earningRequest.code}`, toCustomer: false });
 
             res.statusCode = 200;
-            res.data = "Our team has been notified successfully"
+            res.payload = { message: "Our team has been notified successfully" }
 
         } catch (ex) {
             console.log(ex)
             res.statusCode = 400;
-            res.data = { status: false, data: "Sorry we could not notify our team, Kindly retry" };
+            res.payload = { message: "Sorry we could not notify our team, Kindly retry" };
         }
         next()
     }
 
     @route('/liquidate')
     @PATCH()
-    liquidate = async (req: any, res: any, next: any) => {
+    liquidate = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         const id = this.sanitizer.escape(req.query.id);
         const status = this.sanitizer.escape(req.query.status);
         let response: any = await this._earningService.liquidate(id, status);
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
@@ -250,24 +252,24 @@ export default class EarningsController {
 
     @route('/getLiquidations')
     @GET()
-    liquidations = async (req: any, res: any, next: any) => {
+    liquidations = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         try {
             const id = this.sanitizer.escape(req.query.id);
             const status = this.sanitizer.escape(req.query.status);
             let response: any = !id ? await this._earningLiquidationRepository.getByStatus(status, [{ model: this._db.Customer, required: false }]) : await this._earningLiquidationRepository.getByApprovedEarningID(id, [{ model: this._db.Customer, required: false }])
 
             res.statusCode = 200;
-            res.data = response
+            res.payload = { data: response }
 
         } catch (ex) {
             res.statusCode = 400;
-            res.data = "Sorry we could not process your requests";
+            res.payload = { message: "Sorry we could not process your requests" };
         }
         next()
     }
     @route('/notifyLiquidation')
     @GET()
-    notifyLiquidation = async (req: any, res: any, next: any) => {
+    notifyLiquidation = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         try {
             const id = this.sanitizer.escape(req.query.id);
             let customer = req.session.userData?.customer as Customer;
@@ -275,7 +277,7 @@ export default class EarningsController {
             let earningRequest = await this._earningRequestService.getById(id);
             if (!earningRequest || Object.keys(earningRequest).length == 0) {
                 res.statusCode = 400;
-                res.data = "Cannot find request";
+                res.payload = { message: "Cannot find request" };
                 next()
             }
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
@@ -284,7 +286,7 @@ export default class EarningsController {
             let earningRequestLog = await this._earningRequestLogService.getByEarningRequestIDAndRequestDate({ earningRequestID: id, requestDate: earningRequest.requestDate });
             if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
                 res.statusCode = 400;
-                res.data = { status: false, data: "Cannot find request" };
+                res.payload = { message: "Cannot find request" };
                 next()
             }
             // earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
@@ -293,7 +295,7 @@ export default class EarningsController {
             let approvedEarning = await this._approvedEarningRepository.getByRequestAndLogID(earningRequest.id, earningRequestLog.id);
             if (!approvedEarning || Object.keys(approvedEarning).length == 0) {
                 res.statusCode = 400;
-                res.data = { status: false, data: "Cannot find request" };
+                res.payload = { message: "Cannot find request" };
                 next()
             }
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
@@ -302,7 +304,7 @@ export default class EarningsController {
             let earningLiquidation = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
             if (earningLiquidation && (Object.keys(earningLiquidation).length > 0 && (earningLiquidation as any).dataValues.liquidationStatus != LiquidationStatus.Declined)) {
                 res.statusCode = 400;
-                res.data = { status: false, data: "Liquidation request currently processing" };
+                res.payload = { message: "Liquidation request currently processing" };
                 next()
             }
 
@@ -317,7 +319,7 @@ export default class EarningsController {
 
             // if (earningLiquidation.amount == 0) {
             //     res.statusCode = 400;
-            //     res.data = { status: false, data: "No Earning accrued to liquidate yet" };
+            //     res.data = { data: "No Earning accrued to liquidate yet" };
             //     next();
             //     return
             // }
@@ -332,70 +334,70 @@ export default class EarningsController {
 
             await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a liquidation on an earning with ID, ${earningRequest.code}`, toCustomer: false });
             res.statusCode = 200;
-            res.data = "Our team has been notified successfully"
+            res.payload = { message: "Our team has been notified successfully" }
 
         } catch (ex) {
             res.statusCode = 400;
-            res.data = { status: false, data: "Sorry we could not notify our team, Kindly retry" };
+            res.payload = { message: "Sorry we could not notify our team, Kindly retry" };
         }
         next()
     }
     @route('/getAllEarningDetails')
     @GET()
-    getAllEarningDetails = async (req: any, res: any, next: any) => {
+    getAllEarningDetails = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         // const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getAllEarningDetails(req.session.userData?.customer?.id, "earningRequest");
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
     }
     @route('/getAllEarningLogDetails')
     @GET()
-    getAllEarningLogDetails = async (req: any, res: any, next: any) => {
+    getAllEarningLogDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getAllEarningDetails(req.session.userData?.customer?.id, "earningRequestLog");
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
     }
     @route('/getApprovedEarning')
     @GET()
-    getApprovedEarnings = async (req: any, res: any, next: any) => {
+    getApprovedEarnings = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         const id = this.sanitizer.escape(req.query.requestId);
         let response: any = await this._approvedEarningService.getByEarningRequestId(id);
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
     }
     @route('/updateStatus')
     @POST()
-    updateStatus = async (req: any, res: any, next: any) => {
-        let { status, id, failureReason, message, startDate,serialNumber } = req.body
-        let response: any = await this._earningService.updateStatus({ requestStatus: status, id, failureReason, message, startDate,serialNumber });
+    updateStatus = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
+        let { status, id, failureReason, message, startDate, serialNumber } = req.body
+        let response: any = await this._earningService.updateStatus({ requestStatus: status, id, failureReason, message, startDate, serialNumber });
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data
+            res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
         next()
@@ -403,16 +405,16 @@ export default class EarningsController {
 
     @route('/getLatestEarnings')
     @GET()
-    getLatestEarning = async (req: any, res: any, next: any) => {
+    getLatestEarning = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         console.log("Getting Latest Earning")
         let response: any = await this._earningRequestService.getLatestEarnings(req.session.userData);
         console.log("Gotten Latest Earning")
         if (response.status == true) {
             res.statusCode = 200;
-            res.data = response.data;
+            res.payload = { data: response.data };
         } else {
             res.statusCode = 400;
-            res.data = response;
+            res.payload = { message: response.message };
         }
 
 

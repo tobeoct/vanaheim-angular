@@ -11,6 +11,8 @@ import { VerifyVerificationStatus } from '@enums/verify/verification-status';
 import RedisMiddleware from 'server/middleware/redis-middleware';
 import { VerifyVerificationType } from '@enums/verify/verification-type';
 import { Customer } from '@entities/customer';
+import { VanaheimBodyRequest } from '@models/express/request';
+import { VanaheimTypedResponse } from '@models/express/response';
 
 // const accountList:any={};
 @route('/api/account')
@@ -33,7 +35,7 @@ export default class AccountController {
   }
   @route('/enquiry')
   @POST()
-  enquiry = async (req: Request, res: any, next: any) => {
+  enquiry = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>,  next: any) => {
     let cacheKey = "accountList";
     let accountList: any = await this._redis.get(cacheKey, {});
     if (this._utils.verifyRequest(req, "accountenquiry") && this._utils.spamChecker(req.ip, "accountenquiry")) {
@@ -53,11 +55,11 @@ export default class AccountController {
 
           if (result.data.responseCode == "00" && result.data.verificationStatus == VerifyVerificationStatus.Verified) {
 
-            res.data = { message: "Account Enquiry was successful", data: this.getAccountName(result.data.response) };
+            res.payload = { message: "Account Enquiry was successful", data: this.getAccountName(result.data.response) };
             res.statusCode = 200;
           } else {
             res.statusCode = 400;
-            res.data = { message: "Account Enquiry was not successful" };
+            res.payload = { message: "Account Enquiry was not successful" };
           }
 
         }
@@ -65,20 +67,20 @@ export default class AccountController {
           console.log("Cached Result", accountList[key]);
           if (accountList[key] == VerifyVerificationStatus.NotVerified) {
             res.statusCode = 400;
-            res.data = { message: "Account Enquiry was not successful" };
+            res.payload = { message: "Account Enquiry was not successful" };
           } else {
-            res.data = { message: "Account Enquiry was successful", data: this.getAccountName(accountList[key]) };
+            res.payload = { message: "Account Enquiry was successful", data: this.getAccountName(accountList[key]) };
             res.statusCode = 200;
           }
         }
       }
       catch (err: any) {
-        res.data = { message: "Account Enquiry was not successful" };
+        res.payload = { message: "Account Enquiry was not successful" };
         res.statusCode = 500;
         console.log(err);
       }
     } else {
-      res.data = { message: "Sorry we can not process your request at the moment. Kindly contact our support team." };
+      res.payload = { message: "Sorry we can not process your request at the moment. Kindly contact our support team." };
       res.statusCode = 400;
     }
     await this._redis.save(cacheKey, accountList);
@@ -88,28 +90,28 @@ export default class AccountController {
 
   @route('/')
   @GET()
-  accounts = async (req: any, res: any, next: any) => {
+  accounts = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
         let accounts = await this._accountRepository.getByCustomerID(customer.id);
         res.statusCode = 200;
-        res.data = accounts.length == 0 ? {} : accounts;
+        res.payload = {data:accounts.length == 0 ? {} : accounts};
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Not a customer" }
+        res.payload = { message: "Not a customer" }
 
       }
     }
     catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get accounts" }
+      res.payload = { message: "Failed to get accounts" }
     }
     next();
   }
   @route('/updateAccounts')
   @POST()
-  updateAccounts = async (req: any, res: any, next: any) => {
+  updateAccounts = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     try {
       let accounts: any[] = req.body.accounts;
       if (accounts) {
@@ -122,16 +124,16 @@ export default class AccountController {
           this._accountRepository.update(accInDb);
         })
         res.statusCode = 200;
-        res.data = { status: true, response: "Successfully Updated" };
+        res.payload = { message: "Successfully Updated" };
       } else {
         res.statusCode = 400;
-        res.data = { status: false, message: "Not a customer" }
+        res.payload = { message: "Not a customer" }
 
       }
     }
     catch (err: any) {
       res.statusCode = 400;
-      res.data = { status: false, message: "Failed to get accounts" }
+      res.payload = { message: "Failed to get accounts" }
     }
     next();
   }

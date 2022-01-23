@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start:nodemon": "nodemon",
-    "start:dev": "ts-node -r dotenv/config -r tsconfig-paths/register server/server.ts",
+    "start:dev": "ts-node -r dotenv/config -r tsconfig-paths/register -T server/server.ts",
     "prestart:prod": "-rf dist && ng build --prod --stats-json && tsc && rm -rf dist/src",
     "start": "node -r ./tsconfig-paths-bootstrap.js dist/server/server.js",
     "start:hmr": "node dist/server",
