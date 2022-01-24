@@ -46,7 +46,7 @@ button {
         transform: scale(1.05);
         color: map-get($colors, black) !important;
     }
-    &:focus, &:active,&:enabled,&:visited {
+    &:focus, &:active,&:visited {
         border: 2px solid map-get($colors, yellow) !important;
         color: map-get($colors, yellow) !important;
         outline: none !important;

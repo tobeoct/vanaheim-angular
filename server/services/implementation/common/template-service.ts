@@ -9,9 +9,9 @@ const pdfGenerator = require('template-pdf-generator');
 
 export class TemplateService {
     constructor(private fs: any, private fsExtra: any, private _utils: UtilService) { }
-    STATUS_UPDATE(status: LoanRequestStatus, id: string, customer:string, amount:string, tenure:string) {
+    STATUS_UPDATE(status: LoanRequestStatus, id: string, customer: string, amount: string, tenure: string) {
 
-        switch(status){
+        switch (status) {
             case LoanRequestStatus.Processing:
                 return `We acknowledge receipt of your request and supporting documents and its now receiving attention.<br/>
                 We will review and provide and update soon.<br/><br/>
@@ -38,7 +38,7 @@ export class TemplateService {
                 
                 Thank you and best regards`
             default:
-        return `   LOAN ID: ${id} <br/><br/>
+                return `   LOAN ID: ${id} <br/><br/>
         Your loan request status has been updated to ${status};<br/><br/>
         Kind Regards<br/><br/>
         <b>Vanir Capital Loans and Capital Finance Team</b>
@@ -46,7 +46,7 @@ export class TemplateService {
         `;
         }
     }
-    STATUS_UPDATE_REQUIRED(name: string, message: string,url:string) {
+    STATUS_UPDATE_REQUIRED(name: string, message: string, url: string) {
         return `Dear ${name.trim()},<br/><br/>
         Thank you for your mail.<br/>
         We acknowledge receipt of your request and documents provided. Kindly see below the documents outstanding to enable us proceed with request evaluation:<br/><br/>
@@ -63,7 +63,7 @@ export class TemplateService {
         // <b>Vanir Capital Loans and Capital Finance Team</b>
         // `;
     }
-   
+
     STATUS_UPDATE_DECLINED(name: string, message: string, id: string) {
         return `Dear ${name.trim()},<br/><br/>
         Thank you for your interest in Vanir Capital Limited’s loan services.<br/><br/>
@@ -88,12 +88,14 @@ export class TemplateService {
     EARNING_STATUS_UPDATE(status: EarningRequestStatus, id: string, customerName?: string, payout?: number, interest?: number) {
         switch (status) {
             case EarningRequestStatus.Processing:
-                return `Your earning request status has been updated to
+                return `Hello ${customerName},<br/><br/>
+                Your earning request status has been updated to
                 PROCESSING. <br/><br/>
                 Status will be updated to ACTIVE within 24 hours. <br/><br/>
                 Kind Regards.`;
             case EarningRequestStatus.Active:
-                return `Congratulations! <br/><br/>
+                return `Hello ${customerName},<br/><br/>
+                Congratulations! <br/><br/>
             Your earning request status has been updated to ACTIVE. <br/><br/>
             Kind Regards.`;
             case EarningRequestStatus.Matured:
@@ -113,8 +115,23 @@ export class TemplateService {
         }
     }
 
-    EARNING_LIQUIDATION_NOTIFICATION(customer: string, requestCode: string) {
-        return `Dear ${customer}, <br/><br/> We have received your liquidation request for EARNING ID: ${requestCode} <br/><br/>
+    EARNING_LIQUIDATION_APPROVAL(customer: string) {
+        return `
+         Hello ${customer},<br/><br/>
+
+        Trust this meets you well.<br/><br/>
+
+        Your liquidation request has now been processed and remitted into your account details provided on file.<br/>
+
+        Kindly acknowledge receipt.<br/><br/>
+
+        We thank you for your valued patronage and look forward to having you back with us.<br/><br/>
+
+        Best regards.`
+    }
+    EARNING_LIQUIDATION_NOTIFICATION(customer: string, requestID: string) {
+
+        return `Dear ${customer}, <br/><br/> We have received your liquidation request for EARNING ID: ${requestID} <br/><br/>
         Your request is being attended to.  You would be contacted shortly<br/><br/>
        
         <b>Vanir Capital Loans and Capital Finance Team</b>
@@ -122,32 +139,15 @@ export class TemplateService {
     }
 
     EARNING_TOPUP_NOTIFICATION(customer: string, requestCode: string, amount: string) {
-        return `
+        return `Hello ${customer},
         Congratulations! Your earnings Top Up request has been approved.<br/><br/>
 Kind Regards.
         `;
         // return `Dear ${customer}, <br/><br/> We have received your top up request for EARNING ID: ${requestCode} with an amount of ${amount} <br/><br/>
         // Your request is being attended to. You would be contacted shortly<br/><br/>
-       
+
         // <b>Vanir Capital Loans and Capital Finance Team</b>
         // `;
-    }
-    EARNING_STATUS_UPDATE_REQUIRED(status: string, id: string, url: string, message: string) {
-        return `   EARNING ID: ${id} <br/><br/>
-        Your earning request status has been updated to ${status};<br/><br/>
-        Go to ${url} to provide the required document <br/><br/>
-        ${message} <br/><br/>
-        Kind Regards<br/><br/>
-        <b>Vanir Capital Loans and Capital Finance Team</b>
-        `;
-    }
-    EARNING_UPDATE(customerName: string, code: string, requirement: string) {
-        return `   EARNING ID: ${code} <br/><br/>
-        Customer:${customerName}<br/><br/>
-        Requirement: ${requirement}<br/><br/>
-        Kind Regards<br/><br/>
-        <b>Vanir Capital Loans and Capital Finance Team</b>
-        `;
     }
     EARNING_STATUS_UPDATE_DECLINED(name: string, message: string, id: string) {
         return `  Dear ${name.trim()},<br/><br/>
@@ -160,6 +160,24 @@ Kind Regards.
         <b>Vanir Capital Loans and Capital Finance Team</b>
         `;
     }
+    // EARNING_STATUS_UPDATE_REQUIRED(status: string, id: string, url: string, message: string) {
+    //     return `   EARNING ID: ${id} <br/><br/>
+    //     Your earning request status has been updated to ${status};<br/><br/>
+    //     Go to ${url} to provide the required document <br/><br/>
+    //     ${message} <br/><br/>
+    //     Kind Regards<br/><br/>
+    //     <b>Vanir Capital Loans and Capital Finance Team</b>
+    //     `;
+    // }
+    // EARNING_UPDATE(customerName: string, code: string, requirement: string) {
+    //     return `   EARNING ID: ${code} <br/><br/>
+    //     Customer:${customerName}<br/><br/>
+    //     Requirement: ${requirement}<br/><br/>
+    //     Kind Regards<br/><br/>
+    //     <b>Vanir Capital Loans and Capital Finance Team</b>
+    //     `;
+    // }
+
     NOTIFICATION(message: string, type: string, id?: string) {
         if (id) {
             return `${type} -   LOAN ID: ${id} <br/><br/>

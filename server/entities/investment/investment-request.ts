@@ -37,9 +37,9 @@ export class EarningRequest extends BaseEntity {
     requestId: string;
 
     
-  autogenerateID(serialNumber:number){
+  autogenerateID(serialNumber:string){
       const now =moment();
-    return `VCAP-${serialNumber}-${now.format("MMM").toUpperCase()}${now.format("YYYY")}`
+    return serialNumber; //`VCAP-${serialNumber}-${now.format("MMM").toUpperCase()}${now.format("YYYY")}`
   }
 
 }

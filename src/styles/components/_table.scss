@@ -88,7 +88,7 @@ table {
         th {
             @include paddingVertical(true, "px", 0.5);
             font-weight: map-get($font-weights, "bold");
-            &:not(:last-child){
+            &:not(:last-child) {
                 border-right: 1px solid #d4d4d4;
             }
         }
@@ -136,9 +136,8 @@ table {
 @media #{$gl-xs} {
     table {
         display: block;
-        > *,
+
         tr,
-        td,
         th {
             display: block;
         }
@@ -148,9 +147,12 @@ table {
         }
         tbody tr {
             height: auto;
-            padding: 8px 0;
+            padding: 0 !important;
             td {
-                padding-left: 45%;
+                min-width: 100px;
+                // padding-left: 45%;
+                padding-left: 10px;
+                padding-right: 10px;
                 margin-bottom: 12px;
                 &:last-child {
                     margin-bottom: 0;
@@ -181,7 +183,7 @@ blockquote {
 }
 
 @media all and (max-width: 900px) {
-    #table {
-        min-width: 300%;
-    }
+    // #table {
+    //     min-width: 300%;
+    // }
 }

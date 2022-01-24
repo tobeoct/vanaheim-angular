@@ -14,7 +14,7 @@ import { Staff } from "@entities/staff";
 import { IStaffRepository } from "@repository/interface/Istaff-repository";
 import { TemplateService } from "./common/template-service";
 class UserService extends BaseService<User> implements IUserService {
-  constructor(private _userRepository: IUserRepository, private _templateService:TemplateService, private _emailService: EmailService, private _utils: UtilService, private _staffRepository: IStaffRepository, private _customerRepository: ICustomerRepository, private _encryption: Encryption) {
+  constructor(private _userRepository: IUserRepository, private _templateService: TemplateService, private _emailService: EmailService, private _utils: UtilService, private _staffRepository: IStaffRepository, private _customerRepository: ICustomerRepository, private _encryption: Encryption) {
     super(_userRepository);
   }
   convertToModel = (modelInDb: any) => {
@@ -96,7 +96,7 @@ class UserService extends BaseService<User> implements IUserService {
             resolve(await this.loginCustomer({ type, socialUser, browserID, uname, pwd }));
             break;
         }
-      } catch (err:any) {
+      } catch (err: any) {
         console.log(err);
         resolve({ status: false, message: "Oops, there seems to be an issue with your request" });
       }
@@ -182,7 +182,7 @@ class UserService extends BaseService<User> implements IUserService {
                 // resolve({status:true,data:user}); 
 
               }
-              catch (err:any) {
+              catch (err: any) {
                 console.log("We were able to register the user but could not send you an email.");
                 console.log(err);
               }
@@ -255,11 +255,11 @@ class UserService extends BaseService<User> implements IUserService {
             if (customerInDb) {
               ;
               try {
-                let response = await this._emailService.SendEmail({ subject: "WELCOME TO VANIR CAPITAL LLC", to: user.email, html: this._templateService.NEW_CUSTOMER_TEMPLATE(customer?(customer.firstName+' '+customer.lastName):"Customer"), toCustomer: true })
+                let response = await this._emailService.SendEmail({ subject: "WELCOME TO VANIR CAPITAL LLC", to: user.email, html: this._templateService.NEW_CUSTOMER_TEMPLATE(customer ? (customer.firstName + ' ' + customer.lastName) : "Customer"), toCustomer: true })
                 // resolve({status:true,data:user}); 
 
               }
-              catch (err:any) {
+              catch (err: any) {
                 console.log("We were able to register the user but could not send you an email.");
                 console.log(err);
               }
@@ -418,7 +418,7 @@ Best Regards,<div>
           //   resolve({status:true,data:user});
           //  })
           //  .
-          catch (err:any) {
+          catch (err: any) {
             resolve({ status: false, message: "We were able to reset your password, but could not send you an email. Kindly " });
 
           }

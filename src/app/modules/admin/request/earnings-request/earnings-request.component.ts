@@ -100,7 +100,7 @@ export class EarningsRequestComponent implements OnInit {
       amount: ["", [Validators.required]]
     });
     this.sform = this._fb.group({
-      serialNumber: [0, [Validators.required]],
+      serialNumber: ["", [Validators.required]],
     });
     this.earningsDetails$ = this._requestService.earningDetails$;
     this.earnings$ = this._requestService.filteredRequests$;

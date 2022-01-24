@@ -39,7 +39,7 @@ import { EarningRequest } from "@entities/investment/investment-request";
 import { EarningRequestLog } from "@entities/investment/investment-request-log";
 import { Customer } from "@entities/customer";
 import { EarningLiquidation } from "@entities/investment/earnings-liquidation";
-import {Document } from "@entities/document";
+import { Document } from "@entities/document";
 import { TopUpStatus } from "@enums/topUpStatus";
 import { ApprovedEarning } from "@entities/investment/approved-investment";
 import { EarningsEmployment } from "@entities/investment/earnings-employment";
@@ -48,7 +48,7 @@ import { MeansOfIdentification } from "@entities/investment/means-of-identificat
 import { NOK } from "@entities/nok";
 import { LiquidationStatus } from "@enums/liquidationStatus";
 export class EarningService implements IEarningService {
-  constructor(private _db: any, private _appConfig: AppConfig,private _documentService:IDocumentService, private _nokRepository: NOKRepository, private _documentRepository: IDocumentRepository, private _earningsEmploymentRepository: IEarningsEmploymentRepository, private _meansOfIdentificationRepository: IMeansOfIdentificationRepository, private _earningPayOutRepository: IEarningPayoutRepository, private _earningTopUpRepository: IEarningTopUpRepository, private _earningLiquidationRepository: IEarningLiquidationRepository, private _approvedEarningService: IApprovedEarningService, private _approvedEarningRepository: IApprovedEarningRepository, private Op: any, private _notificationService: INotificationService, private _customerRepository: ICustomerRepository, private _earningRequestLogService: IEarningRequestLogService, private _earningRequestRepository: IEarningRequestRepository, private _earningRequestLogRepository: IEarningRequestLogRepository, private _accountRepository: IAccountRepository, private _accountService: IAccountService, private _templateService: TemplateService, private _emailService: EmailService, private _utils: UtilService) {
+  constructor(private _db: any, private _appConfig: AppConfig, private _documentService: IDocumentService, private _nokRepository: NOKRepository, private _documentRepository: IDocumentRepository, private _earningsEmploymentRepository: IEarningsEmploymentRepository, private _meansOfIdentificationRepository: IMeansOfIdentificationRepository, private _earningPayOutRepository: IEarningPayoutRepository, private _earningTopUpRepository: IEarningTopUpRepository, private _earningLiquidationRepository: IEarningLiquidationRepository, private _approvedEarningService: IApprovedEarningService, private _approvedEarningRepository: IApprovedEarningRepository, private Op: any, private _notificationService: INotificationService, private _customerRepository: ICustomerRepository, private _earningRequestLogService: IEarningRequestLogService, private _earningRequestRepository: IEarningRequestRepository, private _earningRequestLogRepository: IEarningRequestLogRepository, private _accountRepository: IAccountRepository, private _accountService: IAccountService, private _templateService: TemplateService, private _emailService: EmailService, private _utils: UtilService) {
 
   }
   MGT_FEE: number = 5 / 100;
@@ -151,6 +151,7 @@ export class EarningService implements IEarningService {
   liquidate = (id: number, status?: LiquidationStatus) => {
     return new Promise<any>(async (resolve, reject) => {
       try {
+        let customer: Customer = new Customer();
         let earningLiquidation: EarningLiquidation = await this._earningLiquidationRepository.getByIdWithInclude(id, [{ model: this._db.ApprovedEarning, required: true }]);
         if (!earningLiquidation || Object.keys(earningLiquidation).length == 0) {
           resolve({ status: false, data: "Cannot find Liquidation request" });
@@ -174,6 +175,10 @@ export class EarningService implements IEarningService {
           earningRequest = (earningRequest as any).dataValues as EarningRequest;
           earningRequest.requestStatus = EarningRequestStatus.Active;
           earningRequest.updatedAt = moment().toDate();
+
+          customer = await this._customerRepository.getById(earningRequest.customerID);
+          if (!customer || Object.keys(customer).length == 0) throw "Invalid Customer";
+
           let earningRequestLog: EarningRequestLog = await this._earningRequestLogRepository.getById(approvedEarning.earningRequestLogID);
           if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
             resolve({ status: false, data: "Cannot find request" });
@@ -246,6 +251,7 @@ export class EarningService implements IEarningService {
         await this._earningLiquidationRepository.update(earningLiquidation);
         await this._approvedEarningRepository.update(approvedEarning);
 
+        await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_LIQUIDATION_APPROVAL(customer?.firstName), toCustomer: true })
         resolve({ status: true, data: "Liquidated successfully" });
       }
       catch (err) {
@@ -327,7 +333,7 @@ export class EarningService implements IEarningService {
             data: [
               { key: "Type", value: request.type },
               { key: "Duration", value: request.duration + " Months" },
-              { key: "Maturity Date", value:request.requestStatus==LoanRequestStatus.Pending?request.maturityDate: moment(request.maturityDate).format("MMMM Do YYYY") },
+              { key: "Maturity Date", value: request.requestStatus == LoanRequestStatus.Pending ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
               { key: "Rate", value: request.rate + "% per annum" },
               { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
               { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
@@ -339,7 +345,7 @@ export class EarningService implements IEarningService {
             key: "Personal Information",
             data: [
               { key: "Name", value: this._utils.replaceAll((request.Customer.title + " " + request.Customer.lastName + " " + request.Customer.otherNames + " " + request.Customer.firstName), "null", "") },
-              { key: "Date Of Birth", value: request.Customer.dateOfBirth },
+              { key: "Date Of Birth", value: moment(request.Customer.dateOfBirth).format("MMMM Do YYYY") },
               { key: "Gender", value: request.Customer.gender?.toString() },
               { key: "Marital Status", value: request.Customer.maritalStatus?.toString() },
               { key: "Tax Identification Number", value: request.Customer.taxId?.toString() },
@@ -446,7 +452,7 @@ export class EarningService implements IEarningService {
               data: [
                 { key: "Type", value: request.type },
                 { key: "Duration", value: request.duration + " Months" },
-                { key: "Maturity Date", value: request.requestStatus==LoanRequestStatus.Pending?request.maturityDate: moment(request.maturityDate).format("MMMM Do YYYY")  },
+                { key: "Maturity Date", value: request.requestStatus == LoanRequestStatus.Pending ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
                 { key: "Rate", value: request.rate + "%" },
                 { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
                 { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
@@ -529,14 +535,14 @@ export class EarningService implements IEarningService {
         earningRequest.dateProcessed = new Date();
         earningRequestLog.dateProcessed = new Date();
         // earningRequest.code = earningRequest.autogenerateID(serialNumber);
-        if(serialNumber){
+        if (serialNumber) {
           const requestByUniqueID = await this._earningRequestRepository.getByRequestID(new EarningRequest().autogenerateID(serialNumber));
 
-          if(requestByUniqueID && Object.keys(requestByUniqueID).length>0){
+          if (requestByUniqueID && Object.keys(requestByUniqueID).length > 0) {
             throw "Earning ID has already been assigned to another earning";
           }
-        earningRequest.requestId = new EarningRequest().autogenerateID(serialNumber);
-        earningRequestLog.requestId = new EarningRequest().autogenerateID(serialNumber);
+          earningRequest.requestId = new EarningRequest().autogenerateID(serialNumber);
+          earningRequestLog.requestId = new EarningRequest().autogenerateID(serialNumber);
         }
       }
       // else if (requestStatus == EarningRequestStatus.Approved) {
@@ -606,7 +612,7 @@ export class EarningService implements IEarningService {
       notification.data.url = this._appConfig.WEBURL + "/my/earnings";
       try {
         //requestStatus == EarningRequestStatus.UpdateRequired ? this._templateService.EARNING_STATUS_UPDATE_REQUIRED(requestStatus, earningRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${earningRequestLog.id}`, message) :
-        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html: failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) : this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestId,`${customer.title} ${customer.firstName} ${customer.lastName}`,earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
+        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html: failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) : this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : earningRequest.requestId, `${customer.title} ${customer.firstName} ${customer.lastName}`, earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [earningRequest.customerID], notification })
 
       }

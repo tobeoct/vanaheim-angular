@@ -35,7 +35,7 @@ export class LoanService {
   interval = environment.production ? POLLING_INTERVAL : 30000000000000000;
   constructor(
     private _http: HttpClient,
-    private _utility: Utility,
+    private _utils: Utility,
     private _store: Store,
     private _loanStore:LoanStore) {
 

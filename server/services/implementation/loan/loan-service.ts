@@ -72,7 +72,7 @@ export class LoanService implements ILoanService {
             key: "Personal Information",
             data: [
               { key: "Name", value: this._utils.replaceAll((request.Customer.title + " " + request.Customer.lastName + " " + request.Customer.otherNames + " " + request.Customer.firstName), "null", "") },
-              { key: "Date Of Birth", value: request.Customer.dateOfBirth },
+              { key: "Date Of Birth", value: moment(request.Customer.dateOfBirth).format("MMMM Do YYYY") },
               { key: "Gender", value: request.Customer.gender?.toString() },
               { key: "Marital Status", value: request.Customer.maritalStatus?.toString() },
               { key: "Email Address", value: request.Customer.email },
@@ -178,7 +178,7 @@ export class LoanService implements ILoanService {
 
           }
           if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-          resolve({ status: true, data: {failureReason:request.failureReason, id: request.id, loanRequestID: loanRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+          resolve({ status: true, data: {failureReason:request.failureReason, id: request.id, loanRequestID: loanRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code:request.requestStatus == LoanRequestStatus.Pending?"Not yet assigned": request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
 
         } else {
 
