@@ -1,0 +1,5 @@
+
+.theme_text--heading1::placeholder {
+    transform: translateY(-10px);
+    color: map-get($colors, white) !important;
+  }

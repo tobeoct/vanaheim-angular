@@ -11,3 +11,5 @@ $themeValues: ();
 @import './_dark';
 @include generateThemeMappings(dark, $dark);
 /** end theme generation **/
+
+@import './typography';

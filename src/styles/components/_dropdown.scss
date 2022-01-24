@@ -1,3 +1,14 @@
+
+select {
+    @include paddingHorizontal(true, "px", 0.1);
+    @include paddingVertical(true, "px", 0.1);
+    font-family: "Manrope", "Open Sans", sans-serif !important;
+    font-weight: 700;
+    background: map-get($colors, lightGrey);
+    border: 0;
+  }
+
+
 .dropdown{
     border-radius:5px;
     z-index:10;
@@ -143,3 +154,31 @@
 .dropdown .option.selected:focus{
     background:#f6f6f6
 }
+
+@media all and (max-width:900px){
+    
+  .dropdown .list {
+    left: 0 !important;
+  }
+  
+  .dropdown {
+    font-size: 16px !important;
+  }
+  .dropdown .current {
+    white-space: pre-line;
+  }
+  .dropdown .list {
+    padding-top: 15px;
+    word-break: break-all;
+    box-sizing: border-box;
+    padding-bottom: 15px;
+  }
+}
+
+@media all and (max-width: 280px) {
+    .dropdown,
+    select {
+      font-size: 1em !important;
+    }
+  }
+  

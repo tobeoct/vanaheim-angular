@@ -23,9 +23,6 @@ export default class AuthController {
     headers: { 'Content-Type': 'application/json', 'api-key': "7UBUKPMxF8i99DgB", 'userid': '1543318849803' }, //,'accountNumber':body.accountNumber,'bankcode':key},
   });
 
-  bvnList: any = {
-  };
-  bankList: any = {};
   constructor(private _userService: IUserService, private _encryption: Encryption, private sanitizer: any, private _notificationService: NotificationService, private _authService: IAuthService) {
 
   }

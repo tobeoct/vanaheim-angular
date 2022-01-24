@@ -1,4 +1,4 @@
-<!-- <ng-container *ngIf="details"> -->
+<ng-container *ngIf="details">
     <div id="active-loan" *ngIf="!details.disbursedLoan?.isClosed" style="width: 100%;">
         <small>Active Loan</small>
         <div class="content--smaller margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center"
@@ -38,4 +38,4 @@
         <a (click)="onNavigate('my/loans')"><u><b>View History</b></u></a>
         <a (click)="showRepaymentClicked(details.disbursedLoan?.id)"><u><b>View Repayments</b></u></a>
     </div>
-<!-- </ng-container> -->
+</ng-container>

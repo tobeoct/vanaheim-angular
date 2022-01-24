@@ -1,0 +1,93 @@
+
+.js .inputfile + label p span {
+    display: block !important;
+  }
+  .js .inputfile {
+    width: 100%;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+  .inputfile + label {
+    max-width: 80%;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+  }
+  .no-js .inputfile + label {
+    display: none;
+  }
+  .inputfile + label svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    margin-right: 0.25em;
+  }
+  .inputfile-5 + label {
+    color: map-get($colors, black);
+  }
+  .inputfile-5:focus + label,
+  .inputfile-5.has-focus + label,
+  .inputfile-5 + label:hover {
+    color: map-get($colors, black);
+  }
+  .inputfile-5 + label figure {
+    width: 50px;
+    height: 67.5px;
+    background-color: map-get($colors, black);
+    display: block;
+    position: relative;
+    padding: 10px;
+    margin: 0 auto 10px;
+  }
+  .inputfile-5:focus + label figure,
+  .inputfile-5.has-focus + label figure,
+  .inputfile-5 + label:hover figure {
+    background-color: #111;
+  }
+  .inputfile-5 + label figure::before,
+  .inputfile-5 + label figure::after {
+    width: 0;
+    height: 0;
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .inputfile-5 + label figure::before {
+    border-top: 20px solid #828282;
+    border-left: 20px solid transparent;
+  }
+  .inputfile-5 + label figure::after {
+    border-bottom: 20px solid #111;
+    border-right: 20px solid transparent;
+  }
+  .inputfile-5:focus + label figure::after,
+  .inputfile-5.has-focus + label figure::after,
+  .inputfile-5 + label:hover figure::after {
+    border-bottom-color: map-get($colors, black);
+  }
+  .inputfile-5 + label svg {
+    width: 100%;
+    height: 100%;
+    fill: #fafafa;
+  }
+  
+  .box .inputfile.dirty:invalid + label {
+    outline: 2px solid #efa9b0;
+    position: relative;
+  }
+  
+@media screen and (max-width: 50em) {
+  .inputfile-6 + label strong {
+    display: block;
+  }
+}
