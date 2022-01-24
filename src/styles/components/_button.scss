@@ -46,7 +46,7 @@ button {
         transform: scale(1.05);
         color: map-get($colors, black) !important;
     }
-    &:focus {
+    &:focus, &:active {
         border: 2px solid map-get($colors, yellow) !important;
         color: map-get($colors, yellow) !important;
         outline: none !important;
@@ -197,5 +197,8 @@ button {
     .widget_button,
     .form_group {
       max-width: 100% !important;
+    }
+    .widget_button:hover {
+        color: map-get($colors, yellow) !important;
     }
 }
