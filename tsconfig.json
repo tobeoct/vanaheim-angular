@@ -22,22 +22,54 @@
       "dom"
     ],
     "paths": {
-      "@repository/*": ["server/repository/*"],
-      "@styles/*": ["src/app/styles/*"],
-      "@assets/*": ["src/app/assets/*"],
-      "@validators/*": ["src/app/shared/validators/*"],
-      "@models/*": ["server/models/*"],
-      "@services/*": ["server/services/*"],
-      "@entities/*":["server/entities/*"],
-      "@db/*": ["server/db/*"],
-      "@controllers/*": ["server/controllers/*"],
-      "@helpers/*": ["server/helpers/*"],
-      "@enums/*": ["server/enums/*"],
-      "@poco/*": ["server/services/poco/*"],
-      "@environments/*":["src/environments/*"],
-      "@utils/*":["server/helpers/utils/*"],
-      "@api/*": ["server/api/*"],
-      "@config": ["server/config"]
+      "@repository/*": [
+        "server/repository/*"
+      ],
+      "@styles/*": [
+        "src/app/styles/*"
+      ],
+      "@assets/*": [
+        "src/app/assets/*"
+      ],
+      "@validators/*": [
+        "src/app/shared/validators/*"
+      ],
+      "@models/*": [
+        "server/models/*"
+      ],
+      "@services/*": [
+        "server/services/*"
+      ],
+      "@entities/*": [
+        "server/entities/*"
+      ],
+      "@db/*": [
+        "server/db/*"
+      ],
+      "@controllers/*": [
+        "server/controllers/*"
+      ],
+      "@helpers/*": [
+        "server/helpers/*"
+      ],
+      "@enums/*": [
+        "server/enums/*"
+      ],
+      "@poco/*": [
+        "server/services/poco/*"
+      ],
+      "@environments/*": [
+        "src/environments/*"
+      ],
+      "@utils/*": [
+        "server/helpers/utils/*"
+      ],
+      "@api/*": [
+        "server/api/*"
+      ],
+      "@config": [
+        "server/config"
+      ]
     },
     "typeRoots": [
       "node_modules/@types",
@@ -47,7 +79,7 @@
   "include": [
     "./src",
     "./server"
-],
+  ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
