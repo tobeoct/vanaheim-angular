@@ -73,7 +73,7 @@
     },
     "typeRoots": [
       "node_modules/@types",
-      "server/types",
+      "server/types"
     ]
   },
   "include": [
