@@ -1,4 +1,4 @@
-import { LoanRequest } from "@models/loan/loan-request";
+import { LoanRequest } from "@entities/loan/loan-request";
 import { ILoanRequestRepository } from "@repository/interface/loan/Iloan-request-repository";
 import { BaseRepository } from "../base-repository";
 
@@ -24,4 +24,19 @@ import { BaseRepository } from "../base-repository";
     }
     });
   
+    getByRequestID=(requestId:string)=>  new Promise<LoanRequest>(async (resolve,reject)=>{
+      try{
+      let response = await this._db.findOne({
+        where: {
+          requestId
+        },
+        order:[["requestDate","DESC"]]
+      });
+      let dataValues = response?.dataValues as LoanRequest;
+      resolve(dataValues);
+    }catch(err){
+      console.log(err)
+      reject(err);
+    }
+    });
 }

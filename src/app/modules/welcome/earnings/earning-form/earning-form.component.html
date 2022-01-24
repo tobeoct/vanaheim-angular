@@ -1,0 +1,105 @@
+<!-- <form role="form" id="form" novalidate (ngSubmit)="save()" class="example-form" [formGroup]="form"> -->
+<app-form [form]="form" (onSubmit)="onSubmit($event)" (valueChange)="onChange($event)"
+  (errorMessageChange)="onError($event)">
+  <app-earning-card [maturity]="maturity.value" [amount]="amount.value" [payout]="payout.value" *ngIf="changed$|async">
+  </app-earning-card>
+  <div class="theme_row" style="padding: 5%; padding-top: 0;">
+    <app-input [focus$]="focus$" id="amountId" placeholder="Enter savings amount" [control]="amount"
+      class="form-control" [error]="(errorMessage$ | async)?.amount">
+      <label for="amountId">How much do you want to save (100K - 50M)</label>
+    </app-input>
+    <div id="earning-type" class="margin--3x no-margin--bottom">
+      <small>Earning Type</small>
+      <div class="actions">
+        <div class="item" [ngClass]="{'active':type.value=='Monthly ROI'}" (click)="setType('Monthly ROI')">
+          <p><b>Monthly ROI</b></p>
+        </div>
+        <div class="item" [ngClass]="{'active':type.value=='End Of Tenor'}" (click)="setType('End Of Tenor')">
+          <p><b>End Of Tenor</b></p>
+        </div>
+      </div>
+    </div>
+    <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="durationId" [control]="duration"
+      class="form-control">
+    </app-input>
+
+    <app-rate (rateDetailChange)="rateDetailChange($event)" [type]="type.value" [activeDuration]="duration.value" [amount$]="amount$"></app-rate>
+
+    <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="rateId" [control]="rate" class="form-control">
+    </app-input>
+
+    <!-- <ng-container *ngIf="!(isLoggedIn$|async)">
+      <app-input id="nameId" placeholder="Enter your preferred name" [control]="name" class="form-control"
+        [error]="(errorMessage$ | async)?.name">
+        <label for="nameId">Preferred Name</label>
+      </app-input>
+
+
+      <app-input type="email" id="emailId" placeholder="Enter your preferred email" [control]="email"
+        class="form-control" [error]="(errorMessage$ | async)?.email">
+        <label for="emailId">Email</label>
+      </app-input>
+    </ng-container> -->
+
+
+    <!-- <div class="margin--3x no-margin--bottom">
+      <ng-container *ngIf="isLoggedIn$|async">
+        <ng-container *ngIf="(accountsFromDb$|async) && !(showForm$|async) ">
+          <app-dropdown
+            current="{{(accountGroup.get('bank')|toControl).value}} - {{(accountGroup.get('accountNumber')|toControl).value}}"
+            [fieldClass]="'no-margin--top'" [id]="'salary-accounts'" [control]="(accountGroup.get('id')|toControl)"
+            aria-placeholder="Select your salary account">
+            <ng-container slot="label"><label for="salary-accounts">Account Details</label>
+            </ng-container>
+            <app-option *ngFor="let t of (accountsFromDb$|async); let i =index" [value]="t.id"
+              label="{{t.bank}} - {{t.number}}">{{t.bank}} - {{t.number}}</app-option>
+          </app-dropdown>
+          <p class="text-button" (click)="showForm()">Enter a different account</p>
+
+
+
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!(accountsFromDb$|async) || (showForm$|async)">
+
+        <div id="accounts" class="theme_row no-margin--top animate__animated animate__fadeInUp animate__fast">
+          <p><b>Account Details</b></p>
+          <ng-container [formGroup]="accountGroup">
+            <app-dropdown [current]="(accountGroup.get('bank')|toControl).value" [fieldClass]="'no-margin--top'"
+              [id]="'bank'" [control]="accountGroup.get('bank')|toControl" aria-placeholder="Select your bank">
+              <ng-container slot="label"><label for="bank">Bank</label></ng-container>
+              <app-option *ngFor="let t of banks; let i =index" [value]="t.title" [label]="t.title">
+                {{t.title}}</app-option>
+            </app-dropdown>
+
+            <app-input [focus$]="focus$" id="accountNumber" [loading$]="loading$"
+              [placeholder]="'Enter your account number'" [control]="accountGroup.get('accountNumber')|toControl"
+              class="form-control" [error]="(errorMessage$ | async)?.accountNumber">
+              <label for="accountNumber">Account Number</label>
+
+            </app-input>
+            <fieldset [disabled]="(disableInput$|async)">
+              <app-input id="accountName" [placeholder]="'Enter your account name'"
+                [control]="accountGroup.get('accountName')|toControl" class="form-control"
+                [error]="(errorMessage$ | async)?.accountName">
+                <label for="accountName">Account Name</label>
+              </app-input>
+            </fieldset>
+          </ng-container>
+        </div>
+
+
+      </ng-container>
+    </div> -->
+
+    <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="payoutId" [control]="payout" class="form-control">
+    </app-input>
+
+    <app-input [hidden]="true" fieldClass="vc_form-field--hidden" id="maturityId" [control]="maturity"
+      class="form-control">
+    </app-input>
+  </div>
+  <div class="theme_row" style="width: 90%; margin:0px auto;">
+    <app-button [form]="form" [loading$]="loading$">{{!(isLoggedIn$|async)?'I Am Interested':'Continue Applying'}}</app-button>
+  </div>
+</app-form>

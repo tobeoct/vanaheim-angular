@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import e = require('express');
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { RadioButtonItem } from 'src/app/shared/interfaces/radio-button-item';
 
 @Component({
@@ -15,7 +15,7 @@ import { RadioButtonItem } from 'src/app/shared/interfaces/radio-button-item';
 })
 export class LoantypeComponent implements OnInit {
   form: FormGroup;
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanType);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanType);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   base: string;
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -25,7 +25,7 @@ export class LoantypeComponent implements OnInit {
   show2Subject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show2$: Observable<boolean> = this.show2Subject.asObservable();
   items: RadioButtonItem[] = [{ label: "For Individual", value: "FloatMe Loan (Individual)", selected: true }, { label: "For Business", value: "FloatMe Loan (Business)", selected: false }]
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _route: ActivatedRoute) {
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _loanStore:LoanStore, private _route: ActivatedRoute) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
     });
@@ -42,14 +42,14 @@ export class LoantypeComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this._store.titleSubject.next("Loan Product");
+    this._loanStore.titleSubject.next("Loan Product");
     this.form = this._fb.group({
-      loanType: [!this._store.loanType ? "" : this._store.loanType, [Validators.required]],
+      loanType: [!this._loanStore.loanType ? "" : this._loanStore.loanType, [Validators.required]],
       choice: ['FloatMe Loan (Individual)', [Validators.required]]
     })
     // let d = data.filter(d=>d.allowedTypes.includes(this.loanType));
-    let d = this._store.loanProducts.map(c => {
-      if (c.id == "FloatMe Loan" && this._store.loanType.includes("FloatMe")) c.title = this._store.loanType;
+    let d = this._loanStore.loanProducts.map(c => {
+      if (c.id == "FloatMe Loan" && this._loanStore.loanType.includes("FloatMe")) c.title = this._loanStore.loanType;
       return c;
     });
     this.dataSelectionSubject.next(d);
@@ -67,7 +67,7 @@ export class LoantypeComponent implements OnInit {
 
   next = () => {
 
-    if ((this.loanType.value != this._store.loanType) && this._store.loanType) {
+    if ((this.loanType.value != this._loanStore.loanType) && this._loanStore.loanType) {
       this.show2Subject.next(true);
     } else {
       this.continue()
@@ -77,7 +77,7 @@ export class LoantypeComponent implements OnInit {
 
   continue = () => {
     let type = this.loanType.value == "FloatMe Loan" ? this.choice.value : this.loanType.value;
-    this._store.setLoanType(type);
+    this._loanStore.setLoanType(type);
     if (this._router.url != "/welcome/loans") {
       this.onNavigate("applying-as");
     }
@@ -85,7 +85,7 @@ export class LoantypeComponent implements OnInit {
 
   close() {
     this.show2Subject.next(false);
-    let d = this._store.loanProducts.map(c => {
+    let d = this._loanStore.loanProducts.map(c => {
       if (c.id == "FloatMe Loan") c.title = this.choice.value;
       return c;
     });

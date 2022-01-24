@@ -1,0 +1,370 @@
+<div style="max-width: 500px;">
+    
+    <div class="preview-container" *ngIf="earningsApplication['earningsCalculator']">
+        <div class="preview-title">
+            <h3>Earnings Details</h3>
+            <app-button (onClick)="onNavigate('earnings-calculator')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="preview-items">
+            <div class="preview-item">
+                <p><span><b>Amount</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["amount"]}}</span>
+                </p>
+            </div>
+
+            <div class="preview-item">
+                <p><span><b>Earning Type</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["type"]}}</span>
+                </p>
+            </div>
+
+            <div class="preview-item">
+                <p><span><b>Duration</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["duration"]}}
+                        Months</span></p>
+            </div>
+
+            <div class="preview-item" > 
+                    <p><span><b>Rate</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["rate"]}}% per Annum</span></p>
+                    </div>
+
+
+            <div class="preview-item">
+                <p><span><b>Total
+                            Payout</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["payout"]}}</span>
+                </p>
+            </div>
+
+            <div class="preview-item">
+                <p><span><b>Maturity Date</b></span>:<span>{{toJson(earningsApplication['earningsCalculator'])["maturity"]}}</span>
+                </p>
+            </div>
+
+        </div>
+    </div>
+    <ng-container *ngIf="!earningsApplication['earningsCalculator']">
+        <div class="preview-title">
+            <h3>Earnings Details</h3>
+            <app-button (onClick)="onNavigate('earnings-calculator')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="missing">
+            Loan details are required
+        </div>
+    </ng-container>
+    <ng-container *ngIf="earningsApplication['accountInfo']">
+        <div class="preview-container" *ngFor="let acc of toJson(earningsApplication['accountInfo']);let i=index">
+            <div class="preview-title">
+                <h3>Account Details</h3>
+                <app-button (onClick)="onNavigate('account')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="preview-items">
+                <div class="preview-item">
+                    <p><span><b>Bank</b></span>:<span>{{acc["bank"]}}</span></p>
+                </div>
+                <div class="preview-item">
+                    <p><span><b>Account Number</b></span>:<span>{{acc["accountNumber"]}}</span></p>
+                </div>
+                <div class="preview-item">
+                    <p><span><b>Account Name</b></span>:<span>{{acc["accountName"]}}</span></p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!earningsApplication['accountInfo']">
+        <div class="preview-title">
+            <h3>Account Info</h3>
+            <app-button (onClick)="onNavigate('account-info')" [class]="'widget_button--small'">
+                <ng-container slot="button">Edit</ng-container>
+            </app-button>
+        </div>
+        <div class="missing">
+            Provide your account information
+        </div>
+    </ng-container>
+ 
+        <ng-container *ngIf="earningsApplication['personalInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Personal Information</h3>
+                    <app-button (onClick)="onNavigate('personal-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Name</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["title"]}}
+                                {{toJson(earningsApplication['personalInfo'])["firstName"]}}
+                                {{toJson(earningsApplication['personalInfo'])["otherNames"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Date Of
+                                    Birth</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["dob"]["day"]}}
+                                {{toJson(earningsApplication['personalInfo'])["dob"]["month"]}},
+                                {{toJson(earningsApplication['personalInfo'])["dob"]["year"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Gender</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["gender"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Marital
+                                    Status</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["maritalStatus"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Tax Identification Number</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["taxId"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["phoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["email"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Address</b></span>:<span>{{toJson(earningsApplication['personalInfo'])["address"]["street"]}}
+                                {{toJson(earningsApplication['personalInfo'])["address"]["city"]}},
+                                {{toJson(earningsApplication['personalInfo'])["address"]["state"]}}</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!earningsApplication['personalInfo']">
+            <div class="preview-title">
+                <h3>Personal Information</h3>
+                <app-button (onClick)="onNavigate('personal-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Personal Information
+            </div>
+        </ng-container>
+        <ng-container *ngIf="earningsApplication['employmentInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Employment Information</h3>
+                    <app-button (onClick)="onNavigate('employment-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Employer</b></span>:<span>{{toJson(earningsApplication['employmentInfo'])["employer"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Previous Employer</b></span>:<span>{{toJson(earningsApplication['employmentInfo'])["previousEmployer"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Business
+                                    Sector</b></span>:<span>{{toJson(earningsApplication['employmentInfo'])["businessSector"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(earningsApplication['employmentInfo'])["phoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(earningsApplication['employmentInfo'])["email"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Address</b></span>:<span>{{toJson(earningsApplication['employmentInfo'])["address"]["street"]}}
+                                {{toJson(earningsApplication['employmentInfo'])["address"]["city"]}},
+                                {{toJson(earningsApplication['employmentInfo'])["address"]["state"]}}</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="earningsApplication['nokInfo']">
+            <div class="preview-container">
+                <div class="preview-title">
+                    <h3>Next Of Kin Information</h3>
+                    <app-button (onClick)="onNavigate('nok-info')" [class]="'widget_button--small'">
+                        <ng-container slot="button">Edit</ng-container>
+                    </app-button>
+                </div>
+                <div class="preview-items">
+                    <div class="preview-item">
+                        <p><span><b>Name</b></span>:<span>{{toJson(earningsApplication['nokInfo'])["title"]}}
+                                {{toJson(earningsApplication['nokInfo'])["otherNames"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Date Of Birth</b></span>:<span>{{toJson(earningsApplication['nokInfo'])["dob"]["day"]}}
+                                {{toJson(earningsApplication['nokInfo'])["dob"]["month"]}},
+                                {{toJson(earningsApplication['nokInfo'])["dob"]["year"]}}</span></p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Relationship</b></span>:<span>{{toJson(earningsApplication['nokInfo'])["relationship"]}}</span>
+                        </p>
+                    </div>
+
+                    <div class="preview-item">
+                        <p><span><b>Phone
+                                    Number</b></span>:<span>{{toJson(earningsApplication['nokInfo'])["phoneNumber"]}}</span>
+                        </p>
+                    </div>
+                    <div class="preview-item">
+                        <p><span><b>Email
+                                    Address</b></span>:<span>{{toJson(earningsApplication['nokInfo'])["email"]}}</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!earningsApplication['nokInfo']">
+            <div class="preview-title">
+                <h3>NOK Information</h3>
+                <app-button (onClick)="onNavigate('employment-info')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="missing">
+                Provide your Next Of Kin Information
+            </div>
+        </ng-container>
+   
+
+    <ng-container *ngIf="earningsApplication['meansOfIdentification']">
+        <div class="preview-container">
+            <div class="preview-title">
+                <h3>Means Of Identification</h3>
+                <app-button (onClick)="onNavigate('means-of-identification')" [class]="'widget_button--small'">
+                    <ng-container slot="button">Edit</ng-container>
+                </app-button>
+            </div>
+            <div class="preview-items">
+                <div class="preview-item" >
+                    <p><span><b>{{toJson(earningsApplication['meansOfIdentification']).document?.label}}</b></span>:<span>{{toJson(earningsApplication['meansOfIdentification']).document?.fileName}}</span></p>
+                </div>
+
+                <div class="preview-item" >
+                    <p><span><b>ID Number</b></span>:<span>{{toJson(earningsApplication['meansOfIdentification']).idNumber}}</span></p>
+                </div>
+
+                <div class="preview-item" >
+                    <p><span><b>Issue Date</b></span>:<span>{{toJson(earningsApplication['meansOfIdentification']).issueDate}}</span></p>
+                </div>
+
+                <div class="preview-item" >
+                    <p><span><b>Expiry Date</b></span>:<span>{{toJson(earningsApplication['meansOfIdentification']).expiryDate}}</span></p>
+                </div>
+
+            </div>
+        </div>
+    </ng-container>
+</div>
+<div>
+
+    <app-form [form]="form" (onSubmit)="submitApplication($event)">
+        <div #button>
+            <app-button [autoClick]="(autoClick$|async)||false" [form]="form" [loading$]="loading$"
+                fieldClass="theme_col-3 no-margin--top  widget_button--wide">Submit Application</app-button>
+        </div>
+    </app-form>
+</div>
+
+
+
+<app-modal *ngIf="(show$|async)==true && !isLoggedIn" (onChange)="close()">
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Sign In Required</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+        <p style="text-align: center; margin: auto;">Don't worry, your application would be submitted automatically once
+            you've signed in.</p>
+        <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
+            <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;"
+                (click)="login()">Login</button>
+        </div>
+    </app-modal-body>
+</app-modal>
+<!-- <ng-template [ngForIn]="earningsApplication | keyvalue"></ng-template> -->
+
+<app-modal *ngIf="(show2$|async)==true" (onChange)="close2()">
+    <app-modal-header slot="header">
+        <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
+            <app-lottie assetPath="vanir-capital-badge"></app-lottie>
+
+        </div>
+    </app-modal-header>
+    <app-modal-body slot="body">
+
+        <div class="modal_content" style="text-align: center;">
+            <h1>All Done</h1>
+            <div class="form_group">
+                <p class="theme_text--heading theme_text--heading3">You have successfully applied for a earnings.</p>
+                <p>Request ID: {{apiSuccess$|async}}</p>
+            </div>
+            <div class="form_group">
+                <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You
+                    would be notified as your request is processed. </p>
+                <button (click)="close2()" class="widget_button" id="submit" type="submit" style="margin: 5px auto;"
+                    tabindex="0" data-next="modal_ratings">
+                    <div>Done</div>
+                </button>
+                <p class="theme_color--grey">Are you looking to invest? <span class="theme_color--yellow"><a
+                            href="/investment" target="_blank"><u>Go to investments</u></a></span></p>
+
+            </div>
+
+        </div>
+
+
+    </app-modal-body>
+</app-modal>
+
+
+
+<app-modal *ngIf="(show3$|async)==true" (onChange)="close3()">
+    <app-modal-header slot="header">
+        <div class="icon theme_flex theme_flex--middle" style="max-width: 150px; margin: auto; margin-top:-5%;">
+            <app-lottie assetPath="vanir-capital-error"></app-lottie>
+
+        </div>
+    </app-modal-header>
+    <app-modal-body slot="body">
+
+        <div class="modal_content" style="text-align: center;">
+
+            <h1>Oops</h1>
+            <div class="form_group">
+                <p class="theme_text--heading theme_text--heading3">There seems to be a problem</p>
+            </div>
+            <div class="form_group" id="submit-button">
+                <p class="theme_color--grey">{{apiError$|async}} </p>
+                <app-button (onClick)="close3()">
+                    <ng-container slot="button">Close</ng-container>
+                </app-button>
+
+            </div>
+        </div>
+
+
+    </app-modal-body>
+</app-modal>

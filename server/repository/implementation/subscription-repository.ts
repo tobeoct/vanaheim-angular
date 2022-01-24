@@ -1,6 +1,6 @@
 
 import { ISubscriptionRepository } from "@repository/interface/Isubscription-repository";
-import { Subscription } from "@models/subscription";
+import { Subscription } from "@entities/subscription";
 import { BaseRepository } from "./base-repository";
 
  export class SubscriptionRepository extends BaseRepository<Subscription> implements ISubscriptionRepository{

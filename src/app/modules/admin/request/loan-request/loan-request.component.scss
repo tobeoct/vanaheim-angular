@@ -1,0 +1,49 @@
+@import '../../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../../styles/themes/_theme-dir';
+.dot{
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    &--warning{
+        @include background(yellow);
+    }
+
+}
+.new{
+      @include background(facebook);
+    }
+    .processing{
+      @include background(yellow);
+    }
+    .update{
+      @include background(grey);
+    }
+    .declined{
+      @include background(google);
+    }
+    .approved{
+      @include background(green);
+    }
+    .funded{
+      @include background(white);
+    }
+
+#loan-details{
+    .title{
+        @include padding(true,"px",0.5);
+        @include background(lightGrey);
+        border-radius: $border-radius;
+    }
+    .detail-card{
+        @include border(1px,solid,lightGrey);
+        @include padding(true,"px",0.5);
+        border-radius: $border-radius;
+        width: 48.5%;
+        display: inline-block;
+        margin-right:3%;
+        margin-bottom: map-get($sizings, "px")*0.5;
+        &:nth-child(2n){
+            margin-right: 0;
+        }
+    }
+}

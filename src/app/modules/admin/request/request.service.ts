@@ -124,8 +124,8 @@ export class RequestService {
         return {};
       }));
   }
-  updateStatus = (id: number, status: string, failureReason:string,message:string) => {
-    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason,message })
+  updateStatus = (id: number, status: string, failureReason:string,message:string,serialNumber?:string) => {
+    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason,message,serialNumber })
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;
@@ -155,6 +155,9 @@ export class RequestService {
     this.selectedLogIdSubject.next(id);
   }
   getLoanDetails = (id: number, type?: string) => {
+
+    console.log(id)
+    if(id==0) return EMPTY;
     const url = !type ? `${environment.apiUrl}/loans/getLoanDetails?id=${id}` : `${environment.apiUrl}/loans/getLoanLogDetails?id=${id}`;
     return this._http.get<any>(url)
       .pipe(map(response => {

@@ -1,4 +1,4 @@
-import {LoanTypeRequirements } from "@models/loan/loan-type-requirements";
+import {LoanTypeRequirements } from "@entities/loan/loan-type-requirements";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface ILoanTypeRequirementRepository extends IBaseRepository<LoanTypeRequirements>{

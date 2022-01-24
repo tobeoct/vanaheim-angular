@@ -37,7 +37,20 @@
         animation-fill-mode: forwards;
     }
 }
-
+.loader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    background: rgba(0, 0, 0, .9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+    text-align: center;
+}
 @-webkit-keyframes fadein {
     from {bottom: 0; opacity: 0;}
     to {bottom: 15vh; opacity: 1;}

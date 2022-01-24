@@ -1,4 +1,4 @@
-import { Gender } from "server/enums/gender";
+import { Gender } from "@enums/gender";
 import { BaseEntity } from "./base-entity";
 import { UserRole } from "./user-role";
 

@@ -1,5 +1,5 @@
 
-import { Staff } from "@models/staff";
+import { Staff } from "@entities/staff";
 import { IStaffRepository } from "@repository/interface/Istaff-repository";
 import { BaseRepository } from "./base-repository";
 

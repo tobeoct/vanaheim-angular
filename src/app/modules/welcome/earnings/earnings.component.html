@@ -1,0 +1,78 @@
+<!-- 
+    <app-modal *ngIf="showModal" [type]="modalType"></app-modal> -->
+<div id="scrolldown" class="theme_color--grey"
+    style="position: absolute; bottom:2.5%; left:40%; font-size: 0.8em; display: flex;">
+    <div>Scroll Down To Apply</div>
+    <div style="font-size:1.1em; transform: rotateZ(90deg); margin-left: 10px;">👆🏾</div>
+</div>
+<app-header [myclass]="headerclass"></app-header>
+
+<div class="investment_content theme_inline-block grid-padding-3x">
+    <div class="theme_row" style=" padding-top: 2.5%;">
+
+        <div class="main_container">
+            <div>
+                <app-navigation [type]="mobile"></app-navigation>
+                <div class="investment theme_row" style="position:relative;">
+                    <app-navigation [type]="desktop"></app-navigation>
+                    <div class="theme_col-7 theme_color investment_background"
+                        style="padding-right: 5%; padding-top: 7%;z-index: 1;">
+
+                        <div class="copy" style="overflow-x: hidden; margin-top: 0;">
+                            <p class="theme_text--heading1 animate__animated animate__fadeInLeft"><span
+                                    class="theme_color--yellow">Diversify </span><span>and earn</span><span
+                                    class="theme_color--yellow"> Passive</span> <span> income</span></p>
+                            <p><b>Earn more with Vanir Capital Capital</b></p>
+                            <div class="animate__animated animate__fadeIn"
+                                style="width: 100%; max-width: 200px; margin-bottom: 30px; display:flex ; justify-content: flex-start;">
+                                <app-lottie [assetPath]="assetPaths.investment"></app-lottie>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="theme_col-12" style="height: 100%; z-index: 2;">
+                        <div class="theme_bg--white theme_col-5 investment_background theme_dropshadow--light animate__animated animate__fadeInUp"
+                            style="height: 100%;">
+                            <!-- <app-banner [class]="'banner--small no-margin--top'" color="tertiary"
+                                *ngIf="!(isLoggedIn$|async)">
+                                <ng-container slot="content"><span [routerLink]="['/auth/account']"
+                                        [queryParams]="{ username: email.value }" style="cursor: pointer;"><b><u>Sign up
+                                                required</u> </b></span> to be able to
+                                    submit your application</ng-container>
+                            </app-banner> -->
+                            <div class=" theme_bg"
+                                style=" width: 100%; height: 60px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
+                                <p class="theme_color--yellow theme_text--heading3"
+                                    style="text-align: center; margin: auto;">Earnings Application
+                                </p>
+                            </div>
+                            <app-earning-form (onEmailEntered)="emailEntered($event)"></app-earning-form>
+                            <app-footer></app-footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<app-modal *ngIf="(showLogin$|async)==true && !(isLoggedIn$|async)" (onChange)="closeLogin()">
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Sign In Required</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+        <p style="text-align: center; margin: auto;">Don't worry, you would be able to continue your application once
+            you've signed in.</p>
+        <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
+            <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;"
+                (click)="login()">Login</button>
+        </div>
+    </app-modal-body>
+</app-modal>

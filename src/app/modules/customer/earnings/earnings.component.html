@@ -1,0 +1,330 @@
+<app-banner color="info" size="small">
+    <ng-container slot="content">Note: Liquidation requires a 1 month notice in which the interest for that 1 month
+        period would be forfeited.</ng-container>
+</app-banner>
+<div id="earning-content" class="grid-padding-4x margin--3x">
+    <div class="left layout">
+        <div id="earning-summary">
+
+            <ng-container *ngIf="totalEarnings.length>0">
+                <div class="heading">
+                    <h3>Earnings Summary</h3> <select id="month" required>
+                        <option value="January" data-display-text="January" aria-label="January">This week</option>
+                        <option value="February" aria-label="February">February</option>
+                        <option value="March" aria-label="March">March</option>
+                        <option value="April" aria-label="April">April</option>
+                        <option value="May" aria-label="May">May</option>
+                        <option value="June" aria-label="June">June</option>
+                        <option value="July" aria-label="July">July</option>
+                        <option value="August" aria-label="August">August</option>
+                        <option value="September" aria-label="September">September</option>
+                        <option value="October" aria-label="October">October</option>
+                        <option value="November" aria-label="November">November</option>
+                        <option value="December" aria-label="December">December</option>
+
+                    </select>
+                </div>
+
+                <div id="summary-card">
+                    <div>
+                        <p>You have applied for 10 Earnings worth </p>
+                        <h2>₦200,000,000</h2>
+                    </div>
+                    <div>
+                        <p>Total repayment of</p>
+                        <h2>₦199,950,000</h2>
+                    </div>
+                </div>
+            </ng-container>
+            <div id="earning-history" class="animate__animated animate__fadeInUp"
+                [ngClass]="{'no-margin--top':totalEarnings.length==0}">
+                <div class="heading">
+                    <h3>Earning History</h3>
+                </div>
+                <app-table>
+                    <ng-container slot="filter">
+                        <div id="filters">
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}"
+                                (click)="changeFilter('')">All</div>
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Processing'}"
+                                (click)="changeFilter('Processing')">Processing</div>
+                            <!-- <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Defaulting'}"
+                                (click)="changeFilter('Defaulting')">Defaulting</div> -->
+                            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Active'}"
+                                (click)="changeFilter('Active')">Active</div>
+                        </div>
+                    </ng-container>
+                    <ng-container slot="header">
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Duration</th>
+                            <th>Maturity Date</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-container>
+                    <ng-container slot="body" *ngIf="earnings$|async as data">
+                        <ng-container *ngIf="data.rows.length==0">
+                            <div class="no-data">
+                                <span class="material-icons material-icons-outlined">
+                                    info
+                                </span>
+                                <h3>No data available</h3>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="data.rows.length>0">
+                            <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                                <td>{{row.requestDate | date :'MMMM d, y'}}</td>
+                                <td>{{row.amount|currency:'₦'}}</td>
+                                <td>{{row.duration}} Months</td>
+                                <td>{{row.requestStatus=='Pending'?row.maturityDate:(row.maturityDate| date :'MMMM d, y')}}</td>
+                                <td>{{row.type}}</td>
+                                <td>
+                                    <app-badge [color]="getEarningStatusColor(row.requestStatus)">{{row.requestStatus}}
+                                    </app-badge>
+                                </td>
+                                <td>
+                                    <app-button [class]="'widget_button--small'" (onClick)="selectEarning(row.id)"
+                                        fieldClass="no-margin">
+                                        <ng-container slot="button">View Details</ng-container>
+                                    </app-button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container slot="body" *ngIf="!(earnings$|async)">
+                        <div class="no-data">
+                            <span class="material-icons material-icons-outlined">
+                                info
+                            </span>
+                            <h3>No data available</h3>
+                        </div>
+                    </ng-container>
+                    <ng-container slot="pagination">
+                        <app-pagination [totalCount]="(earnings$|async)?.count||0" [maxSize]="10"
+                            [pagingChangeSubject]="pagingSubject"></app-pagination>
+                    </ng-container>
+                </app-table>
+            </div>
+        </div>
+    </div>
+    <div class="right layout">
+        <ng-container *ngIf="(latestEarnings$|async) as allEarnings">
+            <div class="theme_scrolling--wrapper padding--2x no-padding--top" style="min-width: 100%;">
+                <div style="display: inline-block;  vertical-align: top;  width: 100%; margin-right: 10px;"
+                    *ngFor="let earnings of allEarnings;let i=index">
+                    <app-earnings-tracker size="md" [earnings]="earnings" [index]="i"></app-earnings-tracker>
+                    <ng-container
+                        *ngIf="earnings.requestStatus!='Active'&&earnings.requestStatus!='TopUpRequest'&&earnings.requestStatus!='LiquidationRequest'">
+                        <div id="most-recent">
+                            <div class="heading">
+                                <h3>Most Recent</h3>
+                            </div>
+
+                            <div class="card card-stroke card-stroke--black grid-padding-3x"
+                                style="margin-bottom: 30px;">
+                                <app-earning-status [earnings]="earnings"></app-earning-status>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <div id="calculator" class="margin--2x animate__animated animate__fadeInUp">
+            <!-- <div class="heading">
+                <h3>Earn More</h3> <button type="button" (click)="moveToApply()"
+                    class="widget_button widget_button--small widget_button--fill">Apply Now</button>
+            </div> -->
+            <div class="theme_dropshadow--light padding--2x no-margin--top" style="width: 100%;">
+                <div class="heading theme_bg"
+                    style=" width: 100%; height: 60px;  display: flex;  align-items: center;padding-left:10%;padding-right:10%;">
+                    <p class="theme_color--yellow " style="text-align: center; margin: auto;">Earnings
+
+                    </p>
+                </div>
+                <app-earning-form #applyNow></app-earning-form>
+            </div>
+        </div>
+    </div>
+
+    <app-template #templates></app-template>
+
+</div>
+<ng-container *ngIf="show$|async">
+    <app-modal size="large" (onChange)="close()">
+        <!-- <ng-container *ngIf="earningDetailsFromDb$|async as earningDetails"> -->
+        <ng-container slot="header">
+            <h3>{{(earningDetailsFromDb$|async)?.code}}</h3>
+        </ng-container>
+        <ng-container slot="body">
+            <ng-container *ngIf="(earningDetailsFromDb$|async) as earningDetails">
+                <div style="width: 100%;" id="earning-details">
+                    <div class="d-flex d-flex_vertical--center d-flex_horizontal--space-between margin--2x">
+                        <div class="d-flex d-flex_vertical--center">
+                            <div style="margin-right: 10px;">
+                                <p><b>Status</b></p>
+                            </div>
+                            <div>
+                                <app-badge [color]="getEarningStatusColor(earningDetails?.status)">
+                                    <b>{{earningDetails?.status}}</b>
+                                </app-badge>
+                            </div>
+                        </div>
+                        <div class="d-flex d-flex_vertical--center">
+                            <ng-container *ngIf="earningDetails?.status=='Matured'||earningDetails?.status=='Active'">
+                                <ng-container *ngIf="earningDetails?.status!=='Matured'">
+                                    <button type="button" (click)="topUp(earningDetails.earningRequestID)"
+                                        class="widget_button widget_button--small widget_button--fill">Top Up</button>
+                                </ng-container>
+                                <div *ngIf="earningDetails?.approvedEarnings?.earningStatus!='Liquidated'" style="margin-left:5px; margin-right:5px;">
+
+                                    <button type="button" (click)="liquidate(earningDetails.earningRequestID)"
+                                        class="widget_button widget_button--small widget_button--stroke">Liquidate</button>
+                                </div>
+                                <button type="button" class="widget_button widget_button--small widget_button--stroke"
+                                    (click)="showPayouts(earningDetails?.approvedEarnings?.id)">
+                                    <u><b>View Payments</b></u></button>
+                            </ng-container>
+                            <!-- <ng-container *ngIf="earningDetails?.status=='UpdateRequired'">
+                                <app-button fieldClass="no-margin"
+                                    (onClick)="documentUpload(earningDetails?.earningType, earningDetails?.applyingAs, earningDetails?.earningRequestID, earningDetails?.id)"
+                                    [class]="'widget_button--small no-margin'" class="no-margin">
+                                    <ng-container slot="button">Upload Document</ng-container>
+                                </app-button>
+                            </ng-container> -->
+                        </div>
+                    </div>
+                    <div *ngFor="let detail of earningDetails?.details">
+                        <div class="title">
+                            <h3>{{detail.key}}</h3>
+                        </div>
+                        <div class="margin--3x">
+                            <div class="detail-card" *ngFor="let d of detail.data">
+                                <small>{{d.key}}</small>
+                                <p><b>{{d.value}}</b></p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <ng-container *ngIf="earningDetails.documents">
+                        <div class="margin--2x">
+                            <div class="title d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                                <h3>Documents</h3>
+
+                            </div>
+
+                            <div class="margin--3x">
+                                <div class="detail-card d-flex d-flex_horizontal--space-between"
+                                    *ngFor="let doc of earningDetails.documents">
+                                    <div>
+                                        <small>{{doc.requirement}}</small>
+                                        <p><b>{{doc.name}}</b></p>
+                                    </div>
+                                    <app-button (onClick)="download(doc.url,doc.fileName)" size="small">
+                                        <ng-container slot="button">Download</ng-container>
+                                    </app-button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </ng-container>
+        <!-- </ng-container> -->
+    </app-modal>
+
+</ng-container>
+
+
+
+<ng-container *ngIf="(showTopUp$|async) as entered">
+    <app-modal [show]="entered" (onChange)="closeTopUpModal()">
+        <app-modal-header slot="header">
+            <h3>Enter Top Up Amount</h3>
+        </app-modal-header>
+        <app-modal-body slot="body">
+            <app-form [form]="form" (onSubmit)="notifyTopUp($event)" (errorMessageChange)="onError($event)">
+                <app-input id="topUp" [control]="topUpAmount" class="form-control">
+                    <label>Amount</label>
+                </app-input>
+
+                <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Done</app-button>
+
+
+            </app-form>
+        </app-modal-body>
+    </app-modal>
+
+</ng-container>
+
+<ng-container *ngIf="showPayout$|async">
+    <app-modal size="large" (onChange)="closePayout()">
+
+        <ng-container slot="body">
+            <div style="display: block; width: 100%;">
+
+
+                <ng-container *ngIf="payouts$|async as payouts">
+                    <div style="width: 100%;" id="earning-details">
+
+                        <div class="title">
+                            <h3>Payout History</h3>
+                        </div>
+
+                    </div>
+                    <app-table>
+                        <ng-container slot="header">
+                            <tr>
+                                <th>Payment Date</th>
+                                <!-- <th>Expected Payment</th> -->
+                                <th>Amount Paid</th>
+                                <th>Status</th>
+                                <!-- <th>Tenure</th>
+                        <th>Status</th>
+                        <th>Action</th> -->
+                            </tr>
+                        </ng-container>
+                        <ng-container slot="body" *ngIf="payouts$|async as data">
+                            <ng-container *ngIf="data.length==0">
+                                <div class="no-data">
+                                    <span class="material-icons material-icons-outlined">
+                                        info
+                                    </span>
+                                    <h3>No data available</h3>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="data.length>0">
+                                <tr *ngFor="let row of data;trackBy:trackByFn">
+                                    <td>{{row.datePaid | date :'MMMM d, y'}}</td>
+                                    <!-- <td>{{row.expectedPayment|currency:'₦'}}</td> -->
+                                    <td>{{row.amount|currency:'₦'}}</td>
+                                    <td>
+                                        <app-badge [color]="getStatusColor(row.paymentType)">{{row.paymentType}}
+                                        </app-badge>
+                                    </td>
+                                    <!-- <td>{{row.tenure}} {{row.denominator}}</td>
+                                <td>{{row.requestStatus}}</td>
+                                <td><app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)" fieldClass="no-margin"><ng-container slot="button">View Details</ng-container></app-button></td> -->
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container slot="body" *ngIf="!(payouts$|async)">
+                            <div class="no-data">
+                                <span class="material-icons material-icons-outlined">
+                                    info
+                                </span>
+                                <h3>No data available</h3>
+                            </div>
+                        </ng-container>
+
+                    </app-table>
+                </ng-container>
+            </div>
+        </ng-container>
+    </app-modal>
+</ng-container>

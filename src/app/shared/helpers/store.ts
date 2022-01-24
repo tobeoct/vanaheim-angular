@@ -13,6 +13,9 @@ import { ShareholderInfo } from 'src/app/modules/loan/business/shareholder-info/
 import { CollateralInfo } from 'src/app/modules/loan/business/collateral-info/collateral-info';
 import { BaseLoanApplication } from 'src/app/modules/loan/loan-application';
 import { AuthService } from '../services/auth/auth.service';
+import { EarningIndication } from 'src/app/modules/welcome/earnings/earning';
+import { EarningsEmploymentInfo } from 'src/app/modules/earnings/employment-info/employment-info';
+import { MeansOfIdentification } from 'src/app/modules/earnings/earnings-application';
 @Injectable({
   providedIn: 'root'
 })
@@ -47,6 +50,200 @@ export class Store {
     { code: "035", title: "Wema Bank" },
     { code: "057", title: "Zenith Bank" }
   ]
+  timeInBusiness: string[] = [
+    "Less than 6 months",
+    " 6-12 Months",
+    "12- 18 Months",
+    "1-2 years",
+    "2-5 years",
+    "5-10 years",
+    " More than 10 years",
+
+  ];
+  natureOfBusiness: string[] = [
+    "Agriculture",
+    "Energy and Power",
+    "FMCG",
+    "Fashion",
+    "Financial Services",
+    "Haulage / Logistics",
+    "Healthcare",
+    "ICT (Tech)",
+    "Manufacturing",
+    "Media & Entertainment",
+    "Oil & Gas",
+    "Professional Services",
+    "Security",
+    "Telecommunication",
+    "Tourism & Hospitality",
+    "Transportation",
+    "Waste Management",
+    "Other"
+  ]
+  businessSectors: string[] = ["Agriculture", "Energy and Power", "FMCG", "Fashion", "Financial Services", "Haulage / Logistics", "Healthcare", "ICT (Tech)", "Manufacturing", "Media & Entertainment", "Oil & Gas", "Professional Services", "Security", "Telecommunication", "Tourism & Hospitality", "Transportation", "Waste Management", "Other",]
+  designations: string[] = [
+    "Chairman",
+    "Company Secretary",
+    "Executive Director",
+    "Non-Executive Director",
+    "Others",
+  ];
+  collateralTypes: string[] = [
+    "Fixed Asset (Land)",
+    "Fixed Asset (Building)",
+    "Fixed Asset (Equipment)",
+    "Car",
+    "Financial Securities",
+    "Others",
+  ]
+
+  constructor(private _router: Router, private _authService: AuthService) {
+  }
+  removeItem(key: string) {
+    localStorage.removeItem(key);
+  }
+
+
+  getItem(key: string) {
+    if (this._authService.isLoggedInSubject.value) {
+      return localStorage.getItem(key);
+    }
+    return ""
+  }
+  setItem(key: string, value: any) {
+    if (this._authService.isLoggedInSubject.value || ["page", "previous"].includes(key)) {
+      localStorage.setItem(key, value);
+    }
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EarningsStore {
+  EARNINGS_KEY = "earnings-application"
+
+   pageSubject: BehaviorSubject<string> = new BehaviorSubject<string>('earnings-calculator');
+  page$: Observable<string> = this.pageSubject.asObservable();
+
+  private previousSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  previous$: Observable<string> = this.previousSubject.asObservable();
+
+  titleSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  title$: Observable<string> = this.titleSubject.asObservable();
+
+  earningsApplicationSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  private earningsCalculatorSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
+  private personalInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
+  private accountInfoSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+  private employmentInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
+  private nokInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+
+  private meansOfIdentificationSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  constructor(private _router: Router, private _authService: AuthService, private _store: Store) {
+    this.previousSubject.next(this._store.getItem("earnings-previous") || '');
+    this.pageSubject.next(this._store.getItem("earnings-page") || '');
+    this.earningsApplicationSubject.next(this.getEarningsApplication());
+  }
+  get earningsApplication() { return this.getEarningsApplication() }
+  private getEarningsApplication = () => {
+    return Object.keys(this.earningsApplicationSubject.value).length > 0 ? this.earningsApplicationSubject.value : JSON.parse(this._store.getItem(this.EARNINGS_KEY) || '{}');
+
+  }
+
+  saveEarningApplication(application: any) {
+    // if (!this._authService.isLoggedIn()) {
+    this.earningsApplicationSubject.next(application);
+    return this._store.setItem(this.EARNINGS_KEY, JSON.stringify(application));
+    // }
+  }
+
+  setPrevious(page: string) {
+    this.previousSubject.next(page);
+    this._store.setItem("earnings-previous", page);
+  }
+  setPage(page: string) {
+    this.pageSubject.next(page)
+    this._store.setItem("earnings-page", page);
+  }
+
+  removeApplication() {
+    this._store.removeItem(this.EARNINGS_KEY);
+    this._store.removeItem("earnings-page");
+    this._store.removeItem("earnings-previous");
+    this.earningsApplicationSubject.next({})
+  }
+
+
+  getFromCurrentApplication = (key: string) => {
+    // if(!this._authService.isLoggedIn()) return null;
+    let application = this.getEarningsApplication();
+    if (application) {
+      return application[key];
+    }
+
+    return null;
+  }
+  updateCurrentApplication = (key: string, value: any) => {
+    let application = this.getEarningsApplication();
+    if (!application) application = {};
+    if (typeof value === 'object' || Array.isArray(value)) {
+      application[key] = JSON.stringify(value);
+    } else {
+      application[key] = value;
+    }
+    this.earningsApplicationSubject.next(application);
+    this._store.setItem(this.EARNINGS_KEY, JSON.stringify(application));
+  }
+
+
+  updateStore() {
+    this.setPage(this.pageSubject.value);
+
+  }
+
+  back = () => {
+    let page = "earnings-calculator";
+    this.pageSubject.next(page);
+    // this._router.navigate([".."])
+  }
+  get registerDetails() {
+    let info = this.personalInfo;
+    if (info && Object.keys(info).length > 0) return { firstName: info.firstName, surname: info.surname, email: info.email, phoneNumber: info.phoneNumber }
+
+    return { firstName: null, surname: null, email: null, phoneNumber: null };
+  }
+
+  get earningsCalculator() { return JSON.parse(this.getFromCurrentApplication("earningsCalculator") || '{}'); }
+  setEarningsCalculator(value: EarningIndication) { this.earningsCalculatorSubject.next(value); this.updateCurrentApplication('earningsCalculator', JSON.stringify(value)); this.setPrevious("earnings-calculator"); this.setPage("personal-info"); }
+
+  get personalInfo() { return JSON.parse(this.getFromCurrentApplication("personalInfo") || '{}'); }
+  setPersonalInfo(value: PersonalInfo) { this.personalInfoSubject.next(value); this.updateCurrentApplication('personalInfo', JSON.stringify(value)); this.setPrevious("personal-info"); this.setPage("account-info"); }
+
+  get accountInfo() { return JSON.parse(this.getFromCurrentApplication("accountInfo") || '[]'); }
+  setAccountInfo(value: AccountInfo[]) { this.accountInfoSubject.next(value); this.updateCurrentApplication('accountInfo', JSON.stringify(value)); this.setPrevious("account-info"); this.setPage("employment-info"); }
+
+  get employmentInfo() { return JSON.parse(this.getFromCurrentApplication("employmentInfo") || '{}'); }
+  setEmploymentInfo(value: EarningsEmploymentInfo) { this.employmentInfoSubject.next(value); this.updateCurrentApplication('employmentInfo', JSON.stringify(value)); this.setPrevious("employment-info"); this.setPage("nok-info"); }
+
+  get nokInfo() { return JSON.parse(this.getFromCurrentApplication("nokInfo") || '{}'); }
+  setNOKInfo(value: NOKInfo) { this.nokInfoSubject.next(value); this.updateCurrentApplication('nokInfo', JSON.stringify(value)); this.setPrevious("nok-info"); this.setPage("means-of-identification"); }
+
+  get meansOfIdentification() { return JSON.parse(this.getFromCurrentApplication("meansOfIdentification") || '{}'); }
+  setMeansOfIdentification(value: MeansOfIdentification) { this.meansOfIdentificationSubject.next(value); this.updateCurrentApplication('meansOfIdentification', JSON.stringify(value)); this.setPrevious("means-of-identification"); this.setPage("preview"); }
+
+
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoanStore {
+  LOAN_KEY = "loan-application";
   loanProducts: any[] = [
     { id: "PayMe Loan", title: "Salary Earners' Loans", uniqueName: "PayMe Loan", frequency: "Monthly", description: "Need a loan for house rent, to buy a new phone or to fix your car?.Take personal loans between NGN 25,000 to NGN 5M and pay back monthly." },
     { id: "FundMe Loan", title: "Business (SME) Loan", uniqueName: "FundMe Loan", frequency: "Monthly", description: "Need a loan to grow your business?.Get business loans up to NGN 5M with no application fees at affordable interest rates." },
@@ -208,52 +405,6 @@ export class Store {
     }
     ]
   }];
-  timeInBusiness: string[] = [
-    "Less than 6 months",
-    " 6-12 Months",
-    "12- 18 Months",
-    "1-2 years",
-    "2-5 years",
-    "5-10 years",
-    " More than 10 years",
-
-  ];
-  natureOfBusiness: string[] = [
-    "Agriculture",
-    "Energy and Power",
-    "FMCG",
-    "Fashion",
-    "Financial Services",
-    "Haulage / Logistics",
-    "Healthcare",
-    "ICT (Tech)",
-    "Manufacturing",
-    "Media & Entertainment",
-    "Oil & Gas",
-    "Professional Services",
-    "Security",
-    "Telecommunication",
-    "Tourism & Hospitality",
-    "Transportation",
-    "Waste Management",
-    "Other"
-  ]
-  businessSectors: string[] = ["Agriculture", "Energy and Power", "FMCG", "Fashion", "Financial Services", "Haulage / Logistics", "Healthcare", "ICT (Tech)", "Manufacturing", "Media & Entertainment", "Oil & Gas", "Professional Services", "Security", "Telecommunication", "Tourism & Hospitality", "Transportation", "Waste Management", "Other",]
-  designations: string[] = [
-    "Chairman",
-    "Company Secretary",
-    "Executive Director",
-    "Non-Executive Director",
-    "Others",
-  ];
-  collateralTypes: string[] = [
-    "Fixed Asset (Land)",
-    "Fixed Asset (Building)",
-    "Fixed Asset (Equipment)",
-    "Car",
-    "Financial Securities",
-    "Others",
-  ]
   private loanApplicationSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   loanApplication$: Observable<BaseLoanApplication> = this.loanApplicationSubject.asObservable();
 
@@ -317,48 +468,36 @@ export class Store {
   private documents$: Observable<any[]> = this.documentsSubject.asObservable();
 
 
-  constructor(private _router: Router, private _authService: AuthService) {
+
+  constructor(private _router: Router, private _authService: AuthService, private _store: Store) {
     this.applyingAsSubject.next(this.getFromCurrentApplication("applyingAs") || '');
     this.loanTypeSubject.next(this.getFromCurrentApplication("loanType") || '');
     this.loanProductSubject.next(this.getFromCurrentApplication("loanProduct") || '');
-    this.previousSubject.next(this.getItem("previous") || '');
-    this.pageSubject.next(this.getItem("page") || '');
+    this.previousSubject.next(this._store.getItem("loan-previous") || '');
+    this.pageSubject.next(this._store.getItem("loan-page") || '');
     this.loanApplicationSubject.next(this.getLoanApplication());
-    this.loanCategorySubject.next(this.getItem("category") || '');
-  }
-  getItem(key: string) {
-    if (this._authService.isLoggedIn()) {
-      return localStorage.getItem(key);
-    }
-    return ""
-  }
-  setItem(key: string, value: any) {
-    if (this._authService.isLoggedIn() || ["page", "previous"].includes(key)) {
-      localStorage.setItem(key, value);
-    }
-  }
-  removeItem(key: string) {
-    localStorage.removeItem(key);
+    this.loanCategorySubject.next(this._store.getItem("category") || '');
   }
   setPrevious(page: string) {
     this.previousSubject.next(page);
-    this.setItem("previous", page);
+    this._store.setItem("loan-previous", page);
   }
   setPage(page: string) {
     this.pageSubject.next(page)
-    this.setItem("page", page);
+    this._store.setItem("loan-page", page);
   }
 
   removeApplication() {
-    this.removeItem("loan-application");
-    this.removeItem("page");
-    this.removeItem("category");
-    this.removeItem("previous");
+    this._store.removeItem(this.LOAN_KEY);
+    this._store.removeItem("loan-page");
+    this._store.removeItem("category");
+    this._store.removeItem("loan-previous");
   }
+
   clear(category: string) {
     let application = this.getLoanApplication();
     delete application[category];
-    this.setItem("loan-application", JSON.stringify(application));
+    this._store.setItem(this.LOAN_KEY, JSON.stringify(application));
   }
   updateCurrentApplication = (key: string, value: any) => {
     let application = this.getLoanApplication();
@@ -369,7 +508,7 @@ export class Store {
       application[this.loanCategory][key] = value;
     }
     this.loanApplicationSubject.next(application);
-    this.setItem("loan-application", JSON.stringify(application));
+    this._store.setItem(this.LOAN_KEY, JSON.stringify(application));
   }
 
   getFromCurrentApplication = (key: string) => {
@@ -383,7 +522,7 @@ export class Store {
 
   get loanApplication() { return this.getLoanApplication() }
   private getLoanApplication = () => {
-    return Object.keys(this.loanApplicationSubject.value).length > 0 ? this.loanApplicationSubject.value : JSON.parse(this.getItem("loan-application") || '{}');
+    return Object.keys(this.loanApplicationSubject.value).length > 0 ? this.loanApplicationSubject.value : JSON.parse(this._store.getItem(this.LOAN_KEY) || '{}');
 
   }
   get loanType() { return this.getFromCurrentApplication("loanType") || ''; }
@@ -447,9 +586,9 @@ export class Store {
   get documents() { return JSON.parse(this.getFromCurrentApplication("documents") || '[]'); }
   setDocuments(value: any[]) { this.documentsSubject.next(value); this.updateCurrentApplication('documents', JSON.stringify(value)); this.setPrevious("upload"); this.setPage("preview"); }
 
-  get loanCategory() { return this.loanCategorySubject.value || this.getItem("category") || ''; }
+  get loanCategory() { return this.loanCategorySubject.value || this._store.getItem("category") || ''; }
   setLoanCategory(value: string) {
-    this.setItem("category", value);
+    this._store.setItem("category", value);
     this.loanCategorySubject.next(value);
   }
 
@@ -474,14 +613,13 @@ export class Store {
     localStorage.removeItem('user');
     localStorage.removeItem('session_token');
     localStorage.removeItem("expires_at");
-    localStorage.removeItem("page");
-    localStorage.removeItem("previous");
-    localStorage.removeItem("loan-application");
+    localStorage.removeItem("loan-page");
+    localStorage.removeItem("loan-previous");
+    localStorage.removeItem(this.LOAN_KEY);
   }
 
   updateStore() {
     this.setLoanCategory(this.loanCategorySubject.value);
-    console.log(this.pageSubject.value);
     this.setPage(this.pageSubject.value);
 
   }

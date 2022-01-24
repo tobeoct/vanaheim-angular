@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, EMPTY, from, Observable, Subject, Subscription } from 'rxjs';
 import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { AccountInfo } from './account-info';
 import { CommonService } from 'src/app/shared/services/common/common.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -30,7 +30,7 @@ export class AccountInfoComponent implements OnInit {
   loanCategorySubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   loanCategory$: Observable<string> = this.loanCategorySubject.asObservable();
   loanCategory: string//= localStorage.getItem("category")||'';
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -66,7 +66,7 @@ export class AccountInfoComponent implements OnInit {
   // get loanAccountId(){
   //   return this.form.get("loanAccountId") as FormControl|| new FormControl();
   // }
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _loanStore:LoanStore,
     private _validators: VCValidators, private _authService: AuthService, private _route: ActivatedRoute, private _commonService: CommonService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -110,7 +110,7 @@ export class AccountInfoComponent implements OnInit {
     } else {
       this.showForm();
     }
-    let accountInfo = this._store.accountInfo as AccountInfo[];
+    let accountInfo = this._loanStore.accountInfo as AccountInfo[];
     if (accountInfo.length == 0) accountInfo = [new AccountInfo()];
     let account2: AccountInfo = new AccountInfo();
     this.form = this._fb.group({
@@ -122,7 +122,7 @@ export class AccountInfoComponent implements OnInit {
     if (accountInfo.length > 1) {
       account2 = accountInfo[1];
     }
-    this._store.titleSubject.next("Account Information");
+    this._loanStore.titleSubject.next("Account Information");
     this.titles = this._store.titles;
     this.banks = this._store.banks;
     this.pay.valueChanges.subscribe(v => {
@@ -149,7 +149,7 @@ export class AccountInfoComponent implements OnInit {
     this.loanCategory$ = this.loanCategory$;
     // console.log(this._store.loanCategory);
     // this.loanCategory = this._store.loanCategory;
-    this.loanCategorySubject.next(this._store.loanCategory)
+    this.loanCategorySubject.next(this._loanStore.loanCategory)
   }
   ngOnDestroy(): void {
     this.allSubscriptions.forEach(sub => sub.unsubscribe());
@@ -228,9 +228,9 @@ export class AccountInfoComponent implements OnInit {
     })
 
     // {bank:this.bank.value,accountName:this.accountName.value, accountNumber:this.accountNumber.value};
-    this._store.setAccountInfo(accountInfo);
+    this._loanStore.setAccountInfo(accountInfo);
     if (!this.side) {
-      this.onNavigate(this._store.loanCategory == "personal" ? "employment-info" : "upload");
+      this.onNavigate(this._loanStore.loanCategory == "personal" ? "employment-info" : "upload");
     }
   }
   onNavigate(route: string, params: any = {}): void {

@@ -1,5 +1,5 @@
-import { Customer } from "@models/customer";
-import { Document } from "@models/document";
+import { Customer } from "@entities/customer";
+import { Document } from "@entities/document";
 import { DocumentUpload } from "src/app/modules/loan/shared/document-upload/document";
 import { IBaseService } from "./Ibaseservice";
 
@@ -7,6 +7,5 @@ export interface IDocumentService extends IBaseService<Document>{
     getByCustomerID: (customerID:number) => Promise<any>;
     processDocument:(documentUpload:DocumentUpload,customer:Customer)=>Promise<any>
     getBVNDocument:(bvn:string,customerCode:string)=>Promise<any>
-    getByLoanRequestId:(loanRequestId:string)=>Promise<any>
-    getByLoanRequest:(loanRequestId:number,loanRequestLogId:number)=>Promise<any>
+    getByRequestId:(requestId:string)=>Promise<any>
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { Subscription } from 'rxjs';
 import { Subject, Observable, BehaviorSubject, from } from 'rxjs';
@@ -27,13 +27,15 @@ export class AccountComponent implements OnInit, OnDestroy {
   focusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   focus$: Observable<boolean> = this.focusSubject.asObservable();
   delay$ = from([1]).pipe(delay(1000));
+  returnUsername: string;
 
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
 
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
-  constructor(private _fb: FormBuilder, private _utility: Utility, private _router: Router, private _validators: VCValidators,
+  constructor(private _fb: FormBuilder,
+    private route: ActivatedRoute, private _utility: Utility, private _router: Router, private _validators: VCValidators,
     private authenticationService: AuthService) { }
   ngOnDestroy(): void {
     this.allSubscriptions.forEach(sub => sub.unsubscribe());
@@ -53,8 +55,11 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.returnUsername = params['username'];
+    });
     this.form = this._fb.group({
-      username: ['', [Validators.required, this._validators.username]]
+      username: [this.returnUsername ? this.returnUsername : "", [Validators.required, this._validators.username]]
     })
 
 

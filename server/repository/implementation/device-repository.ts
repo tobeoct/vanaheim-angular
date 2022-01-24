@@ -1,6 +1,6 @@
 
 import { IDeviceRepository } from "@repository/interface/Idevice-repository";
-import { Device } from "@models/device";
+import { Device } from "@entities/device";
 import { BaseRepository } from "./base-repository";
 
  export class DeviceRepository extends BaseRepository<Device> implements IDeviceRepository{

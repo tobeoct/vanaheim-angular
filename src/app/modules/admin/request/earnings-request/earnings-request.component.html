@@ -1,0 +1,277 @@
+<div class="padding--2x">
+    <app-earning-drag-and-drop (onClick)="selectEarning($event)" [control]="failureReason" [items$]="earnings$">
+    </app-earning-drag-and-drop>
+  </div>
+
+
+  
+<ng-container *ngIf="show$|async">
+    <app-modal size="large" (onChange)="closeModal()">
+        <!-- <ng-container *ngIf="earningDetailsFromDb$|async as earningDetails"> -->
+        <ng-container slot="header">
+            <h3>{{(earningsDetails$|async)?.code}}</h3>
+        </ng-container>
+        <ng-container slot="body">
+            <ng-container *ngIf="(earningsDetails$|async) as earningDetails">
+                <div style="width: 100%;" id="earning-details">
+                    <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center" style="width: 100%;">
+                      <div>
+                        <small>Earnings Application</small>
+                        <h2>{{earningDetails.code}}</h2>
+                      </div>
+                      <div class="d-flex">
+                        <app-button size="small" (onClick)="showPayouts(earningDetails.approvedEarnings?.id)"
+                          *ngIf="earningDetails.status=='Active'||earningDetails.status=='Matured'" [class]="'widget_button--fill widget_button--small'">
+                          <ng-container slot="button">Payouts</ng-container>
+                        </app-button>
+                        <div style="margin-left: 10px;">
+                          <app-button (onClick)="showNotify()" size="small" color="secondary"
+                            [class]="'widget_button--fill widget_button--small'">
+                            <ng-container slot="button">Notify</ng-container>
+                          </app-button>
+                        </div>
+                      </div>
+            
+                    </div>
+                    <ng-container *ngIf="!earningDetails?.approvedEarnings?.isClosed">
+                      <div class="d-flex d-flex_vertical--center margin--2x">
+                        <div class="dot {{indicator$|async}}" style="margin-right: 10px;"></div>
+                        <div style="margin-right: 10px;">
+                          <p><b>Status</b></p>
+                        </div>
+                        <div>
+                          <app-dropdown
+                            current="{{ctrl.value?ctrl.value:earningDetails.status}}"
+                            [control]="ctrl" [fieldClass]="'no-margin--top'" [id]="'status'" aria-placeholder="Change earnings status">
+                            <app-option *ngFor="let t of earningsStatuses; let i =index" [value]="t.label">{{t.label}}</app-option>
+                          </app-dropdown>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <div *ngFor="let detail of earningDetails?.details">
+                        <div class="title">
+                            <h3>{{detail.key}}</h3>
+                        </div>
+                        <div class="margin--3x">
+                            <div class="detail-card" *ngFor="let d of detail.data">
+                                <small>{{d.key}}</small>
+                                <p><b>{{d.value}}</b></p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <ng-container *ngIf="earningDetails.documents">
+                        <div class="margin--2x">
+                            <div class="title d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                                <h3>Documents</h3>
+
+                            </div>
+
+                            <div class="margin--3x">
+                                <div class="detail-card d-flex d-flex_horizontal--space-between"
+                                    *ngFor="let doc of earningDetails.documents">
+                                    <div>
+                                        <small>{{doc.requirement}}</small>
+                                        <p><b>{{doc.name}}</b></p>
+                                    </div>
+                                    <app-button (onClick)="download(doc.url,doc.fileName)" size="small">
+                                        <ng-container slot="button">Download</ng-container>
+                                    </app-button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </ng-container>
+        <!-- </ng-container> -->
+    </app-modal>
+
+</ng-container>
+
+
+
+<ng-container *ngIf="(enterFailure$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeFailureModal()">
+    <app-modal-header slot="header">
+      <h3>Enter Failure Reason</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="fForm" (onSubmit)="onFailure($event)" (errorMessageChange)="onError($event)">
+        <app-input id="failureReason" [control]="failureReason" class="form-control">
+          <label>Reason For Failure</label>
+        </app-input>
+        <div class="vc_form-field margin--2x" style="max-width: 500px;">
+          <label for="mailMessage">Personalised Message</label>
+          <textarea id="mailMessage" placeholder="Enter personalised message" [formControl]="mailMessage"
+            class="form-control">
+
+        </textarea>
+        </div>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="fForm">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
+<ng-container *ngIf="(enterStartDate$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeStartDateModal()">
+    <app-modal-header slot="header">
+      <h3>Enter Start Date</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="form" (onSubmit)="onStartDate($event)" (errorMessageChange)="onError($event)">
+        <app-input id="startDate" type="date" [control]="startDate" class="form-control">
+          <label>Start Date</label>
+        </app-input>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
+
+<ng-container *ngIf="(enterSerialNumber$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeSerialNumber()">
+    <app-modal-header slot="header">
+      <h3>Enter Unique Serial Number e.g 0123456, 123345</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="sform" (onSubmit)="onSerialNumberEntered($event)" (errorMessageChange)="onError($event)">
+        <app-input type="text"  id="serialNumber" [control]="serialNumber" class="form-control">
+          <label>Serial Number</label>
+        </app-input>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="sform">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
+
+
+
+<ng-container *ngIf="showPayout$|async">
+  <app-modal size="large" (onChange)="closePayout()">
+
+    <ng-container slot="body">
+      <div style="display: block; width: 100%;">
+        <div class="margin--3x no-margin--top">
+          <small>Earning Application</small>
+          <h2>{{(earningsDetails$|async).code}}</h2>
+        </div>
+
+        <ng-container *ngIf="earningsDetails$|async as earningDetails">
+          <div style="margin:auto">
+            <ng-container *ngIf="!earningDetails?.approvedEarnings?.isClosed">
+              <app-form [form]="form" (onSubmit)="onSubmit($event,earningDetails?.approvedEarnings?.id)"
+                (errorMessageChange)="onError($event)">
+
+                <app-input fieldClass="no-margin--top" [focus$]="focus$" id="amount"
+                  placeholder="Enter payout amount" [control]="amount" class="form-control"
+                  [error]="(errorMessage$ | async)?.amount">
+                  <label for="amount">Payout Amount</label>
+                </app-input>
+
+                <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Make Payment</app-button>
+
+
+              </app-form>
+            </ng-container>
+            <ng-container *ngIf="earningDetails?.approvedEarnings?.isClosed==true">
+              <div class="margin--auto margin--3x">
+                <h3 class="d-flex d-flex_vertical--center" style="text-align: center;">Earning has <app-badge
+                    color="success">Matured</app-badge>
+                </h3>
+              </div>
+            </ng-container>
+          </div>
+          <div style="width: 100%;" id="earning-details">
+            <div *ngIf="earningDetails.details[0] as detail">
+              <div class="title">
+                <h3>{{detail.key}}</h3>
+              </div>
+              <div class="margin--3x">
+                <ng-container *ngFor="let d of detail.data;let i =index">
+                  <div class="detail-card" *ngIf="i>3">
+                    <small>{{d.key}}</small>
+                    <p><b>{{d.value}}</b></p>
+                  </div>
+                </ng-container>
+              </div>
+
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="payouts$|async as payouts">
+          <div style="width: 100%;" id="earning-details">
+
+            <div class="title">
+              <h3>Payout History</h3>
+            </div>
+
+          </div>
+          <app-table>
+            <ng-container slot="header">
+              <tr>
+                <th>Payment Date</th>
+                <!-- <th>Expected Payment</th> -->
+                <th>Amount Paid</th>
+                <th>Status</th>
+                <!-- <th>Tenure</th>
+                      <th>Status</th>
+                      <th>Action</th> -->
+              </tr>
+            </ng-container>
+            <ng-container slot="body" *ngIf="payouts$|async as data">
+              <ng-container *ngIf="data.length==0">
+                <div class="no-data">
+                  <span class="material-icons material-icons-outlined">
+                    info
+                  </span>
+                  <h3>No data available</h3>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="data.length>0">
+                <tr *ngFor="let row of data;trackBy:trackByFn">
+                  <td>{{row.datePaid | date :'MMMM d, y'}}</td>
+                  <!-- <td>{{row.expectedPayment|currency:'₦'}}</td> -->
+                  <td>{{row.amount|currency:'₦'}}</td>
+                  <td>
+                    <app-badge [color]="getStatusColor(row.paymentType)">{{row.paymentType}}</app-badge>
+                  </td>
+                  <!-- <td>{{row.tenure}} {{row.denominator}}</td>
+                              <td>{{row.requestStatus}}</td>
+                              <td><app-button [class]="'widget_button--small'" (onClick)="selectLoan(row.id)" fieldClass="no-margin"><ng-container slot="button">View Details</ng-container></app-button></td> -->
+                </tr>
+              </ng-container>
+            </ng-container>
+            <ng-container slot="body" *ngIf="!(payouts$|async)">
+              <div class="no-data">
+                <span class="material-icons material-icons-outlined">
+                  info
+                </span>
+                <h3>No data available</h3>
+              </div>
+            </ng-container>
+
+          </app-table>
+        </ng-container>
+      </div>
+    </ng-container>
+  </app-modal>
+</ng-container>

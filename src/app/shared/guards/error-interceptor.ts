@@ -16,7 +16,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.authenticationService.logout();
                 window.location.reload()
             }
-            let error = err.error.message || err.statusText;
+            let error = err.error.message||err.error.data || err.statusText;
             if (err.status === 404) {
                 error = "This service is unavailable at the moment, try again later";
             }

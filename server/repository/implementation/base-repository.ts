@@ -1,8 +1,11 @@
-import { BaseEntity } from "@models/base-entity";
+import { BaseEntity } from "@entities/base-entity";
 import { IBaseRepository } from "@repository/interface/Ibase-repository";
 
 export class BaseRepository<T> implements IBaseRepository<T>{
   constructor(protected _db: any) {
+  }
+  batchDelete= (id: number[]) => {
+    return new Promise<any>((resolve, reject) => { });
   }
 
   update = (data: BaseEntity) => {
@@ -32,7 +35,7 @@ export class BaseRepository<T> implements IBaseRepository<T>{
     });
   }
   delete = (id: number) => {
-    return new Promise<T>((resolve, reject) => { });
+    return new Promise<any>((resolve, reject) => { });
   }
   getAll = () => {
     return new Promise<T[]>((resolve, reject) => {

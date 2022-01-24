@@ -1,4 +1,4 @@
-import { PushNotification } from "@models/pushnotification";
+import { PushNotification } from "@entities/pushnotification";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface IPushNotificationRepository extends IBaseRepository<PushNotification>{

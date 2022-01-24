@@ -1,4 +1,4 @@
-import { LoanRequest } from "@models/loan/loan-request";
+import { LoanRequest } from "@entities/loan/loan-request";
 import { BaseResponse } from "@services/implementation/base-service";
 import { SearchResponse } from "@services/implementation/loan/loan-request-service";
 import { IBaseService } from "../Ibaseservice";

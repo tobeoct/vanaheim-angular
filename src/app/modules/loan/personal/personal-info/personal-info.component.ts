@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { delay, filter, first, take } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { PersonalInfo } from './personal-info';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -33,7 +33,7 @@ export class PersonalInfoComponent implements OnInit {
   genders: string[];
   @Input()
   side: boolean = false;
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -97,7 +97,7 @@ export class PersonalInfoComponent implements OnInit {
 
   base: string;
 
-  constructor(private _router: Router, private _utility: Utility, private _fb: FormBuilder, private _store: Store, private _customerService: CustomerService,
+  constructor(private _router: Router, private _utility: Utility, private _fb: FormBuilder, private _store: Store,private _loanStore:LoanStore, private _customerService: CustomerService,
     private _validators: VCValidators, private _route: ActivatedRoute, private _authService: AuthService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -121,7 +121,7 @@ export class PersonalInfoComponent implements OnInit {
 
     let year = new Date().getFullYear();
     let max = year - 18;
-    const personalInfo = this._store.personalInfo as PersonalInfo;
+    const personalInfo = this._loanStore.personalInfo as PersonalInfo;
     this.form = this._fb.group({
       surname: [personalInfo.surname ? personalInfo.surname : "", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       firstName: [personalInfo.firstName ? personalInfo.firstName : "", [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
@@ -155,7 +155,7 @@ export class PersonalInfoComponent implements OnInit {
         this.patchValue(c)
       });
     }
-    this._store.titleSubject.next("Personal Information");
+    this._loanStore.titleSubject.next("Personal Information");
     this.titles = this._store.titles;
     this.states = this._store.states;
     this.months = this._store.months;
@@ -245,7 +245,7 @@ export class PersonalInfoComponent implements OnInit {
   onSubmit = (form: FormGroup) => {
     if (!form.valid) return;
     const personalInfo: PersonalInfo = { title: this.title.value, surname: this.surname.value, gender: this.gender.value, maritalStatus: this.maritalStatus.value, firstName: this.firstName.value, otherNames: this.otherNames.value, email: this.email.value, phoneNumber: this.phone.value, dob: { day: this.day.value, month: this.month.value, year: this.year.value }, address: { street: this.street.value, city: this.city.value, state: this.state.value } };
-    this._store.setPersonalInfo(personalInfo);
+    this._loanStore.setPersonalInfo(personalInfo);
     if (!this.side) {
       this.onNavigate("account-info");
     }else{

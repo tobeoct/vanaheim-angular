@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserCategory } from '@models/helpers/enums/usercategory';
+import { UserCategory } from '@enums/usercategory';
 import { SocialUser, SocialAuthService, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { Subject, Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { LoginType } from '@models/helpers/enums/logintype';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoginType } from '@enums/logintype';
+import { EarningsStore, LoanStore, Store } from 'src/app/shared/helpers/store';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Component({
@@ -63,7 +63,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private socialAuthService: SocialAuthService,
     private _router: Router,
     private _validators: VCValidators,
-    private _store: Store,
+    private _loanStore: LoanStore,
+    private _earningStore:EarningsStore,
     private _utility: Utility
   ) {
     // redirect to home if already logged in
@@ -83,7 +84,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.redirectEmail = params['email'];
     });
-    const { firstName, surname, email, phoneNumber }: any = this._store.registerDetails;
+    const { firstName, surname, email, phoneNumber }: any = this._loanStore.registerDetails??this._earningStore.registerDetails;
     this.form = this._fb.group({
       firstName: [firstName ? firstName : '', [Validators.required, Validators.minLength(3)]],
       lastName: [surname ? surname : '', [Validators.required, Validators.maxLength(50)]],

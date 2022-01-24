@@ -1,5 +1,5 @@
-import { Scope } from "server/enums/scope";
-import { BaseEntity } from "server/entities/base-entity";
+import { Scope } from "@enums/scope";
+import { BaseEntity } from "./base-entity";
 
 export class UserRole extends BaseEntity{
     name:string;

@@ -1,4 +1,4 @@
-import { NOK } from "@models/nok";
+import { NOK } from "@entities/nok";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface INOKRepository extends IBaseRepository<NOK>{

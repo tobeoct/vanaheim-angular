@@ -1,6 +1,6 @@
 
 
-import { PaymentType } from "server/enums/paymenttype";
+import { PaymentType } from "@enums/paymenttype";
 import { BaseEntity } from "../base-entity";
 import { DisbursedLoan } from "./disbursed-loan";
 

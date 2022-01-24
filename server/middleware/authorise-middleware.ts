@@ -1,6 +1,7 @@
 
 
 
+import { VanaheimRequest } from '@models/express/request';
 import { IAuthService } from '@services/interfaces/Iauth-service';
 import { IClientService } from '@services/interfaces/Iclient-service';
 
@@ -33,7 +34,7 @@ export function clientApiKeyValidation(_clientService: IClientService) {
 
 
 export function sessionRequestAuthorisation(_authService: IAuthService) {
-  return async (req: any, res: any, next: any) => {
+  return async (req:VanaheimRequest<any, any>, res: any, next: any) => {
     let apiUrl = req.originalUrl;
     let httpMethod = req.method;
     console.log("SESSION REQUEST", apiUrl, req.session)
@@ -42,7 +43,7 @@ export function sessionRequestAuthorisation(_authService: IAuthService) {
       next();
     }
     else {
-      if (req.session & req.session.userData) {
+      if (req.session && req.session.userData) {
         // User is logged in
         if (apiUrl.includes("/welcome/") || apiUrl.includes("/auth/")) {
           const userCategory = req.session.userData.category;
@@ -68,32 +69,35 @@ export function sessionRequestAuthorisation(_authService: IAuthService) {
   }
 }
 export function sessionResponseAuthorisation() {
-  return async (req: any, res: any) => {
+  return async (req: VanaheimRequest<any,any>, res: any) => {
 
     let apiUrl = req.originalUrl;
     console.log("SESSION RESPONSE", apiUrl, req.session)
     if (req.session && req.session.cookie) {
       const tokenExpirationDate = req.session.cookie.originalMaxAge;
       res.setHeader('expires-in', tokenExpirationDate);
-      res.data['expires-in'] = tokenExpirationDate;
+      // res.data['expires-in'] = tokenExpirationDate;
+
+      if (!res.payload.data) res.payload.data = {}
+      if (res.payload.data instanceof Object) res.payload.data['expires-in'] = tokenExpirationDate;
     } else {
       console.log("Session Response Unauthorised")
     }
 
     res.status(res.statusCode || 200)
-      .send({ status: true, response: res.data });
+      .send({ status: true, response: res.payload?.data ?? res.payload?.message ?? res.payload });
   }
 
 }
 export function authoriseRequest(_authService: IAuthService) {
-  return async (req: any, res: any, next: any) => {
+  return async (req: VanaheimRequest<any,any>, res: any, next: any) => {
     console.log("authoriseRequest")
     let apiUrl = req.originalUrl;
     let httpMethod = req.method;
     // req.session = {};
     if (_authService.isNewTokenRequired(httpMethod, apiUrl)) {
       console.log("New Token Required")
-      req.newTokenRequired = true;
+      req.session.newTokenRequired = true;
 
     }
     else if (_authService.isAuthRequired(httpMethod, apiUrl)) {
@@ -141,9 +145,9 @@ export function authoriseRequest(_authService: IAuthService) {
 
 export const authoriseResponse = (_authService: IAuthService) => {
 
-  return async (req: any, res: any) => {
+  return async (req: VanaheimRequest<any,any>, res: any) => {
     console.log("Authorise Response")
-    if (res.data == undefined) {
+    if (res.payload == undefined) {
       console.log("Authorise Response: No Data")
       return res.status(404).send({
         status: false,
@@ -159,16 +163,24 @@ export const authoriseResponse = (_authService: IAuthService) => {
     if (req.session && req.session.cookie && _authService.isNewTokenRequired(httpMethod, apiUrl)) {
       const tokenExpirationDate = req.session.cookie.originalMaxAge;
       res.setHeader('expires-in', tokenExpirationDate);
-      res.data['expires-in'] = tokenExpirationDate;
+      if (!res.payload.data) res.payload.data = {}
+      if (res.payload.data instanceof Object) res.payload.data['expires-in'] = tokenExpirationDate;
     }
 
-    if (res.statusCode == 200) {
-      res.status(res.statusCode || 200)
-        .send({ status: true, response: res.data });
-    } else {
-      res.status(res.statusCode || 400)
-        .send(res.data);
-    }
-
+    // if (res.statusCode == 200) {
+    //   res.status(res.statusCode || 200)
+    //     .send({ status: true, response: res.data });
+    // } else {
+    //   res.status(res.statusCode || 400)
+    //     .send(res.data);
+    // }
+  // console.log(req.cookies, req.signedCookies)
+  if (res.statusCode == 200) {
+    res.status(200)
+      .send({ status: true, response: res.payload?.data ?? res.payload?.message ?? res.payload });
+  } else {
+    res.status(400)
+      .send({ status: false, message: res.payload?.message });
+  }
   }
 }

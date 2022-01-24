@@ -22,3 +22,22 @@ $colors: (
   lightBlue:#cdd4e4,
   overlay: rgba(0,0,0,0.8)
 );
+
+
+.theme_color{color:map-get($colors,black)}
+.theme_color--white{color:map-get($colors, white)}
+.theme_color--yellow{color:map-get($colors, yellow)!important}
+.theme_color--yellow-gradient{color:linear-gradient(180deg,map-get($colors, yellow) 43.75%,#CD9818 100%)}
+.theme_color--grey{color:map-get($colors, grey)}
+.theme_color--lightgrey{color:#E0E0E0}
+.theme_color--lightyellow{color:map-get($colors,  lightYellow)}
+.theme_color--red{color:rgb(255,27,27)}
+.theme_bg{background:map-get($colors,black)!important}
+.theme_bg--white{background:map-get($colors, white)}
+.theme_bg--yellow{background:linear-gradient(180deg,map-get($colors, yellow) 43.75%,#CD9818 100%)}
+.theme_bg--yellow-gradient{background:linear-gradient(180deg,map-get($colors, yellow) 43.75%,#F1B32B 100%)}
+.theme_bg--grey{background:map-get($colors, grey)}
+.theme_bg--lightgrey{background:#E0E0E0}
+.theme_bg--lightyellow{background:map-get($colors,  lightYellow)}
+.theme_bg--lighteryellow{background:rgb(231,226,208)}
+.theme_bg--red{background:rgb(255,27,27)}

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { BaseLoanApplication } from '../../loan-application';
@@ -47,7 +47,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$: Observable<boolean> = this.showSubject.asObservable();
-  constructor(private _router: Router, private _utility: Utility, private _store: Store, private _route: ActivatedRoute, private _authService: AuthService) {
+  constructor(private _router: Router, private _utility: Utility, private _store: Store,private _loanStore:LoanStore, private _route: ActivatedRoute, private _authService: AuthService) {
     this.toggleNav(this._router.url);
     this.active$ = this._utility.activeSolution$;
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
@@ -69,7 +69,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     // console.log(this._store.loanCategory,  this._store.loanApplication)
     this._authService.isLoggedIn();
     this.isLoggedIn$ = this._authService.isLoggedInSubject.asObservable()
-    let sub = this._store.loanCategory$.subscribe((c: string) => {
+    let sub = this._loanStore.loanCategory$.subscribe((c: string) => {
       if (data[c]) {
         let links = data[c].filter((d: any) => {
           if (c == "personal") return true;
@@ -79,8 +79,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
         this.dataSelectionSubject.next(links)
       }
     });
-    this._store.loanApplication$.subscribe((application: any) => {
-      let loan = application[this._store.loanCategory] as any;
+    this._loanStore.loanApplication$.subscribe((application: any) => {
+      let loan = application[this._loanStore.loanCategory] as any;
 
       let navigation = this.dataSelectionSubject.value;
       navigation.map((nav: any, i: number) => {

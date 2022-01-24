@@ -1,4 +1,4 @@
-import AppConfig from "@config";
+import AppConfig from "server/config";
 import UtilService from "./util";
 const path = require('path');
 const nodemailer = require('nodemailer');
@@ -18,10 +18,11 @@ let FileAPI = require('file-api')
 export enum EmailType {
   Update,
   Form,
-  Investment,
+  Earning,
   Feedback,
   Repayment,
-  Loan
+  Loan,
+  EarningPayout
 }
 type EmailPayload = {
   subject?: string,
@@ -82,7 +83,7 @@ export default class EmailService {
           case EmailType.Repayment:
             subject = toCustomer ? 'Loan Repayment Plan' : 'A Customer Requested For A Repayment Plan';
             break;
-          case EmailType.Investment:
+          case EmailType.Earning:
             subject = toCustomer ? 'Vanir Capital: Earnings Indication' : 'Earnings Indication';
             transporterOptions.auth = {
               user: this._appConfig.INVESTMENT_EMAIL,
@@ -254,7 +255,7 @@ export default class EmailService {
       if (this._utils.hasValue(bvnVer)) {
         if (this._utils.hasValue(bvnVer["BVN"])) {
           if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]])) {
-            if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]]["basicDetails"])) {
+            if (this._utils.hasValue(this.bvnList[bvnVer["BVN"]]["basicDetailBase64"])) {
               shouldProceed = true;
             }
           }
@@ -263,7 +264,7 @@ export default class EmailService {
       if (shouldProceed) {
         //console.log(bvnVer["BVN"]);
         let item = "BVN Details To VCAP.jpg";
-        files["BVN Details To VCAP.jpg"] = LZString.compress(`data:image/jpg;base64,${this.bvnList[bvnVer["BVN"]]["basicDetails"]}`);
+        files["BVN Details To VCAP.jpg"] = LZString.compress(`data:image/jpg;base64,${this.bvnList[bvnVer["BVN"]]["basicDetailBase64"]}`);
         let base64String = LZString.decompress(files[item]); // Not a real image
         let mime: any = this.base64MimeType(base64String);
         // console.log(item);

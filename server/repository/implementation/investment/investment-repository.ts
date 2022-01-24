@@ -1,18 +1,15 @@
-import { InvestmentRequest } from "@models/investment/investment-request";
-import { InvestmentRequestLog } from "@models/investment/investment-request-log";
-import { IInvestmentRepository } from "@repository/interface/investment/Iinvestment-repository";
-import { IInvestmentRequestRepository } from "@repository/interface/investment/Iinvestment-request-repository";
-import { IInvestmentRequestLogRepository } from "@repository/interface/investment/Iinvestment-request-log-repository";
+import { EarningRequest } from "@entities/investment/investment-request";
+import { EarningRequestLog } from "@entities/investment/investment-request-log";
+import { IEarningRepository } from "@repository/interface/investment/Iinvestment-repository";
 
-
- export class InvestmentRepository implements IInvestmentRepository{
-  //  constructor(private _investmentRequestRepository:IInvestmentRequestRepository,private _investmentRequestLogRepository:IInvestmentRequestLogRepository){
+ export class EarningRepository implements IEarningRepository{
+  //  constructor(private _earningRequestRepository:IEarningRequestRepository,private _earningRequestLogRepository:IEarningRequestLogRepository){
 
   //  }
-   restructure: (approvedInvestmentId: number, payout: number) => Promise<boolean>;
-   getAllInvestmentRequests: () => Promise<InvestmentRequest[]>;
-   getAllInvestmentRequestLogs: () => Promise<InvestmentRequestLog[]>;
-   getInvestmentRequestById: () => Promise<InvestmentRequest>;
-   getInvestmentRequestLogById: () => Promise<InvestmentRequestLog>;
-   updateInvestmentRequest: (investmentRequest: InvestmentRequest) => Promise<InvestmentRequest>;
+   restructure: (approvedEarningId: number, payout: number) => Promise<boolean>;
+   getAllEarningRequests: () => Promise<EarningRequest[]>;
+   getAllEarningRequestLogs: () => Promise<EarningRequestLog[]>;
+   getEarningRequestById: () => Promise<EarningRequest>;
+   getEarningRequestLogById: () => Promise<EarningRequestLog>;
+   updateEarningRequest: (investmentRequest: EarningRequest) => Promise<EarningRequest>;
 }

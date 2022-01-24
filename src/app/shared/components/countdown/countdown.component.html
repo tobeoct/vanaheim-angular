@@ -1,0 +1,13 @@
+<ng-container *ngIf="size==='small'">
+    <small class="{{class}}"><b>{{amount|currency:"₦":'symbol':'1.0-2'}}</b></small>
+
+</ng-container>
+
+<ng-container *ngIf="size==='md'">
+
+    <h3 class="{{class}}">{{amount|currency:"₦":'symbol':'1.0-2'}}</h3>
+</ng-container>
+<ng-container *ngIf="size==='lg'">
+
+    <h1 class="{{class}}">{{amount|currency:"₦":'symbol':'1.0-2'}}</h1>
+</ng-container>

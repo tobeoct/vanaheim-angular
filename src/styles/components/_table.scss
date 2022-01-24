@@ -1,64 +1,187 @@
-#table{
-    
+#table {
     min-width: fit-content;
-    #filters{
-        @include paddingVertical(true,"px",0.5);
+    #filters {
+        @include paddingVertical(true, "px", 0.5);
         display: flex;
         width: 100%;
-        .item{
-            @include paddingHorizontal(true,"px",0.5);
+        .item {
+            @include paddingHorizontal(true, "px", 0.5);
             margin-right: map-get($sizings, "px");
             border-left: 3px solid map-get($colors, lightGrey);
             color: map-get($colors, grey);
-            &--active{
+            &--active {
                 border-left: 3px solid map-get($colors, yellow);
                 color: map-get($colors, black);
-                font-weight: map-get($font-weights, "bold" );
+                font-weight: map-get($font-weights, "bold");
             }
             cursor: pointer;
         }
     }
-    table{
+    table {
         width: 100%;
         margin-top: 10px;
-        thead{
+        thead {
             width: 100%;
         }
-        tr{
-            @include flex(horizontal,space-evenly);
-            @include paddingVertical(true,"px",0.4);
-            @include paddingHorizontal(true,"px",0.25);
-            @include marginVertical(false,"px",0,0.5);
+        tr {
+            // @include flex(horizontal,space-evenly);
+            @include paddingVertical(true, "px", 0.4);
+            @include paddingHorizontal(true, "px", 0.25);
+            @include marginVertical(false, "px", 0, 0.5);
             @include font(small);
-            border:1px solid map-get($colors, lightGrey);
-            
+            border: 1px solid map-get($colors, lightGrey);
         }
-        thead{
-            tr{
-            background: map-get($colors, lightGrey);
-            border-radius: $border-radius;
-            @include paddingVertical(true,"px",0.4);
+        thead {
+            tr {
+                background: map-get($colors, lightGrey);
+                border-radius: $border-radius;
+                @include paddingVertical(true, "px", 0.4);
             }
-            th{
+            th {
                 @include font(text);
                 font-weight: map-get($font-weights, "bold");
             }
         }
-        tbody{
+        tbody {
             min-height: 200px;
 
-            td{
+            td {
                 font-weight: map-get($font-weights, "bold");
             }
-            tr{
-                @include flex(vertical,center);
+            tr {
+                // @include flex(vertical,center);
             }
         }
     }
 }
 
-@media all and (max-width:900px){
-    #table{
+$gl-ms: "screen and (max-width: 23.5em)"; // up to 360px
+$gl-xs: "screen and (max-width: 35.5em)"; // up to 568px
+$gl-sm: "screen and (max-width: 48em)"; // max 768px
+$gl-md: "screen and (max-width: 64em)"; // max 1024px
+$gl-lg: "screen and (max-width: 80em)"; // max 1280px
+
+// table style
+
+table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    // @include background(white);
+    border-radius: $border-radius;
+    width: 100% !important;
+    margin: 0 auto;
+    position: relative;
+
+    * {
+        position: relative;
+    }
+
+    td,
+    th {
+        padding-left: 8px;
+    }
+
+    thead tr {
+        height: map-get($sizings, "px") * 1.5;
+        // @include background(brown);
+        text-align: left;
+        th {
+            @include paddingVertical(true, "px", 0.5);
+            font-weight: map-get($font-weights, "bold");
+            &:not(:last-child){
+                border-right: 1px solid #d4d4d4;
+            }
+        }
+    }
+
+    tbody {
+        position: relative;
+        td {
+            border-right: 1px solid #ececec;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        tr {
+            @include paddingVertical(true, "px", 0.25);
+
+            // border-bottom: 1px solid map-get($colors, lightGrey);
+            &:last-child {
+                border: 0;
+            }
+        }
+    }
+
+    td,
+    th {
+        text-align: left;
+        &.l {
+            text-align: right;
+        }
+        &.c {
+            text-align: center;
+        }
+        &.r {
+            text-align: center;
+        }
+    }
+}
+// .no-data{
+//     width: 100%;
+//     margin: auto;
+//     position: absolute;
+//     text-align: center;
+//     padding: 5%;
+//     box-sizing: border-box;
+// }
+@media #{$gl-xs} {
+    table {
+        display: block;
+        > *,
+        tr,
+        td,
+        th {
+            display: block;
+        }
+
+        thead {
+            display: none;
+        }
+        tbody tr {
+            height: auto;
+            padding: 8px 0;
+            td {
+                padding-left: 45%;
+                margin-bottom: 12px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+                &:before {
+                    position: absolute;
+                    font-weight: 700;
+                    width: 40%;
+                    left: 10px;
+                    top: 0;
+                }
+
+                // &:nth-child(1):before { content:"Code";}
+                // &:nth-child(2):before { content:"Stock";}
+                // &:nth-child(3):before { content:"Cap";}
+                // &:nth-child(4):before { content:"Inch";}
+                // &:nth-child(5):before { content:"Box Type";}
+            }
+        }
+    }
+}
+
+// body style
+
+blockquote {
+    @include color(white);
+    text-align: center;
+}
+
+@media all and (max-width: 900px) {
+    #table {
         min-width: 300%;
     }
 }

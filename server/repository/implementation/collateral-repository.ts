@@ -1,6 +1,6 @@
 
 import { ICollateralRepository } from "@repository/interface/Icollateral-repository";
-import { Collateral } from "@models/collateral";
+import { Collateral } from "@entities/collateral";
 import { BaseRepository } from "./base-repository";
 
  export class CollateralRepository extends BaseRepository<Collateral> implements ICollateralRepository{

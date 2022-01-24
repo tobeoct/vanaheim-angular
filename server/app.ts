@@ -20,7 +20,7 @@ const cookieParser = require('cookie-parser');
 // This serves static files from the specified directory
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
-import AppConfig, { Environment } from '@config';
+import AppConfig, { Environment } from 'server/config';
 import { AWSService } from '@services/implementation/image/aws-service';
 import { inject, loadControllers, scopePerRequest } from 'awilix-express';
 import helmet = require('helmet');
@@ -91,9 +91,9 @@ export default class App {
     app.use("/api", inject(clientApiKeyValidation), inject(authoriseRequest), expAutoSan.route)
     console.log("App.TS", this._appConfig.environment)
     if (this._appConfig.environment ==Environment.production) {
-      app.use(loadControllers('api/controllers/*.controller.js', { cwd: __dirname }));
+      app.use(loadControllers('controllers/*.controller.js', { cwd: __dirname }));
     } else {
-      app.use(loadControllers('api/controllers/*.controller.ts', { cwd: __dirname }));
+      app.use(loadControllers('controllers/*.controller.ts', { cwd: __dirname }));
     }
     app.use("/api", inject(authoriseResponse))
 

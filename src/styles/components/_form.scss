@@ -1,33 +1,87 @@
-#loan-content 
-{
-    &.loggedIn{
-    div#form{
-    min-width: 500px !important;
-}
+#loan-content {
+    &.loggedIn {
+        div#form {
+            min-width: 500px !important;
+        }
     }
 }
 
-#form{
+#form {
     position: relative;
     z-index: 0;
-
 }
 
-
-
-
-@media all and (max-width:900px){
-    #loan-content 
-{
-    &.loggedIn{
-    div#form{
-    min-width: 0 !important;
-    margin-top: 10%;
+form {
+    padding-top: 20px !important;
 }
+
+.form_upload .theme_text--bold {
+    font-weight: 400 !important;
+}
+.form_section {
+    margin-top: 10vh;
+}
+
+.main_form-title h1 {
+    position: relative;
+}
+
+.dirty {
+    position: relative;
+}
+
+*[data-error],
+select.dirty:invalid + .dropdown {
+    outline: 2px solid #efa9b0;
+    position: relative;
+}
+
+.dirty:invalid + span::after,
+.dirty:invalid + .dropdown::after {
+    content: attr(title);
+    top: 110%;
+    left: 0;
+    font-size: 0.9em;
+    position: absolute;
+    color: #d62839;
+}
+
+.main_form form {
+    margin-top: 20px;
+    width: 500px;
+    padding-bottom: 30vh;
+}
+.form_group {
+    @include marginVertical(false, "px", 1, 0);
+    max-width: 500px;
+    position: relative;
+}
+.form_upload .form_group {
+    margin-bottom: 80px !important;
+}
+
+.main_form-title .answer {
+    max-width: 550px;
+}
+@media all and (max-width: 900px) {
+    #loan-content {
+        &.loggedIn {
+            div#form {
+                min-width: 0 !important;
+                margin-top: 10%;
+            }
+        }
+        form {
+            padding-top: 10px;
+        }
     }
-    form{
-        padding-top: 10px;
-    }
-}
-
+    
+  .dirty:invalid + span::after,
+  .dirty:invalid + .dropdown::after {
+    content: attr(title);
+    top: 110%;
+    left: 0;
+    position: absolute;
+    color: rgb(250, 44, 44);
+  }
 }

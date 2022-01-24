@@ -3,8 +3,8 @@
         <div
             class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
             <div class="margin--x">
-                <small class="no-margin--all">Email</small>
-                <p class="no-margin--all"><b>support@vanircapital.org</b></p>
+                <small class="no-margin">Email</small>
+                <p class="no-margin"><b>support@vanircapital.org</b></p>
             </div>
             <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                 <app-copy [message]="'support@vanircapital.org'"> </app-copy>
@@ -19,8 +19,8 @@
         <div
             class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
             <div class="margin--x">
-                <small class="no-margin--all">Email</small>
-                <p class="no-margin--all"><b>loans@vanircapital.org</b></p>
+                <small class="no-margin">Email</small>
+                <p class="no-margin"><b>loans@vanircapital.org</b></p>
             </div>
             <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                 <app-copy [message]="'loans@vanircapital.org'"> </app-copy>
@@ -33,10 +33,26 @@
             </div>
         </div>
         <div
+        class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+        <div class="margin--x">
+            <small class="no-margin">Email</small>
+            <p class="no-margin"><b>earnings@vanircapital.org </b></p>
+        </div>
+        <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <app-copy [message]="'earnings@vanircapital.org '"> </app-copy>
+            <div style="margin-left: 10px;">
+                <app-button class="no-margin" fieldClass="no-margin--top"
+                    [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
+                    <ng-container slot="button"><a href="mailto:earnings@vanircapital.org ">Email</a></ng-container>
+                </app-button>
+            </div>
+        </div>
+    </div>
+        <div
             class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
             <div class="margin--x">
-                <small class="no-margin--all">Phone Number</small>
-                <p class="no-margin--all"><b>08180279270</b></p>
+                <small class="no-margin">Phone Number</small>
+                <p class="no-margin"><b>08180279270</b></p>
             </div>
             <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
 
@@ -49,6 +65,24 @@
                 </div>
             </div>
         </div>
+        <div
+        class="margin--2x card card--stroke padding--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+        <div class="margin--x">
+            <small class="no-margin">Address</small>
+            <p class="no-margin"><b> Plot 16B Aliu Animashaun Ave, Lekki Phase I 106104, Lekki</b></p>
+        </div>
+        <!-- <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+
+            <app-copy [message]="'08180279270'"> </app-copy>
+            <div style="margin-left: 10px;">
+                <app-button class="no-margin" fieldClass="no-margin--top"
+                    [class]="'no-margin  widget_button--small widget_button--fill widget_button--secondary'">
+                    <ng-container slot="button">Call</ng-container>
+                </app-button>
+            </div>
+        </div> -->
+    </div>
+       
         <div (click)="toggleSideNav('faq')" style="cursor: pointer;"
             class="card card--small padding--x card--tertiary margin--3x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
             <p><b>Frequently Asked Questions</b></p>

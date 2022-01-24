@@ -1,5 +1,5 @@
 import { IAccountRepository } from "@repository/interface/Iaccount-repository";
-import { Account } from "@models/account";
+import { Account } from "@entities/account";
 import { BaseRepository } from "./base-repository";
 
 

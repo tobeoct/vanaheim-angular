@@ -1,8 +1,6 @@
-import { Customer } from "@models/customer";
-import { LoanRequestLog } from "@models/loan/loan-request-log";
+import { LoanRequestLog } from "@entities/loan/loan-request-log";
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
-import { ILoanRequestRepository } from "@repository/interface/loan/Iloan-request-repository";
 import { ILoanRequestLogService } from "@services/interfaces/loan/Iloan-log-request-service";
 import { BaseService } from "../base-service";
 export class LoanRequestLogService extends BaseService<LoanRequestLog> implements ILoanRequestLogService{

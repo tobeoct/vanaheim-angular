@@ -1,4 +1,4 @@
-import { DisbursedLoan } from "@models/loan/disbursed-loan";
+import { DisbursedLoan } from "@entities/loan/disbursed-loan";
 import { IDisbursedLoanRepository } from "@repository/interface/loan/Idisbursed-loan-repository";
 import { BaseRepository } from "../base-repository";
 

@@ -1,4 +1,4 @@
-import { Repayment } from "@models/loan/repayment";
+import { Repayment } from "@entities/loan/repayment";
 import { IBaseService } from "./Ibaseservice";
 
 export interface IRepaymentService  extends IBaseService<Repayment>{

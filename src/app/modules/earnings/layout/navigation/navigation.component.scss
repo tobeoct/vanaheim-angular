@@ -1,0 +1,13 @@
+
+  @import '../../../../../styles/abstracts/_abstracts-dir';
+  @import '../../../../../styles/themes/_theme-dir';
+  .logo{
+      @include marginVertical(false,"px",1,2); 
+      @include flex(true,center);
+  }
+  .sidenav-mini{
+    margin-top: 7.5%;
+    height: 70% !important;
+    display: block;
+    
+  }

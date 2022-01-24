@@ -1,0 +1,41 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+#loan-calculator{
+    display: flex;
+    flex-direction: column;
+    .theme_row{
+        // @include flex(horizontal,space-between);
+        @include marginVertical(false,"px",1,0);
+    }
+
+    #loan-summary{
+        border: 1px solid map-get($colors, lightGrey);
+        border-radius: $border-radius;
+        text-align: center;
+       
+        .details{
+            display: flex;
+            &:nth-child(1){
+            flex-direction: column;
+            }
+            &:nth-child(2){
+                @include flex(horizontal,space-between);
+                border-radius: $border-radius;
+                @include marginVertical(false,"px",2,0);
+                .item{
+                    @include flex(true,center);
+                    flex-direction: column;
+                    background: map-get($colors, lightGrey);
+                    width: 170px;
+
+                    @include paddingHorizontal(true,"px",1);
+                    @include paddingVertical(true,"px",0.5);
+                    p{
+                        font-weight: 800;
+                    }
+                }
+            }
+        }
+    }
+
+}

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { LoanResponse } from 'src/app/shared/poco/loan/loan-response';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -41,7 +41,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   autoClick$: Observable<boolean> = this.autoClickSubject.asObservable();
   fromSignIn = "fromSignIn";
   @ViewChild('button') button: ElementRef;
-  constructor(private _store: Store,private _utility:Utility, private _router: Router, private _zone: NgZone, private _fb: FormBuilder, private _authenticationService: AuthService, private _loanService: LoanService) { }
+  constructor(private _store: Store,private _loanStore:LoanStore,private _utility:Utility, private _router: Router, private _zone: NgZone, private _fb: FormBuilder, private _authenticationService: AuthService, private _loanService: LoanService) { }
   ngAfterViewInit(): void {
     if (this._store.getItem(this.fromSignIn)) {
       this.moveToSubmit();
@@ -54,13 +54,13 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
     this.isLoggedIn = this._authenticationService.isLoggedIn();
-    this.loanType = this._store.loanType;
-    this.category = this._store.loanCategory;
-    this._store.titleSubject.next("Preview");
+    this.loanType = this._loanStore.loanType;
+    this.category = this._loanStore.loanCategory;
+    this._loanStore.titleSubject.next("Preview");
     this.form = this._fb.group({
       validated: [this._loanService.validateLoanApplication() ? 'valid' : '', [Validators.required]]
     })
-    this.loanApplication = this._store.loanApplication[this._store.loanCategory];
+    this.loanApplication = this._loanStore.loanApplication[this._loanStore.loanCategory];
 
   }
   moveToSubmit(): void {
@@ -88,8 +88,8 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   submitApplication(event: any) {
     if (this.isLoggedIn) {
       this.loadingSubject.next(true);
-      let category = this._store.loanCategory;
-      let a = this._store.loanApplication;
+      let category = this._loanStore.loanCategory;
+      let a = this._loanStore.loanApplication;
       let application: BaseLoanApplication;
       if (category == "business") {
         application = a["business"] as BusinessLoanApplication;
@@ -106,7 +106,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
             this.loadingSubject.next(false);
             setTimeout(() => this.apiSuccessSubject.next(data.loanRequestId), 0);
             this.show2Subject.next(true);
-            this._store.removeApplication();
+            this._loanStore.removeApplication();
           })
         },
         (error: string) => {

@@ -17,6 +17,10 @@ import { SideContactComponent } from './contact-us/contact-us.component';
 import { SidePasswordComponent } from './password/password.component';
 import { BVNComponent } from 'src/app/modules/loan/personal/bvn/bvn.component';
 import { SideBVNComponent } from './bvn/bvn.component';
+import { EarningFormComponent } from 'src/app/modules/welcome/earnings/earning-form/earning-form.component';
+import { CardComponent } from 'src/app/modules/welcome/earnings/earning-form/card/card.component';
+import { RateComponent } from 'src/app/modules/welcome/earnings/earning-form/rate/rate.component';
+import { RatecardComponent } from 'src/app/modules/welcome/earnings/earning-form/rate/ratecard/ratecard.component';
 
 
 
@@ -37,7 +41,11 @@ import { SideBVNComponent } from './bvn/bvn.component';
     SideAccountComponent,
     SideContactComponent,
     SidePasswordComponent,
-    SideBVNComponent
+    SideBVNComponent,
+    EarningFormComponent,
+    CardComponent,
+    RateComponent,
+    RatecardComponent,
   ],
   imports: [
     BaseModule,
@@ -59,7 +67,11 @@ import { SideBVNComponent } from './bvn/bvn.component';
     SideAccountComponent,
     SideContactComponent,
     SidePasswordComponent,
-    SideBVNComponent
+    SideBVNComponent,
+    EarningFormComponent,
+    CardComponent,
+    RateComponent,
+    RatecardComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

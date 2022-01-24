@@ -1,5 +1,5 @@
 import { UserCategory } from "@enums/usercategory";
-import { LoginType } from "@models/helpers/enums/logintype";
+import { LoginType } from "@enums/logintype";
 
 export class User {
     id: number;
@@ -7,6 +7,7 @@ export class User {
     password: string;
     firstName: string;
     lastName: string;
+    email: string;
     category:UserCategory;
     type:LoginType;
     authdata?: string;

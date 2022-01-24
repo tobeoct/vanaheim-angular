@@ -1,0 +1,17 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+
+.widget_button--small {
+    background: map-get($colors, lightGrey);
+    color: map-get($colors, black);
+    border: none;
+}
+
+.missing {
+    width: 100%;
+    @include padding(true, "px", 0.5);
+    @include background(lightRed);
+    @include border(1px,solid,red);
+    @include color(red);
+    border-radius: $border-radius;
+}

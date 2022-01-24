@@ -7,7 +7,9 @@ import { BehaviorSubject, Observable, Subject, Subscription, timer } from 'rxjs'
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Router } from '@angular/router';
-import { Store } from 'src/app/shared/helpers/store';
+import { EarningsStore, LoanStore, Store } from 'src/app/shared/helpers/store';
+import { EarningService } from 'src/app/shared/services/earning/earning.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customer',
@@ -24,12 +26,18 @@ export class CustomerComponent implements OnInit {
   showSubject: Subject<string> = new Subject<string>();
   show$: Observable<string> = this.showSubject.asObservable();
 
+  showSuccess$: Observable<boolean>
+  show2$: Observable<boolean>
+  apiSuccess$: Observable<string>;
+  apiError$: Observable<string>;
+
   activeLoan$: Observable<boolean>;
+  activeEarning$:Observable<boolean>;
   runningLoanSubscription: Subscription
 
   showInvalid$: Observable<boolean>;
   timerSubscription: Subscription;
-  constructor(private swPush: SwPush, private _store: Store, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
+  constructor(private swPush: SwPush, private _store: Store,private _loanStore:LoanStore,private _earningsStore:EarningsStore, private _earningService: EarningService, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
     try {
       this.showInvalid$ = this._utility.showLoanInvalidSubject.asObservable();
       if (environment.production) {
@@ -50,31 +58,45 @@ export class CustomerComponent implements OnInit {
     }
 
   }
+  close = () => {
+    setTimeout(() => { this._earningService.showError(false); this._earningService.showSuccess(false); this._router.navigate(["/my/earnings"]) }, 0);
+    // this.apiErrorSubject.next();
+    // this.apiSuccessSubject.next();
+  }
   ngOnDestroy() {
     if (this.timerSubscription) this.timerSubscription.unsubscribe();
     if (this.runningLoanSubscription) this.runningLoanSubscription.unsubscribe()
   }
   ngOnInit(): void {
 
+    this.show2$ = this._earningService.show2$;
+    this.showSuccess$ = this._earningService.show$;
+    this.apiError$ = this._earningService.apiError$;
+    this.apiSuccess$ = this._earningService.apiSuccess$;
     this.activeLoan$ = this._loanService.activeLoanSubject.asObservable();
+    this.activeEarning$ = this._earningService.activeEarningSubject.asObservable();
     const sideNavSub = this._utility.activeNavigation$.subscribe(r => {
       this.showSubject.next(r.toString());
     })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
+    if (Object.keys(this._earningsStore.earningsApplication).length>0 && !this._router.url.includes("apply")) {
+      this._earningService.continueApplication(true);
+    }
+    
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
       // console.log("Running Loan ", r)
-      if (localStorage.getItem("page") && r != true && !this._router.url.includes("apply")) {
-        this._store.setLoanType(this._store.loanTypeSubject.value, false);
-        this._store.setApplyingAs(this._store.applyingAsSubject.value, false);
-        this._store.setLoanProduct(this._store.loanProductSubject.value, false);
+      if (localStorage.getItem("loan-page") && r != true && !this._router.url.includes("apply")) {
+        this._loanStore.setLoanType(this._loanStore.loanTypeSubject.value, false);
+        this._loanStore.setApplyingAs(this._loanStore.applyingAsSubject.value, false);
+        this._loanStore.setLoanProduct(this._loanStore.loanProductSubject.value, false);
         setTimeout(() => this._loanService.continueApplication(true), 3000);
       } else {
-        if (localStorage.getItem("page") && r == true) {
+        if (localStorage.getItem("loan-page") && r == true) {
 
           this._utility.showLoanInvalidSubject.next(true);
-          this._store.setPage("");
-          this._store.removeItem("page")
+          this._loanStore.setPage("");
+          this._store.removeItem("loan-page")
           this._store.removeItem("loan-application")
         }
         this._loanService.continueApplication(false);
@@ -105,14 +127,27 @@ export class CustomerComponent implements OnInit {
     document.location.reload();
   }
   routeToPage() {
-    let currentPage = this._store.getItem("page");
+    let currentPage = this._store.getItem("loan-page");
     let endpoint = "/loans/apply/" + currentPage;
-    let baseUrl = "my"
+    let baseUrl = "my" 
     if (!this.isLoggedIn) {
       baseUrl = "welcome"
     }
     let url = baseUrl + endpoint;
     this._router.navigate([url]);
     this._loanService.continueApplication(false)
+  }
+
+  routeToEarningPage() {
+    const currentPage = localStorage.getItem("earnings-page");//this._store.getItem("earnings-page")??this._earningsStore.pageSubject.value;
+    const endpoint = `/earnings/apply/${currentPage}`;
+    let baseUrl = "my"
+    if (!this.isLoggedIn) {
+      baseUrl = "welcome"
+    }
+    const url = baseUrl + endpoint;
+    console.log(url)
+    this._router.navigate([url]);
+    this._earningService.continueApplication(false)
   }
 }

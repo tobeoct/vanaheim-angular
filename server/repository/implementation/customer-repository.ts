@@ -1,6 +1,6 @@
 
 import { ICustomerRepository } from "@repository/interface/Icustomer-repository";
-import { Customer } from "@models/customer";
+import { Customer } from "@entities/customer";
 import { BaseRepository } from "./base-repository";
 
  export class CustomerRepository extends BaseRepository<Customer> implements ICustomerRepository{

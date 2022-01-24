@@ -1,4 +1,4 @@
-import { Customer } from "@models/customer";
+import { Customer } from "@entities/customer";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface ICustomerRepository extends IBaseRepository<Customer>{

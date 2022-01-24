@@ -1,6 +1,6 @@
-import { Device } from "@models/device";
-import { PushNotification } from "@models/pushnotification";
-import { Subscription } from "@models/subscription";
+import { Device } from "@entities/device";
+import { PushNotification } from "@entities/pushnotification";
+import { Subscription } from "@entities/subscription";
 import { IBaseService } from "./Ibaseservice";
 
 export interface INotificationService extends IBaseService<any>{

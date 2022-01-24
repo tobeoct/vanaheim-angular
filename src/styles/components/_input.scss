@@ -1,35 +1,36 @@
-.vc_form-field{
+.vc_form-field {
     position: relative;
-    .invalid-feedback{
+    .invalid-feedback {
         display: none;
     }
-    label{
+    label {
         @include font(small);
-        @include flex(horizontal,space-between);
-        font-weight: map-get($font-weights, "semi-bold" );
+        @include flex(horizontal, space-between);
+        font-weight: map-get($font-weights, "semi-bold");
     }
-    input, textarea{
+    input,
+    textarea {
         @include font(text);
-        @include paddingHorizontal(false,"px",0.5,0.5);
-        width:100%;
-        height:45px;
-        display:block;
-        border:2px solid #E0E0E0;
-        border-radius:2px;
-        box-sizing:border-box;
-        background:transparent;
-        transition:ease-in-out 0.3s;
-        line-height:1.5em;
+        @include paddingHorizontal(false, "px", 0.5, 0.5);
+        width: 100%;
+        height: 45px;
+        display: block;
+        border: 2px solid #e0e0e0;
+        border-radius: 2px;
+        box-sizing: border-box;
+        background: transparent;
+        transition: ease-in-out 0.3s;
+        line-height: 1.5em;
         // &:[type="checkbox"]{
 
         // }
-   }
-   textarea{
-       height: auto;
-       min-height: 100px;
-   }
+    }
+    textarea {
+        height: auto;
+        min-height: 100px;
+    }
     input[type="range"] {
-        -webkit-appearance: none;  /* Override default CSS styles */
+        -webkit-appearance: none; /* Override default CSS styles */
         appearance: none;
         width: 100%;
         padding-left: 0;
@@ -39,15 +40,15 @@
         background: map-get($colors, lightGrey); /* Grey background */
         outline: none; /* Remove outline */
         opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-        -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-        transition: opacity .2s;
+        -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+        transition: opacity 0.2s;
         border: none;
         position: relative;
-            /* Mouse-over effects */
+        /* Mouse-over effects */
         &:hover {
             opacity: 1; /* Fully shown on mouse-over */
         }
-        
+
         /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
         &::-webkit-slider-thumb {
             -webkit-appearance: none; /* Override default look */
@@ -57,15 +58,13 @@
             background: map-get($colors, black); /* Green background */
             cursor: pointer; /* Cursor on hover */
             position: relative;
-           
-           
         }
 
-          &+.range-value{
+        & + .range-value {
             position: absolute;
             bottom: -50%;
             z-index: 4;
-            span{
+            span {
                 width: 60px;
                 height: 24px;
                 line-height: 24px;
@@ -78,8 +77,8 @@
                 left: 50%;
                 transform: translate(-50%, 0);
                 border-radius: 6px;
-              }
-              span:before{
+            }
+            span:before {
                 content: "";
                 position: absolute;
                 width: 0;
@@ -91,9 +90,9 @@
                 left: 50%;
                 margin-left: -5px;
                 margin-top: -1px;
-              }
-          }
-         
+            }
+        }
+
         // &::after{
         //     @include paddingVertical(true,"px",0.25);
         //     content: attr(value);
@@ -109,86 +108,186 @@
         //     height: 20px; /* Slider handle height */
         //     background: map-get($colors, black); /* Green background */
         //     cursor: pointer; /* Cursor on hover */
-           
+
         // }
-      }
-      
-  
-    &--hidden 
-    {
+    }
+
+    &--hidden {
         margin: 0 !important;
         padding: 0 !important;
-    input{
-        visibility: hidden;
-        height: 0!important;
-        box-sizing: content-box;
-        padding: 0 !important;
-        margin:0 !important;
-        border:none !important;
+        input {
+            visibility: hidden;
+            height: 0 !important;
+            box-sizing: content-box;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
     }
-}
-input.is-invalid{
-    // border-color: red !important;
-    position: relative;
-    outline: none;
-   border-bottom-color: rgb(255, 113, 142) !important;
-    // border-bottom-width: 0px !important; 
-    transition: 2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-div.is-invalid{
-&+.invalid-feedback{
-    @include font(small);
-    display: block;
-    width: 100%;
-    margin-top: 5px;
-    // box-sizing: border-box;
-    padding: 7px 10px;
-    color:  rgb(252, 78, 113);
-    background: rgb(255, 240, 234);
-    border-radius: 2px;
-    // opacity: 0;
-    // transform: translateY(10px);
-    position: absolute;
-    word-wrap: break-word;
-    height: auto;
-    top: 30%;
-    right: 110%;
-    &--default{
+    input.is-invalid {
+        // border-color: red !important;
         position: relative;
-        right: 0;
-        
+        outline: none;
+        border-bottom-color: rgb(255, 113, 142) !important;
+        // border-bottom-width: 0px !important;
+        transition: 2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
     }
-    // animation: FadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
-    &--right{
-        right: unset;
-        left: 110%;
+    div.is-invalid {
+        & + .invalid-feedback {
+            @include font(small);
+            display: block;
+            width: 100%;
+            margin-top: 5px;
+            // box-sizing: border-box;
+            padding: 7px 10px;
+            color: rgb(252, 78, 113);
+            background: rgb(255, 240, 234);
+            border-radius: 2px;
+            // opacity: 0;
+            // transform: translateY(10px);
+            position: absolute;
+            word-wrap: break-word;
+            height: auto;
+            top: 30%;
+            right: 110%;
+            &--default {
+                position: relative;
+                right: 0;
+            }
+            // animation: FadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s forwards;
+            &--right {
+                right: unset;
+                left: 110%;
+            }
+        }
     }
 }
-}
-}
-input:hover,.widget_input:hover{background:rgb(245,244,240);border:2px solid map-get($colors,  lightYellow)!important}
-input::placeholder,.widget_input::placeholder{color:rgb(211,211,211);font-family:'Manrope','Open Sans',sans-serif;font-style:normal;font-weight:400;font-size:14px;line-height:1.5em;text-transform:capitalize}
 
-@keyframes AnimateIn{
-    to{
+label {
+    position: relative;
+}
+.label_loader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+}
+input:hover,
+.widget_input:hover {
+    background: rgb(245, 244, 240);
+    border: 2px solid map-get($colors, lightYellow) !important;
+}
+input::placeholder,
+.widget_input::placeholder {
+    color: rgb(211, 211, 211);
+    font-family: "Manrope", "Open Sans", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5em;
+    text-transform: capitalize;
+}
+
+input:not([type="checkbox"]):not([type="radio"]) {
+    -webkit-appearance: none;
+}
+input[disabled] {
+    color: map-get($colors, black) !important;
+    border: 2px solid rgb(230, 230, 230) !important;
+}
+.widget_input--lg {
+    height: 80px;
+}
+.widget_input--sm {
+    height: 45px;
+}
+input[type="checkbox"] + label {
+    transform: translateY(2px);
+}
+input:focus,
+.widget_input:focus {
+    outline: none;
+    outline: 2px solid map-get($colors, midYellow);
+}
+
+input[type="range"]::after {
+    content: attr(min);
+    position: absolute;
+    top: 20px;
+    left: 0;
+}
+input[type="range"]::before {
+    content: attr(max);
+    position: absolute;
+    top: 20px;
+    right: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: map-get($colors, black);
+    border: 1px solid map-get($colors, lightYellow);
+}
+input[type="range"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: map-get($colors, black);
+    border: 1px solid map-get($colors, lightYellow);
+}
+input[type="range"]::-ms-fill-lower {
+    background: map-get($colors, yellow);
+}
+input[type="range"]::-ms-tooltip {
+    display: block;
+}
+
+*[data-error],
+input.dirty:invalid {
+    outline: 2px solid #efa9b0;
+    position: relative;
+}
+
+input#amount.widget_input::placeholder {
+    color: rgb(211, 211, 211) !important;
+}
+input#purpose.myInput::placeholder {
+    color: #e0e0e0 !important;
+}
+@keyframes AnimateIn {
+    to {
         // border-bottom-width: 100% !important;
         border-bottom: solid 2px rgb(245, 30, 73) !important;
     }
 }
 
-@keyframes FadeIn{
-    to{
+@keyframes FadeIn {
+    to {
         opacity: 100;
         transform: translateY(0);
     }
 }
 
-@media all and (max-width:900px){
-    .vc_form-field{
-        input.is-invalid{
-    &+.invalid-feedback{
-        position: relative;
+@media all and (max-width: 900px) {
+    .vc_form-field {
+        input.is-invalid {
+            & + .invalid-feedback {
+                position: relative;
+            }
+        }
+    }
+
+    input {
+        font-size: 16px !important;
     }
 }
-}
+
+@media all and (max-width: 280px) {
+    input {
+        font-size: 1em !important;
+    }
 }

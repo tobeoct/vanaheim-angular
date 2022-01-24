@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { VCValidators } from '@validators/default.validators';
 import { BehaviorSubject, from, Observable, Subject } from 'rxjs';
 import { delay, filter } from 'rxjs/operators';
-import { Store } from 'src/app/shared/helpers/store';
+import { LoanStore, Store } from 'src/app/shared/helpers/store';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 export class DocumentUploadComponent implements OnInit {
   form: FormGroup;
   docsToUpload: any[] = [];
-  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._store.loanProduct);
+  activeTabSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._loanStore.loanProduct);
   activeTab$: Observable<string> = this.activeTabSubject.asObservable();
   dataSelectionSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   dataSelection$: Observable<any[]> = this.dataSelectionSubject.asObservable();
@@ -43,7 +43,7 @@ export class DocumentUploadComponent implements OnInit {
   get documentControls(): FormControl[] {
     return this.documentArray.controls as FormControl[] || [new FormControl()];
   }
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _loanStore:LoanStore,
     private _validators: VCValidators, private _route: ActivatedRoute, private _cd: ChangeDetectorRef, private _authenticationService: AuthService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -51,11 +51,11 @@ export class DocumentUploadComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._store.titleSubject.next("Document Upload");
-    let loanTypes: any = this._store.loanTypes.find(type => type.title == this._store.loanType);
-    this.requirements = loanTypes?.applyingAs?.find((type: any) => type.title == this._store.applyingAs)?.requirements || [];
+    this._loanStore.titleSubject.next("Document Upload");
+    let loanTypes: any = this._loanStore.loanTypes.find(type => type.title == this._loanStore.loanType);
+    this.requirements = loanTypes?.applyingAs?.find((type: any) => type.title == this._loanStore.applyingAs)?.requirements || [];
 
-    this.documents = this._store.documents as any[];
+    this.documents = this._loanStore.documents as any[];
     this.form = this._fb.group({
 
       documentArray: this._fb.array([...this.buildDocuments()])
@@ -69,7 +69,7 @@ export class DocumentUploadComponent implements OnInit {
     for (let i = 0; i < this.requirements.length; i++) {
       let requirement = this.requirements[i];
       let doc = this.documents.find(c => c.label == requirement.title)
-      groups.push(new FormControl(doc ? doc.name : ''));
+      groups.push(new FormControl(doc ? doc.fileName : ''));
       //, [this._validators.filterFile(this.allowedExtensions)]
     }
     return groups
@@ -80,10 +80,10 @@ export class DocumentUploadComponent implements OnInit {
     let documents: any = [];
     let f = form.value["documentArray"] as any[];
     this.docsToUpload.forEach((doc, i) => {
-      documents.push({ name: doc.name, id: doc.id, label: doc.requirement })
+      documents.push({ fileName: doc.name, id: doc.id, label: doc.requirement })
     });
 
-    this._store.setDocuments(documents);
+    this._loanStore.setDocuments(documents);
     this.onNavigate("preview");
   }
   onNavigate(route: string, params: any = {}): void {

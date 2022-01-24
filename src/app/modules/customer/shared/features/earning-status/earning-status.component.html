@@ -1,0 +1,28 @@
+<div style="text-align: left; width: 100%;" *ngIf="earnings">
+
+    <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+        <small><b>Status of your earnings application</b></small>
+        <small><b>{{index+1}}</b>/{{total}}</small>
+    </div>
+    <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+        <h2 style="font-size: 2em;">{{earnings.amount|currency:"₦":'symbol':'1.0-2' }}</h2>
+        <p><b>{{earnings.duration}} Months</b></p>
+    </div>
+    <div style="width: 100%; margin-top: 10px;">
+        <app-progress [width]="(width$|async)||0" id="{{earnings.requestStatus}}"></app-progress>
+        <div id="statuses" class="d-flex d-flex_horizontal--space-evenly">
+            <small [ngClass]="{'active':earnings.requestStatus=='Pending'}">Pending</small>
+            <small [ngClass]="{'active':earnings.requestStatus=='Processing'}">In Review</small>
+            <small [ngClass]="{'active':earnings.requestStatus=='Active'||earnings.requestStatus=='UpdateRequired'}">
+                <ng-container *ngIf="earnings.requestStatus=='Declined'">Declined</ng-container>
+                <ng-container *ngIf="earnings.requestStatus=='UpdateRequired'">Update Required</ng-container>
+                <ng-container *ngIf="earnings.requestStatus!='Declined'&&earnings.requestStatus!='UpdateRequired'">
+                    Active
+                </ng-container>
+            </small>
+            <small [ngClass]="{'active':earnings.requestStatus=='Active'||earnings.requestStatus=='Declined'}">
+                <ng-container *ngIf="earnings.requestStatus=='Declined'">Declined</ng-container>
+            </small>
+        </div>
+    </div>
+</div>

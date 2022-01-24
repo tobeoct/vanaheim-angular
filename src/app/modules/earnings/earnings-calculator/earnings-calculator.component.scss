@@ -1,0 +1,15 @@
+@import '../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../styles/themes/_theme-dir';
+#earnings-calculator{
+    #disclaimer{
+        // @include color(midGrey);
+        font-weight: map-get($font-weights, "bold");
+        @include marginVertical(false,"px",0,2);
+        font-size: 1.2em;
+    }
+
+  
+   
+}
+
+

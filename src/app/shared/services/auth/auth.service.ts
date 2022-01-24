@@ -7,7 +7,7 @@ import { catchError, debounceTime, map, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/shared/interfaces/user';
 import * as moment from 'moment';
-import { LoginType } from '@models/helpers/enums/logintype';
+import { LoginType } from '@enums/logintype';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 
 @Injectable({

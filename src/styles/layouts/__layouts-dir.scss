@@ -1,6 +1,43 @@
 @import './footer';
 @import './navigation';
 @import './side-navigation';
+
+.theme_margtop--5{margin-top:5vh}
+.theme_margtop--10{margin-top:10vh}
+.theme_padtop--5{padding-top:5vh}
+.theme_padtop--10{padding-top:10vh}
+section {
+   padding-bottom: 15vh;
+   position: fixed;
+   top: 0;
+   left: 0;
+   height: 100vh;
+   overflow: hidden;
+   width: 100vw;
+ }
+.theme_row{position:relative;width:100%;padding:0;margin:0}
+.theme_col-1{width:8.33%;display:inline-block;vertical-align:middle}
+.theme_col-2{width:16.67%;display:inline-block;vertical-align:middle}
+.theme_col-3{width:25%;display:inline-block;vertical-align:middle}
+.theme_col-4{width:33.33%;display:inline-block;vertical-align:middle}
+.theme_col-5{width:41.67%;display:inline-block;vertical-align:middle}
+.theme_col-6{width:50%;display:inline-block;vertical-align:middle}
+.theme_col-7{width:58.33%;display:inline-block;vertical-align:middle}
+.theme_col-8{width:66.67%;display:inline-block;vertical-align:middle}
+.theme_col-9{width:75%;display:inline-block;vertical-align:middle}
+.theme_col-10{width:83.33%;display:inline-block;vertical-align:middle}
+.theme_col-11{width:91.67%;display:inline-block;vertical-align:middle}
+.theme_col-12{width:100%;display:inline-block;vertical-align:middle}
+.theme_flex{display:flex}
+.theme_flex--spacebetween{justify-content:space-between}
+.theme_flex--middle{justify-content:center;align-items:center}
+.theme_inline-block{display:inline-block;vertical-align:top}
+.theme_inline-block--middle{vertical-align:middle}
+.theme-block{display:block}
+
+.theme_scrolling--wrapper{
+   overflow-x:scroll;overflow-y:hidden;white-space:nowrap;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;position:relative}
+
 .grid-padding
 {
    &-2x{
@@ -79,7 +116,22 @@
      padding-bottom: map-get($sizings, "px")*0.75 !important;
   }
 }
+.no-padding{
+   padding: 0 !important;
+&--top{
+    padding-top: 0 !important;
+}
+&--bottom{
+    padding-bottom: 0 !important;
+}
+&--left{
+    padding-left: 0 !important;
+}
+&--right{
+    padding-right: 0 !important;
+}
 
+}
 
 .margin{
   &--x{
@@ -96,6 +148,7 @@
  }
 }
 .no-margin{
+      margin: 0 !important;
    &--top{
        margin-top: 0 !important;
    }
@@ -108,9 +161,7 @@
    &--right{
        margin-right: 0 !important;
    }
-   &--all{
-      margin: 0 !important;
-   }
+  
 }
 @media all and (max-width:1233px){
    .grid-padding-2x{
@@ -118,7 +169,32 @@
    }
   
 }
-
+@media all and (max-width:900px){
+   
+  .remove_flex {
+   display: block !important;
+ }
+ .remove_flex .theme_col-10 {
+   padding: 10px 0 0 0 !important;
+ }
+ .remove_flex input {
+   margin-bottom: 10px;
+ }
+ .theme_col-1,
+  .theme_col-2,
+  .theme_col-3,
+  .theme_col-4,
+  .theme_col-5,
+  .theme_col-6,
+  .theme_col-7,
+  .theme_col-8,
+  .theme_col-9,
+  .theme_col-10,
+  .theme_col-11,
+  .theme_col-12 {
+    width: 100%;
+  }
+}
 @media all and (max-width:768px){
    .grid-padding-3x{
       @include paddingHorizontal(true,"%",0.25,$important:important)

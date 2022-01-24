@@ -1,0 +1,81 @@
+<ng-container *ngIf="earnings">
+    <ng-container
+        *ngIf="(earnings.requestStatus=='Active'||earnings.requestStatus=='TopUpRequest'||earnings.requestStatus=='LiquidationRequest') && earnings.approvedEarnings?.earningStatus!='Paused'">
+        <ng-container *ngIf="(approvedEarnings$|async|get:index) as details">
+            <div id="active-earnings" class="stroke" *ngIf="!details.approvedEarnings?.isClosed" style="width: 100%;">
+                <!-- <small>Active Earnings</small> -->
+                <div class="content--smaller d-flex d-flex_horizontal--space-between d-flex_vertical--center"
+                    id="payouts">
+                    <ng-container *ngIf="earnings.type=='Monthly ROI'">
+                        <div>
+                            <small>Earnings so far this month</small>
+                            <app-countdown [endValue]="details?.approvedEarnings?.nextPayment"
+                                [startingDate]="details?.approvedEarnings?.lastPaymentDate"
+                                [endDate]="details?.approvedEarnings?.nextPaymentDate" [class]="'margin--x'">
+                            </app-countdown>
+                            <div>
+                                <small>Due on <b>{{details?.approvedEarnings?.nextPaymentDate|date:'MMMM
+                                        d
+                                        YYYY'}}</b></small>
+                            </div>
+
+
+                        </div>
+                        <div>
+                            <app-progress-circular
+                                [max]="getMaxDays(details?.approvedEarnings?.lastPaymentDate,details?.approvedEarnings?.nextPaymentDate)"
+                                [daysLeft]="getDaysLeft(details?.approvedEarnings?.nextPaymentDate)">
+                            </app-progress-circular>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="earnings.type=='End Of Tenor'">
+                        <div>
+                            <small>Earnings So Far</small>
+                            <app-countdown size="{{size}}" [endValue]="earnings.payout"
+                                [startingDate]="details?.approvedEarnings?.createdAt" [endDate]="earnings.maturityDate"
+                                [class]="'margin--x'">
+                            </app-countdown>
+                            <small>Due on <b>{{earnings.maturityDate|date:'MMMM d YYYY'}}</b></small>
+                        </div>
+                        <div>
+                            <app-progress-circular
+                                [max]="getMaxDays(details?.approvedEarnings?.createdAt,earnings.maturityDate)"
+                                [daysLeft]="getDaysLeft(earnings.maturityDate)">
+                            </app-progress-circular>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="paid-earnings box-shadow stroke" *ngIf="details.approvedEarnings?.isClosed"
+                style="width: 100%;">
+                <div class="margin--x" id="payout">
+                    <div style="text-align: center;">
+                        <div>
+                            <span style="font-size:2.5em;" class="material-icons">
+                                military_tech
+                            </span>
+                        </div>
+
+                        <h2 class="margin--x" style="font-size: 1.5em;">
+                            {{earnings.payout|currency:"₦":'symbol':'1.0-2' }}</h2>
+                        <p>This earning has matured</p>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="showHistory">
+                <div class="margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                    <a (click)="onNavigate('my/earnings')"><u><b>View History</b></u></a>
+                    <!-- <a (click)="showRepayment(details.approvedEarning.id)"><u><b>View Repayments</b></u></a> -->
+                </div>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="earnings.approvedEarnings?.earningStatus=='Paused'">
+        <div style="width: 100%;" class="margin--x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <h2>Earning Paused</h2>
+            <i class="material-icons">
+                pause
+            </i>
+        </div>
+    </ng-container>
+</ng-container>

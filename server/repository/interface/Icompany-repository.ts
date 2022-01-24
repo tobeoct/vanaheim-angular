@@ -1,4 +1,4 @@
-import { Company } from "@models/company";
+import { Company } from "@entities/company";
 import { IBaseRepository } from "./Ibase-repository";
 
 export interface ICompanyRepository extends IBaseRepository<Company>{

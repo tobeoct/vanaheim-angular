@@ -33,8 +33,11 @@ export default class UtilService {
     const value = parseInt(this.replaceAll(num.toString(), ",", "").replace('NGN', '').replace('₦', '').trim());
     return value;
   }
+  amountToWords(amount: number, append?: string) {
+    return new Number().toWords(amount, append);
+  }
   randPassword = (letters: number, numbers: number, either: number) => {
-    var chars = [
+    let chars = [
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", // letters
       "0123456789", // numbers
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" // either
@@ -56,7 +59,7 @@ export default class UtilService {
       if (this.hasValue(str)) {
         if (str.includes("NGN")) return str;
         str = str.toLowerCase().split(' ');
-        for (var i = 0; i < str.length; i++) {
+        for (let i = 0; i < str.length; i++) {
           str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
         }
         return str.join(' ');
@@ -68,7 +71,7 @@ export default class UtilService {
     }
   }
   myEscape = (value: any) => {
-    var tagsToReplace: any = {
+    let tagsToReplace: any = {
       '&': '&amp;',
       '<': '&lt;',
       '>': '&gt;'
@@ -140,7 +143,67 @@ export default class UtilService {
   }//https://cors-anywhere.herokuapp.com/
 
 }
-  // module.exports={
-  //   createResponse,verifyRequest,validateRequest,hasValue,spamChecker,myEscape,titleCase,currencyFormatter,readResponseAsJSON,validateResponse
-  // }
+// module.exports={
+//   createResponse,verifyRequest,validateRequest,hasValue,spamChecker,myEscape,titleCase,currencyFormatter,readResponseAsJSON,validateResponse
+// }
 
+
+export class Number {
+
+  // System for American Numbering 
+  th_val = ['', 'thousand', 'million', 'billion', 'trillion'];
+
+  dg_val = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  tn_val = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  tw_val = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+  toWords(amount: number, append?: string): string {
+    let s: string = amount.toString();
+    s = s.replace(/[\, ]/g, '');
+    // if (s !== parseFloat(s))
+    //     return 'not a number ';
+    let x_val = s.indexOf('.');
+    if (x_val == -1)
+      x_val = s.length;
+    if (x_val > 15)
+      return 'too big';
+    let n_val = s.split('');
+    let str_val = '';
+    let sk_val = 0;
+    for (let i = 0; i < x_val; i++) {
+      if ((x_val - i) % 3 == 2) {
+        if (n_val[i] == '1') {
+          str_val += this.tn_val[(+n_val[i + 1])] + ' ';
+          i++;
+          sk_val = 1;
+        } else if ((+n_val[i]) != 0) {
+          str_val += this.tw_val[(+n_val[i]) - 2] + ' ';
+          sk_val = 1;
+        }
+      } else if ((+n_val[i]) != 0) {
+        str_val += this.dg_val[(+n_val[i])] + ' ';
+        if ((x_val - i) % 3 == 0)
+          str_val += 'hundred ';
+        sk_val = 1;
+      }
+      if ((x_val - i) % 3 == 1) {
+        if (sk_val)
+          str_val += this.th_val[(x_val - i - 1) / 3] + ' ';
+        sk_val = 0;
+      }
+    }
+    if (x_val != s.length) {
+      let y_val = s.length;
+      str_val += 'point ';
+      for (let i = x_val + 1; i < y_val; i++)
+        str_val += this.dg_val[(+n_val[i])] + ' ';
+    }
+    return `${str_val.replace(/\s+/g, ' ')} ${append}`;
+
+  }
+
+
+  toCurrency = (value: number) => {
+    return Intl.NumberFormat('yo-NG', { style: 'currency', currency: 'NGN' })
+      .format(value)
+  }
+}

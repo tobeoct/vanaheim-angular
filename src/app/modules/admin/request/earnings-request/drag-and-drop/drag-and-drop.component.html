@@ -1,0 +1,130 @@
+<div class="dd" cdkDropListGroup>
+  <ng-container *ngIf="items$|async as items">
+    <div class="dd-container" *ngFor="let item of items" [ngClass]="{'disabled':item.disabled}">
+      <div class="dd-title d-flex d-flex_horizontal--space-between">
+        <p><b>{{item.title}}</b></p>
+        <p>Count:{{item.totalCount}}</p>
+      </div>
+
+      <div cdkDropList [cdkDropListData]="item.data" class="dd-list {{item.title}}" (cdkDropListDropped)="drop($event)">
+        <div (click)="select({id:data.id,indicator:item.indicator})" class="dd-box items" id="{{data.id}}"
+          *ngFor="let data of item.data" cdkDrag>
+          <div class="dd-box-content">
+            <div style="width: 100%;" class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+              <h3>{{data.name}}</h3>
+              <div class="dot {{item.indicator}}"></div>
+            </div>
+            <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+              <p>{{data.amount|currency:"₦"}}</p>
+              <p>{{data.duration}} Months</p>
+            </div>
+          </div>
+          <div style="margin-top: 5px; padding-right: 5px; padding-left: 5px;"
+            class="d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+            <small>{{data.type}}</small>
+            <small>{{data.requestDate|date:"MMM-dd-yyyy hh:mm:ss"}}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>
+
+
+<ng-container *ngIf="(show$|async)==true">
+  <app-modal [show]="show$|async" (onChange)="closeModal()">
+    <app-modal-header slot="header">
+      <h3>Change Notice</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <p>Are you sure you want to change the status of this loan to
+        <b>{{getStatus((event$|async)?.container?.element?.nativeElement?.classList)}}</b>?
+      </p>
+      <div class="d-flex d-flex_horizontal--space-between">
+        <app-button [class]="'no-margin--bottom widget_button--stroke widget_button--small'" (onClick)="closeModal()">
+          <ng-container slot="button">Cancel</ng-container>
+        </app-button>
+        <app-button [class]="'no-margin--bottom widget_button--small'" (onClick)="confirm()">
+          <ng-container slot="button">Continue</ng-container>
+        </app-button>
+
+      </div>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
+
+
+<ng-container *ngIf="(enterFailure$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeFailureModal()">
+    <app-modal-header slot="header">
+      <h3>Enter Failure Reason</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="fForm" (onSubmit)="onFailure($event)" (errorMessageChange)="onError($event)">
+        <app-input id="failureReason" [control]="failureReason" class="form-control">
+          <label>Reason For Failure</label>
+        </app-input>
+        <div class="vc_form-field margin--2x" style="max-width: 500px;">
+          <label for="mailMessage">Personalised Message</label>
+          <textarea id="mailMessage" placeholder="Enter personalised message" [formControl]="mailMessage"
+            class="form-control">
+
+        </textarea>
+        </div>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="fForm">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
+
+<ng-container *ngIf="(enterStartDate$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeStartDateModal()">
+    <app-modal-header slot="header">
+      <h3>Enter Start Date</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="form" (onSubmit)="onStartDate($event)" (errorMessageChange)="onError($event)">
+        <app-input type="date"  id="startDate" [control]="startDate" class="form-control">
+          <label>Start Date</label>
+        </app-input>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
+
+
+<ng-container *ngIf="(enterSerialNumber$|async) as entered">
+  <app-modal [show]="entered" (onChange)="closeSerialNumber()">
+    <app-modal-header slot="header">
+      <h3>Enter Unique Serial Number e.g 0123456, 123345</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+      <app-form [form]="sform" (onSubmit)="onSerialNumberEntered($event)" (errorMessageChange)="onError($event)">
+        <app-input type="text"  id="serialNumber" [control]="serialNumber" class="form-control">
+          <label>Serial Number</label>
+        </app-input>
+
+        <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="sform">Done</app-button>
+
+
+      </app-form>
+    </app-modal-body>
+  </app-modal>
+
+</ng-container>
+
+

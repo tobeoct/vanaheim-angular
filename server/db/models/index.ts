@@ -10,7 +10,8 @@ const configuration: any = {
     "database": "vanaheim-dev",
     "host": "127.0.0.1",
     "port": 5432,
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "test": {
     "username": "postgres",

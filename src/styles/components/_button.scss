@@ -1,106 +1,204 @@
 
-.text-button{
+
+button {
+    font: inherit;
+  }  
+.text-button {
     @include color(facebook);
     cursor: pointer;
 }
-.widget_button{
+.widget_button {
     @include font(button);
-    @include marginVertical(true,"px",1);
+    @include marginVertical(true, "px", 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    height:60px;
-    width:100%;
-    border:2px solid map-get($colors,  yellow);
-    border-radius:2px;
-    background:transparent;
-    text-align:center;
-    cursor:pointer;
-    
-    position:relative;
-    &.loading{
+    height: 60px;
+    width: 100%;
+    border: 2px solid map-get($colors, yellow);
+    border-radius: 2px;
+    background: transparent;
+    text-align: center;
+    cursor: pointer;
+    color: map-get($colors, black);
+    position: relative;
+    &.loading {
         display: flex;
         pointer-events: none;
         cursor: not-allowed;
-        @include border(2px,solid,lightGrey );
-       @include background(lightGrey ); 
-       @include color(grey );
+        @include border(2px, solid, lightGrey);
+        @include background(lightGrey);
+        @include color(grey);
         // justify-content: space-evenly;
-        .widget_button--loader{
+        .widget_button--loader {
             display: block;
         }
     }
 
-  
-    &--underline{
-        border:0 !important;
-        border-bottom: 2px solid map-get($colors,  yellow) !important;
+    &--underline {
+        border: 0 !important;
+        border-bottom: 2px solid map-get($colors, yellow) !important;
         background: transparent !important;
     }
+
+    &:hover {
+        background: map-get($colors, white) !important;
+        transform: scale(1.05);
+        color: map-get($colors, black) !important;
+    }
+    &:focus, &:active {
+        border: 2px solid map-get($colors, yellow) !important;
+        color: map-get($colors, yellow) !important;
+        outline: none !important;
+    }
+    &--info {
+        @include flex(true, center);
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+        border: 0.5px solid map-get($colors, grey);
+    }
+
+    &--small {
+        @include flex(true, center);
+        @include paddingHorizontal(true, "px", 0.25, $important: important);
+        @include font(text);
+        font-weight: map-get($font-weights, "bold");
+        height: map-get($sizings, "px") !important;
+        width: auto;
+        margin: 0;
+    }
+
+    &--medium {
+        height: map-get($sizings, "px") * 1.5;
+    }
+    &--fill {
+        background: map-get($colors, yellow) !important;
+        color: map-get($colors, black) !important;
+        &.widget_button--secondary {
+            background: map-get($colors, lightGrey) !important;
+            @include border(2px, solid, lightGrey);
+        }
+        &:hover {
+            background: map-get($colors, white) !important;
+        }
+        &:focus {
+            color: map-get($colors, black) !important;
+        }
+    }
+    &--stroke {
+        background: transparent;
+        border: 2px solid #e0e0e0;
+        transition: ease-in-out 0.3s;
+
+        &:hover,
+        &:focus {
+            background: map-get($colors, black);
+            border: 2px solid map-get($colors, black);
+            color: map-get($colors, yellow);
+        }
+    }
+    &--rounded {
+        height: 60px;
+        width: 60px;
+        border-radius: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        margin: 10px auto;
+        background: transparent;
+        border: 2px solid #e0e0e0;
+    }
+
+    &--icon {
+        display: flex;
+        cursor: pointer;
+        .icon {
+            margin-right: 5px;
+            width: map-get($sizings, "px") * 0.6667;
+            height: map-get($sizings, "px") * 0.6667;
+        }
+    }
+    &--file {
+        font-size: 0.9em;
+        text-transform: none;
+        margin: 0;
+        font-weight: 400;
+        border-color: #6b6b6b;
+        padding: 2%;
+        width: auto;
+        height: auto;
+    }
+
+    &:disabled {
+        border-color: map-get($colors, lightGrey);
+        background: map-get($colors, lightGrey);
+        color: map-get($colors, grey);
+    }
+    .widget_button--loader {
+        width: 20px;
+        margin-left: 15px;
+        display: none;
+        transform: translateY(2px);
+    }
 }
-.widget_button--icon{
+// .widget_button
+// .widget_button .widget_button--loader{
+//     width:20px;margin-left:15px;display:none;transform:translateY(2px)
+// }
+// .widget_button.widget_button--fill{
+//     background: map-get($colors,  yellow) !important; color: map-get($colors,  black) !important;
+//     &.widget_button--secondary{
+//         background: map-get($colors, lightGrey) !important;
+//         @include border(2px,solid,lightGrey );
+//        }
+//     &:hover{
+//         background: map-get($colors,  white) !important;
+//     }
+//     &:focus{
+
+//         color: map-get($colors,  black) !important;
+//     }
+// }
+// .file_btn{ font-size: 0.9em; text-transform: none; margin: 0; font-weight: 400; border-color: #6B6B6B; padding: 2%; width: auto; height: auto; }
+
+.main_form .widget_button::after {
+    position: absolute;
+    left: 0;
+    content: "<";
+    height: 100%;
+    width: 40px;
     display: flex;
-    cursor: pointer;
-    .icon{
-        margin-right: 5px;
-        width:map-get($sizings, "px") *0.6667;
-        height:map-get($sizings, "px") *0.6667;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-family: "Bruum FY", sans-serif;
+    background: map-get($colors, black);
+    color: #efe7cb;
+    top: 0;
+    display: none;
+}
+
+
+@media all and (max-width:1233px){
+.widget_button--stroke {
+    margin: 30px auto !important;
+    width: 95%;
+    font-size: 0.8em !important;
+    height: 60px !important;
+    padding: 0 5% 0 5% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center;
+  }
+}
+@media all and (max-width:900px){
+    .widget_button,
+    .form_group {
+      max-width: 100% !important;
     }
-}
-.widget_button .widget_button--loader{
-    width:20px;margin-left:15px;display:none;transform:translateY(2px)
-}
-.widget_button.widget_button--fill{
-    background: map-get($colors,  yellow) !important; color: map-get($colors,  black) !important;
-    &.widget_button--secondary{
-        background: map-get($colors, lightGrey) !important;
-        @include border(2px,solid,lightGrey );
-       }
-    &:hover{
-        background: map-get($colors,  white) !important;
+    .widget_button:hover {
+        color: map-get($colors, yellow) !important;
     }
-    &:focus{
-        
-        color: map-get($colors,  black) !important;
-    }
-}
-.file_btn{ font-size: 0.9em; text-transform: none; margin: 0; font-weight: 400; border-color: #6B6B6B; padding: 2%; width: auto; height: auto; }
-.widget_button:hover{transform:scale(1.05)}
-.widget_button:focus{border:2px solid map-get($colors,  yellow)!important;color:map-get($colors,  yellow)!important;outline:none!important}
-.main_form .widget_button::after{
-    position:absolute;
-    left:0;
-    content:'<';
-    height:100%;
-    width:40px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:700;
-    font-family:"Bruum FY",sans-serif;
-    background:map-get($colors,  black);
-    color:#EFE7CB;
-    top:0;
-    display:none
-}
-.widget_button--info{
-    @include flex(true,center);
-    width: 20px;
-    height: 20px;
-    border-radius: 20px;
-    border:0.5px solid map-get($colors, grey );
-}
-.widget_button--stroke{background:transparent;border:2px solid #E0E0E0;transition:ease-in-out 0.3s}
-.widget_button--stroke:hover,.widget_button--stroke:focus{background:map-get($colors,  black);border:2px solid map-get($colors,  black);color:map-get($colors,  yellow)}
-.widget_button--rounded{height:60px;width:60px;border-radius:60px;display:flex;justify-content:center;align-items:center;padding:5px;margin:10px auto;background:transparent;border:2px solid #E0E0E0}
-.tabs .widget_button{display:flex;justify-content:center;align-items:center;min-height:60px}
-.tabs .widget_button.active{background:map-get($colors,  black);color:map-get($colors,  yellow);font-weight:700!important;outline:none!important;border-color:map-get($colors,  black)}
-.widget_button--small{@include flex(true,center); @include paddingHorizontal(true,"px",0.25, $important: important); @include font(text); font-weight: map-get($font-weights, "bold" ); height:map-get($sizings, "px") !important;width:auto;margin:0;}
-.widget_button:disabled{
-    border-color: map-get($colors, lightGrey );
-    background: map-get($colors, lightGrey ); 
-    color: map-get($colors, grey );
-}
-.widget_button--medium{
-    height: map-get($sizings, "px") * 1.5;
 }

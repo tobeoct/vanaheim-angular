@@ -1,0 +1,8 @@
+@import '../../../../../styles/abstracts/_abstracts-dir';
+@import '../../../../../styles/themes/_theme-dir';
+#loan-history {
+    @include marginVertical(false, "px", 1, 0);
+    padding-bottom: 5%;
+    overflow: hidden;
+    overflow-x: auto;
+}

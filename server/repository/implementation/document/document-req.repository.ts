@@ -1,5 +1,5 @@
 import { IDocumentRequirementRepository } from "@repository/interface/document/Idocument-req-repository";
-import { DocumentRequirement } from "@models/document-requirement";
+import { DocumentRequirement } from "@entities/document-requirement";
 import { BaseRepository } from "../base-repository";
 
 

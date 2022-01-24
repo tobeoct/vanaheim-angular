@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChildren, Input, OnInit, QueryList } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList } from '@angular/core';
 import { Observable } from 'rxjs';
 import { startWith, delay, map } from 'rxjs/operators';
 import { TabComponent } from './tab/tab.component';
@@ -9,9 +9,11 @@ import { TabComponent } from './tab/tab.component';
   styleUrls: ['./tab-container.component.scss']
 })
 export class TabContainerComponent implements OnInit, AfterContentInit {
-  @ContentChildren(TabComponent) contentChildren : QueryList<TabComponent>;
+  @ContentChildren(TabComponent) contentChildren: QueryList<TabComponent>;
   @Input()
-  tabHeaders:any[];
+  tabHeaders: any[];
+  @Output()
+  onClick = new EventEmitter<any>();
   @ContentChildren(TabComponent)
   tabs: QueryList<TabComponent>;
 
@@ -19,7 +21,7 @@ export class TabContainerComponent implements OnInit, AfterContentInit {
 
   activeTab: TabComponent;
 
-  constructor() {}
+  constructor() { }
   ngOnInit(): void {
   }
 
@@ -45,7 +47,7 @@ export class TabContainerComponent implements OnInit, AfterContentInit {
     if (this.activeTab === tabItem) {
       return;
     }
-
+    this.headerClicked(tabItem.label);
     if (this.activeTab) {
       this.activeTab.isActive = false;
     }
@@ -55,5 +57,7 @@ export class TabContainerComponent implements OnInit, AfterContentInit {
     tabItem.isActive = true;
   }
 
-
+  headerClicked(heading: string) {
+    this.onClick.emit(heading);
+  }
 }

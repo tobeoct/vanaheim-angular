@@ -1,11 +1,10 @@
-import { BaseEntity } from "server/entities/base-entity";
-import { Collateral } from "server/entities/collateral";
-import { Company } from "server/entities/company";
-import { Customer } from "server/entities/customer";
-import { Employment } from "server/entities/employment";
-import { NOK } from "server/entities/nok";
-import { Shareholder } from "server/entities/shareholder";
-import { LoanType } from "./loan-type";
+import { BaseEntity } from "../base-entity";
+import { Collateral } from "../collateral";
+import { Company } from "../company";
+import { Employment } from "../employment";
+import { NOK } from "../nok";
+import { Shareholder } from "../shareholder";
+
 
 export class LoanTypeRequirements extends BaseEntity{
     

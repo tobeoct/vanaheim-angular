@@ -1,6 +1,6 @@
 
 import { IPushNotificationRepository } from "@repository/interface/Ipushnotification-repository";
-import { PushNotification } from "@models/pushnotification";
+import { PushNotification } from "@entities/pushnotification";
 import { BaseRepository } from "./base-repository";
 
  export class PushNotificationRepository extends BaseRepository<PushNotification> implements IPushNotificationRepository{

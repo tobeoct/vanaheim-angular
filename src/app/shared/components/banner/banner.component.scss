@@ -7,16 +7,23 @@
     // @include paddingHorizontal(true,"px",2);
     visibility: hidden;
     width: 100%;
-    margin: auto;
+    position: absolute;
+    // margin: auto;
     @include color(black);
     text-align: left;
     border-radius: $border-radius;
     overflow: hidden;
     // position: absolute;
     z-index: 99999;
-    top: 0;
     transition: ease-in-out 0.3s;
     height: map-get($sizings, "px") * 2;
+    &.top{
+        top: 0;
+    }
+    &.bottom{
+        position: fixed;
+        bottom: 0;
+    }
     &_button {
         // width: 80px;
         margin-left: 10px;

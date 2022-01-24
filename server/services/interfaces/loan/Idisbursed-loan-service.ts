@@ -1,4 +1,4 @@
-import { DisbursedLoan } from "@models/loan/disbursed-loan";
+import { DisbursedLoan } from "@entities/loan/disbursed-loan";
 
 export interface IDisbursedLoanService{
     getDisbursedLoanById:(loanRequestID:number)=>Promise<any>

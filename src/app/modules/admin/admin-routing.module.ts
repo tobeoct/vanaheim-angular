@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminGuard } from 'src/app/shared/guards/admin.guard';
 import { AuthComponent } from '../auth/auth.component';
+import { EarningsComponent } from './earnings/earnings.component';
 import { NotifyComponent } from './notify/notify.component';
 import { RequestComponent } from './request/request.component';
 const AUTH_ROUTES: Routes = [
@@ -9,10 +10,11 @@ const AUTH_ROUTES: Routes = [
 ]
 
 const routes: Routes = [
-{path:"requests", component:RequestComponent,canActivate:[ AdminGuard]},
+  {path:"earnings", component:EarningsComponent,canActivate:[ AdminGuard]},
+{path:"loans", component:RequestComponent,canActivate:[ AdminGuard]},
 {path:"notify", component:NotifyComponent},// canActivate:[ AdminGuard]},
 {path:"auth", component: AuthComponent, children: AUTH_ROUTES },
-{path:"**", redirectTo:"requests"},
+{path:"**", redirectTo:"loans"},
 ];
 
 @NgModule({

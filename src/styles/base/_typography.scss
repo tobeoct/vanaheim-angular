@@ -1,1 +1,204 @@
-// h1-6, p, a, blockquote, 
+// h1-6, p, a, blockquote,
+
+//
+// @font-face{font-family:'Sofia Pro';src:url(../assets/fonts/SofiaProLight.otf);font-weight:300;font-display:swap}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url(../../assets/fonts/SofiaProRegular.otf);
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url(../../assets/fonts/SofiaProMedium.otf);
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url(../../assets/fonts/SofiaProSemiBold.otf);
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url(../../assets/fonts/SofiaProBold.otf);
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Pro";
+  src: url(../../assets/fonts/SofiaProBlack.otf);
+  font-weight: 800;
+  font-display: swap;
+}
+
+/* @font-face{font-family:Graphik;src:url(../../assets/fonts/GraphikRegular.otf);font-weight:400;font-display:swap}
+  @font-face{font-family:Graphik;src:url(../../assets/fonts/GraphikLight.otf);font-weight:300;font-display:swap}
+  @font-face{font-family:Graphik;src:url(../../assets/fonts/GraphikMedium.otf);font-weight:500;font-display:swap}
+  @font-face{font-family:Graphik;src:url(../../assets/fonts/GraphikSemibold.otf);font-weight:600;font-display:swap}
+  @font-face{font-family:Graphik;src:url(../../assets/fonts/GraphikBold.otf);font-weight:700;font-display:swap}
+   */
+@font-face {
+  font-family: "Bruum FY";
+  src: url(../../assets/fonts/BruumFY-Regular.otf);
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bruum FY";
+  src: url(../../assets/fonts/BruumFY-Bold.otf);
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bruum FY";
+  src: url(../../assets/fonts/BruumFY-Bold.otf);
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bruum FY";
+  src: url(../../assets/fonts/BruumFY-Bold.otf);
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url(../../assets/fonts/Manrope/Manrope-Light.ttf);
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url(../../assets/fonts/Manrope/Manrope-Regular.ttf);
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url(../../assets/fonts/Manrope/Manrope-Medium.ttf);
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url(../../assets/fonts/Manrope/Manrope-SemiBold.ttf);
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url(../../assets/fonts/Manrope/Manrope-Bold.ttf);
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url(../../assets/fonts/Manrope/Manrope-ExtraBold.ttf);
+  font-weight: 800;
+  font-display: swap;
+}
+
+small {
+  @include font(small);
+}
+
+b {
+  font-weight: map-get($font-weights, "bold");
+}
+
+p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+li p {
+  text-overflow: ellipsis !important;
+}
+.theme_text--anchor {
+  text-decoration: underline;
+  font-weight: 700;
+}
+.theme_text--alt {
+  font-family: "Bruum FY", sans-serif !important;
+}
+.theme_text--heading,
+h4 {
+  font-weight: 700;
+}
+.theme_text--heading1,
+h1 {
+  font-family: "Bruum FY", sans-serif !important;
+  font-size: 2.5em !important;
+  font-weight: 700 !important;
+  line-height: 1.2em;
+}
+.theme_text--heading1mid {
+  font-family: "Bruum FY", sans-serif !important;
+  font-size: 2.5em !important;
+  font-weight: 700 !important;
+  line-height: 1.2em !important;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.theme_text--heading2lg,
+h2 {
+  font-family: "Bruum FY", sans-serif;
+  font-size: 2em;
+  font-weight: 700;
+}
+.theme_text--heading2,
+h2 {
+  font-family: "Bruum FY", sans-serif;
+  font-size: 1.429em;
+  font-weight: 700;
+}
+
+.theme_text--heading3,
+h3 {
+  @include font(heading);
+  line-height: 126%;
+}
+
+.theme_text--title {
+  font-size: 20px;
+  line-height: 27px;
+  text-transform: uppercase;
+}
+.theme_text--bold {
+  font-weight: 700 !important;
+}
+.theme_text--upper {
+  text-transform: uppercase;
+}
+a,
+a:focus,
+a:visited,
+a:active {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+h2 {
+  line-height: 1.2;
+}
+.theme_anchor__disabled {
+  pointer-events: none;
+}
+.theme_text {
+  font-family: "Manrope", "Open Sans", sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 12px !important;
+  line-height: 1.5em !important;
+  word-wrap: none !important;
+}

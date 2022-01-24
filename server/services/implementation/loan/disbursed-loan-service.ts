@@ -1,12 +1,10 @@
-import { DisbursedLoan } from "@models/loan/disbursed-loan";
-import { LoanRequest } from "@models/loan/loan-request";
-import { LoanRequestLog } from "@models/loan/loan-request-log";
+import { DisbursedLoan } from "@entities/loan/disbursed-loan";
+import { LoanRequest } from "@entities/loan/loan-request";
 import { IRepaymentRepository } from "@repository/interface/Irepayment-repository";
 import { IDisbursedLoanRepository } from "@repository/interface/loan/Idisbursed-loan-repository";
 import { ILoanRequestLogRepository } from "@repository/interface/loan/Iloan-request-log-repository";
 import { ILoanRequestRepository } from "@repository/interface/loan/Iloan-request-repository";
 import { IDisbursedLoanService } from "@services/interfaces/loan/Idisbursed-loan-service";
-import moment = require("moment");
 
 export class DisbursedLoanService implements IDisbursedLoanService {
   constructor(private _disbursedLoanRepository: IDisbursedLoanRepository, private _repaymentRepository: IRepaymentRepository, private _loanRequestRepository: ILoanRequestRepository, private _loanRequestLogRepository: ILoanRequestLogRepository) {
@@ -26,7 +24,7 @@ export class DisbursedLoanService implements IDisbursedLoanService {
       reject(err);
     }
   })
-  private getDisbursedLoans = (loanRequestID: number) => new Promise<DisbursedLoan[]>(async (resolve, reject) => {
+  private getDisbursedLoans = (loanRequestID: number) => new Promise<DisbursedLoan[]>(async (resolve) => {
     let disbursedLoans = await this._disbursedLoanRepository.getByRequestID(loanRequestID);
     resolve(disbursedLoans);
 
@@ -48,7 +46,7 @@ export class DisbursedLoanService implements IDisbursedLoanService {
     }
   })
 
-  getDisbursedLoanWithRepayment = (loanRequestID: number) => new Promise<any>(async (resolve, reject) => {
+  getDisbursedLoanWithRepayment = (loanRequestID: number) => new Promise<any>(async (resolve) => {
     try {
       let disbursedLoan = await this.getDisbursedLoan(loanRequestID);
       if (!disbursedLoan) resolve({ status: "No disbursed loan available" })

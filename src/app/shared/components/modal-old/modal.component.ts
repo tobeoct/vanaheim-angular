@@ -8,7 +8,7 @@ import { AssetPath } from 'src/app/shared/constants/variables';
 export class ModalOldComponent implements OnInit {
 
   @Input() show:boolean = false;
-  @Input() type:string = 'investment-indication';
+  @Input() type:string = 'earning-indication';
   assetPaths:AssetPath = new AssetPath;
   constructor() { }
 

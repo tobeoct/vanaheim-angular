@@ -1,0 +1,38 @@
+#calculator_container input::placeholder {
+  color: map-get($colors, white) !important;
+}
+
+.calculator_container {
+  padding-bottom: 20px;
+  height: 520px;
+  box-sizing: content-box;
+}
+
+@media all and (max-width: 1233px) {
+  .calculator_container {
+    height: auto;
+  }
+  #calculator_container .dropdown .list {
+    width: 100%;
+    overflow: auto;
+  }
+  .calculator {
+    background: transparent !important;
+    display: block !important;
+    width: 66.67% !important;
+  }
+  
+  .calculator .theme_col-7 {
+    width: 100%;
+  }
+}
+
+@media all and (max-width: 900px) {
+  .calculator {
+    width: 100% !important;
+  }
+  .calculator .theme_col-7 {
+    width: 100%;
+    padding-bottom: 0px !important;
+  }
+}
