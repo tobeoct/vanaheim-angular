@@ -8,12 +8,11 @@ import { DocumentUpload } from 'src/app/modules/loan/shared/document-upload/docu
 import { Document } from '@entities/document';
 import { LoanRequest } from 'server/entities/loan/loan-request';
 import { IDocumentRepository } from '@repository/interface/document/Idocument-repository';
-import AppConfig, { Environment } from 'server/config';
+import AppConfig from 'server/config';
 import EmailService, { EmailType } from '@services/implementation/common/email-service';
 import { TemplateService } from '@services/implementation/common/template-service';
 import { VanaheimBodyRequest, VanaheimQueryRequest } from '@models/express/request';
 import { VanaheimTypedResponse } from '@models/express/response';
-import { response } from 'express';
 @route('/api/document')
 export default class DocumentController {
 
