@@ -4,7 +4,8 @@ import { environment } from '@environments/environment';
 import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
 import { catchError, distinctUntilChanged, filter, map, mergeMap, shareReplay, switchMap, tap } from 'rxjs/operators';
-const POLLING_INTERVAL=30000;
+import { Utility } from '../../helpers/utility.service';
+const POLLING_INTERVAL = 30000;
 export enum EarningType {
   EndOfTenor = "End Of Tenor",
   Monthly = "Monthly ROI"
@@ -13,11 +14,11 @@ export enum EarningType {
   providedIn: 'root'
 })
 export class AdminEarningService {
-  containers: any[] = [{ title: "NEW", indicator: "new", totalCount: 0, data: [] }, 
+  containers: any[] = [{ title: "NEW", indicator: "new", totalCount: 0, data: [] },
   { title: "PROCESSING", indicator: "processing", totalCount: 0, data: [] },
   //  { title: "DECLINED", indicator: "declined", totalCount: 0, data: [] }, 
-   { title: "ACTIVE", indicator: "active", totalCount: 0, data: [] }, 
-   { title: "MATURED", indicator: "matured", disabled: true, totalCount: 0, data: [] }]
+  { title: "ACTIVE", indicator: "active", totalCount: 0, data: [] },
+  { title: "MATURED", indicator: "matured", disabled: true, totalCount: 0, data: [] }]
   updateSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   update$: Observable<any> = this.updateSubject.asObservable();
   requestsSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
@@ -44,7 +45,7 @@ export class AdminEarningService {
 
   // earningLogDetailsSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
   earningLogDetails$: Observable<any>; //= this.earningLogDetailsSubject.asObservable();
-  constructor(private _http: HttpClient) {
+  constructor(private _http: HttpClient, private _utils: Utility) {
     this.pollRequests()
     this.earningDetails$ = this.selectedId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getEarningDetails(id)), shareReplay(1),
       map(value => ({ id: this.selectedIdSubject.value, ...value })),
@@ -61,7 +62,7 @@ export class AdminEarningService {
         map(value => ({ id: this.selectedIdSubject.value, ...value })),
       )//.subscribe(c=>this.earningLogDetailsSubject.next(c));
 
-      this.allEarningDetails$ = this.selectedId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getAllEarningDetails()), shareReplay(1),
+    this.allEarningDetails$ = this.selectedId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getAllEarningDetails()), shareReplay(1),
       map(value => ({ id: this.selectedIdSubject.value, ...value })),
       catchError(err => {
         console.error(err);
@@ -69,7 +70,7 @@ export class AdminEarningService {
       })
     );
     this.allEarningLogDetails$ =
-      this.selectedLogId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getAllEarningDetails( "log").pipe(catchError(err => {
+      this.selectedLogId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getAllEarningDetails("log").pipe(catchError(err => {
         console.error(err);
         return EMPTY;
       }))),
@@ -90,10 +91,10 @@ export class AdminEarningService {
           // const declinedRequests = requests.filter((c: any) => c.requestStatus == "Declined");
           const activeRequests = requests.filter((c: any) => c.requestStatus == "Active");
           const maturedRequests = requests.filter((c: any) => c.requestStatus == "Matured");
-          return [{ title: "NEW", indicator: "new", totalCount: newRequests.length, data: newRequests }, 
-          { title: "PROCESSING", indicator: "processing", totalCount: procRequests.length, data: procRequests }, 
+          return [{ title: "NEW", indicator: "new", totalCount: newRequests.length, data: newRequests },
+          { title: "PROCESSING", indicator: "processing", totalCount: procRequests.length, data: procRequests },
           // { title: "DECLINED", indicator: "declined", totalCount: declinedRequests.length, data: declinedRequests }, 
-          { title: "ACTIVE", indicator: "active", totalCount: activeRequests.length, data:activeRequests }, 
+          { title: "ACTIVE", indicator: "active", totalCount: activeRequests.length, data: activeRequests },
           { title: "MATURED", indicator: "matured", disabled: true, totalCount: maturedRequests.length, data: maturedRequests }];
         }),
         catchError(err => {
@@ -101,7 +102,7 @@ export class AdminEarningService {
           return EMPTY;
         })
       );
-  
+
 
     this.requests$ = combineLatest([this.filteredRequests$, this.update$]).pipe(map(([requests, updated]) => {
       if (!requests || Object.keys(requests).length == 0) return this.containers;
@@ -123,8 +124,8 @@ export class AdminEarningService {
 
   }
 
-  pollRequests(){
-    timer(0, POLLING_INTERVAL).subscribe(c=>{
+  pollRequests() {
+    timer(0, POLLING_INTERVAL).subscribe(c => {
       this.searchSubject.next({ from: moment().startOf("day").subtract(1, "month").toDate(), to: moment().endOf("day").toDate() })
       this.selectedIdSubject.next(0)
     })
@@ -135,7 +136,7 @@ export class AdminEarningService {
   }
 
   getStatus(classList: any) {
-    let value = classList.value??classList;
+    let value = classList.value ?? classList;
     if (value.toLowerCase().includes("active")) return "Active";
     if (value.toLowerCase().includes("processing")) return "Processing";
     // if (value.toLowerCase().includes("update")) return "UpdateRequired";
@@ -152,8 +153,8 @@ export class AdminEarningService {
         return {};
       }));
   }
-  updateStatus = (id: number, status: string, failureReason:string,message:string,startDate:any,serialNumber:any) => {
-    return this._http.post<any>(`${environment.apiUrl}/earnings/updateStatus`, { id, status, failureReason,message,startDate,serialNumber })
+  updateStatus = (id: number, status: string, failureReason: string, message: string, startDate: any, serialNumber: any) => {
+    return this._http.post<any>(`${environment.apiUrl}/earnings/updateStatus`, { id, status, failureReason, message, startDate, serialNumber })
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;
@@ -183,18 +184,25 @@ export class AdminEarningService {
     this.selectedLogIdSubject.next(id);
   }
   getEarningDetails = (id: number, type?: string) => {
-    if(!id) return EMPTY;
+    if (!id) return EMPTY;
+    this._utils.toggleLoading(true);
     const url = !type ? `${environment.apiUrl}/earnings/getEarningDetails?id=${id}` : `${environment.apiUrl}/earnings/getEarningLogDetails?id=${id}`;
     return this._http.get<any>(url)
       .pipe(map(response => {
+        this._utils.toggleLoading(false);
         if (response && response.status == true) {
           return response.response;
         }
         return {};
+      }), catchError(err => {
+
+        this._utils.toggleLoading(false);
+        console.error(err);
+        return EMPTY;
       }));
   }
-  getTopUps = (status:any='Pending') => {
-    const url =  `${environment.apiUrl}/earnings/getTopUps?status=${status}` ;
+  getTopUps = (status: any = 'Pending') => {
+    const url = `${environment.apiUrl}/earnings/getTopUps?status=${status}`;
     return timer(0, POLLING_INTERVAL)
       .pipe(switchMap(() => this._http.get<any>(url)
         .pipe(map(response => {
@@ -207,15 +215,15 @@ export class AdminEarningService {
           return EMPTY;
         }))),
         // shareReplay({bufferSize:1, refCount:true})
-         catchError(err => {
+        catchError(err => {
           console.error(err);
           return EMPTY;
         })
       )
   }
-  getLiquidations = (status?:any) => {
-    const url = !status? `${environment.apiUrl}/earnings/getLiquidations`: `${environment.apiUrl}/earnings/getLiquidations?status=${status}` ;
-      return timer(0, POLLING_INTERVAL)
+  getLiquidations = (status?: any) => {
+    const url = !status ? `${environment.apiUrl}/earnings/getLiquidations` : `${environment.apiUrl}/earnings/getLiquidations?status=${status}`;
+    return timer(0, POLLING_INTERVAL)
       .pipe(switchMap(() => this._http.get<any>(url)
         .pipe(map(response => {
           if (response && response.status == true) {
@@ -227,7 +235,7 @@ export class AdminEarningService {
           return EMPTY;
         }))),
         // shareReplay({bufferSize:1, refCount:true})
-         catchError(err => {
+        catchError(err => {
           console.error(err);
           return EMPTY;
         })
@@ -236,8 +244,8 @@ export class AdminEarningService {
 
 
   topUp = (topUpId: number) => {
-    const url =  `${environment.apiUrl}/earnings/topUp?id=${topUpId}`;
-    return this._http.patch<any>(url,null)
+    const url = `${environment.apiUrl}/earnings/topUp?id=${topUpId}`;
+    return this._http.patch<any>(url, null)
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;
@@ -246,8 +254,8 @@ export class AdminEarningService {
       }));
   }
   liquidate = (topUpId: number, status?: string) => {
-    const url =  `${environment.apiUrl}/earnings/liquidate?id=${topUpId}&status=${status}`;
-    return this._http.patch<any>(url,null)
+    const url = `${environment.apiUrl}/earnings/liquidate?id=${topUpId}&status=${status}`;
+    return this._http.patch<any>(url, null)
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;

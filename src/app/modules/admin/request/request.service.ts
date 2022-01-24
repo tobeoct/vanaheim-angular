@@ -4,6 +4,7 @@ import { environment } from '@environments/environment';
 import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, Observable } from 'rxjs';
 import { catchError, combineAll, distinctUntilChanged, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
+import { Utility } from 'src/app/shared/helpers/utility.service';
 import { DisbursedLoanService } from 'src/app/shared/services/loan/disbursedLoan/disbursed-loan.service';
 
 @Injectable({
@@ -33,7 +34,7 @@ export class RequestService {
 
   // loanLogDetailsSubject:BehaviorSubject<any> = new BehaviorSubject<any>({});
   loanLogDetails$: Observable<any>; //= this.loanLogDetailsSubject.asObservable();
-  constructor(private _http: HttpClient, private _disbursedLoanService: DisbursedLoanService) {
+  constructor(private _http: HttpClient, private _disbursedLoanService: DisbursedLoanService, private _utils: Utility) {
     this.loanDetails$ = this.selectedId$.pipe(distinctUntilChanged(), mergeMap((id) => this.getLoanDetails(id)), shareReplay(1),
       map(value => ({ id: this.selectedIdSubject.value, ...value })),
       catchError(err => {
@@ -107,7 +108,7 @@ export class RequestService {
   }
 
   getStatus(classList: any) {
-    let value = classList.value??classList;
+    let value = classList.value ?? classList;
     if (value.toLowerCase().includes("approved")) return "Approved";
     if (value.toLowerCase().includes("processing")) return "Processing";
     if (value.toLowerCase().includes("update")) return "UpdateRequired";
@@ -124,8 +125,8 @@ export class RequestService {
         return {};
       }));
   }
-  updateStatus = (id: number, status: string, failureReason:string,message:string,serialNumber?:string) => {
-    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason,message,serialNumber })
+  updateStatus = (id: number, status: string, failureReason: string, message: string, serialNumber?: string) => {
+    return this._http.post<any>(`${environment.apiUrl}/loans/updateStatus`, { id, status, failureReason, message, serialNumber })
       .pipe(map(response => {
         if (response && response.status == true) {
           return response.response;
@@ -156,15 +157,21 @@ export class RequestService {
   }
   getLoanDetails = (id: number, type?: string) => {
 
-    console.log(id)
-    if(id==0) return EMPTY;
+    if (id == 0) return EMPTY;
+    this._utils.toggleLoading(true);
     const url = !type ? `${environment.apiUrl}/loans/getLoanDetails?id=${id}` : `${environment.apiUrl}/loans/getLoanLogDetails?id=${id}`;
     return this._http.get<any>(url)
       .pipe(map(response => {
+        this._utils.toggleLoading(false);
         if (response && response.status == true) {
           return response.response;
         }
         return {};
+      }), catchError(err => {
+
+        this._utils.toggleLoading(false);
+        console.error(err);
+        return EMPTY;
       }));
   }
 }

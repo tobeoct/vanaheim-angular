@@ -1,4 +1,5 @@
-import AppConfig, { Environment } from "server/config";
+import { Environment } from "@enums/environment";
+import AppConfig from "server/config";
 import { promisify } from "util";
 const redis = require('redis');
 const connectRedis = require('connect-redis');
@@ -17,7 +18,7 @@ export default class RedisMiddleware {
     private connect = () => {
         const connector = connectRedis(this.expressSession)
         //Configure redis client
-        let config = this._appConfig.environment ==Environment.production ? { url: process.env.REDIS_URL } :
+        let config = this._appConfig.environment ==Environment.Production ? { url: process.env.REDIS_URL } :
             {
                 host: 'localhost',
                 port: 6379

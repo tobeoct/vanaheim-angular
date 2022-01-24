@@ -218,7 +218,7 @@ export default class EarningsController {
             await this._earningRequestService.update(earningRequest);
             await this._earningRequestLogService.update(earningRequestLog);
 
-            await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_TOPUP_NOTIFICATION(customer?.firstName, earningRequest.code, this._utils.currencyFormatter(+amount)), toCustomer: true })
+            await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_TOPUP_NOTIFICATION(customer?.firstName, earningRequest.requestId, this._utils.currencyFormatter(+amount)), toCustomer: true })
 
             await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a top up on an earning with ID, ${earningRequest.code}`, toCustomer: false });
 
@@ -330,7 +330,7 @@ export default class EarningsController {
             await this._earningRequestService.update(earningRequest);
             await this._earningRequestLogService.update(earningRequestLog);
             // await this._approvedEarningRepository.update(approvedEarning);
-            await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_LIQUIDATION_NOTIFICATION(customer?.firstName, earningRequest.code), toCustomer: true })
+            await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_LIQUIDATION_NOTIFICATION(customer?.firstName, earningRequest.requestId), toCustomer: true })
 
             await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a liquidation on an earning with ID, ${earningRequest.code}`, toCustomer: false });
             res.statusCode = 200;

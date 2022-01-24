@@ -7,13 +7,12 @@
 // CC_EMAIL:process.env.LOAN_EMAIL,
 // INVESTMENT_EMAIL: process.env.INVESTMENT_EMAIL,
 // SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
+
+import { Environment } from "@enums/environment";
+
 //   };
-export enum Environment{
-  production="production",
-  development="development"
-}
 export default class AppConfig {
-  environment:string;
+  environment:Environment;
   port:string;
   WEBURL:string;
   ADMIN_EMAIL:string;
@@ -32,7 +31,7 @@ SESSION_SECRET_KEY:string;
 JWT_SECRET_KEY:string ;
     constructor() {
 
-      this.environment= process.env.NODE_ENV || 'development'
+      this.environment= (process.env.NODE_ENV || 'development')=='production'?Environment.Production:Environment.Development
       this.port= process.env.PORT ||'4200'
       this.ADMIN_EMAIL=process.env.LOAN_EMAIL||''
       this.OPS_EMAIL=process.env.OPS_EMAIL||process.env.ADMIN_EMAIL||''

@@ -79,7 +79,8 @@
                                 <td>{{row.requestDate | date :'MMMM d, y'}}</td>
                                 <td>{{row.amount|currency:'₦'}}</td>
                                 <td>{{row.duration}} Months</td>
-                                <td>{{row.requestStatus=='Pending'?row.maturityDate:(row.maturityDate| date :'MMMM d, y')}}</td>
+                                <td>{{row.requestStatus=='Pending'?row.maturityDate:(row.maturityDate| date :'MMMM d,
+                                    y')}}</td>
                                 <td>{{row.type}}</td>
                                 <td>
                                     <app-badge [color]="getEarningStatusColor(row.requestStatus)">{{row.requestStatus}}
@@ -88,7 +89,7 @@
                                 <td>
                                     <app-button [class]="'widget_button--small'" (onClick)="selectEarning(row.id)"
                                         fieldClass="no-margin">
-                                        <ng-container slot="button">View Details</ng-container>
+                                        <ng-container slot="button">View</ng-container>
                                     </app-button>
                                 </td>
                             </tr>
@@ -156,7 +157,10 @@
     <app-modal size="large" (onChange)="close()">
         <!-- <ng-container *ngIf="earningDetailsFromDb$|async as earningDetails"> -->
         <ng-container slot="header">
-            <h3>{{(earningDetailsFromDb$|async)?.code}}</h3>
+            <div style="text-align: center;">
+                <p>Earning ID</p>
+                <h3>{{(earningDetailsFromDb$|async)?.code}}</h3>
+            </div>
         </ng-container>
         <ng-container slot="body">
             <ng-container *ngIf="(earningDetailsFromDb$|async) as earningDetails">
@@ -178,7 +182,8 @@
                                     <button type="button" (click)="topUp(earningDetails.earningRequestID)"
                                         class="widget_button widget_button--small widget_button--fill">Top Up</button>
                                 </ng-container>
-                                <div *ngIf="earningDetails?.approvedEarnings?.earningStatus!='Liquidated'" style="margin-left:5px; margin-right:5px;">
+                                <div *ngIf="earningDetails?.approvedEarnings?.earningStatus!='Liquidated'"
+                                    style="margin-left:5px; margin-right:5px;">
 
                                     <button type="button" (click)="liquidate(earningDetails.earningRequestID)"
                                         class="widget_button widget_button--small widget_button--stroke">Liquidate</button>

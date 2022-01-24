@@ -122,7 +122,7 @@ export class LoanRequestComponent implements OnInit {
       mailMessage: [""]
     });
     this.sform = this._fb.group({
-      serialNumber: [0, [Validators.required]],
+      serialNumber: ["", [Validators.required]],
     });
     this.uForm = this._fb.group({
       mailMessage: [""]

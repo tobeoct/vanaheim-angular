@@ -6,6 +6,7 @@ const cors = require('cors');
 const http = require('http');
 const https = require('https');
 const express = require('express');
+var enforce = require('express-sslify');
 // const serverless = require('serverless-http');
 const compression = require('compression');
 // const bodyParser = require('body-parser');
@@ -20,18 +21,19 @@ const cookieParser = require('cookie-parser');
 // This serves static files from the specified directory
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
-import AppConfig, { Environment } from 'server/config';
+import AppConfig from 'server/config';
 import { AWSService } from '@services/implementation/image/aws-service';
 import { inject, loadControllers, scopePerRequest } from 'awilix-express';
 import helmet = require('helmet');
 import { authoriseRequest, clientApiKeyValidation, authoriseResponse, sessionRequestAuthorisation, sessionResponseAuthorisation } from './middleware/authorise-middleware';
 import SessionMiddleware from './middleware/session-middleware';
+import { Environment } from '@enums/environment';
 
 const publicVapidKey = 'BH9z7PCyti1n9ItSnlp_8qoyDHP-RUK-vdZrTCqaoYHKVKIlk2w3XPoZLSndWp23VPVepP7gZ6diOFTbQNLpeBc';
 const privateVapidKey = '_qHAcJ81LwWefymI1DnHmmeF6ZBqEeTmfXPFebOAGrM';
 export default class App {
 
-  constructor(private _appConfig: AppConfig, private _session: SessionMiddleware, private webPush: any, private _awsService:AWSService) {
+  constructor(private _appConfig: AppConfig, private _session: SessionMiddleware, private webPush: any, private _awsService: AWSService) {
   }
 
   start(container: any, callback: any) {
@@ -61,6 +63,10 @@ export default class App {
     //   contentSecurityPolicy: false,
     // }))
     // app.use(helmet.contentSecurityPolicy());
+    if (this._appConfig.environment == Environment.Production) {
+      //enforce redirect from http to https on production
+      app.use(enforce.HTTPS({ trustProtoHeader: true }));
+    }
     app.use(helmet.dnsPrefetchControl());
     // app.use(helmet.expectCt());
     app.use(helmet.frameguard());
@@ -90,7 +96,7 @@ export default class App {
     app.use(inject(sessionRequestAuthorisation))
     app.use("/api", inject(clientApiKeyValidation), inject(authoriseRequest), expAutoSan.route)
     console.log("App.TS", this._appConfig.environment)
-    if (this._appConfig.environment ==Environment.production) {
+    if (this._appConfig.environment == Environment.Production) {
       app.use(loadControllers('controllers/*.controller.js', { cwd: __dirname }));
     } else {
       app.use(loadControllers('controllers/*.controller.ts', { cwd: __dirname }));
@@ -99,8 +105,8 @@ export default class App {
 
     app.get('*', function (req: any, res: any) {
       res.setHeader('Cache-Control', 'public, max-age=5000');
-      let p = _this._appConfig.environment == Environment.production ? "" : "dist/";
-      let b = _this._appConfig.environment == Environment.production ? "../" : "../";
+      let p = _this._appConfig.environment == Environment.Production ? "" : "dist/";
+      let b = _this._appConfig.environment == Environment.Production ? "../" : "../";
       // // ,{ root: path.resolve(__dirname, b)  }p+
       res.sendFile('index.html', { root: path.resolve("dist/vanaheim") });
     })

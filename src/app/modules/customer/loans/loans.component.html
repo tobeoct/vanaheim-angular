@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </ng-container> -->
-              
+
             </ng-container>
             <ng-container *ngIf="loan.requestStatus!='Funded'">
                 <div id="most-recent">
@@ -169,7 +169,10 @@
     <app-modal size="large" (onChange)="close()">
         <!-- <ng-container *ngIf="loanDetailsFromDb$|async as loanDetails"> -->
         <ng-container slot="header">
-            <h3>{{(loanDetailsFromDb$|async)?.code}}</h3>
+            <div style="text-align: center;">
+                <p>Loan ID</p>
+                <h3>{{(loanDetailsFromDb$|async)?.code}}</h3>
+            </div>
         </ng-container>
         <ng-container slot="body">
             <ng-container *ngIf="(loanDetailsFromDb$|async) as loanDetails">
