@@ -16,6 +16,7 @@ export class EarningsComponent implements OnInit {
   form: FormGroup;
   liquidations$: Observable<any>
   topUps$: Observable<any>
+  showProfile:FormControl;
   @Input()
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
 
@@ -73,5 +74,9 @@ export class EarningsComponent implements OnInit {
   }
   trackByFn(index: any, item: any) {
     return index;
+  }
+
+  showProfileAction=(id:number)=>{
+    this.showProfile.patchValue(id);
   }
 }

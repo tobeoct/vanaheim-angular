@@ -159,7 +159,7 @@
         <ng-container slot="header">
             <div style="text-align: center;">
                 <p>Earning ID</p>
-                <h3>{{(earningDetails?.status=='Pending'?'Not yet assigned':earningDetailsFromDb$|async)?.code}}</h3>
+                <h3>{{(earningDetailsFromDb$|async)?.code}}</h3>
             </div>
         </ng-container>
         <ng-container slot="body">

@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <app-earnings-request [fromDate]="fromDate" [toDate]="toDate"></app-earnings-request>
+    <app-earnings-request [fromDate]="fromDate" [toDate]="toDate" [showProfile]="showProfile"></app-earnings-request>
     <div class="margin--3x">
 
         <h3>Liquidation Requests</h3>
@@ -35,6 +35,7 @@
                     <th>Amount</th>
                     <th>Duration</th>
                     <th>Status</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -81,6 +82,12 @@
                             </app-button>
                             </ng-container>
                         </td>
+                        <td>
+                            <app-button [class]="'widget_button--small'" (onClick)="showProfileAction(row.ApprovedEarning?.earningRequestID)"
+                                fieldClass="no-margin">
+                                <ng-container slot="button">View</ng-container>
+                            </app-button>
+                        </td>
                     </tr>
                 </ng-container>
             </ng-container>
@@ -118,6 +125,7 @@
                     <th>Duration</th>
                     <th>Status</th>
                     <th>Action</th>
+                    <th></th>
                 </tr>
             </ng-container>
             <ng-container slot="body" *ngIf="topUps$|async as data">
@@ -143,6 +151,12 @@
                             <app-button [class]="'widget_button--small'" (onClick)="topUp(row.id)"
                                 fieldClass="no-margin">
                                 <ng-container slot="button">Approve</ng-container>
+                            </app-button>
+                        </td>
+                        <td>
+                            <app-button [class]="'widget_button--small'" (onClick)="showProfileAction(row.ApprovedEarning?.earningRequestID)"
+                                fieldClass="no-margin">
+                                <ng-container slot="button">View</ng-container>
                             </app-button>
                         </td>
                     </tr>

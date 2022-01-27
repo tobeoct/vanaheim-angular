@@ -333,7 +333,7 @@ export class EarningService implements IEarningService {
             data: [
               { key: "Type", value: request.type },
               { key: "Duration", value: request.duration + " Months" },
-              { key: "Maturity Date", value: (request.requestStatus == LoanRequestStatus.Pending || request.requestStatus == LoanRequestStatus.Processing) ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
+              { key: "Maturity Date", value: (request.requestStatus == EarningRequestStatus.Pending || request.requestStatus == EarningRequestStatus.Processing) ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
               { key: "Rate", value: request.rate + "% per annum" },
               { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
               { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
@@ -410,7 +410,7 @@ export class EarningService implements IEarningService {
 
           }
           // if (approvedEarning?.status == true && approvedEarning.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(approvedEarning.data.id)
-          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} } })
+          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestStatus==EarningRequestStatus.Pending?"Not yet assigned":request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} } })
 
         }
         else {
@@ -452,7 +452,7 @@ export class EarningService implements IEarningService {
               data: [
                 { key: "Type", value: request.type },
                 { key: "Duration", value: request.duration + " Months" },
-                { key: "Maturity Date", value: request.requestStatus == LoanRequestStatus.Pending ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
+                { key: "Maturity Date", value: (request.requestStatus == EarningRequestStatus.Pending||request.requestStatus == EarningRequestStatus.Processing) ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
                 { key: "Rate", value: request.rate + "%" },
                 { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
                 { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
@@ -488,7 +488,7 @@ export class EarningService implements IEarningService {
 
             // }
             // if (approved?.status == true && approved.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(approvedEarnings.data.id)
-            responses.push({ id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.code, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} })
+            responses.push({ id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestStatus==EarningRequestStatus.Pending?"Not yet assigned": request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} })
 
           }
           //  else {
