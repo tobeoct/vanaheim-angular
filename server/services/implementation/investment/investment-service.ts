@@ -333,7 +333,7 @@ export class EarningService implements IEarningService {
             data: [
               { key: "Type", value: request.type },
               { key: "Duration", value: request.duration + " Months" },
-              { key: "Maturity Date", value: request.requestStatus == LoanRequestStatus.Pending ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
+              { key: "Maturity Date", value: (request.requestStatus == LoanRequestStatus.Pending || request.requestStatus == LoanRequestStatus.Processing) ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
               { key: "Rate", value: request.rate + "% per annum" },
               { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
               { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
@@ -611,7 +611,6 @@ export class EarningService implements IEarningService {
       notification.data = new WebNotificationData();
       notification.data.url = this._appConfig.WEBURL + "/my/earnings";
       try {
-        //requestStatus == EarningRequestStatus.UpdateRequired ? this._templateService.EARNING_STATUS_UPDATE_REQUIRED(requestStatus, earningRequest.requestId, `https://vanaheim2.herokuapp.com/my/loans/${earningRequestLog.id}`, message) :
         await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html: failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) : this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : earningRequest.requestId, `${customer.title} ${customer.firstName} ${customer.lastName}`, earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [earningRequest.customerID], notification })
 
@@ -692,7 +691,7 @@ export class EarningService implements IEarningService {
           investment.employmentID = employmentInfo.id;
         } else {
           let earningsEmployment = new EarningsEmployment();
-          earningsEmployment.address = (application.employmentInfo.address?.street + " " + application.employmentInfo.address?.city + " " + application.employmentInfo.address?.state);
+          earningsEmployment.address = (application.employmentInfo.address?.street + ", " + application.employmentInfo.address?.city + ", " + application.employmentInfo.address?.state);
           earningsEmployment.street = application.employmentInfo?.address?.street;
           earningsEmployment.city = application.employmentInfo?.address?.city;
           earningsEmployment.state = application.employmentInfo?.address?.state;

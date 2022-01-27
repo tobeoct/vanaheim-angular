@@ -31,7 +31,7 @@ export class EmploymentInfoComponent implements OnInit {
   get previousEmployer() {
     return this.form.get("previousEmployer") as FormControl || new FormControl();
   }
-  get employer() {
+  get currentEmployer() {
     return this.form.get("currentEmployer") as FormControl || new FormControl();
   }
   get employerId() {
@@ -99,14 +99,13 @@ export class EmploymentInfoComponent implements OnInit {
     const employmentInfo = this._earningsStore.employmentInfo as EarningsEmploymentInfo;
     this.form = this._fb.group({
       id: [0],
-      currentEmployer: [employmentInfo.currentEmployer ? employmentInfo.currentEmployer : "", [
-        Validators.minLength(3), Validators.maxLength(50)]],
+      currentEmployer: [employmentInfo.currentEmployer ? employmentInfo.currentEmployer : "", [Validators.minLength(3), Validators.maxLength(50)]],
       previousEmployer: [employmentInfo.previousEmployer ? employmentInfo.previousEmployer : "", [Validators.minLength(3), Validators.maxLength(50)]],
       businessSector: [employmentInfo.businessSector ? employmentInfo.businessSector : ""],
 
       contactGroup: this._fb.group({
-        email: [employmentInfo.email ? employmentInfo.email : "", [ Validators.email]],
-        phone: [employmentInfo.phoneNumber ? employmentInfo.phoneNumber : "", [ this._validators.phone]],
+        email: [employmentInfo.email ? employmentInfo.email : "", [Validators.email]],
+        phone: [employmentInfo.phoneNumber ? employmentInfo.phoneNumber : "", [this._validators.phone]],
         addressGroup: this._fb.group({
           street: [employmentInfo.address?.street ? employmentInfo.address.street : ""],
           city: [employmentInfo.address?.city ? employmentInfo.address.city : ""],
@@ -152,8 +151,8 @@ export class EmploymentInfoComponent implements OnInit {
       if (!this.phone.value && employer.phoneNumber) {
         this.phone.patchValue(employer.phoneNumber);
       }
-      if (!this.employer.value && employer.currentEmployer) {
-        this.employer.patchValue(employer.currentEmployer);
+      if (!this.currentEmployer.value && employer.currentEmployer) {
+        this.currentEmployer.patchValue(employer.currentEmployer);
       }
       if (!this.previousEmployer.value && employer.previousEmployer) {
         this.previousEmployer.patchValue(employer.previousEmployer);
@@ -162,7 +161,7 @@ export class EmploymentInfoComponent implements OnInit {
         this.businessSector.patchValue(employer.businessSector);
       }
       if (employer.address) {
-        let a = employer.address.split(",");
+        let a = employer.address.split(", ");
         let street = a[0];
         let city = a[1];
         let state = a[2];
@@ -188,16 +187,16 @@ export class EmploymentInfoComponent implements OnInit {
         this.phone.patchValue(employer.phoneNumber);
       }
       if (employer.currentEmployer) {
-        this.employer.patchValue(employer.currentEmployer);
+        this.currentEmployer.patchValue(employer.currentEmployer);
       }
       if (employer.previousEmployer) {
-        this.employer.patchValue(employer.previousEmployer);
+        this.previousEmployer.patchValue(employer.previousEmployer);
       }
       if (employer.businessSector) {
         this.businessSector.patchValue(employer.businessSector);
       }
       if (employer.address) {
-        let a = employer.address.split(",");
+        let a = employer.address.split(", ");
         let street = a[0];
         let city = a[1];
         let state = a[2];
@@ -215,7 +214,7 @@ export class EmploymentInfoComponent implements OnInit {
 
   onSubmit = (form: FormGroup) => {
     if (!form.valid) return;
-    const employmentInfo: EarningsEmploymentInfo = { id: this.employerId.value, businessSector: this.businessSector.value, previousEmployer: this.previousEmployer.value, currentEmployer: this.employer.value, email: this.email.value, phoneNumber: this.phone.value, address: { street: this.street.value, city: this.city.value, state: this.state.value } };
+    const employmentInfo: EarningsEmploymentInfo = { id: this.employerId.value, businessSector: this.businessSector.value, previousEmployer: this.previousEmployer.value, currentEmployer: this.currentEmployer.value, email: this.email.value, phoneNumber: this.phone.value, address: { street: this.street.value, city: this.city.value, state: this.state.value } };
     this._earningsStore.setEmploymentInfo(employmentInfo);
     this.onNavigate("nok-info");
   }

@@ -278,7 +278,7 @@ export class LoanService implements ILoanService {
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
       try {
         const customerName =customer.title + ' '+customer.firstName;
-        await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: failureReason ? this._templateService.STATUS_UPDATE_DECLINED(customerName, message ?? requestStatus, loanRequest.requestId) : requestStatus == LoanRequestStatus.UpdateRequired ? this._templateService.STATUS_UPDATE_REQUIRED(customerName,message, `https://vanaheim2.herokuapp.com/my/loans/${loanRequestLog.id}`) : this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId,customerName,this._utils.currencyFormatter(loanRequest.amount),`${loanRequest.tenure} ${loanRequest.denominator}`), to: customer.email, toCustomer: true });
+        await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: failureReason ? this._templateService.STATUS_UPDATE_DECLINED(customerName, message ?? requestStatus, loanRequest.requestId) : requestStatus == LoanRequestStatus.UpdateRequired ? this._templateService.STATUS_UPDATE_REQUIRED(customerName,message, `${this._appConfig.WEBURL}/my/loans/${loanRequestLog.id}`) : this._templateService.STATUS_UPDATE(requestStatus, loanRequest.requestId,customerName,this._utils.currencyFormatter(loanRequest.amount),`${loanRequest.tenure} ${loanRequest.denominator}`), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
 
       }

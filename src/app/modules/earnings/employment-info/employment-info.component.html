@@ -14,8 +14,8 @@
             </ng-container>
         </ng-container>
         <ng-container *ngIf="!(employersFromDb$|async) || (showForm$|async)">
-        <app-input [focus$]="focus$" fieldClass="no-margin--top" id="employer" [placeholder]="'Enter name of employer'" [control]="employer" class="form-control" [error]="(errorMessage$ | async)?.employer" >
-            <label for="employer">Current Employer</label>
+        <app-input [focus$]="focus$" fieldClass="no-margin--top" id="currentEmployer" [placeholder]="'Enter name of employer'" [control]="currentEmployer" class="form-control" [error]="(errorMessage$ | async)?.employer" >
+            <label for="currentEmployer">Current Employer</label>
         </app-input>     
         <app-input  id="previous-employer" [placeholder]="'Enter name of previous-employer'" [control]="previousEmployer" class="form-control" [error]="(errorMessage$ | async)?.previousEmployer" >
             <label for="previous-employer">Previous Employer</label>
