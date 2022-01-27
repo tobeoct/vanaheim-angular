@@ -93,9 +93,6 @@ export class EarningsRequestComponent implements OnInit {
   constructor(private _requestService: AdminEarningService, private _documentService: DocumentService, private _fb: FormBuilder, private _earningsPayoutService: EarningPayoutService, private _utils: Utility) { }
 
   ngOnInit(): void {
-    this.showProfile.valueChanges.subscribe(id => {
-      if (id) this.selectEarning({ id, indicator: "active" })
-    })
     this.fForm = this._fb.group({
       failureReason: [""],
       mailMessage: [""]
@@ -111,6 +108,10 @@ export class EarningsRequestComponent implements OnInit {
     });
     this.earningsDetails$ = this._requestService.earningDetails$;
     this.earnings$ = this._requestService.filteredRequests$;
+    
+    this.showProfile.valueChanges.subscribe(id => {
+      if (id) this.selectEarning({ id, indicator: "active" })
+    })
   }
   selectEarning({ id, indicator }: any) {
     this._requestService.selectEarning(id);
