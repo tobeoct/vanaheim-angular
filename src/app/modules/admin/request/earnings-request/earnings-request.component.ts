@@ -23,6 +23,10 @@ export class EarningsRequestComponent implements OnInit {
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
 
   @Input()
+  showProfile: FormControl = new FormControl("");
+
+
+  @Input()
   toDate: FormControl = new FormControl(moment().endOf("day").format('yyyy-MM-dd'));
   ctrl: FormControl = new FormControl("");
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
@@ -89,6 +93,9 @@ export class EarningsRequestComponent implements OnInit {
   constructor(private _requestService: AdminEarningService, private _documentService: DocumentService, private _fb: FormBuilder, private _earningsPayoutService: EarningPayoutService, private _utils: Utility) { }
 
   ngOnInit(): void {
+    this.showProfile.valueChanges.subscribe(id => {
+      if (id) this.selectEarning({ id, indicator: "active" })
+    })
     this.fForm = this._fb.group({
       failureReason: [""],
       mailMessage: [""]
@@ -155,6 +162,7 @@ export class EarningsRequestComponent implements OnInit {
   }
   closeModal() {
     this.showSubject.next(false);
+    this.showProfile.patchValue("");
   }
   onFailure(event: any) {
     this.proceed();

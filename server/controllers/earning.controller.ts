@@ -124,7 +124,7 @@ export default class EarningsController {
             const id = this.sanitizer.escape(req.query.id);
             const amount = this.sanitizer.escape(req.query.amount);
             const status = this.sanitizer.escape(req.query.status) ?? TopUpStatus.Pending;
-            let response: any = !id ? await this._earningTopUpRepository.getByStatus(status, [{ model: this._db.Customer, required: false }]) : await this._earningTopUpRepository.getByApprovedEarningID(id, amount, [{ model: this._db.Customer, required: false }]);
+            let response: any = !id ? await this._earningTopUpRepository.getByStatus(status, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningTopUpRepository.getByApprovedEarningID(id, amount, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]);
             res.statusCode = 200;
             res.payload = { data: response }
 
@@ -256,7 +256,7 @@ export default class EarningsController {
         try {
             const id = this.sanitizer.escape(req.query.id);
             const status = this.sanitizer.escape(req.query.status);
-            let response: any = !id ? await this._earningLiquidationRepository.getByStatus(status, [{ model: this._db.Customer, required: false }]) : await this._earningLiquidationRepository.getByApprovedEarningID(id, [{ model: this._db.Customer, required: false }])
+            let response: any = !id ? await this._earningLiquidationRepository.getByStatus(status, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningLiquidationRepository.getByApprovedEarningID(id, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }])
 
             res.statusCode = 200;
             res.payload = { data: response }
