@@ -94,7 +94,7 @@
       <app-form [form]="uForm" (onSubmit)="onUpdateRequired($event)" (errorMessageChange)="onError($event)">
         
         <div class="vc_form-field margin--2x" style="max-width: 500px;">
-          <label for="uMailMessage">Personalised Message</label>
+          <label for="uMailMessage">Personalised Message (Use enter to specify a new line)</label>
           <textarea id="uMailMessage" placeholder="Enter personalised message" [formControl]="uMailMessage"
             class="form-control">
 

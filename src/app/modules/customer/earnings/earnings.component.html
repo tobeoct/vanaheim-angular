@@ -79,7 +79,7 @@
                                 <td>{{row.requestDate | date :'MMMM d, y'}}</td>
                                 <td>{{row.amount|currency:'₦'}}</td>
                                 <td>{{row.duration}} Months</td>
-                                <td>{{row.requestStatus=='Pending'?row.maturityDate:(row.maturityDate| date :'MMMM d,
+                                <td>{{(row.requestStatus=='Pending'||row.requestStatus=='Processing')?row.maturityDate:(row.maturityDate| date :'MMMM d,
                                     y')}}</td>
                                 <td>{{row.type}}</td>
                                 <td>
