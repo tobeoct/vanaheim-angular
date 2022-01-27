@@ -377,7 +377,7 @@ export class EarningService implements IEarningService {
             key: "NOK Information",
             data: [
               { key: "Name", value: this._utils.replaceAll(this._utils.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", ""), "undefined", "") },
-              { key: "Date Of Birth", value: request.Customer?.NOK?.dateOfBirth },
+              { key: "Date Of Birth", value: moment(request.Customer?.NOK?.dateOfBirth).format("MMMM Do YYYY")  },
               { key: "Relationship", value: request.Customer?.NOK?.relationship.toString() },
               { key: "Email Address", value: request.Customer?.NOK?.email },
               { key: "Phone Number", value: request.Customer?.NOK?.phoneNumber },
