@@ -21,7 +21,7 @@ export class LoanRequestComponent implements OnInit {
   fForm: FormGroup;
   uForm: FormGroup;
   sform: FormGroup;
-  messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
+  messageTypes: any[]
   loanStatuses: any[] = [{ label: "Processing", key: "processing" }, { label: "UpdateRequired", key: "update" }, { label: "Declined", key: "declined" }, { label: "Approved", key: "approved" }, { label: "Funded", key: "funded" }];
   ctrl: FormControl = new FormControl("");
   @Input()
@@ -104,6 +104,7 @@ export class LoanRequestComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.messageTypes = this._notifyService.messageTypes;
     this.loans$ = this._requestService.filteredRequests$;
     this.repayments$ = this._repaymentService.repayments$;
     this.ctrl.valueChanges.subscribe(c => {
@@ -277,8 +278,8 @@ export class LoanRequestComponent implements OnInit {
         });
     this.allSubscriptions.push(sub);
   }
-  notify(message: string, type: string, customerID: number[], code: string) {
-    const sub = this._notifyService.notify({ message, type, customerID, code })
+  notify(message: string, type: string, customerIDs: number[], code: string) {
+    const sub = this._notifyService.notify({ message, type:`Loan ${type}`, customerIDs, code })
       .pipe(first())
       .subscribe(
         response => {

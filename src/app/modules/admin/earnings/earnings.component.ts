@@ -16,7 +16,7 @@ export class EarningsComponent implements OnInit {
   form: FormGroup;
   liquidations$: Observable<any>
   topUps$: Observable<any>
-  showProfile:FormControl;
+  showProfile:FormControl = new FormControl("");
   @Input()
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
 
@@ -43,10 +43,15 @@ export class EarningsComponent implements OnInit {
   getCriteria(from: any, to: any) {
     return { from: moment(from).startOf("day").toDate(), to: moment(to).endOf("day").toDate() };
   }
-  getEarningStatusColor(status: string) {
-    if (status == "Active" || status == "Matured" || status == "Completed") return 'success';
-    if (status == "NotQualified" || status == "Declined" || status == "Defaulting") return 'danger';
-    return status == "Processing" || status == 'TopUpRequest' || status == 'LiquidationRequest' ? '' : 'info';
+  getLiquidationStatusColor(status: string) {
+    if (status == "Processed" ) return 'success';
+    if (status == "Declined") return 'danger';
+    return status == "Pending"?"":'info';
+  }
+
+  getTopUpStatusColor(status: string) {
+    if (status == "Processed" ) return 'success';
+    return 'info';
   }
 
   topUp(id: number) {

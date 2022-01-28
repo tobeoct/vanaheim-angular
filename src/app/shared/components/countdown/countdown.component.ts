@@ -45,7 +45,8 @@ export class CountdownComponent implements OnInit {
     const timeElapsed = moment().diff(this.startingDate, "seconds");
     const percentageElapsed = timeElapsed / totalTime;
     const value = (+this.endValue) - (+this.startingValue);
-    this.amount = (+this.startingValue) + (percentageElapsed * value);
+    const amount = (+this.startingValue) + (percentageElapsed * value);
+    this.amount= Math.abs(amount);
   }
 
 }

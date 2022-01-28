@@ -56,8 +56,14 @@
                         <td>{{row.amount|currency:'₦'}}</td>
                         <td>{{row.duration}} Months</td>
                         <td>
-                            <app-badge [color]="getEarningStatusColor(row.liquidationStatus)">{{row.liquidationStatus}}
+                            <app-badge [color]="getLiquidationStatusColor(row.liquidationStatus)">{{row.liquidationStatus}}
                             </app-badge>
+                        </td>
+                        <td>
+                            <app-button [class]="'widget_button--small'" (onClick)="showProfileAction(row.ApprovedEarning?.earningRequestID)"
+                                fieldClass="no-margin">
+                                <ng-container slot="button">View</ng-container>
+                            </app-button>
                         </td>
                         <td>
                             <ng-container *ngIf="row.liquidationStatus=='Pending'">
@@ -82,12 +88,7 @@
                             </app-button>
                             </ng-container>
                         </td>
-                        <td>
-                            <app-button [class]="'widget_button--small'" (onClick)="showProfileAction(row.ApprovedEarning?.earningRequestID)"
-                                fieldClass="no-margin">
-                                <ng-container slot="button">View</ng-container>
-                            </app-button>
-                        </td>
+                        
                     </tr>
                 </ng-container>
             </ng-container>
@@ -144,7 +145,7 @@
                         <td>{{row.amount|currency:'₦'}}</td>
                         <td>{{row.duration}} Months</td>
                         <td>
-                            <app-badge [color]="getEarningStatusColor(row.topUpStatus)">{{row.topUpStatus}}
+                            <app-badge [color]="getTopUpStatusColor(row.topUpStatus)">{{row.topUpStatus}}
                             </app-badge>
                         </td>
                         <td>

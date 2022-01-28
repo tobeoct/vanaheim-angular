@@ -37,7 +37,7 @@ export function sessionRequestAuthorisation(_authService: IAuthService) {
   return async (req:VanaheimRequest<any, any>, res: any, next: any) => {
     let apiUrl = req.originalUrl;
     let httpMethod = req.method;
-    console.log("SESSION REQUEST", apiUrl, req.session)
+    // console.log("SESSION REQUEST", apiUrl, req.session)
     if (_authService.isNewTokenRequired(httpMethod, apiUrl) || _authService.isAuthRequired(httpMethod, apiUrl)) {
       console.log("Forward to controller")
       next();
@@ -72,7 +72,7 @@ export function sessionResponseAuthorisation() {
   return async (req: VanaheimRequest<any,any>, res: any) => {
 
     let apiUrl = req.originalUrl;
-    console.log("SESSION RESPONSE", apiUrl, req.session)
+    // console.log("SESSION RESPONSE", apiUrl, req.session)
     if (req.session && req.session.cookie) {
       const tokenExpirationDate = req.session.cookie.originalMaxAge;
       res.setHeader('expires-in', tokenExpirationDate);

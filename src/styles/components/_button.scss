@@ -2,6 +2,7 @@
 
 button {
     font: inherit;
+    min-width: fit-content !important;
   }  
 .text-button {
     @include color(facebook);
@@ -95,7 +96,7 @@ button {
         &:focus {
             background: map-get($colors, black);
             border: 2px solid map-get($colors, black);
-            color: map-get($colors, yellow);
+            color: map-get($colors, yellow) !important;
         }
     }
     &--rounded {
@@ -183,14 +184,11 @@ button {
 
 @media all and (max-width:1233px){
 .widget_button--stroke {
-    margin: 30px auto !important;
-    width: 95%;
-    font-size: 0.8em !important;
-    height: 60px !important;
-    padding: 0 5% 0 5% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center;
+    margin: 20px auto !important;
+    // width: 95%;
+    //font-size: 0.8em !important;
+    max-height: 60px !important;
+    // padding: 0 5% 0 5% !important;
   }
 }
 @media all and (max-width:900px){

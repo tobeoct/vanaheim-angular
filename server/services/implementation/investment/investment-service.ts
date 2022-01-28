@@ -273,8 +273,8 @@ export class EarningService implements IEarningService {
       await this.validateRequest(customer.id);
       const request = await this.createEarningRequest(application, customer);
       const requestLog = await this.createEarningRequestLog(request);
-      const customerTemplate = this._templateService.INVESTMENT_CUSTOMER_TEMPLATE((!name) ? "Customer" : `${this._utils.titleCase(name)}`);
-      const adminTemplate = this._templateService.INVESTMENT_ADMIN_TEMPLATE(name, email, this._utils.currencyFormatter(this._utils.convertToPlainNumber(amount)), duration.toString() + " Months", maturity, this._utils.currencyFormatter(payout), rate, type);
+      const customerTemplate = this._templateService.EARNING_CUSTOMER_TEMPLATE((!name) ? "Customer" : `${this._utils.titleCase(name)}`);
+      const adminTemplate = this._templateService.EARNING_ADMIN_TEMPLATE(name, email, this._utils.currencyFormatter(this._utils.convertToPlainNumber(amount)), duration.toString() + " Months", maturity, this._utils.currencyFormatter(payout), rate, type);
       await this._emailService.SendEmail({ type: EmailType.Earning, to: email, filePaths: [`dist/vanaheim/assets/static/VANIR CAPITAL GLOBAL PITCH DECK_Vol 4.pdf`], html: customerTemplate, toCustomer: true })
 
       await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: adminTemplate, toCustomer: false });
@@ -595,7 +595,7 @@ export class EarningService implements IEarningService {
           await this._approvedEarningRepository.create(approvedEarning);
         } else {
           approvedEarning.nextPayment = earningRequest.type == EarningType.EndOfTenor ? earningRequest.payout : earningRequest.monthlyPayment;
-          approvedEarning.nextPaymentDate = earningRequest.type == EarningType.EndOfTenor ? maturityDate.toDate() : start.set("date", 24).toDate();//maturityDate.subtract(earningRequest.duration,"months").set("date",24).add(1,  "month").toDate();
+          approvedEarning.nextPaymentDate = earningRequest.type == EarningType.EndOfTenor ? maturityDate.toDate() : start.diff(moment(),"day")>=0?start.add(1,"month").set("date",24).toDate(): start.set("date",24).toDate()//maturityDate.subtract(earningRequest.duration,"months").set("date",24).add(1,  "month").toDate();
           approvedEarning.earningStatus = ApprovedEarningStatus.AwaitingFirstPayment;
           approvedEarning.maturityDate = earningRequest.maturityDate;
           console.log(earningRequestLog, earningRequest, approvedEarning, moment(earningRequest.maturityDate))
@@ -611,7 +611,8 @@ export class EarningService implements IEarningService {
       notification.data = new WebNotificationData();
       notification.data.url = this._appConfig.WEBURL + "/my/earnings";
       try {
-        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html: failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) : this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : earningRequest.requestId, `${customer.title} ${customer.firstName} ${customer.lastName}`, earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
+        //failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) :
+        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html:  this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : earningRequest.requestId, `${customer.title} ${customer.firstName} ${customer.lastName}`, earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [earningRequest.customerID], notification })
 
       }

@@ -42,6 +42,7 @@ export class EarningsTrackerComponent implements OnInit {
     let d = moment(date);
     let now = moment();
     return d.diff(now, "days");
+    // return diff<0?(30-diff):diff
   }
 
   getNextDueDateFormatted(dateFunded: any, tenure: number, denominator: string) {
@@ -55,7 +56,8 @@ export class EarningsTrackerComponent implements OnInit {
     if(!startDate|| !endDate) return 30;
     let start = moment(startDate);
     let end = moment(endDate);
-    console.log(end.diff(start, "days"))
-    return end.diff(start, "days");
+    // console.log(end.diff(start, "days"))
+    return  end.diff(start, "days");
+    // return Math.abs(diff <0? 30+diff:diff);
   }
 }

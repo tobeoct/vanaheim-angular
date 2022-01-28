@@ -79,7 +79,8 @@
                                 <td>{{row.requestDate | date :'MMMM d, y'}}</td>
                                 <td>{{row.amount|currency:'₦'}}</td>
                                 <td>{{row.duration}} Months</td>
-                                <td>{{(row.requestStatus=='Pending'||row.requestStatus=='Processing')?row.maturityDate:(row.maturityDate| date :'MMMM d,
+                                <td>{{(row.requestStatus=='Pending'||row.requestStatus=='Processing')?row.maturityDate:(row.maturityDate|
+                                    date :'MMMM d,
                                     y')}}</td>
                                 <td>{{row.type}}</td>
                                 <td>
@@ -190,7 +191,8 @@
                                 </div>
                                 <button type="button" class="widget_button widget_button--small widget_button--stroke"
                                     (click)="showPayouts(earningDetails?.approvedEarnings?.id)">
-                                    <u><b>View Payments</b></u></button>
+                                    <b>View Payments</b>
+                                </button>
                             </ng-container>
                             <!-- <ng-container *ngIf="earningDetails?.status=='UpdateRequired'">
                                 <app-button fieldClass="no-margin"

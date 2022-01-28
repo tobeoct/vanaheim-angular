@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class NotifyService {
-
+ messageTypes:any[]= [{ label: "Announcements" }, { label: "Update" }];
   constructor(private _http: HttpClient) { }
 
   
