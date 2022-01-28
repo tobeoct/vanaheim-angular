@@ -125,7 +125,7 @@ class UserService extends BaseService<User> implements IUserService {
     return new Promise<any>(async (resolve, reject) => {
       try {
 
-        let user;
+        let user = new User();
         let { email, firstName, lastName, password, phoneNumber, dateOfBirth, otherNames, address, role, position, type, gender, socialUser, browserID } = payload;
 
         user = await this.getByEmail(email, UserCategory.Staff);
@@ -133,7 +133,7 @@ class UserService extends BaseService<User> implements IUserService {
         user = await this.getByPhoneNumber(phoneNumber, UserCategory.Staff);
         if (user) { resolve({ status: false, response: "This phone number has already been taken" }); return; }
 
-        if (phoneNumber && phoneNumber.includes("+234")) phoneNumber = phoneNumber.replace('+234', '0')
+        if (phoneNumber && phoneNumber.includes("+234")) {phoneNumber = phoneNumber.replace('+234', '0')}
 
         if (!user || Object.keys(user).length == 0) {
           user = new User();
@@ -193,7 +193,9 @@ class UserService extends BaseService<User> implements IUserService {
           }
 
         } else {
-          resolve({ status: true, data: user })
+          // resolve({ status: true, data: { ...user, passwordHash: undefined, firstName: user.staff?.firstName, type: type, lastName: user.staff?.lastName } })
+          
+          resolve({ status: false, message:"User already exists" })
         }
       } catch (err: any) {
         reject(err)
@@ -263,14 +265,14 @@ class UserService extends BaseService<User> implements IUserService {
                 console.log("We were able to register the user but could not send you an email.");
                 console.log(err);
               }
-              resolve({ status: true, userData: user, data: { ...user, passwordHash: undefined, firstName: user.customer.firstName, type: type, lastName: user.customer.lastName } });
+              resolve({ status: true, userData: user, data: { ...user, passwordHash: undefined, firstName: user.customer?.firstName, type: type, lastName: user.customer?.lastName } });
 
             }
             else resolve({ status: false, message: "Registration failed" })
           }
 
         } else {
-          resolve({ status: true, data: user })
+          resolve({ status: true, data: { ...user, passwordHash: undefined, firstName: user.customer?.firstName, type: type, lastName: user.customer?.lastName } })
         }
       } catch (err: any) {
         reject(err)

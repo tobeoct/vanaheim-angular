@@ -164,18 +164,21 @@ export default class EarningsController {
                 res.statusCode = 400;
                 res.payload = { message: "Cannot find request" };
                 next()
+                return;
             }
             //Only one active top up is allowed
             if (earningRequest?.requestStatus == EarningRequestStatus.TopUpRequest) {
                 res.statusCode = 400;
                 res.payload = { message: "You currently have a Top Up request processing" };
                 next()
+                return;
             }
 
             if (earningRequest?.requestStatus == EarningRequestStatus.Matured) {
                 res.statusCode = 400;
                 res.payload = { message: "Earning has matured, you cannot top it up" };
                 next()
+                return;
             }
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
             earningRequest.requestStatus = EarningRequestStatus.TopUpRequest;
@@ -185,6 +188,7 @@ export default class EarningsController {
                 res.statusCode = 400;
                 res.payload = { message: "Cannot find request" };
                 next()
+                return;
             }
             // earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
             earningRequestLog.requestStatus = EarningRequestStatus.TopUpRequest;
@@ -194,6 +198,7 @@ export default class EarningsController {
                 res.statusCode = 400;
                 res.payload = { message: "Cannot find request" };
                 next()
+                return;
             }
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
 
@@ -220,7 +225,7 @@ export default class EarningsController {
 
             await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_TOPUP_NOTIFICATION(customer?.firstName, earningRequest.requestId, this._utils.currencyFormatter(+amount)), toCustomer: true })
 
-            await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a top up on an earning with ID, ${earningRequest.code}`, toCustomer: false });
+            await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a top up on an earning with ID, ${earningRequest.requestId}`, toCustomer: false });
 
             res.statusCode = 200;
             res.payload = { message: "Our team has been notified successfully" }
@@ -279,6 +284,7 @@ export default class EarningsController {
                 res.statusCode = 400;
                 res.payload = { message: "Cannot find request" };
                 next()
+                return;
             }
             // earningRequest = (earningRequest as any).dataValues as EarningRequest;
             earningRequest.requestStatus = EarningRequestStatus.LiquidationRequest;
@@ -288,6 +294,7 @@ export default class EarningsController {
                 res.statusCode = 400;
                 res.payload = { message: "Cannot find request" };
                 next()
+                return;
             }
             // earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
             earningRequestLog.requestStatus = EarningRequestStatus.LiquidationRequest;
@@ -297,6 +304,7 @@ export default class EarningsController {
                 res.statusCode = 400;
                 res.payload = { message: "Cannot find request" };
                 next()
+                return;
             }
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
             // approvedEarning.earningStatus = ApprovedEarningStatus.Pause;
@@ -306,6 +314,7 @@ export default class EarningsController {
                 res.statusCode = 400;
                 res.payload = { message: "Liquidation request currently processing" };
                 next()
+                return;
             }
 
             earningLiquidation = new EarningLiquidation();
@@ -332,7 +341,7 @@ export default class EarningsController {
             // await this._approvedEarningRepository.update(approvedEarning);
             await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_LIQUIDATION_NOTIFICATION(customer?.firstName, earningRequest.requestId), toCustomer: true })
 
-            await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a liquidation on an earning with ID, ${earningRequest.code}`, toCustomer: false });
+            await this._emailService.SendEmail({ type: EmailType.Earning, to: this._appConfig.INVESTMENT_EMAIL, html: `Customer ${customer.firstName} ${customer.lastName},<br/><br/> Requested for a liquidation on an earning with ID, ${earningRequest.requestId}`, toCustomer: false });
             res.statusCode = 200;
             res.payload = { message: "Our team has been notified successfully" }
 

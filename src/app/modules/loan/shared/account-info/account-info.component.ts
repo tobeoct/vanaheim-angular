@@ -261,7 +261,7 @@ export class AccountInfoComponent implements OnInit {
     if (bankCode) {
       let data = { bankcode: bankCode, accountnumber: accountNumber };
       this._commonService.accountEnquiry(data).pipe(map(r => {
-        if (r.status == true) { accountName.patchValue(r.response.data); accountName.updateValueAndValidity(); this.displayMessage(true) } else {
+        if (r.status == true) { accountName.patchValue(r.response); accountName.updateValueAndValidity(); this.displayMessage(true) } else {
           this.displayMessage(false)
         }
         return r;

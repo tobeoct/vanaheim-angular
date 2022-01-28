@@ -7,6 +7,7 @@ import { Utility } from 'src/app/shared/helpers/utility.service';
 import { DocumentService } from 'src/app/shared/services/document/document.service';
 import { AdminEarningService } from 'src/app/shared/services/earning/admin-earning.service';
 import { EarningPayoutService } from 'src/app/shared/services/earning/earning-payout.service';
+import { NotifyService } from '../../notify/notify.service';
 
 @Component({
   selector: 'app-earnings-request',
@@ -19,6 +20,8 @@ export class EarningsRequestComponent implements OnInit {
   form: FormGroup;
   pform: FormGroup;
   sform: FormGroup;
+
+  notifyForm: FormGroup;
   @Input()
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
 
@@ -29,7 +32,7 @@ export class EarningsRequestComponent implements OnInit {
   @Input()
   toDate: FormControl = new FormControl(moment().endOf("day").format('yyyy-MM-dd'));
   ctrl: FormControl = new FormControl("");
-  messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
+  messageTypes: any[]
   earningsStatuses: any[] = [{ label: "Processing", key: "processing" },
   //  { label: "Declined", key: "declined" },
   { label: "Active", key: "active" }];
@@ -75,6 +78,12 @@ export class EarningsRequestComponent implements OnInit {
   errorMessageSubject: Subject<any> = new Subject<any>();
   errorMessage$: Observable<any> = this.errorMessageSubject.asObservable();
 
+  get message() {
+    return this.notifyForm.get("message") as FormControl || new FormControl();
+  }
+  get messageType() {
+    return this.notifyForm.get("messageType") as FormControl || new FormControl();
+  }
   get failureReason() {
     return this.fForm.get("failureReason") as FormControl || new FormControl();
   }
@@ -90,9 +99,10 @@ export class EarningsRequestComponent implements OnInit {
   get serialNumber() {
     return this.sform.get("serialNumber") as FormControl || new FormControl();
   }
-  constructor(private _requestService: AdminEarningService, private _documentService: DocumentService, private _fb: FormBuilder, private _earningsPayoutService: EarningPayoutService, private _utils: Utility) { }
+  constructor(private _requestService: AdminEarningService, private _documentService: DocumentService, private _notifyService: NotifyService, private _fb: FormBuilder, private _earningsPayoutService: EarningPayoutService, private _utils: Utility) { }
 
   ngOnInit(): void {
+    this.messageTypes = this._notifyService.messageTypes;
     this.fForm = this._fb.group({
       failureReason: [""],
       mailMessage: [""]
@@ -108,10 +118,15 @@ export class EarningsRequestComponent implements OnInit {
     });
     this.earningsDetails$ = this._requestService.earningDetails$;
     this.earnings$ = this._requestService.filteredRequests$;
-    
+
     this.showProfile.valueChanges.subscribe(id => {
       if (id) this.selectEarning({ id, indicator: "active" })
     })
+
+    this.notifyForm = this._fb.group({
+      message: ["", [Validators.required]],
+      messageType: ["", [Validators.required]]
+    });
   }
   selectEarning({ id, indicator }: any) {
     this._requestService.selectEarning(id);
@@ -158,6 +173,7 @@ export class EarningsRequestComponent implements OnInit {
       this._utils.setError(err)
     });
   }
+
   getCriteria(from: any, to: any) {
     return { from: moment(from).startOf("day").toDate(), to: moment(to).endOf("day").toDate() };
   }
@@ -245,5 +261,30 @@ export class EarningsRequestComponent implements OnInit {
     this.proceed();
     this.enterSerialNumberSubject.next(false);
     this.showSubject.next(false)
+  }
+
+  onNotify(form: FormGroup, code: string, customerId: number) {
+
+    // stop here if form is invalid
+    if (form.invalid) {
+      return;
+    }
+
+    this.notify(this.message.value, this.messageType.value, [customerId], code);
+
+  }
+
+  notify(message: string, type: string, customerIDs: number[], code: string) {
+    this._utils.toggleLoading(true);
+    const sub = this._notifyService.notify({ message, type:`Earning ${type}`, customerIDs, code })
+      .pipe(first())
+      .subscribe(
+        response => {
+          this._utils.setSuccess(response);
+        },
+        error => {
+          this._utils.setError(error);
+        });
+    this.allSubscriptions.push(sub);
   }
 }

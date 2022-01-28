@@ -163,6 +163,41 @@
 </ng-container>
 
 
+<ng-container *ngIf="showNotify$|async">
+  <app-modal size="large" (onChange)="closeNotify()">
+
+    <ng-container slot="body">
+      <div style="display: block; width: 100%;" *ngIf="(earningsDetails$|async) as earningsDetails">
+        <div class="margin--3x no-margin--top">
+          <small>Earning ID</small>
+          <h2>{{earningsDetails.code}}</h2>
+        </div>
+
+        <div style="margin:auto">
+          <app-form [form]="notifyForm" (onSubmit)="onNotify($event,earningsDetails.code, earningsDetails.customerId)"
+            (errorMessageChange)="onError($event)">
+            <app-dropdown current="{{messageType.value}}" [control]="messageType" [fieldClass]="'no-margin--top'"
+              [id]="'messageType'" aria-placeholder="Change messageType">
+              <app-option *ngFor="let t of messageTypes; let i =index" [value]="t.label">{{t.label}}</app-option>
+            </app-dropdown>
+            <div class="vc_form-field margin--2x" style="max-width: 500px;">
+              <label for="message">Message</label>
+              <textarea id="message" placeholder="Enter message" [formControl]="message" class="form-control">
+
+              </textarea>
+            </div>
+
+            <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="notifyForm">Notify</app-button>
+
+
+          </app-form>
+        </div>
+
+
+      </div>
+    </ng-container>
+  </app-modal>
+</ng-container>
 
 
 <ng-container *ngIf="showPayout$|async">
