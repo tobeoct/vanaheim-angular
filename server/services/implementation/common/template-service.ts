@@ -30,7 +30,7 @@ export class TemplateService {
                  
                 Best regards.`
             case LoanRequestStatus.Funded:
-                return `Hello  ${customer}<br/><br/>,
+                return `Hello  ${customer},<br/><br/>
 
                 Trust this meets you well.<br/><br/>
                 
