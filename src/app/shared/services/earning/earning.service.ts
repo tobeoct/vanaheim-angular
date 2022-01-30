@@ -6,6 +6,7 @@ import { BehaviorSubject, combineLatest, EMPTY, from, Observable, of, timer } fr
 import { catchError, filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { EarningApplication } from 'src/app/modules/earnings/earnings-application';
 import { EarningsStore } from '../../helpers/store';
+import { Utility } from '../../helpers/utility.service';
 export enum EarningType {
   EndOfTenor = "End Of Tenor",
   Monthly = "Monthly ROI"
@@ -44,7 +45,7 @@ export class EarningService {
 
   activeEarningSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   interval = environment.production ? 30000 : 30000000000000000;
-  constructor(private _http: HttpClient, private _earningsStore: EarningsStore) { }
+  constructor(private _http: HttpClient, private _earningsStore: EarningsStore,private _utils:Utility) { }
   apply = (payload: any) => {
     // console.log(payload)
     return this._http.post<any>(`${environment.apiUrl}/earnings/apply`, payload)
@@ -138,8 +139,8 @@ export class EarningService {
         return {};
       }));
   }
-  notifyLiquidate = (earningRequestId: number) => {
-    const url = `${environment.apiUrl}/earnings/notifyLiquidation?id=${earningRequestId}`;
+  notifyLiquidate = (earningRequestId: number,amount:number,payoutDate:Date) => {
+    const url = `${environment.apiUrl}/earnings/notifyLiquidation?id=${earningRequestId}&amount=${this._utils.convertToPlainNumber(amount)}&payoutDate=${payoutDate}`;
     return this._http.get<any>(url)
       .pipe(map(response => {
         if (response && response.status == true) {

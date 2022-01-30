@@ -164,6 +164,8 @@ export class EarningService implements IEarningService {
           resolve({ status: false, data: "Cannot find request" });
           return;
         }
+        const amount = earningLiquidation.amount;
+        const payoutDate= earningLiquidation.payoutDate;
         approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
 
         if (status && status == LiquidationStatus.Declined) {
@@ -177,7 +179,11 @@ export class EarningService implements IEarningService {
           earningRequest.updatedAt = moment().toDate();
 
           customer = await this._customerRepository.getById(earningRequest.customerID);
-          if (!customer || Object.keys(customer).length == 0) throw "Invalid Customer";
+          if (!customer || Object.keys(customer).length == 0) {
+            resolve({ status: false, data: "Invalid Customer" });
+            return;
+          }
+          customer = (customer as any).dataValues as Customer;
 
           let earningRequestLog: EarningRequestLog = await this._earningRequestLogRepository.getById(approvedEarning.earningRequestLogID);
           if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
@@ -199,13 +205,15 @@ export class EarningService implements IEarningService {
         if (status && status == LiquidationStatus.EarningPaused) {
           earningLiquidation.liquidationStatus = LiquidationStatus.EarningPaused;
           earningLiquidation.datePaused = moment().toDate();
-          const duration = moment().diff(approvedEarning.createdAt, "month");
+          // const duration = moment().diff(approvedEarning.createdAt, "month");
+          // const duration = moment().diff(payoutDate, "month");
 
-          if (duration != earningLiquidation.duration) {
-            const amount = (earningLiquidation.amount / earningLiquidation.duration) * duration;
-            earningLiquidation.duration = duration;
-            earningLiquidation.amount = amount;
-          }
+          // earningLiquidation.amount = amount;
+          // earningLiquidation.duration = duration;
+          // if (duration != earningLiquidation.duration) {
+          //   // const amount = (earningLiquidation.amount / earningLiquidation.duration) * duration;
+          //   earningLiquidation.duration = duration;
+          // }
           approvedEarning.earningStatus = ApprovedEarningStatus.Pause
           approvedEarning.updatedAt = moment().toDate();
           await this._earningLiquidationRepository.update(earningLiquidation);
@@ -220,24 +228,54 @@ export class EarningService implements IEarningService {
           approvedEarning.earningStatus = ApprovedEarningStatus.Pause
           approvedEarning.updatedAt = moment().toDate();
           if (approvedEarning.earningStatus === ApprovedEarningStatus.Pause) {
-            approvedEarning.earningStatus = ApprovedEarningStatus.Liquidated
-            approvedEarning.isClosed = true;
             let earningRequest: EarningRequest = await this._earningRequestRepository.getById(approvedEarning.earningRequestID);
             if (!earningRequest || Object.keys(earningRequest).length == 0) {
               resolve({ status: false, data: "Cannot find request" });
               return;
             }
-            earningRequest = (earningRequest as any).dataValues as EarningRequest;
-            earningRequest.requestStatus = EarningRequestStatus.Matured;
-            earningRequest.updatedAt = moment().toDate();
             let earningRequestLog: EarningRequestLog = await this._earningRequestLogRepository.getById(approvedEarning.earningRequestLogID);
             if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
               resolve({ status: false, data: "Cannot find request" });
               return;
             }
-            earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
-            earningRequestLog.requestStatus = EarningRequestStatus.Matured;
-            earningRequestLog.updatedAt = moment().toDate();
+            customer = await this._customerRepository.getById(earningRequest.customerID);
+            if (!customer || Object.keys(customer).length == 0) {
+              resolve({ status: false, data: "Invalid Customer" });
+              return;
+            }
+            customer = (customer as any).dataValues as Customer;
+            let allLiquidations = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
+            let liquidationsSoFar =0;
+            if(allLiquidations && allLiquidations.length>0){
+              liquidationsSoFar = allLiquidations.reduce((total,l)=>{
+
+                return total + ((l as any).dataValues as EarningLiquidation).amount
+              },0);
+            }
+            const accruedAmount = (earningRequest.payout / earningLiquidation.duration);
+
+            if((liquidationsSoFar+amount)>accruedAmount){
+              resolve({ status: false, data: "Cannot liquidate more than total accrued amount" });
+              return;
+            }
+            if((liquidationsSoFar+amount)>earningRequest.payout){
+              resolve({ status: false, data: "Cannot liquidate more than total payout" });
+              return;
+            }
+            earningRequest.payout-=amount;
+            earningRequestLog.payout-=amount;
+            if((liquidationsSoFar+amount)==earningRequest.payout){
+              approvedEarning.earningStatus = ApprovedEarningStatus.Liquidated
+              approvedEarning.isClosed = true;
+             
+              earningRequest = (earningRequest as any).dataValues as EarningRequest;
+              earningRequest.requestStatus = EarningRequestStatus.Matured;
+              earningRequest.updatedAt = moment().toDate();
+             
+              earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
+              earningRequestLog.requestStatus = EarningRequestStatus.Matured;
+              earningRequestLog.updatedAt = moment().toDate();
+            }
             await this._earningRequestRepository.update(earningRequest);
             await this._earningRequestLogRepository.update(earningRequestLog);
 
@@ -377,7 +415,7 @@ export class EarningService implements IEarningService {
             key: "NOK Information",
             data: [
               { key: "Name", value: this._utils.replaceAll(this._utils.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames + " " + request.Customer?.NOK?.firstName), "null", ""), "undefined", "") },
-              { key: "Date Of Birth", value: moment(request.Customer?.NOK?.dateOfBirth).format("MMMM Do YYYY")  },
+              { key: "Date Of Birth", value: moment(request.Customer?.NOK?.dateOfBirth).format("MMMM Do YYYY") },
               { key: "Relationship", value: request.Customer?.NOK?.relationship.toString() },
               { key: "Email Address", value: request.Customer?.NOK?.email },
               { key: "Phone Number", value: request.Customer?.NOK?.phoneNumber },
@@ -410,7 +448,7 @@ export class EarningService implements IEarningService {
 
           }
           // if (approvedEarning?.status == true && approvedEarning.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(approvedEarning.data.id)
-          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestStatus==EarningRequestStatus.Pending?"Not yet assigned":request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} } })
+          resolve({ status: true, data: { id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} } })
 
         }
         else {
@@ -452,7 +490,7 @@ export class EarningService implements IEarningService {
               data: [
                 { key: "Type", value: request.type },
                 { key: "Duration", value: request.duration + " Months" },
-                { key: "Maturity Date", value: (request.requestStatus == EarningRequestStatus.Pending||request.requestStatus == EarningRequestStatus.Processing) ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
+                { key: "Maturity Date", value: (request.requestStatus == EarningRequestStatus.Pending || request.requestStatus == EarningRequestStatus.Processing) ? request.maturityDate : moment(request.maturityDate).format("MMMM Do YYYY") },
                 { key: "Rate", value: request.rate + "%" },
                 { key: "Amount", value: this._utils.currencyFormatter(request.amount) },
                 { key: "Total Payout", value: this._utils.currencyFormatter(request.payout) },
@@ -488,7 +526,7 @@ export class EarningService implements IEarningService {
 
             // }
             // if (approved?.status == true && approved.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(approvedEarnings.data.id)
-            responses.push({ id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestStatus==EarningRequestStatus.Pending?"Not yet assigned": request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} })
+            responses.push({ id: request.id, earningRequestID: earningRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, approvedEarnings: approvedEarning?.status == true ? approvedEarning.data : {} })
 
           }
           //  else {
@@ -595,7 +633,7 @@ export class EarningService implements IEarningService {
           await this._approvedEarningRepository.create(approvedEarning);
         } else {
           approvedEarning.nextPayment = earningRequest.type == EarningType.EndOfTenor ? earningRequest.payout : earningRequest.monthlyPayment;
-          approvedEarning.nextPaymentDate = earningRequest.type == EarningType.EndOfTenor ? maturityDate.toDate() : start.diff(moment(),"day")>=0?start.add(1,"month").set("date",24).toDate(): start.set("date",24).toDate()//maturityDate.subtract(earningRequest.duration,"months").set("date",24).add(1,  "month").toDate();
+          approvedEarning.nextPaymentDate = earningRequest.type == EarningType.EndOfTenor ? maturityDate.toDate() : start.diff(moment(), "day") >= 0 ? start.add(1, "month").set("date", 24).toDate() : start.set("date", 24).toDate()//maturityDate.subtract(earningRequest.duration,"months").set("date",24).add(1,  "month").toDate();
           approvedEarning.earningStatus = ApprovedEarningStatus.AwaitingFirstPayment;
           approvedEarning.maturityDate = earningRequest.maturityDate;
           console.log(earningRequestLog, earningRequest, approvedEarning, moment(earningRequest.maturityDate))
@@ -612,7 +650,7 @@ export class EarningService implements IEarningService {
       notification.data.url = this._appConfig.WEBURL + "/my/earnings";
       try {
         //failureReason ? this._templateService.EARNING_STATUS_UPDATE_DECLINED(customer.firstName, message ?? requestStatus, earningRequest.requestId) :
-        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html:  this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : earningRequest.requestId, `${customer.title} ${customer.firstName} ${customer.lastName}`, earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
+        await this._emailService.SendEmail({ subject: "Vanir Capital: Earning Status Update", html: this._templateService.EARNING_STATUS_UPDATE(earningRequest.requestStatus, earningRequest.requestStatus == EarningRequestStatus.Pending ? "Not yet assigned" : earningRequest.requestId, `${customer.title} ${customer.firstName} ${customer.lastName}`, earningRequest.payout, earningRequest.payout - earningRequest.amount), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [earningRequest.customerID], notification })
 
       }

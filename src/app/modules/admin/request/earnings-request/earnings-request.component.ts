@@ -281,6 +281,7 @@ export class EarningsRequestComponent implements OnInit {
       .subscribe(
         response => {
           this._utils.setSuccess(response);
+          this.notifyForm.reset()
         },
         error => {
           this._utils.setError(error);

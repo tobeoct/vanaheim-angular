@@ -12,6 +12,7 @@ export class EarningLiquidation extends BaseEntity {
     amount:number;
     liquidationStatus:LiquidationStatus;
     datePaused?:Date;
+    payoutDate?:Date;
     duration:number;
 }
 

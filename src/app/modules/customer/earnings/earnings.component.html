@@ -255,12 +255,34 @@
             <h3>Enter Top Up Amount</h3>
         </app-modal-header>
         <app-modal-body slot="body">
-            <app-form [form]="form" (onSubmit)="notifyTopUp($event)" (errorMessageChange)="onError($event)">
+            <app-form [form]="topUpForm" (onSubmit)="notifyTopUp($event)" (errorMessageChange)="onError($event)">
                 <app-input id="topUp" [control]="topUpAmount" class="form-control">
                     <label>Amount</label>
                 </app-input>
 
-                <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="form">Done</app-button>
+                <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="topUpForm">Done</app-button>
+
+
+            </app-form>
+        </app-modal-body>
+    </app-modal>
+
+</ng-container>
+
+<ng-container *ngIf="(showLiquidation$|async) as entered">
+    <app-modal [show]="entered" (onChange)="closeLiquidationModal()">
+        <app-modal-header slot="header">
+            <h3>Enter Liquidation Details</h3>
+        </app-modal-header>
+        <app-modal-body slot="body">
+            <app-form [form]="liquidationForm" (onSubmit)="notifyLiquidation($event)" (errorMessageChange)="onError($event)">
+                <app-input id="liquidationAmount" [control]="liquidationAmount" class="form-control">
+                    <label>Amount</label>
+                </app-input>
+                <app-input id="payoutDate" [control]="payoutDate" type="date" class="form-control">
+                    <label>Date of Payment</label>
+                </app-input>
+                <app-button fieldClass="no-margin--top" [loading$]="loading$" [form]="liquidationForm">Done</app-button>
 
 
             </app-form>

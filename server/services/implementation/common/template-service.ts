@@ -9,7 +9,7 @@ const pdfGenerator = require('template-pdf-generator');
 
 export class TemplateService {
     constructor(private fs: any, private fsExtra: any, private _utils: UtilService) { }
-    STATUS_UPDATE(status: LoanRequestStatus, id: string, customer: string, amount: string, tenure: string,message?:string,url?:string) {
+    LOAN_STATUS_UPDATE(status: LoanRequestStatus, id: string, customer: string, amount: string, tenure: string,message?:string,url?:string) {
 
         switch (status) {
             case LoanRequestStatus.Processing:
@@ -34,13 +34,28 @@ export class TemplateService {
 
                 Trust this meets you well.<br/><br/>
                 
-                Kindly acknowledge receipt of the ${amount} (${this._utils.amountToWords(this._utils.convertToPlainNumber(amount), 'Naira Only')}) as disbursed into your account.<br/><br/>
+                Kindly acknowledge receipt of the ${amount.replace(".00","")} (${this._utils.amountToWords(this._utils.convertToPlainNumber(amount), 'Naira Only')}) as disbursed into your account.<br/><br/>
                 
                 Thank you and best regards`
             case LoanRequestStatus.UpdateRequired:
-                return this.STATUS_UPDATE_REQUIRED(customer,message,url);
+                return `Dear ${customer.trim()},<br/><br/>
+                Thank you for your mail.<br/><br/>
+                We acknowledge receipt of your request and documents provided. Kindly see below the documents outstanding to enable us proceed with request evaluation:<br/><br/>
+                ${this.parseMessage(message)}<br/><br/>
+        
+                Go to ${url} to provide the required documents <br/><br/>
+                We look forward to your response to enable us proceed with evaluation.<br/><br/>
+                Best regards.`;
             case LoanRequestStatus.NotQualified:
-                return this.STATUS_UPDATE_DECLINED(customer,message,id);
+                return `Dear ${ customer.trim() }, <br/><br/>
+                Thank you for your interest in Vanir Capital Limited’s loan services.<br/> <br/>
+            
+            Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/> <br/>
+            ${ this.parseMessage(message) } <br/><br/>
+                Thank you for your interest and we hope to be able to serve you in the near future.<br/> <br/>
+    
+            Best regards.<br/> <br/>
+                `;
             default:
                 return `   LOAN ID: ${id} <br/><br/>
         Your loan request status has been updated to ${status};<br/><br/>
@@ -50,38 +65,8 @@ export class TemplateService {
         `;
         }
     }
-    private getMessage = (message?: string) => {
-        let m = "";
-        if(!message) return "";
-        message.split(/\n/).forEach(line => {
-            m += `${line}<br/>`
-        })
-        return m;
-    }
-    private STATUS_UPDATE_REQUIRED(name: string, message?: string, url?: string) {
-        return `Dear ${name.trim()},<br/><br/>
-        Thank you for your mail.<br/><br/>
-        We acknowledge receipt of your request and documents provided. Kindly see below the documents outstanding to enable us proceed with request evaluation:<br/><br/>
-        ${this.getMessage(message)}<br/><br/>
 
-        Go to ${url} to provide the required documents <br/><br/>
-        We look forward to your response to enable us proceed with evaluation.<br/><br/>
-        Best regards.`
-            }
-
-  private  STATUS_UPDATE_DECLINED(name: string, message?: string, id?: string) {
-        return `Dear ${ name.trim() }, <br/><br/>
-            Thank you for your interest in Vanir Capital Limited’s loan services.<br/> <br/>
-        
-        Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/> <br/>
-        ${ message } <br/><br/>
-            Thank you for your interest and we hope to be able to serve you in the near future.<br/> <br/>
-
-        Best regards.<br/> <br/>
-            `;
-    }
-
-    LOAN_UPDATE(customerName: string, code: string, requirement: string) {
+    LOAN_DOCUMENT_UPDATE_NOTIFICATION(customerName: string, code: string, requirement: string) {
         return `   LOAN ID: ${ code } <br/><br/>
             Customer:${ customerName } <br/><br/>
                 Requirement: ${ requirement } <br/><br/>
@@ -90,136 +75,6 @@ export class TemplateService {
                             `;
     }
 
-    EARNING_STATUS_UPDATE(status: EarningRequestStatus, id: string, customerName: string, payout?: number, interest?: number,message?:string) {
-        switch (status) {
-            case EarningRequestStatus.Processing:
-                return `Hello ${ customerName }, <br/><br/>
-            Your earning request status has been updated to
-        PROCESSING. <br/> <br/>
-                Status will be updated to ACTIVE within 24 hours. <br/> <br/>
-                Kind Regards.`;
-            case EarningRequestStatus.Active:
-                return `Hello ${ customerName }, <br/><br/>
-            Congratulations! <br/><br/>
-            Your earning request status has been updated to ACTIVE. <br/> <br/>
-            Kind Regards.`;
-            case EarningRequestStatus.Matured:
-                return `Hello ${ customerName }, <br/><br/>
-            Trust this meets you well.<br/> <br/>
-                Kindly be informed that your matured earnings of ${ this._utils.currencyFormatter(payout) } and accrued interest of ${ this._utils.currencyFormatter(interest) } has been paid into
-                your account.<br/> <br/>
-                We thank you for your patronage and look forward to
-                having you back with us.<br/> <br/>
-                Best regards.`
-            case EarningRequestStatus.Declined:
-                return  this.EARNING_STATUS_UPDATE_DECLINED(customerName,message, id);
-            default:
-                return `   EARNING ID: ${ id } <br/><br/>
-            Your earning request status has been updated to ${ status }; <br/><br/>
-                Kind Regards <br/> <br/>
-                    <b> Vanir Capital Loans and Capital Finance Team </b>
-                        `;
-        }
-    }
-
-    EARNING_LIQUIDATION_APPROVAL(customer: string) {
-        return `
-         Hello ${ customer }, <br/><br/>
-
-            Trust this meets you well.<br/> <br/>
-
-        Your liquidation request has now been processed and remitted into your account details provided on file.<br/>
-
-            Kindly acknowledge receipt.<br/> <br/>
-
-        We thank you for your valued patronage and look forward to having you back with us.<br/> <br/>
-
-        Best regards.`
-    }
-    EARNING_LIQUIDATION_NOTIFICATION(customer: string, requestID: string) {
-
-        return `Dear ${ customer }, <br/><br/> We have received your liquidation request for EARNING ID: ${ requestID } <br/><br/>
-            Your request is being attended to.<br/><br/>You would be contacted shortly <br/> <br/>
-
-                <b> Vanir Capital Loans and Capital Finance Team </b>
-                    `;
-    }
-
-    EARNING_TOPUP_NOTIFICATION(customer: string, requestCode: string, amount: string) {
-        return `Hello ${ customer },<br/><br/>
-                        Congratulations! Your earnings Top Up request has been approved.<br/> <br/>
-                Kind Regards.
-        `;
-    }
-  private  EARNING_STATUS_UPDATE_DECLINED(name: string, message?: string, id?: string) {
-        return `  Dear ${name.trim()},<br/><br/>
- 
-        Thank you for your interest in Vanir Capital Limited’s earning services.<br/><br/>
-         
-        Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/><br/>
-        ${message}<br/><br/>
-        Kind Regards<br/><br/>
-        <b>Vanir Capital Loans and Capital Finance Team</b>
-        `;
-    }
-    // EARNING_STATUS_UPDATE_REQUIRED(status: string, id: string, url: string, message: string) {
-    //     return `   EARNING ID: ${id} <br/><br/>
-    //     Your earning request status has been updated to ${status};<br/><br/>
-    //     Go to ${url} to provide the required document <br/><br/>
-    //     ${message} <br/><br/>
-    //     Kind Regards<br/><br/>
-    //     <b>Vanir Capital Loans and Capital Finance Team</b>
-    //     `;
-    // }
-    // EARNING_UPDATE(customerName: string, code: string, requirement: string) {
-    //     return `   EARNING ID: ${code} <br/><br/>
-    //     Customer:${customerName}<br/><br/>
-    //     Requirement: ${requirement}<br/><br/>
-    //     Kind Regards<br/><br/>
-    //     <b>Vanir Capital Loans and Capital Finance Team</b>
-    //     `;
-    // }
-
-    NOTIFICATION(message: string, type: string, id?: string) {
-        if (id) {
-            return `${type} - ID: ${id} <br/><br/>
-        ${message}<br/><br/>
-        Kind Regards<br/><br/>
-        <b>Vanir Capital Loans and Capital Finance Team</b>
-        `;
-        } else {
-            return `<b>${type}</b><br/><br/>
-            ${message}<br/><br/>
-            Kind Regards<br/><br/>
-            <b>Vanir Capital Loans and Capital Finance Team</b>
-            `;
-        }
-    }
-    EARNING_CUSTOMER_TEMPLATE = (customer: string) => `
-    Dear ${customer},<br/><br/>
-    Welcome to Vanir Capital Limited.<br/><br/>
-    We thank you for your interest in our earnings service. We are
-    resolute in our mission for quality financial service delivery, assured by
-    our core values of passion and sustained through Professionalism,
-    Integrity, Innovation and business sustainability.<br/><br/>
-    The documents listed below have been attached for your information to
-    enable you make the right earning decision:<br/><br/>
-    - A Copy of our Investors Pitch Deck<br/>
-    - A Copy of our Privacy Policy Document<br/>
-    Thank you for choosing Vanir Capital. You will be contacted by a
-    member of the earnings team shortly.<br/><br/>
-    Kind Regards<br/><br/>
-    <b>Vanir Capital Earnings Team</b>`;
-
-    EARNING_ADMIN_TEMPLATE = (name: string, emailAddress: string, amount: string, duration: string, maturity: string, payout: string, rate: number, earningType: string) => `Customer Name: ${name} <br/><br/>
-    Customer Email: ${emailAddress} <br/><br/>
-    Amount: ${amount} <br/><br/>
-    Duration: ${duration} <br/><br/>
-    Maturity Date: ${maturity} <br/><br/>
-    Total Payout: ${payout} <br/><br/>
-    Rate: ${rate}% <br/><br/>
-    Earning Type: ${earningType}
-    `
     SUCCESSFUL_LOAN_TEMPLATE = (customerName: string) => `<div style="width:100% !important;  margin-top:20px;"><p>Dear ${customerName.trim()},<br/><br/>
     Thank you for your interest in Vanir Capital Limited's loan services.​<br/><br/>
 ​
@@ -262,6 +117,120 @@ The Vanir Loans’ Team
        </div>
         
         `;
+
+        
+    EARNING_STATUS_UPDATE(status: EarningRequestStatus, id: string, customerName: string, payout?: number, interest?: number,message?:string) {
+        switch (status) {
+            case EarningRequestStatus.Processing:
+                return `Hello ${ customerName }, <br/><br/>
+            Your earning request status has been updated to
+        PROCESSING. <br/> <br/>
+                Status will be updated to ACTIVE within 24 hours. <br/> <br/>
+                Kind Regards.`;
+            case EarningRequestStatus.Active:
+                return `Hello ${ customerName }, <br/><br/>
+            Congratulations! <br/><br/>
+            Your earning request status has been updated to ACTIVE. <br/> <br/>
+            Kind Regards.`;
+            case EarningRequestStatus.Matured:
+                return `Hello ${ customerName }, <br/><br/>
+                Trust this meets you well.<br/> <br/>
+                Kindly be informed that your matured earnings of ${ this._utils.currencyFormatter(payout) } and accrued interest of ${ this._utils.currencyFormatter(interest) } has been paid into
+                your account.<br/> <br/>
+                We thank you for your patronage and look forward to
+                having you back with us.<br/> <br/>
+                Best regards.`
+            case EarningRequestStatus.Declined:
+                return  `Dear ${customerName.trim()},<br/><br/>
+ 
+                Thank you for your interest in Vanir Capital Limited’s earning services.<br/><br/>
+                 
+                Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/><br/>
+                ${this.parseMessage(message)}<br/><br/>
+                Kind Regards<br/><br/>
+                <b>Vanir Capital Loans and Capital Finance Team</b>
+                `;
+            default:
+                return `   EARNING ID: ${ id } <br/><br/>
+            Your earning request status has been updated to ${ status }; <br/><br/>
+                Kind Regards <br/> <br/>
+                    <b> Vanir Capital Loans and Capital Finance Team </b>
+                        `;
+        }
+    }
+
+    EARNING_LIQUIDATION_APPROVAL(customer: string) {
+        return `
+         Hello ${ customer }, <br/><br/>
+
+            Trust this meets you well.<br/> <br/>
+
+        Your liquidation request has now been processed and remitted into your account details provided on file.<br/>
+
+            Kindly acknowledge receipt.<br/> <br/>
+
+        We thank you for your valued patronage and look forward to having you back with us.<br/> <br/>
+
+        Best regards.`
+    }
+    EARNING_LIQUIDATION_NOTIFICATION(customer: string, requestID: string) {
+
+        return `Dear ${ customer }, <br/><br/> We have received your liquidation request for EARNING ID: ${ requestID } <br/><br/>
+            Your request is being attended to.<br/><br/>You would be contacted shortly <br/> <br/>
+
+                <b> Vanir Capital Loans and Capital Finance Team </b>
+                    `;
+    }
+
+    EARNING_TOPUP_NOTIFICATION(customer: string, requestCode: string, amount: string) {
+        return `Hello ${ customer },<br/><br/>
+                        Congratulations! Your earnings Top Up request has been approved.<br/> <br/>
+                Kind Regards.
+        `;
+    }
+
+    NOTIFICATION(message: string, type: string, id?: string) {
+        if (id) {
+            return `${this.parseMessage(message)}<br/><br/>
+        ${type} - ID: ${id} <br/><br/>
+        Kind Regards<br/><br/>
+        <b>Vanir Capital Loans and Capital Finance Team</b>
+        `;
+        } else {
+            return `
+            ${this.parseMessage(message)}<br/><br/>
+            <b>${type}</b><br/><br/>
+            Kind Regards<br/><br/>
+            <b>Vanir Capital Loans and Capital Finance Team</b>
+            `;
+        }
+    }
+    EARNING_CUSTOMER_TEMPLATE = (customer: string) => `
+    Dear ${customer},<br/><br/>
+    Welcome to Vanir Capital Limited.<br/><br/>
+    We thank you for your interest in our earnings service. We are
+    resolute in our mission for quality financial service delivery, assured by
+    our core values of passion and sustained through Professionalism,
+    Integrity, Innovation and business sustainability.<br/><br/>
+    The documents listed below have been attached for your information to
+    enable you make the right earning decision:<br/><br/>
+    - A Copy of our Investors Pitch Deck<br/>
+    - A Copy of our Privacy Policy Document<br/>
+    Thank you for choosing Vanir Capital. You will be contacted by a
+    member of the earnings team shortly.<br/><br/>
+    Kind Regards<br/><br/>
+    <b>Vanir Capital Earnings Team</b>`;
+
+    EARNING_ADMIN_TEMPLATE = (name: string, emailAddress: string, amount: string, duration: string, maturity: string, payout: string, rate: number, earningType: string) => `Customer Name: ${name} <br/><br/>
+    Customer Email: ${emailAddress} <br/><br/>
+    Amount: ${amount} <br/><br/>
+    Duration: ${duration} <br/><br/>
+    Maturity Date: ${maturity} <br/><br/>
+    Total Payout: ${payout} <br/><br/>
+    Rate: ${rate}% <br/><br/>
+    Earning Type: ${earningType}
+    `
+
     NEW_CUSTOMER_TEMPLATE = (customerName: string) => {
         return `<div style="width:100% !important;  margin-top:20px;"><p>Hello ${customerName.trim()},<br/><br/>
             Welcome to Vanir Capital LLC.<br/><br/>
@@ -294,6 +263,54 @@ The Vanir Loans’ Team
             The Vanir Loans’ Team
             </div><br/><br/>`
     }
+    
+    
+    createDirectory = (path: string) => {
+        let pathMap = path.split("/");
+        let concatPath = '';
+        pathMap.forEach((dir, i) => {
+            if (i < (pathMap.length - 1)) {
+
+                concatPath += dir
+                if (!this.fsExtra.existsSync(concatPath)) {
+                    mkdirsSync(concatPath);
+                }
+                concatPath += "/";
+            }
+        })
+    }
+    generatePDF = (documentTitle: string, data: any[], fileName: any, generatedTemplate?: any) => new Promise(async (resolve, reject) => {
+        try {
+            let css = 'body {padding:5vh 5%;font-family:sans-serif !important;} .section{margin-top:70px} .table{width:100% !important; } p{margin:0;padding:0;} .item p:first-child{font-weight:300; font-size:0.85em;} .item .value{margin-top:5px;} .item{border: 2px solid #E0E0E0; color:#6B6B6B; padding:10px 2.5%; margin-top:10px;}  .heading{margin-top:20px;text-transform: uppercase;width:100% !important;  padding-top:30px; padding-bottom:30px; background:#333333;text-align:center;color:#E6AF2A;}';
+
+            let template = generatedTemplate ? generatedTemplate : this.generateTemplate(data);
+            let basePath = "uploads/generated-documents/";
+            let filePath = basePath + fileName;
+            this.createDirectory(filePath);
+            this.fs.writeFile(`${filePath}.pdf`, '', async (err: any) => {
+                if (err) { console.log(err); console.log('Writing Error'); reject(err); }
+                console.log('File is created successfully.');
+                let layout = `<img src="${mailHeader}" style="object-fit:cover;width:80%; margin:auto; margin-left:10%;margin-bottom:50px"/>`;
+                layout += template;
+                const res = await pdfGenerator({}, template, css).pipe(this.fs.createWriteStream(`${filePath}.pdf`));
+                resolve({ path: `${filePath}.pdf`, template });
+
+            });
+
+        } catch (err: any) {
+            reject(err);
+        }
+    });
+
+    private parseMessage = (message?: string) => {
+        let m = "";
+        if(!message) return "";
+        message.split(/\n/).forEach(line => {
+            m += `${line}<br/>`
+        })
+        return m;
+    }
+
     private generateRow(label: string, value: string) {
         return `<tr class="item" style="border: 2px solid #E0E0E0;width:100% !important;  color:#6B6B6B; padding:10px 2.5%; margin-top:10px;">
                 <td style="border: 2px solid #E0E0E0; padding-top:10px;padding-bottom:10px; padding-left:20px;">
@@ -339,40 +356,4 @@ The Vanir Loans’ Team
         })
         return template;
     }
-    createDirectory = (path: string) => {
-        let pathMap = path.split("/");
-        let concatPath = '';
-        pathMap.forEach((dir, i) => {
-            if (i < (pathMap.length - 1)) {
-
-                concatPath += dir
-                if (!this.fsExtra.existsSync(concatPath)) {
-                    mkdirsSync(concatPath);
-                }
-                concatPath += "/";
-            }
-        })
-    }
-    generatePDF = (documentTitle: string, data: any[], fileName: any, generatedTemplate?: any) => new Promise(async (resolve, reject) => {
-        try {
-            let css = 'body {padding:5vh 5%;font-family:sans-serif !important;} .section{margin-top:70px} .table{width:100% !important; } p{margin:0;padding:0;} .item p:first-child{font-weight:300; font-size:0.85em;} .item .value{margin-top:5px;} .item{border: 2px solid #E0E0E0; color:#6B6B6B; padding:10px 2.5%; margin-top:10px;}  .heading{margin-top:20px;text-transform: uppercase;width:100% !important;  padding-top:30px; padding-bottom:30px; background:#333333;text-align:center;color:#E6AF2A;}';
-
-            let template = generatedTemplate ? generatedTemplate : this.generateTemplate(data);
-            let basePath = "uploads/generated-documents/";
-            let filePath = basePath + fileName;
-            this.createDirectory(filePath);
-            this.fs.writeFile(`${filePath}.pdf`, '', async (err: any) => {
-                if (err) { console.log(err); console.log('Writing Error'); reject(err); }
-                console.log('File is created successfully.');
-                let layout = `<img src="${mailHeader}" style="object-fit:cover;width:80%; margin:auto; margin-left:10%;margin-bottom:50px"/>`;
-                layout += template;
-                const res = await pdfGenerator({}, template, css).pipe(this.fs.createWriteStream(`${filePath}.pdf`));
-                resolve({ path: `${filePath}.pdf`, template });
-
-            });
-
-        } catch (err: any) {
-            reject(err);
-        }
-    });
 }
