@@ -34,7 +34,7 @@ export default class UtilService {
     return value;
   }
   amountToWords(amount: number, append?: string) {
-    return new Number().toWords(amount, append);
+    return this.titleCase(new Number().toWords(amount, append));
   }
   randPassword = (letters: number, numbers: number, either: number) => {
     let chars = [

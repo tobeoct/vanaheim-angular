@@ -39,7 +39,7 @@ export default class DocumentController {
           // doc.loanRequestLogID = loanRequestLogID;
           await this._documentService.update(doc)
           try {
-            let sent = await this._emailService.SendEmail({ type: EmailType.Update, to: this._appConfig.OPS_EMAIL, attachment: doc.path, html: this._templateService.LOAN_UPDATE(customer.firstName+" "+customer.lastName, loanRequest.code,doc.requirement), toCustomer: false })
+            let sent = await this._emailService.SendEmail({ type: EmailType.Update, to: this._appConfig.OPS_EMAIL, attachment: doc.path, html: this._templateService.LOAN_DOCUMENT_UPDATE_NOTIFICATION(customer.firstName+" "+customer.lastName, loanRequest.code,doc.requirement), toCustomer: false })
           } catch (err) {
             console.log("Loan Update Email failed to send");
             console.log(err);

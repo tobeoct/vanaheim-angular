@@ -17,7 +17,8 @@ import { EarningService } from 'src/app/shared/services/earning/earning.service'
   styleUrls: ['./earnings.component.scss']
 })
 export class EarningsComponent implements OnInit {
-  form: FormGroup;
+  topUpForm: FormGroup;
+  liquidationForm: FormGroup;
   @ViewChild('applyNow') applyNow: ElementRef;
   earnings$: Observable<any>;
   activeEarnings: boolean = false;
@@ -33,7 +34,13 @@ export class EarningsComponent implements OnInit {
   loanRequestID: number
   loanRequestLogID: number
   get topUpAmount(): FormControl {
-    return this.form.get("amount") as FormControl || new FormControl(0)
+    return this.topUpForm.get("amount") as FormControl || new FormControl(0)
+  }
+  get liquidationAmount(): FormControl {
+    return this.liquidationForm.get("amount") as FormControl || new FormControl(0)
+  }
+  get payoutDate(): FormControl {
+    return this.liquidationForm.get("payoutDate") as FormControl || new FormControl(0)
   }
   pagingSubject: BehaviorSubject<any>;
   latestEarnings$: Observable<any[]>;
@@ -50,9 +57,14 @@ export class EarningsComponent implements OnInit {
   requestIDSubject: BehaviorSubject<any> = new BehaviorSubject<any>('');
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
+
   showTopUpSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   showTopUp$: Observable<boolean> = this.showTopUpSubject.asObservable();
-  constructor(private _route: ActivatedRoute, private _fb: FormBuilder,private _documentService:DocumentService, private _validators: VCValidators, private _earningService: EarningService, private _earningPayoutService: EarningPayoutService, private _requestService: AdminEarningService, private _utils: Utility) { }
+
+
+  showLiquidationSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  showLiquidation$: Observable<boolean> = this.showLiquidationSubject.asObservable();
+  constructor(private _route: ActivatedRoute, private _fb: FormBuilder, private _documentService: DocumentService, private _validators: VCValidators, private _earningService: EarningService, private _earningPayoutService: EarningPayoutService, private _requestService: AdminEarningService, private _utils: Utility) { }
 
   ngOnInit(): void {
     this._route.params
@@ -69,8 +81,13 @@ export class EarningsComponent implements OnInit {
     this.earningPayouts$ = this._earningPayoutService.myEarningPayouts$;
     this.earnings$ = this._earningService.earningWithFilter$;
     this.pagingSubject = this._earningService.pagingSubject;
-    this.form = this._fb.group({
+    this.topUpForm = this._fb.group({
       amount: ["10,000", [Validators.required, this._validators.numberRange(10000, 10000000)]]
+    })
+
+    this.liquidationForm = this._fb.group({
+      amount: ["10,000", [Validators.required, this._validators.numberRange(10000, 20000000)]],
+      payoutDate: ["", [Validators.required]]
     })
   }
   moveToApply(): void {
@@ -81,7 +98,7 @@ export class EarningsComponent implements OnInit {
     if (status == "NotQualified" || status == "Declined" || status == "Defaulting") return 'danger';
     return status == "Processing" || status == 'TopUpRequest' || status == 'LiquidationRequest' ? '' : 'info';
   }
-  
+
   getStatusColor(status: string) {
     if (status == "Paid In Full" || status == "Fully Paid") return 'success';
     return status == "Defaulted" ? 'danger' : status == 'Partial' ? 'info' : '';
@@ -107,12 +124,26 @@ export class EarningsComponent implements OnInit {
   }
 
   liquidate(requestID: number) {
+
+    this.requestIDSubject.next(requestID);
+    this.showLiquidationSubject.next(true)
+
+  }
+
+  topUp(requestID: number) {
+    this.requestIDSubject.next(requestID);
+    this.showTopUpSubject.next(true)
+  }
+  notifyLiquidation(form: any) {
+    const requestID = this.requestIDSubject.value;
+    const amount = this.liquidationAmount.value;
+    const payoutDate = this.payoutDate.value;
     this._utils.toggleLoading(true);
-    this._earningService.notifyLiquidate(requestID).pipe(take(1)).subscribe(
+    this._earningService.notifyLiquidate(requestID, amount, payoutDate).pipe(take(1)).subscribe(
       data => {
 
         this._utils.setSuccess(data);
-        this.showTopUpSubject.next(false)
+        this.showLiquidationSubject.next(false)
         this._requestService.selectEarningLog(requestID);
         this.showSubject.next(false);
 
@@ -123,12 +154,6 @@ export class EarningsComponent implements OnInit {
         this._utils.setError(error)
 
       });
-
-  }
-
-  topUp(requestID: number) {
-    this.requestIDSubject.next(requestID);
-    this.showTopUpSubject.next(true)
   }
   notifyTopUp(form: any) {
     const requestID = this.requestIDSubject.value;
@@ -168,6 +193,9 @@ export class EarningsComponent implements OnInit {
   }
   closeTopUpModal() {
     this.showTopUpSubject.next(false)
+  }
+  closeLiquidationModal() {
+    this.showLiquidationSubject.next(false)
   }
 
   onError(err: any) {

@@ -18,6 +18,10 @@ module.exports = (sequelize:any, DataTypes:any) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      payoutDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       status:{
         type: DataTypes.ENUM('Active', 'Inactive'),
         allowNull: false,

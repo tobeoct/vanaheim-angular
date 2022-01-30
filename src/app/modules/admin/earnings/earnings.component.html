@@ -33,7 +33,7 @@
                     <th>Customer Name</th>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Duration</th>
+                    <th>Payout Date</th>
                     <th>Status</th>
                     <th></th>
                     <th></th>
@@ -54,7 +54,7 @@
                         <td>{{row.Customer?.title}} {{row.Customer?.firstName}} {{row.Customer?.lastName}}</td>
                         <td>{{row.createdAt | date :'MMMM d, y'}}</td>
                         <td>{{row.amount|currency:'₦'}}</td>
-                        <td>{{row.duration}} Months</td>
+                        <td>{{row.payoutDate| date :'MMMM d, y'}}</td>
                         <td>
                             <app-badge [color]="getLiquidationStatusColor(row.liquidationStatus)">{{row.liquidationStatus}}
                             </app-badge>

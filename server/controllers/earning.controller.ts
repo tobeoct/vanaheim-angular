@@ -243,6 +243,8 @@ export default class EarningsController {
     liquidate = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         const id = this.sanitizer.escape(req.query.id);
         const status = this.sanitizer.escape(req.query.status);
+        // const amount = this.sanitizer.escape(req.query.amount);
+        // const payoutDate = this.sanitizer.escape(req.query.payoutDate);
         let response: any = await this._earningService.liquidate(id, status);
         if (response.status == true) {
             res.statusCode = 200;
@@ -277,6 +279,8 @@ export default class EarningsController {
     notifyLiquidation = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         try {
             const id = this.sanitizer.escape(req.query.id);
+            const amount = this.sanitizer.escape(req.query.amount);
+            const payoutDate = this.sanitizer.escape(req.query.payoutDate);
             let customer = req.session.userData?.customer as Customer;
 
             let earningRequest = await this._earningRequestService.getById(id);
@@ -309,21 +313,25 @@ export default class EarningsController {
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
             // approvedEarning.earningStatus = ApprovedEarningStatus.Pause;
 
-            let earningLiquidation = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
-            if (earningLiquidation && (Object.keys(earningLiquidation).length > 0 && (earningLiquidation as any).dataValues.liquidationStatus != LiquidationStatus.Declined)) {
+            let earningLiquidations = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
+            if (earningLiquidations && (Object.keys(earningLiquidations).length > 0 && earningLiquidations.some( earningLiquidation=>{
+                const liquidation= (earningLiquidation as any).dataValues.liquidationStatus;
+                return liquidation != LiquidationStatus.Declined && liquidation != LiquidationStatus.Processed
+            }))) {
                 res.statusCode = 400;
                 res.payload = { message: "Liquidation request currently processing" };
                 next()
                 return;
             }
 
-            earningLiquidation = new EarningLiquidation();
+           let earningLiquidation = new EarningLiquidation();
             earningLiquidation.customerID = customer.id;
             earningLiquidation.code = this._utils.autogenerate({ prefix: "ETU" })
             earningLiquidation.status = BaseStatus.Active;
             earningLiquidation.liquidationStatus = LiquidationStatus.Pending;
-            earningLiquidation.duration = moment().diff(earningRequestLog.dateActive, "month");
-            earningLiquidation.amount = (earningRequest.payout / earningRequest.duration) * earningLiquidation.duration;
+            earningLiquidation.duration =  moment().diff(payoutDate, "month");//moment().diff(earningRequestLog.dateActive, "month");
+            earningLiquidation.payoutDate = payoutDate;
+            earningLiquidation.amount =amount; //(earningRequest.payout / earningRequest.duration) * earningLiquidation.duration;
             earningLiquidation.approvedEarningID = approvedEarning.id;
 
             // if (earningLiquidation.amount == 0) {
