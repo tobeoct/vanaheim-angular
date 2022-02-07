@@ -33,11 +33,13 @@ export default class AuthController {
     const response = await this._userService.login(req.body);
     if (response.status == true) {
 
-      try {
-        console.log("Registering Device after login");
-        await this._notificationService.registerDevice({ browserID: req.body.browserID, customerID: response.userData?.customer?.id });
-      } catch (err: any) {
-        console.log("Error Registering device", err, req.body.browserID);
+      if (!!response.userData?.customer) {
+        try {
+          console.log("Registering Device after login");
+          await this._notificationService.registerDevice({ browserID: req.body.browserID, customerID: response.userData?.customer?.id });
+        } catch (err: any) {
+          console.log("Error Registering device", err, req.body.browserID);
+        }
       }
       res.statusCode = 200;
       res.payload = { data: response.data };
@@ -55,13 +57,14 @@ export default class AuthController {
   register = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
     const response = await this._userService.register(req.body);
     if (response.status == true) {
-      try {
-        console.log("Registering Device after registration");
-        await this._notificationService.registerDevice({ browserID: req.body.browserID, customerID: req.body.registerAs == "Admin" ? response.userData.staff.id : response.userData.customer.id });
-      } catch (err: any) {
-        console.log("Error Registering device", err, req.body.browserID);
+      if (!!response.userData?.customer) {
+        try {
+          console.log("Registering Device after registration");
+          await this._notificationService.registerDevice({ browserID: req.body.browserID, customerID: req.body.registerAs == "Admin" ? response.userData.staff.id : response.userData.customer.id });
+        } catch (err: any) {
+          console.log("Error Registering device", err, req.body.browserID);
+        }
       }
-
       res.statusCode = 200;
       res.payload = { data: response.data };
       req.session.userData = response.userData;
