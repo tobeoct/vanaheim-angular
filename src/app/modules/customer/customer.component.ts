@@ -9,7 +9,6 @@ import { LoanService } from 'src/app/shared/services/loan/loan.service';
 import { Router } from '@angular/router';
 import { EarningsStore, LoanStore, Store } from 'src/app/shared/helpers/store';
 import { EarningService } from 'src/app/shared/services/earning/earning.service';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customer',
@@ -18,7 +17,8 @@ import { take } from 'rxjs/operators';
 })
 export class CustomerComponent implements OnInit {
   isEnabled: boolean;
-  isGranted: boolean;
+  isGrantedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isGranted$: Observable<boolean> = this.isGrantedSubject.asObservable();
   updateAvailable = false;
   pwaAble: boolean = true;
   timer$: Observable<any>;
@@ -32,24 +32,24 @@ export class CustomerComponent implements OnInit {
   apiError$: Observable<string>;
 
   activeLoan$: Observable<boolean>;
-  activeEarning$:Observable<boolean>;
+  activeEarning$: Observable<boolean>;
   runningLoanSubscription: Subscription
 
   showInvalid$: Observable<boolean>;
   timerSubscription: Subscription;
-  constructor(private swPush: SwPush, private _store: Store,private _loanStore:LoanStore,private _earningsStore:EarningsStore, private _earningService: EarningService, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
+  constructor(private swPush: SwPush, private _store: Store, private _loanStore: LoanStore, private _earningsStore: EarningsStore, private _earningService: EarningService, private _router: Router, private _utility: Utility, private _loanService: LoanService, private webNotificationService: WebNotificationService, private _authenticationService: AuthService) {
     try {
       this.showInvalid$ = this._utility.showLoanInvalidSubject.asObservable();
       if (environment.production) {
         this.isEnabled = this.swPush ? this.swPush.isEnabled : false;
         if (Notification) {
-          this.isGranted = Notification.permission === 'granted';
+          this.isGrantedSubject.next(Notification.permission === 'granted');
         } else {
           this.pwaAble = false;
         }
         this.timer$ = timer(0, 100000);
         this.timerSubscription = this.timer$.subscribe(c => {
-          if (this.isGranted) this.submitNotification();
+          if (this.isGrantedSubject.value) this.submitNotification();
         })
       }
     } catch (err: any) {
@@ -80,10 +80,10 @@ export class CustomerComponent implements OnInit {
     })
     this.isLoggedIn = this._authenticationService.isLoggedIn();
 
-    if (Object.keys(this._earningsStore.earningsApplication).length>0 && !this._router.url.includes("apply")) {
+    if (Object.keys(this._earningsStore.earningsApplication).length > 0 && !this._router.url.includes("apply")) {
       this._earningService.continueApplication(true);
     }
-    
+
     this.runningLoanSubscription = this._loanService.runningLoan$.subscribe(r => {
       // console.log("Running Loan ", r)
       if (localStorage.getItem("loan-page") && r != true && !this._router.url.includes("apply")) {
@@ -112,7 +112,7 @@ export class CustomerComponent implements OnInit {
   ngOnChanges(): void {
     try {
       if (Notification) {
-        this.isGranted = Notification.permission === 'granted';
+        this.isGrantedSubject.next(Notification.permission === 'granted');
       }
     } catch (err: any) {
       console.log(err);
@@ -121,6 +121,7 @@ export class CustomerComponent implements OnInit {
   }
   submitNotification(): void {
     this.webNotificationService.subscribeToNotification();
+    this.isGrantedSubject.next(true);
   }
 
   reload() {
@@ -129,7 +130,7 @@ export class CustomerComponent implements OnInit {
   routeToPage() {
     let currentPage = this._store.getItem("loan-page");
     let endpoint = "/loans/apply/" + currentPage;
-    let baseUrl = "my" 
+    let baseUrl = "my"
     if (!this.isLoggedIn) {
       baseUrl = "welcome"
     }
