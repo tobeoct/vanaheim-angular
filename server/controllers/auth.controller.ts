@@ -29,7 +29,6 @@ export default class AuthController {
   @route('/login')
   @POST()
   login = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-    console.log(req.body)
     const response = await this._userService.login(req.body);
     if (response.status == true) {
 

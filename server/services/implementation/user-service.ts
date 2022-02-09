@@ -82,7 +82,7 @@ class UserService extends BaseService<User> implements IUserService {
   login = (payload: any) => {
     return new Promise<any>(async (resolve, reject) => {
       try {
-        let uname = payload.username;
+        let uname:string = (payload.username??"").toLowerCase();
         let pwd = payload.password;
         let browserID = payload.browserID;
         let type = payload.type as LoginType;
