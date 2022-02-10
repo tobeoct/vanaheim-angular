@@ -31,6 +31,7 @@ export default class EarningsController {
     @route('/apply')
     @POST()
     apply = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
+        try{
         let response: any = await this._earningService.process(req.session.userData.customer, req.body);
         if (response.status == true) {
             res.statusCode = 200;
@@ -39,7 +40,11 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
 
         next()
     }
@@ -47,11 +52,15 @@ export default class EarningsController {
     @route('/getAllEarningRequests')
     @GET()
     getAllEarningRequests = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        console.log("Earnings Controller", req.session)
+        try{  console.log("Earnings Controller", req.session)
         let earningRequests = await this._earningService.getAllEarningRequests();
         res.statusCode = 200;
         res.payload = { data: earningRequests };
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
 
     }
@@ -59,7 +68,7 @@ export default class EarningsController {
     @route('/search')
     @POST()
     search = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        console.log("Searching Logs");
+        try{ console.log("Searching Logs");
         let response: any = await this._earningRequestLogService.search(req.body, req.session.userData.customer);
         if (response.status == true) {
             res.statusCode = 200;
@@ -68,13 +77,17 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
     @route('/searchToProcess')
     @POST()
     searchForAdmin = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        console.log("Searching Logs");
+        try{ console.log("Searching Logs");
         let response: any = await this._earningRequestService.search(req.body);
         if (response.status == true) {
             res.statusCode = 200;
@@ -83,13 +96,17 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
     @route('/getEarningDetails')
     @GET()
     getEarningDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        const id = this.sanitizer.escape(req.query.id);
+        try{   const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getEarningDetails(id, "earningRequest");
         if (response.status == true) {
             res.statusCode = 200;
@@ -98,13 +115,17 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
     @route('/getEarningLogDetails')
     @GET()
     getEarningLogDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        const id = this.sanitizer.escape(req.query.id);
+        try{    const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getEarningDetails(id, "earningRequestLog");
         if (response.status == true) {
             res.statusCode = 200;
@@ -113,7 +134,11 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
 
@@ -139,7 +164,7 @@ export default class EarningsController {
     @route('/topUp')
     @PATCH()
     topUp = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        const id = this.sanitizer.escape(req.query.id);
+        try{     const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.topUp(id);
         if (response.status == true) {
             res.statusCode = 200;
@@ -148,7 +173,11 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
 
@@ -241,7 +270,7 @@ export default class EarningsController {
     @route('/liquidate')
     @PATCH()
     liquidate = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        const id = this.sanitizer.escape(req.query.id);
+        try{    const id = this.sanitizer.escape(req.query.id);
         const status = this.sanitizer.escape(req.query.status);
         // const amount = this.sanitizer.escape(req.query.amount);
         // const payoutDate = this.sanitizer.escape(req.query.payoutDate);
@@ -253,7 +282,11 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
 
@@ -357,12 +390,13 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: "Sorry we could not notify our team, Kindly retry" };
         }
+
         next()
     }
     @route('/getAllEarningDetails')
     @GET()
     getAllEarningDetails = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        // const id = this.sanitizer.escape(req.query.id);
+        try{   // const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getAllEarningDetails(req.session.userData?.customer?.id, "earningRequest");
         if (response.status == true) {
             res.statusCode = 200;
@@ -371,13 +405,17 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
     @route('/getAllEarningLogDetails')
     @GET()
     getAllEarningLogDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        const id = this.sanitizer.escape(req.query.id);
+        try{   const id = this.sanitizer.escape(req.query.id);
         let response: any = await this._earningService.getAllEarningDetails(req.session.userData?.customer?.id, "earningRequestLog");
         if (response.status == true) {
             res.statusCode = 200;
@@ -386,13 +424,17 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
     @route('/getApprovedEarning')
     @GET()
     getApprovedEarnings = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        const id = this.sanitizer.escape(req.query.requestId);
+        try{   const id = this.sanitizer.escape(req.query.requestId);
         let response: any = await this._approvedEarningService.getByEarningRequestId(id);
         if (response.status == true) {
             res.statusCode = 200;
@@ -401,13 +443,17 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
     @route('/updateStatus')
     @POST()
     updateStatus = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        let { status, id, failureReason, message, startDate, serialNumber } = req.body
+        try{    let { status, id, failureReason, message, startDate, serialNumber } = req.body
         let response: any = await this._earningService.updateStatus({ requestStatus: status, id, failureReason, message, startDate, serialNumber });
         if (response.status == true) {
             res.statusCode = 200;
@@ -416,14 +462,18 @@ export default class EarningsController {
             res.statusCode = 400;
             res.payload = { message: response.message };
         }
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
 
     @route('/getLatestEarnings')
     @GET()
     getLatestEarning = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        console.log("Getting Latest Earning")
+        try{ console.log("Getting Latest Earning")
         let response: any = await this._earningRequestService.getLatestEarnings(req.session.userData);
         console.log("Gotten Latest Earning")
         if (response.status == true) {
@@ -434,7 +484,11 @@ export default class EarningsController {
             res.payload = { message: response.message };
         }
 
-
+    } 
+    catch (err) {
+        res.statusCode = 400;
+        res.payload = { message: "Sorry we could not process your requests" };
+    }
         next()
     }
 

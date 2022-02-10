@@ -19,10 +19,15 @@ export default class UserController {
     @route('/getAllLoanRequests')
     @GET()
     getAllLoanRequests = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        console.log("Loans Controller", req.session)
-        let loanRequests = await this._loanService.getAllLoanRequests();
-        res.statusCode = 200;
-        res.payload = { data: loanRequests };
+        try {
+            console.log("Loans Controller", req.session)
+            let loanRequests = await this._loanService.getAllLoanRequests();
+            res.statusCode = 200;
+            res.payload = { data: loanRequests };
+        } catch (err) {
+            res.statusCode = 400;
+            res.payload = { message: "Could not get loan" };
+        }
 
         next()
 
@@ -31,13 +36,18 @@ export default class UserController {
     @route('/create')
     @POST()
     new = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        let response: any = await this._loanService.processLoanRequest(req.body, req.session.userData);
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data }
-        } else {
+        try {
+            let response: any = await this._loanService.processLoanRequest(req.body, req.session.userData);
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data }
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not get create loan" };
         }
 
         next()
@@ -47,13 +57,18 @@ export default class UserController {
     @POST()
     search = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
         console.log("Searching Logs");
-        let response: any = await this._loanRequestLogService.search(req.body, req.session.userData.customer);
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data }
-        } else {
+        try {
+            let response: any = await this._loanRequestLogService.search(req.body, req.session.userData.customer);
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data }
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not get loan" };
         }
 
         next()
@@ -61,14 +76,20 @@ export default class UserController {
     @route('/searchToProcess')
     @POST()
     searchForAdmin = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        console.log("Searching Logs");
-        let response: any = await this._loanRequestService.search(req.body);
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data }
-        } else {
+
+        try {
+            console.log("Searching Logs");
+            let response: any = await this._loanRequestService.search(req.body);
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data }
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not get loan" };
         }
 
         next()
@@ -76,14 +97,19 @@ export default class UserController {
     @route('/getLoanDetails')
     @GET()
     getLoanDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        var id = this.sanitizer.escape(req.query.id);
-        let response: any = await this._loanService.getLoanDetails(id, "loanRequest");
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data }
-        } else {
+        try {
+            const id = this.sanitizer.escape(req.query.id);
+            let response: any = await this._loanService.getLoanDetails(id, "loanRequest");
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data }
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not get loan details" };
         }
 
         next()
@@ -91,14 +117,19 @@ export default class UserController {
     @route('/getLoanLogDetails')
     @GET()
     getLoanLogDetails = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        var id = this.sanitizer.escape(req.query.id);
-        let response: any = await this._loanService.getLoanDetails(id, "loanRequestLog");
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data }
-        } else {
+        try {
+            const id = this.sanitizer.escape(req.query.id);
+            let response: any = await this._loanService.getLoanDetails(id, "loanRequestLog");
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data }
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not get loan details" };
         }
 
         next()
@@ -106,14 +137,19 @@ export default class UserController {
     @route('/getDisbursedLoan')
     @GET()
     getDisbursedLoans = async (req: VanaheimQueryRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        var id = this.sanitizer.escape(req.query.requestId);
-        let response: any = await this._disbursedLoanService.getDisbursedLoanById(id);
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data }
-        } else {
+        try {
+            const id = this.sanitizer.escape(req.query.requestId);
+            let response: any = await this._disbursedLoanService.getDisbursedLoanById(id);
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data }
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not get disbursed loan" };
         }
 
         next()
@@ -121,14 +157,19 @@ export default class UserController {
     @route('/updateStatus')
     @POST()
     updateStatus = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        let { status, id, failureReason, message, serialNumber } = req.body
-        let response: any = await this._loanService.updateStatus({ requestStatus: status, id, failureReason, message, serialNumber });
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data }
-        } else {
+        try {
+            let { status, id, failureReason, message, serialNumber } = req.body
+            let response: any = await this._loanService.updateStatus({ requestStatus: status, id, failureReason, message, serialNumber });
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data }
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not update status" };
         }
 
         next()
@@ -137,17 +178,22 @@ export default class UserController {
     @route('/getLatestLoan')
     @GET()
     getLatestLoan = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-        console.log("Getting Latest Loan")
-        let response: any = await this._loanRequestService.getLatestLoan(req.session.userData);
-        console.log("Gotten Latest Loan")
-        if (response.status == true) {
-            res.statusCode = 200;
-            res.payload = { data: response.data };
-        } else {
+        try {
+            console.log("Getting Latest Loan")
+            let response: any = await this._loanRequestService.getLatestLoan(req.session.userData);
+            console.log("Gotten Latest Loan")
+            if (response.status == true) {
+                res.statusCode = 200;
+                res.payload = { data: response.data };
+            } else {
+                res.statusCode = 400;
+                res.payload = { message: response.message };
+            }
+        } 
+        catch (err) {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: "Could not get latest loan" };
         }
-
 
         next()
     }

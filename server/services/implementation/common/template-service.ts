@@ -13,8 +13,8 @@ export class TemplateService {
 
         switch (status) {
             case LoanRequestStatus.Processing:
-                return `Dear ${customer},<br/><br/>,
-                We acknowledge receipt of your request and supporting documents and its now receiving attention.<br/>
+                return `Dear ${customer},<br/><br/>
+                We acknowledge receipt of your request and supporting documents and its now receiving attention.<br/><br/>
                 We will review and provide and update soon.<br/><br/>
                 
                 Best regards.`;
