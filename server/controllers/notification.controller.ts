@@ -65,16 +65,22 @@ export default class NotificationController {
   @route('/sendtomultiple')
   @POST()
   sendToMultiple = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
-    const { notification } = req.body;
-    this._notificationService.sendNotificationToMany({ notification, type: "All" }).then(response => {
-      res.statusCode = 200;
-      res.payload = { data: response };
-      next();
-    }).catch((err: any) => {
+    try {
+      const { notification } = req.body;
+      this._notificationService.sendNotificationToMany({ notification, type: "All" }).then(response => {
+        res.statusCode = 200;
+        res.payload = { data: response };
+        next();
+      }).catch((err: any) => {
+        res.statusCode = 400;
+        res.payload = { message: "Notification Failed to send" };
+        next();
+      })
+    } catch (err) {
       res.statusCode = 400;
       res.payload = { message: "Notification Failed to send" };
       next();
-    })
+    }
   }
   @route('/send')
   @POST()
