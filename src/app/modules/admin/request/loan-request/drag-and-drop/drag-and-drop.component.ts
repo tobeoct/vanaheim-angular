@@ -139,6 +139,8 @@ export class LoanDragAndDropComponent implements OnInit {
 
       this._requestService.updateStatus(id, this._requestService.getStatus(classList), (this.getStatus(this.classListSubject.value) == "UpdateRequired") ? undefined : this.failureReason.value, (this.getStatus(this.classListSubject.value) == "UpdateRequired") ? this.uMailMessage.value : this.mailMessage.value,this.serialNumber.value).then(c => {
         this.loadingSubject.next(false)
+        this.sform.reset();
+        this.fForm.reset();
         this._utility.setSuccess("Successfully updated status and sent email to customer")
         if (!c || c.requestStatus != this._requestService.getStatus(classList)) {
           this.reverse(event)

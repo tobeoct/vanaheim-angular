@@ -117,7 +117,7 @@ export class EarningsComponent implements OnInit {
     this.showPayoutSubject.next(false);
   }
   showPayouts(id: number) {
-    console.log("Show payouts")
+    // console.log("Show payouts")
     this.payouts$ = this._earningPayoutService.getEarningPayout(id)
     this.showPayoutSubject.next(true);
     this._earningPayoutService.selectEarning(id);

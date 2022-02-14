@@ -23,16 +23,6 @@ export class LoanTrackerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.details)
-    // this.latestLoanSubscription = this._loanService.latestLoan$.subscribe(l => {
-    //   if (l && l.requestStatus == 'Funded') {
-    //     this._requestService.selectLoan(l.id);
-    //   }
-    // })
-
-  }
-  ngOnChanges():void{
-    console.log(this.details)
 
   }
   getDaysLeft(date: any) {

@@ -30,7 +30,7 @@ export class ApprovedEarning extends BaseEntity {
         this.nextPayment = earningRequest.monthlyPayment;
         this.nextPaymentDate =earningRequest.type == EarningType.EndOfTenor? maturityDate.toDate(): start.diff(moment(),"day")>=0?start.add(1,"month").set("date",24).toDate(): start.set("date",24).toDate();//maturityDate.subtract(earningRequest.duration,"months").set("date",24).add(1,  "month").toDate();
         this.lastPayment =0;
-        this.lastPaymentDate =start.diff(moment(),"day")>=0? start.set("date",24).toDate():start.subtract(-1,"month").set("date",24).toDate();
+        this.lastPaymentDate =start.subtract(-1,"month").set("date",24).toDate();//start.diff(moment(),"day")>=0? start.set("date",24).toDate():start.subtract(-1,"month").set("date",24).toDate();
         this.earningRequestID = earningRequest.id;
         this.earningRequestLogID = earningRequestLog.id;
     }

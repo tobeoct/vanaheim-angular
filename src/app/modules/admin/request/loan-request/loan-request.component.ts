@@ -285,6 +285,7 @@ export class LoanRequestComponent implements OnInit {
         response => {
           this.loadingSubject.next(false);
           this.apiSuccessSubject.next(response);
+          this.notifyForm.reset()
           setTimeout(() => { this.apiSuccessSubject.next(); }, 5000)
         },
         error => {

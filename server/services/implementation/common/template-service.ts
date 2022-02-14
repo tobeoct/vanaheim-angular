@@ -21,7 +21,7 @@ export class TemplateService {
             case LoanRequestStatus.Approved:
                 return `Dear ${customer},<br/><br/>
  
-                We acknowledge receipt of your request for a loan of${amount.replace(".00","")} (${this._utils.amountToWords(this._utils.convertToPlainNumber(amount), 'Naira Only')}) for a repayment period of ${tenure} and supporting documents provided and its currently receiving attention.<br/><br/>
+                We acknowledge receipt of your request for a loan of <b>${amount.replace(".00","")} (${this._utils.amountToWords(this._utils.convertToPlainNumber(amount), 'Naira Only')})</b> for a repayment period of ${tenure} and supporting documents provided and its currently receiving attention.<br/><br/>
                  
                 Please find attached your loan agreement to be signed and scanned back to us and Remita mandate form to be taken to any branch of your bank for activation. ------ if remita Activation is required.<br/><br/>
                  
@@ -35,7 +35,7 @@ export class TemplateService {
 
                 Trust this meets you well.<br/><br/>
                 
-                Kindly acknowledge receipt of the ${amount.replace(".00","")} (${this._utils.amountToWords(this._utils.convertToPlainNumber(amount), 'Naira Only')}) as disbursed into your account.<br/><br/>
+                Kindly acknowledge receipt of the <b>${amount.replace(".00","")} (${this._utils.amountToWords(this._utils.convertToPlainNumber(amount), 'Naira Only')})</b> as disbursed into your account.<br/><br/>
                 
                 Thank you and best regards`
             case LoanRequestStatus.UpdateRequired:
