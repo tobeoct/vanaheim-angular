@@ -199,7 +199,7 @@ export class EarningsRequestComponent implements OnInit {
     this.enterStartDateSubject.next(false);
   }
   showPayouts(id: number) {
-    console.log("Show payouts")
+    // console.log("Show payouts")
     this.payouts$ = this._earningsPayoutService.getEarningPayout(id)
     this.showPayoutSubject.next(true);
     this._earningsPayoutService.selectEarning(id);
