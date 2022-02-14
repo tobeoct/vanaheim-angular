@@ -140,7 +140,7 @@ export class CustomerComponent implements OnInit {
   }
 
   routeToEarningPage() {
-    const currentPage = localStorage.getItem("earnings-page");//this._store.getItem("earnings-page")??this._earningsStore.pageSubject.value;
+    const currentPage = localStorage.getItem("earnings-page")??this._earningsStore.pageSubject.value;//this._store.getItem("earnings-page")??this._earningsStore.pageSubject.value;
     const endpoint = `/earnings/apply/${currentPage}`;
     let baseUrl = "my"
     if (!this.isLoggedIn) {

@@ -125,7 +125,6 @@ export class LoansComponent implements OnInit, OnDestroy {
     this._route.params
       .subscribe(params => {
         const id = +params['id'];
-        console.log(id)
         if (id) {
           this.selectLoan(id);
         }
@@ -141,7 +140,6 @@ export class LoansComponent implements OnInit, OnDestroy {
 
     this.requirementCtrl.valueChanges.subscribe(c => {
       this.requirementSubject.next(this.requirements[+c])
-      console.log(this.requirementSubject.value)
     })
     this.latestLoanSubscription = this.latestLoan$.subscribe(l => {
       if (l.requestStatus == 'Funded') {
@@ -284,7 +282,6 @@ export class LoansComponent implements OnInit, OnDestroy {
   getRequirements(loanType: string, applyingAs: string) {
     let loanTypes: any = this._loanStore.loanTypes.find(type => type.title == loanType);
     this.requirements = loanTypes?.applyingAs?.find((type: any) => type.title == applyingAs)?.requirements || [];
-    console.log(this.requirements)
   }
 
   onChange(result: any) {
