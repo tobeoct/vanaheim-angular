@@ -174,6 +174,18 @@ The Vanir Loans’ Team
 
         Best regards.`
     }
+    EARNING_LIQUIDATION_DECLINED(customer: string) {
+        return `
+         Hello ${ customer }, <br/><br/>
+
+            Trust this meets you well.<br/> <br/>
+
+        Your liquidation request has been declined<br/>
+
+        We thank you for your valued patronage and look forward to having you back with us.<br/> <br/>
+
+        Best regards.`
+    }
     EARNING_LIQUIDATION_NOTIFICATION(customer: string, requestID: string) {
 
         return `Dear ${ customer }, <br/><br/> We have received your liquidation request for EARNING ID: ${ requestID } <br/><br/>
@@ -183,11 +195,19 @@ The Vanir Loans’ Team
                     `;
     }
 
-    EARNING_TOPUP_NOTIFICATION(customer: string, requestCode: string, amount: string) {
+    EARNING_TOPUP_APPROVAL(customer: string, requestCode: string, amount: string) {
         return `Hello ${ customer },<br/><br/>
                         Congratulations! Your earnings Top Up request has been approved.<br/> <br/>
                 Kind Regards.
         `;
+    }
+    EARNING_TOPUP_NOTIFICATION(customer: string, requestID: string, amount: string) {
+
+        return `Dear ${ customer }, <br/><br/> We have received your top up request for EARNING ID: ${ requestID } <br/><br/>
+            Your request is being attended to.<br/><br/>You would be contacted shortly <br/> <br/>
+
+                <b> Vanir Capital Loans and Capital Finance Team </b>
+                    `;
     }
 
     NOTIFICATION(message: string, type: string, id?: string) {

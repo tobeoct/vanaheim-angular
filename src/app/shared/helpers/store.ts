@@ -202,7 +202,7 @@ export class EarningsStore {
 
 
   updateStore() {
-    this.setPage(this.pageSubject.value);
+    if(this.pageSubject.value)this.setPage(this.pageSubject.value);
 
   }
 

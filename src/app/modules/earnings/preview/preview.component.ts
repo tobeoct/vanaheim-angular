@@ -40,7 +40,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   autoClick$: Observable<boolean> = this.autoClickSubject.asObservable();
   fromSignIn = "earningFromSignIn";
   @ViewChild('button') button: ElementRef;
-  constructor(private _store: Store,private _earningsStore:EarningsStore,private _utility:Utility, private _router: Router, private _zone: NgZone, private _fb: FormBuilder, private _authenticationService: AuthService, private _earningService: EarningService) { }
+  constructor(private _store: Store, private _earningsStore: EarningsStore, private _utility: Utility, private _router: Router, private _zone: NgZone, private _fb: FormBuilder, private _authenticationService: AuthService, private _earningService: EarningService) { }
   ngAfterViewInit(): void {
     if (this._store.getItem(this.fromSignIn)) {
       this.moveToSubmit();
@@ -53,7 +53,7 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
     this.isLoggedIn = this._authenticationService.isLoggedIn();
-  
+
     this._earningsStore.titleSubject.next("Preview");
     this.form = this._fb.group({
       validated: [this._earningService.validateApplication() ? 'valid' : '', [Validators.required]]
@@ -83,14 +83,15 @@ export class PreviewComponent implements OnInit, AfterViewInit {
   submitApplication(event: any) {
     if (this.isLoggedIn) {
       this.loadingSubject.next(true);
-    this._utility.toggleLoading(true);
+      this._utility.toggleLoading(true);
       this._earningService.apply(this.earningsApplication).pipe(take(1)).subscribe(
         data => {
           this._zone.run(() => {
             this.loadingSubject.next(false);
-            setTimeout(() => { 
-              this._utility.toggleLoading(false);this._earningService.success(data.message); this._earningService.showSuccess(true); }, 0);
-          
+            setTimeout(() => {
+              this._utility.toggleLoading(false); this._earningService.success(data.message); this._earningService.showSuccess(true);
+            }, 0);
+
             this._earningsStore.removeApplication();
 
           })
@@ -98,9 +99,10 @@ export class PreviewComponent implements OnInit, AfterViewInit {
         (error: string) => {
           this.loadingSubject.next(false);
           if (error == "Not Found") error = "You do not seem to be connected to the internet";
-          setTimeout(() => { 
-            this._utility.toggleLoading(false);this._earningService.error(error); this._earningService.showError(true); }, 0);
-            // this._earningsStore.removeApplication();
+          setTimeout(() => {
+            this._utility.toggleLoading(false); this._earningService.error(error); this._earningService.showError(true);
+          }, 0);
+          // this._earningsStore.removeApplication();
 
         });
 
