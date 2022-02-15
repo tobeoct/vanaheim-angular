@@ -62,6 +62,7 @@ export class EarningService implements IEarningService {
   topUp = (id: number) => {
     return new Promise<any>(async (resolve, reject) => {
       try {
+        let customer: Customer = new Customer();
         let earningTopUp: EarningTopUp = await this._earningTopUpRepository.getByIdWithInclude(id, [{ model: this._db.ApprovedEarning, required: true }]);
         if (!earningTopUp || Object.keys(earningTopUp).length == 0) {
           resolve({ status: false, data: "Cannot find Top Up request" });
@@ -121,6 +122,16 @@ export class EarningService implements IEarningService {
           await this._earningTopUpRepository.update(earningTopUp);
           await this._earningRequestRepository.update(earningRequest);
           await this._earningRequestLogRepository.update(earningRequestLog);
+
+          customer = await this._customerRepository.getById(earningRequest.customerID);
+          if (!customer || Object.keys(customer).length == 0) {
+            resolve({ status: false, data: "Invalid Customer" });
+            return;
+          }
+          customer = (customer as any).dataValues as Customer;
+
+          await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_TOPUP_APPROVAL(customer?.firstName, earningRequest.requestId, this._utils.currencyFormatter(+amount)), toCustomer: true })
+
           resolve({ status: true, data: "Top Up successful" });
         } else {
           resolve({ status: false, data: "Top Up was not requested" });
@@ -199,6 +210,8 @@ export class EarningService implements IEarningService {
           await this._earningRequestRepository.update(earningRequest);
           await this._earningRequestLogRepository.update(earningRequestLog);
           await this._approvedEarningRepository.update(approvedEarning);
+          await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_LIQUIDATION_DECLINED(customer?.firstName), toCustomer: true })
+       
           resolve({ status: true, data: "Request Declined" });
           return;
         }
@@ -426,8 +439,8 @@ export class EarningService implements IEarningService {
             data: [
               { key: "Type", value: request.MeansOfIdentification?.type },
               { key: "ID Number", value: request.MeansOfIdentification?.idNumber },
-              { key: "Issue Date", value: request.MeansOfIdentification?.issueDate },
-              { key: "Expiry Date", value: request.MeansOfIdentification?.expiryDate },
+              { key: "Issue Date", value:!request.MeansOfIdentification?.issueDate?request.MeansOfIdentification?.issueDate:moment( request.MeansOfIdentification?.issueDate).format("MMMM Do YYYY")  },
+              { key: "Expiry Date", value:!request.MeansOfIdentification?.expiryDate?request.MeansOfIdentification?.expiryDate:moment( request.MeansOfIdentification?.expiryDate).format("MMMM Do YYYY")  },
             ]
           }
         ];

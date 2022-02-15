@@ -16,7 +16,7 @@ import { IdentificationType, MeansOfIdentification } from '../earnings-applicati
 })
 export class DocumentUploadComponent implements OnInit {
   form: FormGroup;
-  docsToUpload: any ;
+  docsToUpload: any;
   meansOfIdentification: MeansOfIdentification;
   isLoggedIn: boolean = true;
   base: string;
@@ -33,23 +33,23 @@ export class DocumentUploadComponent implements OnInit {
   show$: Observable<boolean> = this.showSubject.asObservable();
   show2Subject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show2$: Observable<boolean> = this.show2Subject.asObservable();
-  types:any[] = Object.values(IdentificationType);
+  types: any[] = Object.values(IdentificationType);
   get document() {
-    return this.form.get("document") as FormControl|| new FormControl();
+    return this.form.get("document") as FormControl || new FormControl();
   }
   get idNumber() {
-    return this.form.get("idNumber") as FormControl|| new FormControl();
+    return this.form.get("idNumber") as FormControl || new FormControl();
   }
   get issueDate() {
-    return this.form.get("issueDate") as FormControl|| new FormControl();
+    return this.form.get("issueDate") as FormControl || new FormControl();
   }
   get expiryDate() {
-    return this.form.get("expiryDate") as FormControl|| new FormControl();
+    return this.form.get("expiryDate") as FormControl || new FormControl();
   }
   get type() {
-    return this.form.get("type") as FormControl|| new FormControl();
+    return this.form.get("type") as FormControl || new FormControl();
   }
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store,private _earningStore:EarningsStore,
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _earningStore: EarningsStore,
     private _validators: VCValidators, private _route: ActivatedRoute, private _cd: ChangeDetectorRef, private _authenticationService: AuthService) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
@@ -58,14 +58,14 @@ export class DocumentUploadComponent implements OnInit {
 
   ngOnInit(): void {
     this._earningStore.titleSubject.next("Means Of Identification");
- 
+
     this.meansOfIdentification = this._earningStore.meansOfIdentification as MeansOfIdentification;
     this.form = this._fb.group({
-      type: [this.meansOfIdentification?.type ? this.meansOfIdentification?.type:"", [Validators.required]],
+      type: [this.meansOfIdentification?.type ? this.meansOfIdentification?.type : "", [Validators.required]],
       document: [this.meansOfIdentification?.document ? this.meansOfIdentification?.document.label : '', [Validators.required]],
-      idNumber: [this.meansOfIdentification?.idNumber ? this.meansOfIdentification?.idNumber:"", [Validators.required]],
-      issueDate: [this.meansOfIdentification?.issueDate ? this.meansOfIdentification?.issueDate:""],
-      expiryDate: [this.meansOfIdentification?.expiryDate ? this.meansOfIdentification?.expiryDate:""]
+      idNumber: [this.meansOfIdentification?.idNumber ? this.meansOfIdentification?.idNumber : "", [Validators.required]],
+      issueDate: [this.meansOfIdentification?.issueDate ? this.meansOfIdentification?.issueDate : ""],
+      expiryDate: [this.meansOfIdentification?.expiryDate ? this.meansOfIdentification?.expiryDate : ""]
     });
     this.isLoggedIn = this._authenticationService.isLoggedIn();
   }
@@ -74,8 +74,8 @@ export class DocumentUploadComponent implements OnInit {
 
   onSubmit = (form: FormGroup) => {
     if (!form.valid) return;
-    let meansOfIdentification: MeansOfIdentification = {type:this.type.value,document:{ fileName: this.docsToUpload? this.docsToUpload.name:this.meansOfIdentification?.document?.fileName, id: this.docsToUpload? this.docsToUpload.id:this.meansOfIdentification?.document?.id, label: this.docsToUpload? this.docsToUpload.requirement:this.meansOfIdentification?.document?.label },idNumber:this.idNumber.value, issueDate:this.issueDate.value, expiryDate:this.expiryDate.value};
-    this._earningStore.setMeansOfIdentification(meansOfIdentification);
+   
+    this.store();
     this.onNavigate("preview");
   }
   onNavigate(route: string, params: any = {}): void {
@@ -97,7 +97,13 @@ export class DocumentUploadComponent implements OnInit {
       if (result.message == "Invalid file type") { this.show2Subject.next(true) } else { this.showSubject.next(true); }
     } else {
       this.docsToUpload = result;
+      this.store();
     }
+  }
+  store(){
+    
+    let meansOfIdentification: MeansOfIdentification = { type: this.type.value, document: { fileName: this.docsToUpload ? this.docsToUpload.name : this.meansOfIdentification?.document?.fileName, id: this.docsToUpload ? this.docsToUpload.id : this.meansOfIdentification?.document?.id, label: this.docsToUpload ? this.docsToUpload.requirement : this.meansOfIdentification?.document?.label }, idNumber: this.idNumber.value, issueDate: this.issueDate.value, expiryDate: this.expiryDate.value };
+    this._earningStore.setMeansOfIdentification(meansOfIdentification);
   }
   login(): void {
     this._router.navigate(["auth/login"])

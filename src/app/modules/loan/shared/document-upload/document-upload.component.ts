@@ -74,15 +74,18 @@ export class DocumentUploadComponent implements OnInit {
     return groups
   }
 
-  onSubmit = (form: FormGroup) => {
-    if (!form.valid) return;
+  storeDocuments(){
     let documents: any = [];
-    let f = form.value["documentArray"] as any[];
+    let f = this.form.value["documentArray"] as any[];
     this.docsToUpload.forEach((doc, i) => {
       documents.push({ fileName: doc.name, id: doc.id, label: doc.requirement })
     });
 
     this._loanStore.setDocuments(documents);
+  }
+  onSubmit = (form: FormGroup) => {
+    if (!form.valid) return;
+   this.storeDocuments();
     this.onNavigate("preview");
   }
   onNavigate(route: string, params: any = {}): void {
@@ -104,6 +107,7 @@ export class DocumentUploadComponent implements OnInit {
       if (result.message == "Invalid file type") { this.show2Subject.next(true) } else { this.showSubject.next(true); }
     } else {
       this.docsToUpload[id] = result;
+      this.storeDocuments();
     }
   }
   login(): void {
