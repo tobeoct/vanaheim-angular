@@ -107,8 +107,8 @@ export class LoanService implements ILoanService {
             {
               key: "NOK Information",
               data: [
-                { key: "Name", value: this._utils.replaceAll(this._utils.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames ), "null", ""), "undefined", "") },
-                { key: "Date Of Birth", value: moment(request.Customer?.NOK?.dateOfBirth).format("MMMM Do YYYY")  },
+                { key: "Name", value: this._utils.replaceAll(this._utils.replaceAll((request.Customer?.NOK?.lastName + " " + request.Customer?.NOK?.otherNames), "null", ""), "undefined", "") },
+                { key: "Date Of Birth", value: moment(request.Customer?.NOK?.dateOfBirth).format("MMMM Do YYYY") },
                 { key: "Relationship", value: request.Customer?.NOK?.relationship.toString() },
                 { key: "Email Address", value: request.Customer?.NOK?.email },
                 { key: "Phone Number", value: request.Customer?.NOK?.phoneNumber },
@@ -124,7 +124,7 @@ export class LoanService implements ILoanService {
                 { key: "Name", value: request.loanTypeRequirements?.company?.name },
                 { key: "RC No", value: request.loanTypeRequirements?.company?.rcNo },
                 { key: "Nature Of Business", value: request.loanTypeRequirements?.company?.natureOfBusiness },
-                { key: "Date Of Incorporation", value: moment(request.loanTypeRequirements?.company?.dateOfIncorporation).format("MMMM Do YYYY")  },
+                { key: "Date Of Incorporation", value: moment(request.loanTypeRequirements?.company?.dateOfIncorporation).format("MMMM Do YYYY") },
                 { key: "Time In Business", value: request.loanTypeRequirements?.company?.timeInBusiness },
                 { key: "Email", value: request.loanTypeRequirements?.company?.email },
                 { key: "Phone Number", value: request.loanTypeRequirements?.company?.phoneNumber },
@@ -149,7 +149,7 @@ export class LoanService implements ILoanService {
                 { key: "Name", value: s.title + " " + s.surname + " " + s.otherNames },
                 { key: "Designation", value: s.designation },
                 { key: "Educational Qualification", value: s.educationalQualification },
-                { key: "Date Of Birth", value: moment(s.dateOfBirth).format("MMMM Do YYYY")  },
+                { key: "Date Of Birth", value: moment(s.dateOfBirth).format("MMMM Do YYYY") },
                 { key: "Gender", value: s.gender?.toString() },
                 { key: "Marital Status", value: s.maritalStatus?.toString() },
                 { key: "Email Address", value: s.email },
@@ -163,7 +163,6 @@ export class LoanService implements ILoanService {
           requestDetails = [...requestDetails, ...business];
         }
         if (type != "loanRequest") {
-          //loanRequestResponse = await this._loanRequestService.getById((request as LoanRequestLog).loanRequestID)//.search({ pageNumber: 1, maxSize: 1, requestId: request.requestId });
           loanRequest = await this._loanRequestService.getById((request as LoanRequestLog).loanRequestID);//loanRequestResponse.data?.rows[0]
         } else {
           loanRequest = request;
@@ -172,13 +171,13 @@ export class LoanService implements ILoanService {
           let disbursedLoan = await this._disbursedLoanService.getDisbursedLoanById(loanRequest.id);
           let totalRepayment = 0;
           let documents: Document[] = [];
-          let response = await this._documentService.getByRequestId(request.requestId);
+          let response = await this._documentService.getByRequestId(request.code);
           if (response.status) {
             documents = response?.data as Document[];
 
           }
           if (disbursedLoan?.status == true && disbursedLoan.data?.id) totalRepayment = await this._repaymentService.getTotalRepayment(disbursedLoan.data.id)
-          resolve({ status: true, data: {failureReason:request.failureReason, id: request.id, loanRequestID: loanRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code:request.requestStatus == LoanRequestStatus.Pending?"Not yet assigned": request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
+          resolve({ status: true, data: { failureReason: request.failureReason, id: request.id, loanRequestID: loanRequest.id, loanType: request.loanType, applyingAs: request.applyingAs, code: request.requestStatus == LoanRequestStatus.Pending ? "Not yet assigned" : request.requestId, customerId: request.customerID, status: request.requestStatus, details: requestDetails, totalRepayment, documents, disbursedLoan: disbursedLoan?.status == true ? disbursedLoan.data : {} } });
 
         } else {
 
@@ -229,10 +228,20 @@ export class LoanService implements ILoanService {
           const requestByUniqueID = await this._loanRequestRepository.getByRequestID(serialNumber);
 
           if (requestByUniqueID && Object.keys(requestByUniqueID).length > 0) {
-            throw "Earning ID has already been assigned to another earning";
+            throw "Loan ID has already been assigned to another earning";
           }
+          // let documents = await this._documentService.getByRequestId(loanRequest.requestId)
+          // if (documents?.status) {
+          //   for (let i = 0; i < documents.data?.length; i++) {
+          //     let document = (documents.data[i] as any).dataValues as Document;
+          //     document.requestId = serialNumber;
+          //     await this._documentService.update(document);
+
+          //   }
+          // }
           loanRequest.requestId = serialNumber;
           loanRequestLog.requestId = serialNumber;
+
         }
       } else if (requestStatus == LoanRequestStatus.Approved) {
         loanRequest.dateApproved = new Date();
@@ -277,10 +286,10 @@ export class LoanService implements ILoanService {
       notification.data = new WebNotificationData();
       notification.data.url = this._appConfig.WEBURL + "/my/loans";
       try {
-        const customerName =customer.title + ' '+customer.firstName;
-        const loanDetailsUrl =`${this._appConfig.WEBURL}/my/loans/${loanRequestLog.id}`;
+        const customerName = customer.title + ' ' + customer.firstName;
+        const loanDetailsUrl = `${this._appConfig.WEBURL}/my/loans/${loanRequestLog.id}`;
         //(failureReason && requestStatus == LoanRequestStatus.NotQualified)  ? this._templateService.STATUS_UPDATE_DECLINED(customerName, message ?? requestStatus, loanRequest.requestId) : requestStatus == LoanRequestStatus.UpdateRequired ? this._templateService.STATUS_UPDATE_REQUIRED(customerName,message, `${this._appConfig.WEBURL}/my/loans/${loanRequestLog.id}`) :
-        await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html:  this._templateService.LOAN_STATUS_UPDATE(loanRequest.requestStatus, loanRequest.requestId,customerName,this._utils.currencyFormatter(loanRequest.amount),`${loanRequest.tenure} ${loanRequest.denominator}`,message,loanDetailsUrl), to: customer.email, toCustomer: true });
+        await this._emailService.SendEmail({ subject: "Vanir Capital: Loan Status Update", html: this._templateService.LOAN_STATUS_UPDATE(loanRequest.requestStatus, loanRequest.requestId, customerName, this._utils.currencyFormatter(loanRequest.amount), `${loanRequest.tenure} ${loanRequest.denominator}`, message, loanDetailsUrl), to: customer.email, toCustomer: true });
         await this._notificationService.sendNotificationToMany({ customerIds: [loanRequest.customerID], notification })
 
       }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
 import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { VCValidators } from 'src/app/shared/validators/default.validators';
 import { Subject, Observable, BehaviorSubject, from, EMPTY } from 'rxjs';
 import { catchError, delay, filter, map, take, tap } from 'rxjs/operators';
@@ -14,7 +14,6 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { EarningsStore, Store } from 'src/app/shared/helpers/store';
 import { NavigationEnd, Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common/common.service';
-import { AccountInfo } from 'src/app/modules/loan/shared/account-info/account-info';
 
 @Component({
   selector: 'app-earning-form',

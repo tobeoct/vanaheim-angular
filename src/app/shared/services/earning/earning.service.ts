@@ -9,7 +9,8 @@ import { EarningsStore } from '../../helpers/store';
 import { Utility } from '../../helpers/utility.service';
 export enum EarningType {
   EndOfTenor = "End Of Tenor",
-  Monthly = "Monthly ROI"
+  Monthly = "Monthly ROI",
+  Quarterly = "Quarterly ROI"
 }
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class EarningService {
 
   activeEarningSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   interval = environment.production ? 30000 : 30000000000000000;
-  constructor(private _http: HttpClient, private _earningsStore: EarningsStore,private _utils:Utility) { }
+  constructor(private _http: HttpClient, private _earningsStore: EarningsStore, private _utils: Utility) { }
   apply = (payload: any) => {
     // console.log(payload)
     return this._http.post<any>(`${environment.apiUrl}/earnings/apply`, payload)
@@ -80,22 +81,38 @@ export class EarningService {
     switch (duration) {
       case 3:
         if (amount >= 100000 && amount <= 10000000) {
-          r = type == EarningType.EndOfTenor ? 18 : 16;
+          r = type == EarningType.EndOfTenor ? 18 : type == EarningType.Quarterly ? 16 : 14;
         } else if (amount > 10000000 && amount <= 20000000) {
-          r = type == EarningType.EndOfTenor ? 20 : 18;
+          r = type == EarningType.EndOfTenor ? 20 : type == EarningType.Quarterly ? 17 : 16;
         }
         break;
       case 6:
         if (amount >= 100000 && amount <= 10000000) {
-          r = type == EarningType.EndOfTenor ? 20 : 18;
+          r = type == EarningType.EndOfTenor ? 20 : type == EarningType.Quarterly ? 17 : 16;
         } else if (amount > 10000000 && amount <= 20000000) {
-          r = type == EarningType.EndOfTenor ? 22 : 20;
+          r = type == EarningType.EndOfTenor ? 22 : type == EarningType.Quarterly ? 18 : 17;
         }
         break;
-
+      case 9:
+        if (type == EarningType.Quarterly) {
+          if (amount >= 100000 && amount <= 10000000) {
+            r = 18;
+          } else if (amount > 10000000 && amount <= 20000000) {
+            r = 19;
+          }
+        }
+        break;
       case 12:
-        if (amount <= 20000000) {
-          r = type == EarningType.EndOfTenor ? 22 : 20;
+        if (type == EarningType.Quarterly) {
+          if (amount >= 100000 && amount <= 10000000) {
+            r = 19;
+          } else if (amount > 10000000 && amount <= 20000000) {
+            r = 20;
+          }
+        } else {
+          if (amount <= 20000000) {
+            r = type == EarningType.EndOfTenor ? 22 : 18;
+          }
         }
         break;
     }
@@ -139,7 +156,7 @@ export class EarningService {
         return {};
       }));
   }
-  notifyLiquidate = (earningRequestId: number,amount:number,payoutDate:Date) => {
+  notifyLiquidate = (earningRequestId: number, amount: number, payoutDate: Date) => {
     const url = `${environment.apiUrl}/earnings/notifyLiquidation?id=${earningRequestId}&amount=${this._utils.convertToPlainNumber(amount)}&payoutDate=${payoutDate}`;
     return this._http.get<any>(url)
       .pipe(map(response => {

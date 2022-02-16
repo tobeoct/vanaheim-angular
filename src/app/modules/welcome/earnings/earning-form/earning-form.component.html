@@ -12,7 +12,10 @@
       <small>Earning Type</small>
       <div class="actions">
         <div class="item" [ngClass]="{'active':type.value=='Monthly ROI'}" (click)="setType('Monthly ROI')">
-          <p><b>Monthly ROI</b></p>
+          <p><b>Monthly</b></p>
+        </div>
+        <div class="item" [ngClass]="{'active':type.value=='Quarterly ROI'}" (click)="setType('Quarterly ROI')">
+          <p><b>Quarterly</b></p>
         </div>
         <div class="item" [ngClass]="{'active':type.value=='End Of Tenor'}" (click)="setType('End Of Tenor')">
           <p><b>End Of Tenor</b></p>

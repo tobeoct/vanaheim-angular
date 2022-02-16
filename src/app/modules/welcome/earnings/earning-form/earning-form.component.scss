@@ -29,15 +29,13 @@
         // width:map-get($sizings,"px" )* 4;
         .item {
             border-radius: $border-radius;
-            // width: map-get($sizings,"px" ) * 1.2;
-            // height: map-get($sizings,"px" ) * 1.2;
             @include paddingVertical(true, "px", 0.1);
-            // @include paddingHorizontal(true, "px", 1);
             border: 1px solid black;
             @include flex(both, center);
             cursor: pointer;
             transition: 0.3s ease-in-out;
-            width: 47.5%;
+            width: 30%;
+            text-align: center;
             &.active {
                 border-color: map-get($colors, yellow) !important;
                 background: map-get($colors, yellow) !important;
@@ -50,10 +48,10 @@
                 border-color: map-get($colors, black);
                 color: map-get($colors, black);
             }
-            &:nth-child(2) {
+            &:nth-child(3) {
                 border-color: map-get($colors, black);
                 color: map-get($colors, black);
-                margin-left: map-get($sizings, "px") / 2;
+               // margin-left: map-get($sizings, "px") / 2;
                 // &.active{
 
                 // border-color: map-get($colors, black);

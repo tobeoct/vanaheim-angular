@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { Utility } from 'src/app/shared/helpers/utility.service';
+import { EarningType } from 'src/app/shared/services/earning/earning.service';
 
 @Component({
   selector: 'app-rate',
@@ -31,6 +32,15 @@ export class RateComponent implements OnInit {
     this.amount$.subscribe(v => this.amount = v);
     if(this.activeDuration){
       this.activate(this.activeDuration);
+    }
+  }
+
+  ngOnChanges():void{
+    if(this.type===EarningType.Quarterly){
+      this.durationsSubject.next([{ value: 12, active: false },{ value: 9, active: false }, { value: 6, active: false }, { value: 3, active: false }])
+    }else{
+      
+      this.durationsSubject.next([{ value: 12, active: false }, { value: 6, active: false }, { value: 3, active: false }])
     }
   }
   trackByFn(index: any, item: any) {
