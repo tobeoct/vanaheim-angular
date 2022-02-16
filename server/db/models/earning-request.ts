@@ -3,7 +3,7 @@
 module.exports = (sequelize:any, DataTypes:any) => {
   const EarningRequest = sequelize.define('EarningRequest', {
     type:{
-      type: DataTypes.ENUM('Monthly ROI','End Of Tenor'),
+      type: DataTypes.ENUM('Monthly ROI','Quarterly ROI','End Of Tenor'),
       allowNull: false,
     }, 
     amount:{

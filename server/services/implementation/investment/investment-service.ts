@@ -455,7 +455,7 @@ export class EarningService implements IEarningService {
           let approvedEarning = await this._approvedEarningService.getByEarningRequestId(earningRequest.id);
           let totalRepayment = 0;
           let documents: Document[] = [];
-          let response = await this._documentService.getByRequestId(request.requestId);
+          let response = await this._documentService.getByRequestId(request.code);
           if (response.status) {
             documents = response?.data as Document[];
 
