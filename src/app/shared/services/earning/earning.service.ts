@@ -90,7 +90,7 @@ export class EarningService {
         if (amount >= 100000 && amount <= 10000000) {
           r = type == EarningType.EndOfTenor ? 20 : type == EarningType.Quarterly ? 17 : 16;
         } else if (amount > 10000000 && amount <= 20000000) {
-          r = type == EarningType.EndOfTenor ? 22 : type == EarningType.Quarterly ? 18 : 17;
+          r = type == EarningType.EndOfTenor ? 21 : type == EarningType.Quarterly ? 18 : 17;
         }
         break;
       case 9:
@@ -114,6 +114,8 @@ export class EarningService {
             r = type == EarningType.EndOfTenor ? 22 : 18;
           }
         }
+
+     
         break;
     }
     return r;
