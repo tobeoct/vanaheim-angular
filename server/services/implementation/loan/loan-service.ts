@@ -138,7 +138,7 @@ export class LoanService implements ILoanService {
                 { key: "Valuation", value: this._utils.currencyFormatter(request.loanTypeRequirements?.collateral?.valuation) },
                 { key: "Type", value: request.loanTypeRequirements?.collateral?.type },
                 { key: "Description", value: request.loanTypeRequirements?.collateral?.description },
-                { key: "Document", value: request.loanTypeRequirements?.collateral?.document?.requirement },
+                { key: "Document", value: request.loanTypeRequirements?.collateral?.document?.name },
               ]
             }]
 

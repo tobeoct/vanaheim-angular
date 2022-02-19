@@ -5,7 +5,7 @@ import moment = require('moment');
 import { BehaviorSubject, combineLatest, EMPTY, from, Observable, timer } from 'rxjs';
 import { catchError, distinctUntilChanged, filter, map, mergeMap, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { Utility } from '../../helpers/utility.service';
-const POLLING_INTERVAL = 30000;
+const POLLING_INTERVAL = 10000;
 export enum EarningType {
   EndOfTenor = "End Of Tenor",
   Monthly = "Monthly ROI"
