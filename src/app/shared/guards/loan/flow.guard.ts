@@ -13,7 +13,8 @@ export class FlowGuard implements CanActivate {
   constructor(
     private _loanService: LoanService,
     private _utility: Utility,
-    private _store:Store
+    private _store:Store,
+    private _router:Router
   ) {
   }
 
@@ -21,7 +22,7 @@ export class FlowGuard implements CanActivate {
 
       
     console.log("Running Loan ",this._loanService.runningLoanSubject.value)
-    if (this._loanService.runningLoanSubject.value==true) {
+    if (this._loanService.runningLoanSubject.value==true && !this._router.url.includes("apply") ) {
       this._store.removeItem("page")
       this._store.removeItem("previous")
       this._utility.showLoanInvalid(true);

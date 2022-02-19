@@ -4,7 +4,7 @@
     @include background(info);
     color: map-get($colors, white) !important;
     position: absolute;
-    top:-100%;
+    top:-150%;
     border-radius: $border-radius;
     @include padding(true,"px",0.25);
 }

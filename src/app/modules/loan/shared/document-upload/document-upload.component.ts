@@ -69,6 +69,7 @@ export class DocumentUploadComponent implements OnInit {
       let requirement = this.requirements[i];
       let doc = this.documents.find(c => c.label == requirement.title)
       groups.push(new FormControl(doc ? doc.fileName : ''));
+      if(doc) this.docsToUpload.push({ name: doc.fileName, id: doc.id, requirement:doc.label })
       //, [this._validators.filterFile(this.allowedExtensions)]
     }
     return groups
@@ -76,7 +77,7 @@ export class DocumentUploadComponent implements OnInit {
 
   storeDocuments(){
     let documents: any = [];
-    let f = this.form.value["documentArray"] as any[];
+    // let f = this.form.value["documentArray"] as any[];
     this.docsToUpload.forEach((doc, i) => {
       documents.push({ fileName: doc.name, id: doc.id, label: doc.requirement })
     });

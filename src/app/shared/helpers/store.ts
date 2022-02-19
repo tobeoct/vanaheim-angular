@@ -489,6 +489,10 @@ export class LoanStore {
 
   removeApplication() {
     this._store.removeItem(this.LOAN_KEY);
+    this.loanApplicationSubject.next({});
+    this.loanCategorySubject.next("");
+    this.pageSubject.next("");
+    this.previousSubject.next("");
     this._store.removeItem("loan-page");
     this._store.removeItem("category");
     this._store.removeItem("loan-previous");

@@ -45,7 +45,7 @@ export class EarningService {
 
 
   activeEarningSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  interval = environment.production ? 30000 : 30000000000000000;
+  interval = environment.production ? 10000 : 30000000000000000;
   constructor(private _http: HttpClient, private _earningsStore: EarningsStore, private _utils: Utility) { }
   apply = (payload: any) => {
     // console.log(payload)

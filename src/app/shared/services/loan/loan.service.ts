@@ -8,7 +8,7 @@ import { LoanStore, Store } from '../../helpers/store';
 import { Utility } from '../../helpers/utility.service';
 import { LoanResponse } from '../../poco/loan/loan-response';
 // import { LoanResponse } from '../../poco/loan/loan-response';
-const POLLING_INTERVAL = 30000;
+const POLLING_INTERVAL = 10000;
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +32,7 @@ export class LoanService {
 
 
   activeLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  interval = environment.production ? POLLING_INTERVAL : 30000000000000000;
+  interval = environment.production ? POLLING_INTERVAL : 3000//0000000000000;
   constructor(
     private _http: HttpClient,
     private _utils: Utility,
@@ -210,9 +210,10 @@ export class LoanService {
       )
   }
 
-  // timer$:Observable<any> = timer(0, 1000);
+  // timer$:Observable<any> = timer(0, this.interval);
 
-  loans$: Observable<any> = this.search({ pageNumber: 1, maxSize: 10 });
+  loans$: Observable<any> =  timer(0, this.interval)
+  .pipe(switchMap(()=>this.search({ pageNumber: 1, maxSize: 10 })));
   latestLoan$: Observable<any> = this.getLatest().pipe(tap(c => {
     if (!c || c.requestStatus == "NotQualified" || c.requestStatus == "Completed") { this.runningLoanSubject.next(false) } else {
       this.runningLoanSubject.next(true)

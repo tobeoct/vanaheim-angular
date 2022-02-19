@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { environment } from '@environments/environment';
 import moment = require('moment');
-import { BehaviorSubject, combineLatest, EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, EMPTY, Observable, timer } from 'rxjs';
 import { catchError, combineAll, distinctUntilChanged, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { DisbursedLoanService } from 'src/app/shared/services/loan/disbursedLoan/disbursed-loan.service';
-
+const POLLING_INTERVAL=10000;
 @Injectable({
   providedIn: 'root'
 })
@@ -51,11 +51,11 @@ export class RequestService {
       )//.subscribe(c=>this.loanLogDetailsSubject.next(c));
 
 
-    this.filteredRequests$ = combineLatest([
+    this.filteredRequests$ = combineLatest([timer(0,POLLING_INTERVAL),
       this.search$,
       this.paging$
     ])
-      .pipe(mergeMap(([search, paging]: any) => this.searchForAdmin({ ...paging, ...search })), shareReplay(1),
+      .pipe(mergeMap(([time,search, paging]: any) => this.searchForAdmin({ ...paging, ...search })), shareReplay(1),
         map(requests => requests.rows), map((requests: any[]) => {
 
           const newRequests = requests.filter((c: any) => c.requestStatus == "Pending");
