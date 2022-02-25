@@ -212,10 +212,10 @@ export class LoansComponent implements OnInit, OnDestroy {
         })
       };
       this._loanStore.setLoanCalculator(loanDetails);
-      this._utility.showLoanInvalid(false);
+      this._utility.showLoanInvalid(false,this._router.url);
       this.onNavigate('apply/applying-as');
     } else {
-      this._utility.showLoanInvalid(true);
+      this._utility.showLoanInvalid(true,this._router.url);
     }
   }
   onNavigate(route: string, params: any = {}): void {
