@@ -496,6 +496,14 @@ export class LoanStore {
     this._store.removeItem("loan-page");
     this._store.removeItem("category");
     this._store.removeItem("loan-previous");
+
+    this.applyingAsSubject.next("")
+    this.loanTypeSubject.next("")
+    this.loanProductSubject.next("")
+    this.previousSubject.next("")
+    this.pageSubject.next("")
+    this.loanApplicationSubject.next("")
+    this.loanCategorySubject.next("")
   }
 
   clear(category: string) {

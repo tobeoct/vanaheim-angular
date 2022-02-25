@@ -73,16 +73,18 @@ export class ApplyingAsComponent implements OnInit {
     this.showSubject.next(true);
   }
   next = () => {
+
+    if (this.applyingAs.value.includes("Line Of Credit")) {
+      this._loanStore.setLoanType("Line Of Credit");
+    }
     if(this.applyingAs.value=="Personal Line Of Credit"){
       this._loanStore.setLoanCategory("personal");
     }
     if(this.applyingAs.value=="Business Line Of Credit"){
       this._loanStore.setLoanCategory("business");
     }
+    
     this._loanStore.setApplyingAs(this.applyingAs.value);
-    if (this.applyingAs.value.includes("Line Of Credit")) {
-      this._loanStore.setLoanType("Line Of Credit");
-    }
     this._loanStore.setLoanProduct(this.applyingAs.value);
     // if(this._router.url!="/welcome/loans"){
     let url = "loans/apply/loan-calculator";
