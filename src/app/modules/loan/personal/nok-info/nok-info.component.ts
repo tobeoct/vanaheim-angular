@@ -198,7 +198,7 @@ export class NOKInfoComponent implements OnInit {
       if (nok.dateOfBirth) {
         let d = moment(nok.dateOfBirth);
         let day = d.get("day");
-        let month = d.get("month");
+        let month =d.format('MMMM')// d.get("month");
         let year = d.get("year");
         if (!this.day.value) {
           this.day.patchValue(day);
