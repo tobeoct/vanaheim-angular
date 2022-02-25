@@ -228,7 +228,7 @@ export class PersonalInfoComponent implements OnInit {
       if (customer.dateOfBirth) {
         let d = moment(customer.dateOfBirth);
         let day = d.get("day");
-        let month = d.get("month");
+        let month =d.format('MMMM');// d.get("month");
         let year = d.get("year");
         if (!this.day.value) {
           this.day.patchValue(day);

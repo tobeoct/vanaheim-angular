@@ -201,7 +201,7 @@ patchValue(company:any){
 if(company.dateOfIncorporation){
   let d = moment(company.dateOfIncorporation);
   let day = d.get("day")?.toString();
-  let month = d.get("month")?.toString();
+  let month = d.format('MMMM')//d.get("month")?.toString();
   let year = d.get("year")?.toString();
 if(!this.day.value){
   this.day.patchValue(day);
@@ -250,7 +250,7 @@ if(!this.year.value){
 if(company.dateOfIncorporation){
   let d = moment(company.dateOfIncorporation);
   let day = d.get("day")?.toString();
-  let month = d.get("month")?.toString();
+  let month = d.format('MMMM');//d.get("month")?.toString();
   let year = d.get("year")?.toString();
   this.day.patchValue(day);
   this.month.patchValue(month);

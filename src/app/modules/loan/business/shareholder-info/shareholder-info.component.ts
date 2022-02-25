@@ -189,7 +189,7 @@ trackId(group:FormGroup){
 if(a.dateOfBirth){
   let d = moment(a.dateOfBirth);
   let day = d.get("day");
-  let month = d.get("month");
+  let month =d.format('MMMM');// d.get("month");
   let year = d.get("year");
       this.updateValue(group,"dobGroup.day",day.toString());
       this.updateValue(group,"dobGroup.month",month.toString());
