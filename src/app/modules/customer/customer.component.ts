@@ -94,7 +94,7 @@ export class CustomerComponent implements OnInit {
       } else {
         if (localStorage.getItem("loan-page") && r == true) {
 
-          this._utility.showLoanInvalidSubject.next(true);
+          this._utility.showLoanInvalid(true,this._router.url);
           this._loanStore.setPage("");
           this._store.removeItem("loan-page")
           this._store.removeItem("loan-application")
@@ -107,7 +107,7 @@ export class CustomerComponent implements OnInit {
   }
 
   closeInvalid() {
-    this._utility.showLoanInvalid(false);
+    this._utility.showLoanInvalid(false,this._router.url);
   }
   ngOnChanges(): void {
     try {
