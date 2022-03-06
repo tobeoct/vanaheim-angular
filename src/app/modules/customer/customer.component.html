@@ -3,24 +3,24 @@
   <!-- <div class="notifications" > -->
   <!-- *ngIf="!isGranted&&pwaAble" -->
 
-    <app-banner *ngIf="!(isGranted$|async)&&pwaAble&&isEnabled">
-      <!-- <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center" > -->
-      <ng-container slot="content">
-        <h3 *ngIf="!(isGranted$|async)">Get notified on your device whenever there are updates</h3>
-        <p *ngIf="(isGranted$|async)" class="success">
-          Push Notifications are active
-        </p>
-      </ng-container>
-      <!-- <p *ngIf="!isEnabled" class="error">
+  <app-banner *ngIf="!(isGranted$|async)&&pwaAble&&isEnabled">
+    <!-- <div class="d-flex d-flex_horizontal--space-between d-flex_vertical--center" > -->
+    <ng-container slot="content">
+      <h3 *ngIf="!(isGranted$|async)">Get notified on your device whenever there are updates</h3>
+      <p *ngIf="(isGranted$|async)" class="success">
+        Push Notifications are active
+      </p>
+    </ng-container>
+    <!-- <p *ngIf="!isEnabled" class="error">
         Notifications are not available in the browser or enabled in the application
       </p> -->
-      <ng-container slot="action">
-        <app-button [class]="'widget_button--small no-margin'" *ngIf="!(isGranted$|async)" [outline]="true"
-          (onClick)="submitNotification()">
-          <ng-container slot="button">Notify Me</ng-container>
-        </app-button>
-      </ng-container>
-    </app-banner>
+    <ng-container slot="action">
+      <app-button [class]="'widget_button--small no-margin'" *ngIf="!(isGranted$|async)" [outline]="true"
+        (onClick)="submitNotification()">
+        <ng-container slot="button">Notify Me</ng-container>
+      </app-button>
+    </ng-container>
+  </app-banner>
   <!-- </div> -->
   <app-customer-header></app-customer-header>
   <!-- <app-banner><ng-container slot="content"><p><b style="font-weight: 700;">Welcome to Vanaheim</b><span class="hide">, There’s something missing. Tap the button to finish setting up</span></p></ng-container><ng-container slot="action">
@@ -51,7 +51,7 @@
 </app-modal>
 
 
-<ng-container *ngIf="activeLoan$|async">
+<!-- <ng-container *ngIf="activeLoan$|async">
   <div class="snackbar_container " style="cursor: pointer;">
     <div class="snackbar snackbar-warning animate__animated animate__fadeInUp mt-3 mb-0 box-shadow"
       (click)="routeToPage()"><small><b>Click to continue your
@@ -67,8 +67,38 @@
           Earning application</b></small>
     </div>
   </div>
-</ng-container>
+</ng-container> -->
 
+
+<app-modal *ngIf="(activeEarning$|async)||(activeLoan$|async)" (onChange)="close()">
+  <app-modal-header slot="header">
+    <h3>Continue Application</h3>
+  </app-modal-header>
+  <app-modal-body slot="body">
+
+    <div class="modal_content" style="text-align: center;">
+
+      <p>You have an earlier application that you may want to complete</p>
+      <div class="form_group margin--2x" >
+        <ng-container *ngIf="(activeLoan$|async)">
+          <button class="widget_button" (click)="routeToPage()" id="continueLoan" type="button" tabindex="0">
+            <div>Continue your
+              loan application</div>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="(activeEarning$|async)">
+          <button class="widget_button" (click)="routeToEarningPage()" id="continueEarning" type="button" tabindex="0">
+            <div>Continue your
+              Earning application</div>
+          </button>
+        </ng-container>
+      </div>
+
+    </div>
+
+
+  </app-modal-body>
+</app-modal>
 
 <app-modal *ngIf="(showSuccess$|async)" (onChange)="close()">
   <app-modal-header slot="header">

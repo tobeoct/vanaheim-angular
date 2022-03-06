@@ -43,7 +43,7 @@ export default class UserController {
                 res.payload = { data: response.data }
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } catch (err) {
             res.statusCode = 400;
@@ -64,7 +64,7 @@ export default class UserController {
                 res.payload = { data: response.data }
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } catch (err) {
             res.statusCode = 400;
@@ -85,7 +85,7 @@ export default class UserController {
                 res.payload = { data: response.data }
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } catch (err) {
             res.statusCode = 400;
@@ -105,7 +105,7 @@ export default class UserController {
                 res.payload = { data: response.data }
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } catch (err) {
             res.statusCode = 400;
@@ -125,7 +125,7 @@ export default class UserController {
                 res.payload = { data: response.data }
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } catch (err) {
             res.statusCode = 400;
@@ -145,7 +145,7 @@ export default class UserController {
                 res.payload = { data: response.data }
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } catch (err) {
             res.statusCode = 400;
@@ -165,7 +165,7 @@ export default class UserController {
                 res.payload = { data: response.data }
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } catch (err) {
             res.statusCode = 400;
@@ -187,7 +187,7 @@ export default class UserController {
                 res.payload = { data: response.data };
             } else {
                 res.statusCode = 400;
-                res.payload = { message: response.message };
+                res.payload = { message: response.message??response.data };
             }
         } 
         catch (err) {

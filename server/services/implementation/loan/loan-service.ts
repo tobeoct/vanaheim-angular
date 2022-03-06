@@ -228,7 +228,8 @@ export class LoanService implements ILoanService {
           const requestByUniqueID = await this._loanRequestRepository.getByRequestID(serialNumber);
 
           if (requestByUniqueID && Object.keys(requestByUniqueID).length > 0) {
-            throw "Loan ID has already been assigned to another earning";
+            resolve({ status: false, data: "Loan ID has already been assigned to another earning" });
+            return
           }
           // let documents = await this._documentService.getByRequestId(loanRequest.requestId)
           // if (documents?.status) {
