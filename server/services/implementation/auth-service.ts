@@ -31,7 +31,7 @@ class AuthService implements IAuthService{
   }
     verifyToken = (jwtToken:any) =>{
      try{
-       console.log("Verifying Token", jwtToken)
+       console.log("Verifying Token")
         return this.jwt.verify(jwtToken, this._appConfig.JWT_SECRET_KEY);
      }catch(e){
         console.log('e:',e);

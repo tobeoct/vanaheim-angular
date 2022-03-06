@@ -68,7 +68,7 @@ export class EarningRequestLogService extends BaseService<EarningRequestLog> imp
         }
         catch(err){
             console.error(err);
-            resolve({status:false,data:err});
+            resolve({status:false,message:err});
         }
     });
  }

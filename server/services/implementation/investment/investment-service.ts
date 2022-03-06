@@ -95,13 +95,14 @@ export class EarningService implements IEarningService {
 
         if (earningRequest.requestStatus == EarningRequestStatus.TopUpRequest) {
           const duration = moment(earningRequestLog.maturityDate).diff(moment().endOf("month"), "month")
+          const newPrincipal = (+earningRequest.amount) + (+amount);
           const payout = this.calculateTotalPayout(amount, earningRequest.rate, duration);
           earningRequest.topUpPayout = (earningRequest.topUpPayout ?? 0) + payout;
           earningRequest.topUp = (earningRequest.topUp ?? 0) + amount;
 
           earningRequest.requestStatus = EarningRequestStatus.Active;
-          const newPrincipal = (+earningRequest.amount) + (+amount);
           const newPayout = (+earningRequest.payout) + (+payout);
+          // console.log("Payout", payout, newPayout)
           const payoutsSoFar = await this._earningPayOutRepository.getPayoutSoFar(approvedEarning.id);
           const newRemaining = newPayout - (payoutsSoFar[0]?.total ?? 0);
           const newMonthlyPayment = newRemaining / duration;
@@ -176,7 +177,7 @@ export class EarningService implements IEarningService {
           return;
         }
         const amount = earningLiquidation.amount;
-        const payoutDate= earningLiquidation.payoutDate;
+        const payoutDate = earningLiquidation.payoutDate;
         approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
 
         if (status && status == LiquidationStatus.Declined) {
@@ -211,7 +212,7 @@ export class EarningService implements IEarningService {
           await this._earningRequestLogRepository.update(earningRequestLog);
           await this._approvedEarningRepository.update(approvedEarning);
           await this._emailService.SendEmail({ type: EmailType.Earning, to: customer?.email, html: this._templateService.EARNING_LIQUIDATION_DECLINED(customer?.firstName), toCustomer: true })
-       
+
           resolve({ status: true, data: "Request Declined" });
           return;
         }
@@ -258,33 +259,33 @@ export class EarningService implements IEarningService {
             }
             customer = (customer as any).dataValues as Customer;
             let allLiquidations = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
-            let liquidationsSoFar =0;
-            if(allLiquidations && allLiquidations.length>0){
-              liquidationsSoFar = allLiquidations.reduce((total,l)=>{
+            let liquidationsSoFar = 0;
+            if (allLiquidations && allLiquidations.length > 0) {
+              liquidationsSoFar = allLiquidations.reduce((total, l) => {
 
                 return total + ((l as any).dataValues as EarningLiquidation).amount
-              },0);
+              }, 0);
             }
             const accruedAmount = (earningRequest.payout / earningLiquidation.duration);
 
-            if((liquidationsSoFar+amount)>accruedAmount){
+            if ((liquidationsSoFar + amount) > accruedAmount) {
               resolve({ status: false, data: "Cannot liquidate more than total accrued amount" });
               return;
             }
-            if((liquidationsSoFar+amount)>earningRequest.payout){
+            if ((liquidationsSoFar + amount) > earningRequest.payout) {
               resolve({ status: false, data: "Cannot liquidate more than total payout" });
               return;
             }
-            earningRequest.payout-=amount;
-            earningRequestLog.payout-=amount;
-            if((liquidationsSoFar+amount)==earningRequest.payout){
+            earningRequest.payout -= amount;
+            earningRequestLog.payout -= amount;
+            if ((liquidationsSoFar + amount) == earningRequest.payout) {
               approvedEarning.earningStatus = ApprovedEarningStatus.Liquidated
               approvedEarning.isClosed = true;
-             
+
               earningRequest = (earningRequest as any).dataValues as EarningRequest;
               earningRequest.requestStatus = EarningRequestStatus.Matured;
               earningRequest.updatedAt = moment().toDate();
-             
+
               earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
               earningRequestLog.requestStatus = EarningRequestStatus.Matured;
               earningRequestLog.updatedAt = moment().toDate();
@@ -439,8 +440,8 @@ export class EarningService implements IEarningService {
             data: [
               { key: "Type", value: request.MeansOfIdentification?.type },
               { key: "ID Number", value: request.MeansOfIdentification?.idNumber },
-              { key: "Issue Date", value:!request.MeansOfIdentification?.issueDate?request.MeansOfIdentification?.issueDate:moment( request.MeansOfIdentification?.issueDate).format("MMMM Do YYYY")  },
-              { key: "Expiry Date", value:!request.MeansOfIdentification?.expiryDate?request.MeansOfIdentification?.expiryDate:moment( request.MeansOfIdentification?.expiryDate).format("MMMM Do YYYY")  },
+              { key: "Issue Date", value: !request.MeansOfIdentification?.issueDate ? request.MeansOfIdentification?.issueDate : moment(request.MeansOfIdentification?.issueDate).format("MMMM Do YYYY") },
+              { key: "Expiry Date", value: !request.MeansOfIdentification?.expiryDate ? request.MeansOfIdentification?.expiryDate : moment(request.MeansOfIdentification?.expiryDate).format("MMMM Do YYYY") },
             ]
           }
         ];
@@ -590,7 +591,9 @@ export class EarningService implements IEarningService {
           const requestByUniqueID = await this._earningRequestRepository.getByRequestID(new EarningRequest().autogenerateID(serialNumber));
 
           if (requestByUniqueID && Object.keys(requestByUniqueID).length > 0) {
-            throw "Earning ID has already been assigned to another earning";
+
+            resolve({ status: false, message: "Earning ID has already been assigned to another earning", data: "Earning ID has already been assigned to another earning" })
+            return;
           }
           earningRequest.requestId = new EarningRequest().autogenerateID(serialNumber);
           earningRequestLog.requestId = new EarningRequest().autogenerateID(serialNumber);
@@ -641,7 +644,7 @@ export class EarningService implements IEarningService {
           approvedEarning = new ApprovedEarning();
           approvedEarning.new(earningRequest, earningRequestLog, start as moment.Moment, maturityDate);
           approvedEarning.code = this._utils.autogenerate({ prefix: "APRE" });
-          console.log(earningRequestLog, earningRequest, approvedEarning, moment(earningRequest.maturityDate))
+          // console.log(earningRequestLog, earningRequest, approvedEarning, moment(earningRequest.maturityDate))
           approvedEarning.maturityDate = earningRequest.maturityDate;
           await this._approvedEarningRepository.create(approvedEarning);
         } else {
@@ -649,7 +652,7 @@ export class EarningService implements IEarningService {
           approvedEarning.nextPaymentDate = earningRequest.type == EarningType.EndOfTenor ? maturityDate.toDate() : start.diff(moment(), "day") >= 0 ? start.add(1, "month").set("date", 24).toDate() : start.set("date", 24).toDate()//maturityDate.subtract(earningRequest.duration,"months").set("date",24).add(1,  "month").toDate();
           approvedEarning.earningStatus = ApprovedEarningStatus.AwaitingFirstPayment;
           approvedEarning.maturityDate = earningRequest.maturityDate;
-          console.log(earningRequestLog, earningRequest, approvedEarning, moment(earningRequest.maturityDate))
+          // console.log(earningRequestLog, earningRequest, approvedEarning, moment(earningRequest.maturityDate))
           await this._approvedEarningRepository.update(approvedEarning);
 
         }
@@ -674,7 +677,7 @@ export class EarningService implements IEarningService {
       resolve({ status: true, data: earningRequest });
     } catch (err: any) {
       console.log(err)
-      resolve({ status: false, data: "Sorry we could not update the status." })
+      resolve({ status: false, message: "Sorry we could not update the status." })
     }
   });
 

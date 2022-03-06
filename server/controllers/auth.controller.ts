@@ -45,7 +45,7 @@ export default class AuthController {
       req.session.userData = response.userData;
     } else {
       res.statusCode = 400;
-      res.payload = { message: response.message };
+      res.payload = { message: response.message??response.data };
     }
 
     next();
@@ -69,7 +69,7 @@ export default class AuthController {
       req.session.userData = response.userData;
     } else {
       res.statusCode = 400;
-      res.payload = { message: response.message };
+      res.payload = { message: response.message??response.data };
     }
 
     next();

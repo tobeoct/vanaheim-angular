@@ -38,7 +38,7 @@ export default class EarningsController {
             res.payload = { data: response.data };
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -75,7 +75,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -94,7 +94,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -113,7 +113,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -132,7 +132,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -171,7 +171,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -280,7 +280,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -403,7 +403,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -422,7 +422,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -441,7 +441,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
     } 
     catch (err) {
@@ -460,7 +460,7 @@ export default class EarningsController {
             res.payload = { data: response.data }
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data };
         }
     } 
     catch (err) {
@@ -481,7 +481,7 @@ export default class EarningsController {
             res.payload = { data: response.data };
         } else {
             res.statusCode = 400;
-            res.payload = { message: response.message };
+            res.payload = { message: response.message??response.data  };
         }
 
     } 

@@ -101,7 +101,7 @@ export function authoriseRequest(_authService: IAuthService) {
 
     }
     else if (_authService.isAuthRequired(httpMethod, apiUrl)) {
-      console.log("Authorisation Required", apiUrl, req.header)
+      // console.log("Authorisation Required", apiUrl, req.header)
       let authHeader = req.header('Authorization');
       if (!authHeader) {
         return res.status(401).send({
@@ -116,7 +116,7 @@ export function authoriseRequest(_authService: IAuthService) {
       if (jwtTokenID && req.session.userData) {
         let userData: any = _authService.verifyToken(jwtTokenID);
         if (userData) {
-          console.log("Verified Token", userData)
+          // console.log("Verified Token", userData)
           req.session.userData = userData;
           // req.session.sessionID = jwtTokenID;
         }
