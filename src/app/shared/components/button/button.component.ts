@@ -17,6 +17,7 @@ export class ButtonComponent implements OnInit {
   @Input() title:string='Please fill the form first';
   @Input() autoClick:boolean;
   @Input() loading$:Observable<boolean>
+  @Input() noValidate:boolean =false
   @Output() onClick = new EventEmitter<any>();
   constructor() { }
 

@@ -18,7 +18,7 @@ export class LoanStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.loan$.subscribe(c=>{
-      switch(c.requestStatus){
+      switch(c?.requestStatus){
         case "Pending":
             this.widthSubject.next(25);
           break;

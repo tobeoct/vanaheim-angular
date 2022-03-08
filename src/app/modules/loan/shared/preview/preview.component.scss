@@ -15,3 +15,12 @@
     @include color(red);
     border-radius: $border-radius;
 }
+
+.missing {
+    width: 100%;
+    @include padding(true, "px", 0.5);
+    @include background(lightGrey);
+    @include border(1px,solid,lightGrey);
+    @include color(lightGrey);
+    border-radius: $border-radius;
+}

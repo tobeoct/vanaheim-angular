@@ -225,10 +225,10 @@ export class LoanService implements ILoanService {
         loanRequest.dateProcessed = new Date();
         loanRequestLog.dateProcessed = new Date();
         if (serialNumber) {
-          const requestByUniqueID = await this._loanRequestRepository.getByRequestID(serialNumber);
+          const requestByUniqueID = await this._loanRequestLogRepository.getByRequestID(serialNumber);
 
           if (requestByUniqueID && Object.keys(requestByUniqueID).length > 0) {
-            resolve({ status: false, data: "Loan ID has already been assigned to another earning" });
+            resolve({ status: false, data: "Loan ID has already been assigned to another loan" });
             return
           }
           // let documents = await this._documentService.getByRequestId(loanRequest.requestId)

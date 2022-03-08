@@ -1,49 +1,101 @@
+<div id="form" class="theme_col-6 animate__animated animate__fadeInUp animate__fast">
+    <div class=" content box-shadow" style="box-sizing: border-box;">
 
-    <div id="form" class="theme_col-6 animate__animated animate__fadeInUp animate__fast">
-        <div class=" content box-shadow" style="box-sizing: border-box;">
-            <ng-container *ngIf="!(dataLoading$|async)">
-    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-        <ng-container *ngIf="isLoggedIn">
-            <ng-container *ngIf="(collateralsFromDb$|async) && !(showForm$|async) ">
-                <app-dropdown current="{{owner.value}} - {{type.value}} {{valuation.value}}"  [fieldClass]="'no-margin--top'" [id]="'collaterals'" [control]="collateralId"  aria-placeholder="Select your collateral">
-                    <ng-container slot="label">Collaterals</ng-container>
-                    <app-option *ngFor="let t of (collateralsFromDb$|async); let i =index" [value]="t.id" label="{{t.collateral}}">{{t.owner}} - {{t.type}} {{t.valuation|currency:"₦"}}</app-option>
-                </app-dropdown>
-                <p class="text-button" (click)="showForm()">Enter a different collateral</p>
-                
+        <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+            <div style="margin-top: 30px;">
+                <app-checkbox [outline]="true" [active]="hasDocument.value!=''" [control]="hasDocument"
+                    [value]="'true'">Do
+                    you have your collateral document?</app-checkbox>
+            </div>
+
+            <ng-container *ngIf="hasDocument.value=='true'">
+
+                <ng-container *ngIf="!(dataLoading$|async)">
+                    <ng-container *ngIf="isLoggedIn">
+                        <ng-container *ngIf="(collateralsFromDb$|async) && !(showForm$|async) ">
+                            <app-dropdown current="{{owner.value}} - {{type.value}} {{valuation.value}}"
+                                [fieldClass]="'no-margin--top'" [id]="'collaterals'" [control]="collateralId"
+                                aria-placeholder="Select your collateral">
+                                <ng-container slot="label">Collaterals</ng-container>
+                                <app-option *ngFor="let t of (collateralsFromDb$|async); let i =index" [value]="t.id"
+                                    label="{{t.collateral}}">{{t.owner}} - {{t.type}} {{t.valuation|currency:"₦"}}
+                                </app-option>
+                            </app-dropdown>
+                            <p class="text-button" (click)="showForm()">Enter a different collateral</p>
+
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!(collateralsFromDb$|async) || (showForm$|async)">
+
+                        <app-dropdown [current]="type.value" [fieldClass]="'no-margin--top'" [id]="'type'"
+                            [control]="type" aria-placeholder="What type of collateral is this?">
+                            <ng-container slot="label"><label for="type">Collateral Type</label></ng-container>
+                            <app-option *ngFor="let t of types; let i =index" [value]="t" [label]="t">{{t}}</app-option>
+                        </app-dropdown>
+                        <app-input [focus$]="focus$" id="description" [placeholder]="'Enter your description'"
+                            [control]="description" class="form-control" [error]="(errorMessage$ | async)?.description">
+                            <label for="description">Collateral Description</label>
+                        </app-input>
+
+                        <app-input id="valuation" [placeholder]="'Enter the valuation'" [control]="valuation"
+                            class="form-control" [error]="(errorMessage$ | async)?.valuation">
+                            <label for="valuation">Collateral Valuation</label>
+                        </app-input>
+
+                        <app-input id="owner" [placeholder]="'Who owns the Collateral'" [control]="owner"
+                            class="form-control" [error]="(errorMessage$ | async)?.owner">
+                            <label for="owner">Owner</label>
+                        </app-input>
+                        <app-document [control]="document" title="Collateral Document" (onChange)="onFileChange($event)"><label>Collateral Document</label></app-document>
+                    </ng-container>
+
+                </ng-container>
             </ng-container>
+            <div style="margin-top: 60px;">
+                <app-button [form]="form" [loading$]="loading$"
+                    [noValidate]="skipCollateral && hasDocument.value!='true'">Next</app-button>
+            </div>
+        </app-form>
+        <ng-container *ngIf="(dataLoading$|async) && !(collateralsFromDb$|async)">
+            <app-loading></app-loading>
         </ng-container>
-        <ng-container *ngIf="!(collateralsFromDb$|async) || (showForm$|async)">
-            <app-dropdown [current]="type.value" [fieldClass]="'no-margin--top'" [id]="'type'" [control]="type"  aria-placeholder="What type of collateral is this?">
-                    <ng-container slot="label"><label for="type">Collateral Type</label></ng-container>
-                    <app-option *ngFor="let t of types; let i =index" [value]="t" [label]="t">{{t}}</app-option>
-                </app-dropdown>
-                <app-input [focus$]="focus$" id="description" [placeholder]="'Enter your description'" [control]="description" class="form-control" [error]="(errorMessage$ | async)?.description" >
-                    <label for="description">Collateral Description</label>
-                </app-input>
-                
-                <app-input id="valuation" [placeholder]="'Enter the valuation'" [control]="valuation" class="form-control" [error]="(errorMessage$ | async)?.valuation" >
-                    <label for="valuation">Collateral Valuation</label>
-                </app-input>
-           
-                <app-input id="owner" [placeholder]="'Who owns the Collateral'" [control]="owner" class="form-control" [error]="(errorMessage$ | async)?.owner" >
-                    <label for="owner">Owner</label>
-                </app-input>
-                <ng-container *ngIf="hasDocument.value=='true'">
-                  <app-document [control]="document"><label>Collateral Document</label></app-document>
-              </ng-container>
-              <div style="margin-top: 30px;">
-                  <app-checkbox [outline]="true" [active]="hasDocument.value!=''" [control]="hasDocument" [value]="'true'">Do you have your collateral document?</app-checkbox>
-              </div>
-            </ng-container>
-        <div style="margin-top: 60px;">
-            <app-button [form]="form" [loading$]="loading$">Next</app-button>
-        </div>
-    </app-form>
-</ng-container>
-<ng-container *ngIf="(dataLoading$|async) && !(collateralsFromDb$|async)">
-    <app-loading></app-loading>
-</ng-container>
     </div>
 </div>
-                            
+
+
+
+<app-modal *ngIf="(show$|async)==true && !isLoggedIn" (onChange)="close()">
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Sign In Required</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+        <p style="text-align: center; margin: auto;">Sorry you can't upload a document without signing in.</p>
+        <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
+            <p><b>Go to login</b></p> <button class="widget_button widget_button--small" style="margin-left: 10px;"
+                (click)="login()">Login</button>
+        </div>
+    </app-modal-body>
+</app-modal>
+
+
+<app-modal *ngIf="(show2$|async)==true && !isLoggedIn" (onChange)="close()">
+    <app-modal-header slot="header">
+        <h1 id="req-icon"><span class="material-icons">
+                info
+            </span>
+        </h1>
+        <h3>Attention</h3>
+    </app-modal-header>
+    <app-modal-body slot="body">
+        <p style="text-align: center; margin: auto;">Invalid file type</p>
+        <div style=" display: flex; width:100%; align-items: center; justify-content: center;">
+            <app-badge size="small">
+                <p><b>Only images and text documents allowed</b></p>
+            </app-badge>
+        </div>
+    </app-modal-body>
+</app-modal>
