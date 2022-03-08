@@ -51,26 +51,9 @@
 </app-modal>
 
 
-<!-- <ng-container *ngIf="activeLoan$|async">
-  <div class="snackbar_container " style="cursor: pointer;">
-    <div class="snackbar snackbar-warning animate__animated animate__fadeInUp mt-3 mb-0 box-shadow"
-      (click)="routeToPage()"><small><b>Click to continue your
-          loan application</b></small>
-    </div>
-  </div>
-</ng-container>
-
-<ng-container *ngIf="activeEarning$|async">
-  <div class="snackbar_container " style="cursor: pointer;">
-    <div class="snackbar snackbar-info animate__animated animate__fadeInUp mt-3 mb-0 box-shadow"
-      (click)="routeToEarningPage()"><small><b>Click to continue your
-          Earning application</b></small>
-    </div>
-  </div>
-</ng-container> -->
 
 
-<app-modal *ngIf="(activeEarning$|async)||(activeLoan$|async)" (onChange)="close()">
+<app-modal *ngIf="((activeEarning$|async)||(activeLoan$|async))" (onChange)="closeActiveApplicationNotification()">
   <app-modal-header slot="header">
     <h3>Continue Application</h3>
   </app-modal-header>

@@ -109,6 +109,11 @@ export class CustomerComponent implements OnInit {
   closeInvalid() {
     this._utility.showLoanInvalid(false,this._router.url);
   }
+
+  closeActiveApplicationNotification(){
+    this._loanService.activeLoanSubject.next(false)
+    this._earningService.activeEarningSubject.next(false);
+  }
   ngOnChanges(): void {
     try {
       if (Notification) {

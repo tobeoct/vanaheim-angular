@@ -7,4 +7,5 @@ export class CollateralInfo{
     valuation:string;
     owner:string;
     document:Document;
+    hasDocument:boolean;
 }

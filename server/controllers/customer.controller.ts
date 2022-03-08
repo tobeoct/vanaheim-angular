@@ -14,13 +14,14 @@ import UtilService from '@services/implementation/common/util';
 import { GET, POST, PUT, route } from 'awilix-express';
 import { VanaheimBodyRequest, VanaheimQueryRequest } from '@models/express/request';
 import { VanaheimTypedResponse } from '@models/express/response';
+import { ICollateralRepository } from '@repository/interface/Icollateral-repository';
 const expAutoSan = require('express-autosanitizer');
 
 // const accountList:any={};
 @route('/api/customer')
 export default class CustomerController {
 
-  constructor(private sanitizer: any, private _utils: UtilService, private _earningsEmploymentRepository: IEarningsEmploymentRepository, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: CollateralRepository) {
+  constructor(private _db:any,private sanitizer: any, private _utils: UtilService, private _earningsEmploymentRepository: IEarningsEmploymentRepository, private _customerRepository: CustomerRepository, private _employmentRepository: EmploymentRepository, private _nokRepository: NOKRepository, private _companyRepository: CompanyRepository, private _shareholderRepository: ShareholderRepository, private _collateralRepository: ICollateralRepository) {
 
   }
 
@@ -363,7 +364,10 @@ export default class CustomerController {
     try {
       let customer = req.session?.userData?.customer as Customer;
       if (customer) {
-        let collaterals = await this._collateralRepository.getByCustomerID(customer.id);
+        let collaterals = await this._collateralRepository.getByCustomerID(customer.id, [{
+          model: this._db.Customer,
+          required: true
+      }]);
         res.statusCode = 200;
         res.payload = { data: collaterals };
 

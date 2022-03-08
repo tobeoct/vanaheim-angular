@@ -325,9 +325,7 @@ export class LoanTypeRequirementService implements ILoanTypeRequirementService {
       collateral.valuation = this._utils.convertToPlainNumber(collateralInfo.valuation);
       let documentInfo = collateralInfo.document;
       if (documentInfo.id > 0) {
-        let document = new Document(); //get document from db;
-        collateral.document = document;
-        collateral.documentID = document.id;
+        collateral.documentID = documentInfo.id;
       }
     }
     collateral.customerID = customer.id;

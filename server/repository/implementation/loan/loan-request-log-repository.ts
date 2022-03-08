@@ -22,7 +22,22 @@ export class LoanRequestLogRepository extends BaseRepository<LoanRequestLog> imp
       }
     });
   };
-
+  getByRequestID = (requestId: string) => new Promise<LoanRequestLog>(async (resolve, reject) => {
+    try {
+      let response = await this._db.findOne({
+        where: {
+          requestId
+        },
+        order: [["requestDate", "DESC"]]
+      });
+      let dataValues = response?.dataValues as LoanRequestLog;
+      resolve(dataValues);
+    }
+    catch (err) {
+      console.log(err)
+      reject(err);
+    }
+  });
   getByLoanRequestID = (loanRequestID: number) => {
     return new Promise<LoanRequestLog>(async (resolve, reject) => {
       try {
@@ -34,7 +49,8 @@ export class LoanRequestLogRepository extends BaseRepository<LoanRequestLog> imp
         });
         let dataValues = response?.dataValues as LoanRequestLog;
         resolve(dataValues);
-      } catch (err) {
+      }
+      catch (err) {
         console.log(err)
         reject(err);
       }

@@ -81,6 +81,7 @@ export class EarningsComponent implements OnInit {
     this.earningPayouts$ = this._earningPayoutService.myEarningPayouts$;
     this.earnings$ = this._earningService.earningWithFilter$;
     this.pagingSubject = this._earningService.pagingSubject;
+    this.activeFilter$ =  this._earningService.filterSubject.asObservable();
     this.topUpForm = this._fb.group({
       amount: ["10,000", [Validators.required, this._validators.numberRange(10000, 10000000)]]
     })

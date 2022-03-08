@@ -65,6 +65,8 @@ export class DocumentUploadComponent implements OnInit {
 
   buildDocuments = (): FormControl[] => {
     let groups: FormControl[] = [];
+    const collateralDocument = this.documents.find(c => c.label === "Collateral Document")
+    if(collateralDocument)this.docsToUpload.push({ name: collateralDocument.fileName, id: collateralDocument.id, requirement:collateralDocument.label })
     for (let i = 0; i < this.requirements.length; i++) {
       let requirement = this.requirements[i];
       let doc = this.documents.find(c => c.label == requirement.title)

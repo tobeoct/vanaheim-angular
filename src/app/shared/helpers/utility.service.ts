@@ -82,7 +82,6 @@ export class Utility {
     this.showLoanInvalidSubject.next(!this.showLoanInvalidSubject.value);
   }
   showLoanInvalid(status: boolean,url:string) {
-
     if(!url.includes("apply")||!status)this.showLoanInvalidSubject.next(status);
   }
   setError(message: string) {

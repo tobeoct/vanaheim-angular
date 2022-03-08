@@ -511,26 +511,34 @@
                         <ng-container slot="button">Edit</ng-container>
                     </app-button>
                 </div>
-                <div class="preview-items">
-                    <div class="preview-item">
-                        <p><span><b>Type</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["type"]}}</span>
-                        </p>
-                    </div>
-                    <div class="preview-item">
-                        <p><span><b>Description</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["description"]}}</span>
-                        </p>
-                    </div>
-                    <div class="preview-item">
-                        <p><span><b>Valuation</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["valuation"]}}</span>
-                        </p>
-                    </div>
+                <ng-container *ngIf="toJson(loanApplication['collateralInfo'])['hasDocument']">
+                    <div class="preview-items">
+                        <div class="preview-item">
+                            <p><span><b>Type</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["type"]}}</span>
+                            </p>
+                        </div>
+                        <div class="preview-item">
+                            <p><span><b>Description</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["description"]}}</span>
+                            </p>
+                        </div>
+                        <div class="preview-item">
+                            <p><span><b>Valuation</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["valuation"]}}</span>
+                            </p>
+                        </div>
 
-                    <div class="preview-item">
-                        <p><span><b>Owner</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["owner"]}}</span>
-                        </p>
-                    </div>
+                        <div class="preview-item">
+                            <p><span><b>Owner</b></span>:<span>{{toJson(loanApplication['collateralInfo'])["owner"]}}</span>
+                            </p>
+                        </div>
 
-                </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!toJson(loanApplication['collateralInfo'])['hasDocument']">
+                    <div class="warning">
+                        No collateral information provided
+                    </div>
+                </ng-container>
+
             </div>
         </ng-container>
         <ng-container *ngIf="!loanApplication['collateralInfo']">
