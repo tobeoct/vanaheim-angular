@@ -1,12 +1,13 @@
 import AppConfig from "server/config";
 import { IAuthService } from "@services/interfaces/Iauth-service";
-import { newSessionRoutes, authRoutes } from "./common/routes";
+import { newSessionRoutes, authRoutes } from "../../routes";
 class AuthService implements IAuthService{
   
   constructor(private jwt:any,private _appConfig:AppConfig){
 
   }
   isNewTokenRequired = (httpMethod:any, url:any) => {
+    if(url && url.includes("swagger")) return true;
     for (let routeObj of newSessionRoutes) {
       if (routeObj.method === httpMethod && routeObj.path === url?.split("?")[0]) {
         return true;

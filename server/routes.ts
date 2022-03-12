@@ -74,3 +74,9 @@ export const authRoutes = [
   { path: '/api/files/merge_chunks', method: 'POST' }
 ];
 
+
+
+export const ApiControllers = [...newSessionRoutes,...authRoutes].map(route=>{
+
+  return route.path.split("/")[2];
+})

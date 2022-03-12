@@ -11,6 +11,7 @@ export interface IBaseEntity{
 }
 export class BaseEntity implements IBaseEntity{
     generateTemplateData: () => any;
+    
     id:number;
     status:BaseStatus;
     // isActive:boolean;

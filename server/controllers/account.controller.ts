@@ -1,4 +1,126 @@
+
+/**
+* @swagger
+* tags:
+* name: Accounts
+* description: API to manage your account.
+* paths:
+* /api/account/:
+* get:
+* summary: Lists all the customer accounts
+* tags: [Accounts]
+* responses:
+* “200”:
+* description: The list of customer accounts.
+* content:
+* application/json:
+* schema:
+* $ref: ‘#/components/schemas/Account’
+* post:
+* summary: Creates a new account
+* tags: [Accounts]
+* requestBody:
+* required: true
+* content:
+* application/json:
+* schema:
+* $ref: ‘#/components/schemas/Account’
+* responses:
+* “200”:
+* description: The created account.
+* content:
+* application/json:
+* schema:
+* $ref: ‘#/components/schemas/Account’
+* /account/{id}:
+* get:
+* summary: Gets a account by id
+* tags: [Accounts]
+* parameters:
+* – in: path
+* name: id
+* schema:
+* type: integer
+* required: true
+* description: The account id
+* responses:
+* “200”:
+* description: The list of account.
+* content:
+* application/json:
+* schema:
+* $ref: ‘#/components/schemas/Account’
+* “404”:
+* description: Account not found.
+* put:
+* summary: Updates a account
+* tags: [Accounts]
+* parameters:
+* – in: path
+* name: id
+* schema:
+* type: integer
+* required: true
+* description: The account id
+* requestBody:
+* required: true
+* content:
+* application/json:
+* schema:
+* $ref: ‘#/components/schemas/Account’
+* responses:
+* “204”:
+* description: Update was successful.
+* “404”:
+* description: Account not found.
+* delete:
+* summary: Deletes a account by id
+* tags: [Accounts]
+* parameters:
+* – in: path
+* name: id
+* schema:
+* type: integer
+* required: true
+* description: The account id
+* responses:
+* “204”:
+* description: Delete was successful.
+* “404”:
+* description: Account not found.
+* components:
+* schemas:
+* Account:
+* type: object
+* required:
+* – title
+* – author
+* – finished
+* properties:
+* id:
+* type: integer
+* description: The auto-generated id of the account.
+* title:
+* type: string
+* description: The title of your account.
+* author:
+* type: string
+* description: Who wrote the account?
+* finished:
+* type: boolean
+* description: Have you finished reading it?
+* createdAt:
+* type: string
+* format: date
+* description: The date of the record creation.
+* example:
+* title: The Pragmatic Programmer
+* author: Andy Hunt / Dave Thomas
+* finished: true
+*/
+
 import { Account } from '@entities/account';
+import "reflect-metadata";
 import { VerifyAccountEnquiryRequest } from '@models/verify/request';
 import { VerifyAccountEnquiryResponsePayload, VerifyResponse } from '@models/verify/response';
 import { AccountRepository } from '@repository/implementation/account-repository';
@@ -6,18 +128,22 @@ import { EnvConstants } from '@services/implementation/common/env.constants';
 import UtilService from '@services/implementation/common/util';
 import { GET, POST, route } from 'awilix-express';
 import axios, { AxiosResponse } from 'axios';
-import { Request } from 'express';
 import { VerifyVerificationStatus } from '@enums/verify/verification-status';
 import RedisMiddleware from 'server/middleware/redis-middleware';
 import { VerifyVerificationType } from '@enums/verify/verification-type';
 import { Customer } from '@entities/customer';
 import { VanaheimBodyRequest } from '@models/express/request';
 import { VanaheimTypedResponse } from '@models/express/response';
+// import { ApiOperationGet, ApiPath, SwaggerDefinitionConstant } from 'swagger-express-ts';
 
-// const accountList:any={};
+// @ApiPath({
+//   path: "/api/account",
+//   name: "Account",
+//   security: { basicAuth: [] }
+// })
 @route('/api/account')
 export default class AccountController {
-
+  public static TARGET_NAME: string = "AccountController";
   accountEnquiryInstance = axios.create({
     method: 'post',
     baseURL: EnvConstants.verify.v3.baseUrl,
@@ -27,11 +153,6 @@ export default class AccountController {
 
   constructor(private _utils: UtilService, private _redis: RedisMiddleware, private _accountRepository: AccountRepository) {
 
-  }
-
-  getAccountName(data: VerifyAccountEnquiryResponsePayload | any) {
-    console.log("Account Info",data)
-    return data.full_name //?? (!data["surname"] && !data["otherNames"])?"": (data["surname"]??"" + " " + data["otherNames"]??"");
   }
   @route('/enquiry')
   @POST()
@@ -87,7 +208,17 @@ export default class AccountController {
     next();
   }
 
-
+  //@ts-ignore
+//   @ApiOperationGet({
+//     description: "Get accounts objects list",
+//     summary: "Get accounts list",
+//     responses: {
+//         200: { description: "Success", type: SwaggerDefinitionConstant.Response.Type.ARRAY, model: "Account" }
+//     },
+//     security: {
+//         apiKeyHeader: ["5466567"]
+//     }
+// })
   @route('/')
   @GET()
   accounts = async (req: VanaheimBodyRequest<any>, res: VanaheimTypedResponse<any>, next: any) => {
@@ -137,42 +268,8 @@ export default class AccountController {
     }
     next();
   }
+  getAccountName(data: VerifyAccountEnquiryResponsePayload | any) {
+    console.log("Account Info",data)
+    return data.full_name //?? (!data["surname"] && !data["otherNames"])?"": (data["surname"]??"" + " " + data["otherNames"]??"");
+  }
 }
-
-
-// type VerifyAccountEnquiryRequest = {
-//   transactionReference: string
-//   searchParameter: string
-//   bankCode: string
-//   verificationType: VerifyVerificationType
-// }
-
-// type VerifyAccountEnquiryResponse = {
-//   responseCode: string,
-//   description: string,
-//   verificationType: VerifyVerificationType,
-//   verificationStatus: VerifyVerificationStatus,
-//   transactionStatus: string,
-//   transactionReference: string,
-//   transactionDate: string,
-//   searchParameter: string,
-//   response: VerifyAccountEnquiryResponsePayload,
-//   faceMatch: string,
-// }
-// type VerifyAccountEnquiryResponsePayload = {
-
-//   full_name: string,
-//   bank_name: string,
-//   account_number: string,
-//   bank_code: string,
-//   message: string,
-
-// }
-// enum VerifyVerificationType {
-//   AccountEnquiry = "ACCOUNT-INQUIRY-VERIFICATION"
-// }
-
-// enum VerifyVerificationStatus {
-//   Verified = "VERIFIED",
-//   NotVerified = "NOT VERIFIED"
-// }
