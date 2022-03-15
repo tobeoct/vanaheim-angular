@@ -62,11 +62,14 @@ export class BaseRepository<T> implements IBaseRepository<T>{
       let params: any = {
         limit: maxSize,
         offset: pageNumber * maxSize,
-        where: { ...parameters }, // conditions
+        
         order: orderBy
       };
       if (include) {
         params["include"] = include;
+      }
+      if(Object.keys(parameters).length>0){
+        params["where"]=  { ...parameters };// conditions
       }
       resolve(await this._db.findAndCountAll(params));
 

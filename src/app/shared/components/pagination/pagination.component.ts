@@ -4,7 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+  styleUrls: ['./pagination.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginationComponent implements OnInit,OnChanges {
   @Input()
@@ -38,6 +39,7 @@ export class PaginationComponent implements OnInit,OnChanges {
   }
   onPageChange(pageNumber:number){
     this.pagingChangeSubject.next({pageNumber,maxSize:this.maxSize});
+    this.activeFilterSubject.next(pageNumber)
   }
   prev(){
     if(this.currentPage>1){
@@ -47,7 +49,7 @@ export class PaginationComponent implements OnInit,OnChanges {
   }
   next(){
     if(this.currentPage<this.pageSubject.value.length){
-      this.currentPage -=1;
+      this.currentPage +=1;
       this.onPageChange(this.currentPage);
       }
   }

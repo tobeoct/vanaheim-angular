@@ -111,8 +111,8 @@ export class CustomerComponent implements OnInit {
   }
 
   closeActiveApplicationNotification(){
-    this._loanService.activeLoanSubject.next(false)
-    this._earningService.activeEarningSubject.next(false);
+    this._loanService.continueApplication(false)
+    this._earningService.continueApplication(false);
   }
   ngOnChanges(): void {
     try {

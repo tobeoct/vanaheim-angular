@@ -141,7 +141,7 @@
     <app-modal-body slot="body">
       <app-form [form]="fForm" (onSubmit)="onFailure($event)" (errorMessageChange)="onError($event)">
         <app-input id="failureReason" [control]="failureReason" class="form-control">
-          <label>Reason For Failure</label>
+          <label>Reason For Failure *This does not get sent to the customer*</label>
         </app-input>
         <div class="vc_form-field margin--2x" style="max-width: 500px;">
           <label for="mailMessage">Personalised Message</label>

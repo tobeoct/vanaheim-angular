@@ -30,13 +30,15 @@ import { BaseRepository } from "../base-repository";
       }
     });
      
-    getByApprovedEarningID = (approvedEarningID: number,include?:any[]) => new Promise<EarningLiquidation[]>(async (resolve, reject) => {
+    getByApprovedEarningID = (approvedEarningID: number,pageNumber:number,maxSize:number,include?:any[]) => new Promise<SearchResponse<EarningLiquidation[]>>(async (resolve, reject) => {
       try {
   
-        let response = await this._db.findAll({
+        let response = await this._db.findAndCountAll({
           where: {
             approvedEarningID
           },
+          limit: maxSize,
+        offset: pageNumber * maxSize,
           order: [["createdAt", "DESC"]],
           include
         });

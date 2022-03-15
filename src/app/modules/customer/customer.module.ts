@@ -17,11 +17,12 @@ import { EarningStatusComponent } from './shared/features/earning-status/earning
 import { EarningsTrackerComponent } from './shared/features/earnings-tracker/earnings-tracker.component';
 import { ReportComponent } from './loans/report/report.component';
 import { LoanTrackerComponent } from './shared/features/loan-tracker/loan-tracker.component';
+import { EarningReportComponent } from './earnings/report/report.component';
 
 
 
 @NgModule({
-  declarations: [DashboardComponent,EarningStatusComponent, NavigationComponent,NavComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent, LoanStatusComponent, DocumentsComponent, AccountComponent, EarningsComponent, EarningsTrackerComponent, ReportComponent,LoanTrackerComponent],
+  declarations: [DashboardComponent,EarningReportComponent,EarningStatusComponent, NavigationComponent,NavComponent, CustomerComponent, HeaderComponent, LoanSummaryComponent, InvestmentSummaryComponent, LoansComponent, LoanStatusComponent, DocumentsComponent, AccountComponent, EarningsComponent, EarningsTrackerComponent, ReportComponent,LoanTrackerComponent],
   imports: [
     SharedModule,
     CustomerRoutingModule

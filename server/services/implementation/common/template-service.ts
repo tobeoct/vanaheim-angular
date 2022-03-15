@@ -52,7 +52,7 @@ export class TemplateService {
                 Thank you for your interest in Vanir Capital Limited’s loan services.<br/> <br/>
             
             Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/> <br/>
-            ${ this.parseMessage(message) } <br/><br/>
+            ${!message? `${this.parseMessage(message)}<br/><br/>`:"" } 
                 Thank you for your interest and we hope to be able to serve you in the near future.<br/> <br/>
     
             Best regards.<br/> <br/>
@@ -210,24 +210,24 @@ The Vanir Loans’ Team
                     `;
     }
 
-    NOTIFICATION(message: string, type: string, id?: string) {
-        if (id) {
-            return `${this.parseMessage(message)}<br/><br/>
-        ${type} - ID: ${id} <br/><br/>
-        Kind Regards<br/><br/>
-        <b>Vanir Capital Loans and Capital Finance Team</b>
-        `;
-        } else {
-            return `
-            ${this.parseMessage(message)}<br/><br/>
+    NOTIFICATION(customer:string,message: string, type: string, id?: string) {
+        // if (id) {
+        //     return `${this.parseMessage(message)}<br/><br/>
+        // ${type} - ID: ${id} <br/><br/>
+        // Kind Regards<br/><br/>
+        // <b>Vanir Capital Loans and Capital Finance Team</b>
+        // `;
+        // } else {
+            return `Dear ${customer.trim()},<br/><br/>
             <b>${type}</b><br/><br/>
-            Kind Regards<br/><br/>
+            ${this.parseMessage(message)}<br/><br/>
+            Kind regards<br/><br/>
             <b>Vanir Capital Loans and Capital Finance Team</b>
             `;
-        }
+        // }
     }
     EARNING_CUSTOMER_TEMPLATE = (customer: string) => `
-    Dear ${customer},<br/><br/>
+    Dear ${customer.trim()},<br/><br/>
     Welcome to Vanir Capital Limited.<br/><br/>
     We thank you for your interest in our earnings service. We are
     resolute in our mission for quality financial service delivery, assured by

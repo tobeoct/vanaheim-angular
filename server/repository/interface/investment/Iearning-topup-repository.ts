@@ -8,5 +8,5 @@ export interface IEarningTopUpRepository extends IBaseRepository<EarningTopUp>{
     getByStatus: (status?:TopUpStatus,include?:any[]) => Promise<SearchResponse<EarningTopUp[]>>
     getActiveTopUps: (approvedEarningID:number,include?:any[]) => Promise<SearchResponse<EarningTopUp[]>>
 
-    getByApprovedEarningID: (approvedEarningID:number,amount:number,include?:any[]) => Promise<EarningTopUp>
+    getByApprovedEarningID: (approvedEarningID:number,amount:number,pageNumber:number,maxSize:number,include?:any[]) => Promise<EarningTopUp>
 }

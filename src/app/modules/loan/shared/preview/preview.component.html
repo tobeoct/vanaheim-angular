@@ -576,7 +576,7 @@
     <app-form [form]="form" (onSubmit)="submitApplication($event)">
         <div #button>
             <app-button [autoClick]="(autoClick$|async)||false" [form]="form" [loading$]="loading$"
-                fieldClass="theme_col-3 no-margin--top  widget_button--wide">Submit Application</app-button>
+                fieldClass=" no-margin--top  widget_button--wide">Submit Application</app-button>
         </div>
     </app-form>
 </div>
@@ -615,7 +615,6 @@
             <h1>All Done</h1>
             <div class="form_group">
                 <p class="theme_text--heading theme_text--heading3">You have successfully applied for a loan.</p>
-                <!-- <p>Request ID: {{apiSuccess$|async}}</p> -->
             </div>
             <div class="form_group">
                 <p class="theme_color--grey">Thank you for filling out the application and choosing Vanir Capital. You
@@ -624,8 +623,8 @@
                     tabindex="0" data-next="modal_ratings">
                     <div>Done</div>
                 </button>
-                <p class="theme_color--grey">Are you looking to invest? <span class="theme_color--yellow"><a
-                            href="/investment" target="_blank"><u>Go to investments</u></a></span></p>
+                <p class="theme_color--grey">Are you looking to save? <span class="theme_color--yellow"><a
+                            href="/earnings" target="_blank"><u>Go to earnings</u></a></span></p>
 
             </div>
 

@@ -7,5 +7,5 @@ import { IBaseRepository } from "../Ibase-repository";
 export interface IEarningLiquidationRepository extends IBaseRepository<EarningLiquidation>{
     getByStatus: (status?:LiquidationStatus,include?:any[]) => Promise<SearchResponse<EarningLiquidation[]>>
 
-    getByApprovedEarningID: (approvedEarningID:number,include?:any[]) => Promise<EarningLiquidation[]>
+    getByApprovedEarningID: (approvedEarningID:number,pageNumber:number,maxSize:number,include?:any[]) => Promise<SearchResponse<EarningLiquidation[]>>
 }

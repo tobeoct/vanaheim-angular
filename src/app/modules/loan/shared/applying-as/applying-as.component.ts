@@ -37,7 +37,7 @@ export class ApplyingAsComponent implements OnInit {
     return this.form.get("applyingAs") as FormControl || new FormControl();
   }
 
-  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _loanStore:LoanStore, private _route: ActivatedRoute) {
+  constructor(private _router: Router, private _fb: FormBuilder, private _store: Store, private _loanStore: LoanStore, private _route: ActivatedRoute) {
     this._router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((x: any) => {
       this.base = x.url.replace(/\/[^\/]*$/, '/');
     });
@@ -63,43 +63,39 @@ export class ApplyingAsComponent implements OnInit {
   activate = (id: string) => {
     this.activeTabSubject.next(id);
     this.applyingAs.patchValue(id);
-    // this.next();
     this.toggle(this.applyingAs.value)
   }
   toggle(product: any) {
     let loanTypes: any = this._loanStore.loanTypes.find(type => type.title == this.loanProduct);
+
     this.requirementsSubject.next(loanTypes?.applyingAs?.find((type: any) => type.title == this.applyingAs.value)?.requirements || []);
-    // this.requirementsSubject.next(this._store.loanTypes.find(type=>type.title==product)?.requirements || []);
     this.showSubject.next(true);
   }
   next = () => {
 
+    console.log(this.applyingAs.value,this._loanStore.loanCategory)
+
+    const calculatorDetails = this._loanStore.loanCalculator;
+    this._loanStore.clear(this._loanStore.loanCategory)
+    if (this.applyingAs.value == "Personal Line Of Credit") {
+      this._loanStore.setLoanCategory("personal");
+    }
+    if (this.applyingAs.value == "Business Line Of Credit") {
+      this._loanStore.setLoanCategory("business");
+    }
+
+
     if (this.applyingAs.value.includes("Line Of Credit")) {
       this._loanStore.setLoanType("Line Of Credit");
     }
-    if(this.applyingAs.value=="Personal Line Of Credit"){
-      this._loanStore.setLoanCategory("personal");
-    }
-    if(this.applyingAs.value=="Business Line Of Credit"){
-      this._loanStore.setLoanCategory("business");
-    }
     
+    this._loanStore.setLoanCalculator(calculatorDetails);
     this._loanStore.setApplyingAs(this.applyingAs.value);
     this._loanStore.setLoanProduct(this.applyingAs.value);
-    // if(this._router.url!="/welcome/loans"){
     let url = "loans/apply/loan-calculator";
     if (this._router.url.includes("apply")) url = "loan-calculator";
-    // alert(url)
     this.onNavigate(url);
-    // if(this._router.url!="/welcome/loans"){
-    //   this.onNavigate("loan-product");
-    // }
-    //  this.onNavigate("welcome/loans/apply/applying-as");
   }
-  // onNavigate(route:string,params:any={}):void{
-  //   const r =this.base+route;
-  //   this._router.navigate([r],{queryParams: params})
-  // }
   onNavigate(route: string, params: any = {}): void {
     // const r =this.base+route;
     this._router.navigate([route], { queryParams: params, relativeTo: this._route.parent })

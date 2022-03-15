@@ -1,6 +1,6 @@
 import AppConfig from "server/config";
 import { IAuthService } from "@services/interfaces/Iauth-service";
-import { newSessionRoutes, authRoutes } from "./common/routes";
+import { newSessionRoutes, authRoutes } from "../../routes";
 class AuthService implements IAuthService{
   
   constructor(private jwt:any,private _appConfig:AppConfig){

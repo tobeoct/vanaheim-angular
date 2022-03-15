@@ -63,6 +63,14 @@ select.dirty:invalid + .dropdown {
 .main_form-title .answer {
     max-width: 550px;
 }
+
+@media all and (min-width: 900px) {
+    #loan-content {
+        div#form {
+            min-width: 500px;
+        }
+    }
+}
 @media all and (max-width: 900px) {
     #loan-content {
         &.loggedIn {
@@ -75,13 +83,13 @@ select.dirty:invalid + .dropdown {
             padding-top: 10px;
         }
     }
-    
-  .dirty:invalid + span::after,
-  .dirty:invalid + .dropdown::after {
-    content: attr(title);
-    top: 110%;
-    left: 0;
-    position: absolute;
-    color: rgb(250, 44, 44);
-  }
+
+    .dirty:invalid + span::after,
+    .dirty:invalid + .dropdown::after {
+        content: attr(title);
+        top: 110%;
+        left: 0;
+        position: absolute;
+        color: rgb(250, 44, 44);
+    }
 }

@@ -27,6 +27,8 @@ export class LoanService {
   pagingSubject: BehaviorSubject<any> = new BehaviorSubject<any>({ pageNumber: 1, maxSize: 10 });
   paging$: Observable<any> = this.pagingSubject.asObservable();
 
+  lastContinueDisplayTime: Date
+  lastContinueDisplayCount:number=0
   runningLoanSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   runningLoan$: Observable<boolean> = this.runningLoanSubject.asObservable();
 
@@ -37,11 +39,19 @@ export class LoanService {
     private _http: HttpClient,
     private _utils: Utility,
     private _store: Store,
-    private _loanStore:LoanStore) {
+    private _loanStore: LoanStore) {
 
   }
-  continueApplication(value:boolean){
+  continueApplication(value: boolean) {
+    if (this.lastContinueDisplayTime && (moment().diff(moment(this.lastContinueDisplayTime), "minute") < 5 && this.lastContinueDisplayCount>=1)) {
+      this.activeLoanSubject.next(false);
+      return;
+    }
+    if(!value){
+      this.lastContinueDisplayCount+=1;
+    }
     this.activeLoanSubject.next(value);
+    this.lastContinueDisplayTime = moment().toDate();
   }
   getTenureRange = (type: string) => {
     if (type.toLowerCase().includes("float")) {
@@ -187,7 +197,7 @@ export class LoanService {
       }));
   }
 
-  
+
   getLatest = () => {
     return timer(0, this.interval)
       .pipe(switchMap(() => this._http.get<any>(`${environment.apiUrl}/loans/getLatestLoan`)
@@ -202,7 +212,7 @@ export class LoanService {
           return EMPTY;
         }))),
         // shareReplay({bufferSize:1, refCount:true})
-         catchError(err => {
+        catchError(err => {
           console.error(err);
           this.runningLoanSubject.next(false)
           return EMPTY;
@@ -212,8 +222,8 @@ export class LoanService {
 
   // timer$:Observable<any> = timer(0, this.interval);
 
-  loans$: Observable<any> =  timer(0, this.interval)
-  .pipe(switchMap(()=>this.search({ pageNumber: 1, maxSize: 10 })));
+  loans$: Observable<any> = timer(0, this.interval)
+    .pipe(switchMap(() => this.search({ pageNumber: 1, maxSize: 10 })));
   latestLoan$: Observable<any> = this.getLatest().pipe(tap(c => {
     if (!c || c.requestStatus == "NotQualified" || c.requestStatus == "Completed") { this.runningLoanSubject.next(false) } else {
       this.runningLoanSubject.next(true)

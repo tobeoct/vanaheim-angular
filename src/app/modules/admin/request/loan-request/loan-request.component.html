@@ -117,7 +117,7 @@
     <app-modal-body slot="body">
       <app-form [form]="fForm" (onSubmit)="onFailure($event)" (errorMessageChange)="onError($event)">
         <app-input id="failureReason" [control]="failureReason" class="form-control">
-          <label>Reason For Failure</label>
+          <label>Reason For Failure *This does not get sent to the customer*</label>
         </app-input>
         <div class="vc_form-field margin--2x" style="max-width: 500px;">
           <label for="mailMessage">Personalised Message</label>
@@ -217,6 +217,15 @@
               </div>
             </ng-container>
           </div>
+          <ng-container *ngIf="loanDetails?.status==='NotQualified'">
+            <div class="d-flex d-flex_vertical--center  margin--2x" style="width: 100%;">
+              <div style="text-align: center;">
+                <p><b>Failure Reason</b></p>
+                <h3>{{loanDetails?.failureReason}}</h3>
+
+              </div>
+            </div>
+          </ng-container>
           <div style="width: 100%;" id="loan-details">
             <div *ngIf="loanDetails.details[0] as detail">
               <div class="title">

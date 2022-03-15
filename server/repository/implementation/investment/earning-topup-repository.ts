@@ -11,23 +11,23 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
   constructor(_db: any) {
     super(_db.EarningTopUp)
   }
-  getActiveTopUps= (approvedEarningID: number,include?:any[]) => {
-    return new Promise<SearchResponse<EarningTopUp[]>>(async (resolve,reject)=>{
+  getActiveTopUps = (approvedEarningID: number, include?: any[]) => {
+    return new Promise<SearchResponse<EarningTopUp[]>>(async (resolve, reject) => {
       let response = await this._db.findAndCountAll({
-        where:{approvedEarningID, status:["Pending"]},
+        where: { approvedEarningID, status: ["Pending"] },
         order: [["updatedAt", "DESC"]],
         include
       });
       resolve(response);
     })
   }
-  getByStatus= (status?:TopUpStatus,include?:any[]) => new Promise<SearchResponse<EarningTopUp[]>>(async (resolve, reject) => {
+  getByStatus = (status?: TopUpStatus, include?: any[]) => new Promise<SearchResponse<EarningTopUp[]>>(async (resolve, reject) => {
     try {
-      let where:any = {
+      let where: any = {
       }
 
-      if(status){
-       where["topUpStatus"] =status
+      if (status) {
+        where["topUpStatus"] = status
       }
       let response = await this._db.findAndCountAll({
         where,
@@ -35,20 +35,21 @@ export class EarningTopUpRepository extends BaseRepository<EarningTopUp> impleme
         include
       });
       resolve(response);
-    } catch (err:any) {
+    } catch (err: any) {
       console.log(err)
       reject(err);
     }
   });
-   
-  getByApprovedEarningID = (approvedEarningID: number, amount: number,include?:any[]) => new Promise<EarningTopUp>(async (resolve, reject) => {
+
+  getByApprovedEarningID = (approvedEarningID: number, amount: number, pageNumber: number, maxSize: number, include?: any[]) => new Promise<EarningTopUp>(async (resolve, reject) => {
     try {
 
       let response = await this._db.findOne({
         where: {
           approvedEarningID,
           amount
-        },
+        }, limit: maxSize,
+        offset: pageNumber * maxSize,
         order: [["createdAt", "DESC"]],
         include
       });

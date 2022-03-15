@@ -149,7 +149,14 @@ export default class EarningsController {
             const id = this.sanitizer.escape(req.query.id);
             const amount = this.sanitizer.escape(req.query.amount);
             const status = this.sanitizer.escape(req.query.status) ?? TopUpStatus.Pending;
-            let response: any = !id ? await this._earningTopUpRepository.getByStatus(status, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningTopUpRepository.getByApprovedEarningID(id, amount, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]);
+            
+            let parameters={};
+            if(status) parameters = {topUpStatus:status}
+            const pageNumber =  this.sanitizer.escape(req.query.pageNumber??0);
+            const maxSize =  this.sanitizer.escape(req.query.maxSize??10);
+            // let response: any = !id ? await this._earningTopUpRepository.getByStatus(status, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningTopUpRepository.getByApprovedEarningID(id, amount, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]);
+            let response: any = !id ? await this._earningTopUpRepository.search(parameters,(+pageNumber)-1,maxSize,[["updatedAt", "DESC"]], [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningTopUpRepository.getByApprovedEarningID(id,amount,(+pageNumber)-1,maxSize, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }])
+
             res.statusCode = 200;
             res.payload = { data: response }
 
@@ -296,7 +303,13 @@ export default class EarningsController {
         try {
             const id = this.sanitizer.escape(req.query.id);
             const status = this.sanitizer.escape(req.query.status);
-            let response: any = !id ? await this._earningLiquidationRepository.getByStatus(status, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningLiquidationRepository.getByApprovedEarningID(id, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }])
+            let parameters={};
+            if(status) parameters = {status}
+            const pageNumber =  this.sanitizer.escape(req.query.pageNumber??0);
+            const maxSize =  this.sanitizer.escape(req.query.maxSize??10);
+            // let response: any = !id ? await this._earningLiquidationRepository.getByStatus(status, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningLiquidationRepository.getByApprovedEarningID(id, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }])
+
+            let response: any = !id ? await this._earningLiquidationRepository.search(parameters,(+pageNumber)-1,maxSize,[["updatedAt", "DESC"]], [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }]) : await this._earningLiquidationRepository.getByApprovedEarningID(id,(+pageNumber)-1,maxSize, [{ model: this._db.Customer, required: false },{ model: this._db.ApprovedEarning, required: false }])
 
             res.statusCode = 200;
             res.payload = { data: response }
@@ -346,8 +359,8 @@ export default class EarningsController {
             approvedEarning = (approvedEarning as any).dataValues as ApprovedEarning;
             // approvedEarning.earningStatus = ApprovedEarningStatus.Pause;
 
-            let earningLiquidations = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
-            if (earningLiquidations && (Object.keys(earningLiquidations).length > 0 && earningLiquidations.some( earningLiquidation=>{
+            let earningLiquidations = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id,0,1000);
+            if (earningLiquidations && (Object.keys(earningLiquidations).length > 0 && earningLiquidations.rows.some( earningLiquidation=>{
                 const liquidation= (earningLiquidation as any).dataValues.liquidationStatus;
                 return liquidation != LiquidationStatus.Declined && liquidation != LiquidationStatus.Processed
             }))) {
@@ -362,7 +375,7 @@ export default class EarningsController {
             earningLiquidation.code = this._utils.autogenerate({ prefix: "ETU" })
             earningLiquidation.status = BaseStatus.Active;
             earningLiquidation.liquidationStatus = LiquidationStatus.Pending;
-            earningLiquidation.duration =  moment().diff(payoutDate, "month");//moment().diff(earningRequestLog.dateActive, "month");
+            earningLiquidation.duration =  moment().diff(payoutDate, "month");//moment().diff(earningRequestLog.dateApproved, "month");
             earningLiquidation.payoutDate = payoutDate;
             earningLiquidation.amount =amount; //(earningRequest.payout / earningRequest.duration) * earningLiquidation.duration;
             earningLiquidation.approvedEarningID = approvedEarning.id;

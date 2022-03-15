@@ -26,4 +26,6 @@
 .no-event{
     pointer-events: none !important;
     cursor: not-allowed;
+    @include border(1px,solid,grey,important);
+    @include color(grey,important);
 }
