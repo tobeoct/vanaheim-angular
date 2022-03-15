@@ -203,6 +203,15 @@
                             </ng-container>
                         </div>
                     </div>
+                    <ng-container *ngIf="loanDetails?.status==='NotQualified'">
+                        <div class="d-flex d-flex_vertical--center  margin--2x"  style="width: 100%;">
+                            <div style="text-align: center;">
+                                <p><b>Failure Reason</b></p>
+                                <h3>{{loanDetails?.failureReason}}</h3>
+
+                            </div>
+                        </div>
+                    </ng-container>
                     <div *ngFor="let detail of loanDetails?.details">
                         <div class="title">
                             <h3>{{detail.key}}</h3>

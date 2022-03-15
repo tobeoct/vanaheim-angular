@@ -45,7 +45,8 @@ export default class NotificationController {
 
           let response = await this._notificationService.sendNotificationToMany({ notification, customerIds: [customerID] });
 
-          const template = this._templateService.NOTIFICATION(message, type, code);
+          const customerName = customer.title + ' ' + customer.firstName;
+          const template = this._templateService.NOTIFICATION(customerName,message, type, code);
           let emailResponse = await this._emailService.SendEmail({ subject: type.toString(), to: customer.email, html: template, toCustomer: true });
         }
         catch (err: any) {

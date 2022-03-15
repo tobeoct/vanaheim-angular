@@ -1,0 +1,76 @@
+<div id="earning-history" class="animate__animated animate__fadeInUp"
+[ngClass]="{'no-margin--top':totalEarnings.length==0}">
+<div class="heading">
+    <h3>Earning History</h3>
+</div>
+<app-table>
+    <ng-container slot="filter">
+        <div id="filters">
+            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)==''}"
+                (click)="changeFilter('')">All</div>
+            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Pending'}"
+                (click)="changeFilter('Pending')">Processing</div>
+            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Active'}"
+                (click)="changeFilter('Active')">Active</div>
+            <div class="item" [ngClass]="{'item--active':(activeFilter$|async)=='Matured'}"
+                (click)="changeFilter('Matured')">Matured</div>
+        </div>
+    </ng-container>
+    <ng-container slot="header">
+        <tr>
+            <th>Date Applied</th>
+            <th>Start Date</th>
+            <th>Amount</th>
+            <th>Duration</th>
+            <th>Maturity Date</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </ng-container>
+    <ng-container slot="body" *ngIf="earnings as data">
+        <ng-container *ngIf="data.rows.length==0">
+            <div class="no-data">
+                <span class="material-icons material-icons-outlined">
+                    info
+                </span>
+                <h3>No data available</h3>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="data.rows.length>0">
+            <tr *ngFor="let row of data.rows;trackBy:trackByFn">
+                <td>{{row.requestDate | date :'MMMM d, y'}}</td>
+                <td>{{row.dateApproved | date :'MMMM d, y'}}</td>
+                <td>{{row.amount|currency:'₦'}}</td>
+                <td>{{row.duration}} Months</td>
+                <td>{{(row.requestStatus=='Pending'||row.requestStatus=='Processing')?row.maturityDate:(row.maturityDate|
+                    date :'MMMM d,
+                    y')}}</td>
+                <td>{{row.type}}</td>
+                <td>
+                    <app-badge [color]="getEarningStatusColor(row.requestStatus)">{{row.requestStatus}}
+                    </app-badge>
+                </td>
+                <td>
+                    <app-button [class]="'widget_button--small'" (onClick)="selectEarningEvent(row.id)"
+                        fieldClass="no-margin">
+                        <ng-container slot="button">View</ng-container>
+                    </app-button>
+                </td>
+            </tr>
+        </ng-container>
+    </ng-container>
+    <ng-container slot="body" *ngIf="!(earnings)">
+        <div class="no-data">
+            <span class="material-icons material-icons-outlined">
+                info
+            </span>
+            <h3>No data available</h3>
+        </div>
+    </ng-container>
+    <ng-container slot="pagination">
+        <app-pagination [totalCount]="(earnings)?.count||0" [maxSize]="10"
+            [pagingChangeSubject]="pagingSubject"></app-pagination>
+    </ng-container>
+</app-table>
+</div>

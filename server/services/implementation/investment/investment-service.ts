@@ -247,21 +247,23 @@ export class EarningService implements IEarningService {
               resolve({ status: false, data: "Cannot find request" });
               return;
             }
+            earningRequest = (earningRequest as any).dataValues as EarningRequest;
             let earningRequestLog: EarningRequestLog = await this._earningRequestLogRepository.getById(approvedEarning.earningRequestLogID);
             if (!earningRequestLog || Object.keys(earningRequestLog).length == 0) {
               resolve({ status: false, data: "Cannot find request" });
               return;
             }
+            earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
             customer = await this._customerRepository.getById(earningRequest.customerID);
             if (!customer || Object.keys(customer).length == 0) {
               resolve({ status: false, data: "Invalid Customer" });
               return;
             }
             customer = (customer as any).dataValues as Customer;
-            let allLiquidations = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id);
+            let allLiquidations = await this._earningLiquidationRepository.getByApprovedEarningID(approvedEarning.id, 0, 10000);
             let liquidationsSoFar = 0;
-            if (allLiquidations && allLiquidations.length > 0) {
-              liquidationsSoFar = allLiquidations.reduce((total, l) => {
+            if (allLiquidations && allLiquidations.count > 0) {
+              liquidationsSoFar = allLiquidations.rows.reduce((total, l) => {
 
                 return total + ((l as any).dataValues as EarningLiquidation).amount
               }, 0);
@@ -276,8 +278,20 @@ export class EarningService implements IEarningService {
               resolve({ status: false, data: "Cannot liquidate more than total payout" });
               return;
             }
-            earningRequest.payout -= amount;
-            earningRequestLog.payout -= amount;
+            // const duration = moment(earningRequestLog.dateApproved).diff(moment().endOf("month"), "month")
+            const newPrincipal = (+earningRequest.amount) - (+amount);
+            // const payout = this.calculateTotalPayout(amount, earningRequest.rate, duration);
+
+            const newPayout = (+earningRequest.payout) - (+amount);
+            // const payoutsSoFar = await this._earningPayOutRepository.getPayoutSoFar(approvedEarning.id);
+            // const newRemaining = newPayout - (payoutsSoFar[0]?.total ?? 0);
+            const newMonthlyPayment = newPayout / earningRequest.duration;
+            earningRequest.amount = newPrincipal;
+            earningRequest.payout = newPayout;
+            earningRequest.monthlyPayment = newMonthlyPayment;
+            earningRequestLog.amount = newPrincipal;
+            earningRequestLog.payout = newPayout;
+            earningRequestLog.monthlyPayment = newMonthlyPayment;
             if ((liquidationsSoFar + amount) == earningRequest.payout) {
               approvedEarning.earningStatus = ApprovedEarningStatus.Liquidated
               approvedEarning.isClosed = true;
@@ -289,6 +303,9 @@ export class EarningService implements IEarningService {
               earningRequestLog = (earningRequestLog as any).dataValues as EarningRequestLog;
               earningRequestLog.requestStatus = EarningRequestStatus.Matured;
               earningRequestLog.updatedAt = moment().toDate();
+
+
+
             }
             await this._earningRequestRepository.update(earningRequest);
             await this._earningRequestLogRepository.update(earningRequestLog);
@@ -610,18 +627,16 @@ export class EarningService implements IEarningService {
         earningRequestLog.failureReason = failureReason;
       }
       else if (requestStatus == EarningRequestStatus.Active) {
-        // if (!earningRequest.dateFunded) {
-        //   earningRequest.dateFunded = new Date();
-        //   earningRequestLog.dateFunded = new Date();
-        // }
-        earningRequest.dateActive = new Date();
-        earningRequestLog.dateActive = new Date();
         //  start = startDate ?? new Date();
         // if (moment(start).day() >= 24) {
         //   start = moment(start).add(1,"month").startOf("month");
         // } else {
         start = moment((startDate ?? new Date()));
         // }
+
+
+        earningRequest.dateApproved = startDate;
+        earningRequestLog.dateApproved = startDate;
         maturityDate = moment((startDate ?? new Date())).add(earningRequest.duration, "month").set("date", 24);
         earningRequest.maturityDate = maturityDate.toString();//.format("MMMM Do YYYY");
         earningRequestLog.maturityDate = earningRequest.maturityDate;

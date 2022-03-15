@@ -14,8 +14,6 @@ import { EarningPayoutService } from 'src/app/shared/services/earning/earning-pa
 })
 export class EarningsComponent implements OnInit {
   form: FormGroup;
-  liquidations$: Observable<any>
-  topUps$: Observable<any>
   showProfile:FormControl = new FormControl("");
   @Input()
   fromDate: FormControl = new FormControl(moment().startOf("day").subtract(1, "month").format('yyyy-MM-dd'));
@@ -25,6 +23,12 @@ export class EarningsComponent implements OnInit {
 
   topUpPagingSubject: BehaviorSubject<any>;
   liquidationPagingSubject: BehaviorSubject<any>;
+
+  // liquidationsSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([])
+  liquidations$: Observable<any> //= this.liquidationsSubject.asObservable()
+
+  // topUpsSubject:BehaviorSubject<any[]> = new BehaviorSubject<any[]>([])
+  topUps$: Observable<any> //= this.topUpsSubject.asObservable()
   constructor(private _requestService: AdminEarningService, private _fb: FormBuilder, private _earningsPayoutService: EarningPayoutService, private _utils: Utility) { }
 
   ngOnInit(): void {
@@ -37,8 +41,13 @@ export class EarningsComponent implements OnInit {
 
     this.topUpPagingSubject = new BehaviorSubject<any>({ pageNumber: 1, maxSize: 100 });
     this.liquidationPagingSubject = new BehaviorSubject<any>({ pageNumber: 1, maxSize: 100 });
-    this.topUps$ = this._requestService.getTopUps();
-    this.liquidations$ = this._requestService.getLiquidations();
+
+    this.topUpPagingSubject.asObservable().subscribe(paging=>{
+      this.topUps$ = this._requestService.getTopUps(undefined,paging.pageNumber, paging.maxSize);
+      this.liquidations$ = this._requestService.getLiquidations(undefined,paging.pageNumber, paging.maxSize);
+    })
+    // this.topUps$ = this._requestService.getTopUps();
+    // this.liquidations$ = this._requestService.getLiquidations();
   }
   getCriteria(from: any, to: any) {
     return { from: moment(from).startOf("day").toDate(), to: moment(to).endOf("day").toDate() };

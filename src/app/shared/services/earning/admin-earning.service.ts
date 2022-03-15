@@ -201,8 +201,8 @@ export class AdminEarningService {
         return EMPTY;
       }));
   }
-  getTopUps = (status: any = 'Pending') => {
-    const url = `${environment.apiUrl}/earnings/getTopUps?status=${status}`;
+  getTopUps = (status: any = 'Pending', pageNumber: number = 1, maxSize: number = 10) => {
+    const url = `${environment.apiUrl}/earnings/getTopUps?status=${status}&pageNumber=${pageNumber}&maxSize=${maxSize}`;
     return timer(0, POLLING_INTERVAL)
       .pipe(switchMap(() => this._http.get<any>(url)
         .pipe(map(response => {
@@ -221,8 +221,8 @@ export class AdminEarningService {
         })
       )
   }
-  getLiquidations = (status?: any) => {
-    const url = !status ? `${environment.apiUrl}/earnings/getLiquidations` : `${environment.apiUrl}/earnings/getLiquidations?status=${status}`;
+  getLiquidations = (status?: any, pageNumber: number = 1, maxSize: number = 10) => {
+    const url = !status ? `${environment.apiUrl}/earnings/getLiquidations?pageNumber=${pageNumber}&maxSize=${maxSize}` : `${environment.apiUrl}/earnings/getLiquidations?status=${status}&pageNumber=${pageNumber}&maxSize=${maxSize}`;
     return timer(0, POLLING_INTERVAL)
       .pipe(switchMap(() => this._http.get<any>(url)
         .pipe(map(response => {

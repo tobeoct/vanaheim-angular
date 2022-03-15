@@ -32,7 +32,7 @@ export class EarningRequest extends BaseEntity {
     rate: any;
     type: EarningType;
     requestStatus: EarningRequestStatus;
-    dateActive: Date;
+    dateApproved: Date;
     workflow: any;
     requestId: string;
 

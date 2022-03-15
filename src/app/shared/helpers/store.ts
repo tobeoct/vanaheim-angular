@@ -123,7 +123,7 @@ export class Store {
 export class EarningsStore {
   EARNINGS_KEY = "earnings-application"
 
-   pageSubject: BehaviorSubject<string> = new BehaviorSubject<string>('earnings-calculator');
+  pageSubject: BehaviorSubject<string> = new BehaviorSubject<string>('earnings-calculator');
   page$: Observable<string> = this.pageSubject.asObservable();
 
   private previousSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -202,7 +202,7 @@ export class EarningsStore {
 
 
   updateStore() {
-    if(this.pageSubject.value)this.setPage(this.pageSubject.value);
+    if (this.pageSubject.value) this.setPage(this.pageSubject.value);
 
   }
 
@@ -539,15 +539,20 @@ export class LoanStore {
   }
   get loanType() { return this.getFromCurrentApplication("loanType") || ''; }
   setLoanType(value: string, setPage = true) {
-
+    console.log(value)
     if (value != this.loanType) { this.setApplyingAs(''); this.setLoanProduct(''); this.clear(this.loanCategory); }
 
     this.loanTypeSubject.next(value);
-    if (value.toLowerCase().includes("individual") || this.applyingAs.toLowerCase().includes("personal") || value.toLowerCase().includes("payme")) {
-      this.setLoanCategory("personal");
-    }
-    else {
-      this.setLoanCategory("business");
+
+    if (value.toLowerCase() === "line of credit") {
+      if (!this.loanCategory) this.setLoanCategory("personal");
+    } else {
+      if (value.toLowerCase().includes("individual") || this.applyingAs.toLowerCase().includes("personal") || value.toLowerCase().includes("payme")) {
+        this.setLoanCategory("personal");
+      }
+      else {
+        this.setLoanCategory("business");
+      }
     }
 
     this.updateCurrentApplication('loanType', value);

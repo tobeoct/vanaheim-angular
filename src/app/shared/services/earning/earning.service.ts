@@ -25,6 +25,8 @@ export class EarningService {
   show2$: Observable<boolean> = this.show2Subject.asObservable();
   showLoginSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
+  lastContinueDisplayTime: Date
+  lastContinueDisplayCount: number = 0
 
   apiSuccessSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   apiSuccess$: Observable<string> = this.apiSuccessSubject.asObservable();
@@ -115,7 +117,7 @@ export class EarningService {
           }
         }
 
-     
+
         break;
     }
     return r;
@@ -250,6 +252,13 @@ export class EarningService {
     return false;
   }
   continueApplication(value: boolean) {
+    if (this.lastContinueDisplayTime && moment().diff(moment(this.lastContinueDisplayTime), "minute") < 5 && this.lastContinueDisplayCount > 1) {
+      this.activeEarningSubject.next(false);
+      return;
+    }
+    if (!value) {
+      this.lastContinueDisplayCount += 1;
+    }
     this.activeEarningSubject.next(value);
   }
 }

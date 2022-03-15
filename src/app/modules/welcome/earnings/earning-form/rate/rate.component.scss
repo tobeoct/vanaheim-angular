@@ -25,6 +25,15 @@
         &:not(.active):hover {
             border: 2px solid #333333;
         }
+
+        &--inline {
+            width: 47.5%;
+            margin-bottom: 10px;
+            display: inline-block;
+            &:nth-child(2n) {
+                margin-left: 2.5%;
+            }
+        }
     }
 }
 .form_group {
