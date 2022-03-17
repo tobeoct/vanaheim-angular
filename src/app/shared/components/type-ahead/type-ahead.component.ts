@@ -1,21 +1,20 @@
-import { Component, ContentChildren, ElementRef, Input, OnInit, QueryList } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { startWith, delay, map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { TypeAheadOptionComponent } from './option/option.component';
 
 @Component({
   selector: 'app-type-ahead',
   templateUrl: './type-ahead.component.html',
   styleUrls: ['./type-ahead.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush,
   host: {
     '(document:click)': 'onClick($event)',
   }
 })
 export class TypeAheadComponent implements OnInit {
 
-  @ContentChildren(TypeAheadOptionComponent) contentChildren: QueryList<TypeAheadOptionComponent>;
-  @ContentChildren(TypeAheadOptionComponent) dropdowns: QueryList<TypeAheadOptionComponent>;
   constructor(private _eref: ElementRef) { }
   basePath = "../../../../assets/illustrations/characters";
   @Input()
@@ -25,50 +24,48 @@ export class TypeAheadComponent implements OnInit {
   @Input()
   placeholder: string = '- select -';
   @Input()
-  control: FormControl;
+  control: FormControl = new FormControl('');
   @Input()
   id: string = '';
   @Input()
   current: string = '';
-  dropdownItems$: Observable<TypeAheadOptionComponent[]>;
+
+  @Input()
+  items$: Observable<any[]>;
+
+  currentControl = new FormControl('');
+
   currentSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  current$: Observable<string> = this.currentSubject.asObservable();
-  // filterSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  // filter$: Observable<string> = this.filterSubject.asObservable();
-  filteredDropDownItems$: Observable<TypeAheadOptionComponent[]>;
+
+  filteredItemsSubject: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  filteredItems$: Observable<any[]>=this.filteredItemsSubject.asObservable()
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$: Observable<boolean> = this.showSubject.asObservable();
-  activeOption: TypeAheadOptionComponent;
   ngOnInit(): void {
-    this.currentSubject.next(this.current ? this.current : this.placeholder);
-    this.control.valueChanges.subscribe()
-  }
-  ngOnChanges() {
-    this.currentSubject.next(this.current ? this.current : this.placeholder);
-  }
-  ngAfterContentInit(): void {
-    this.dropdownItems$ = this.dropdowns.changes
-      .pipe(startWith(""))
-      .pipe(delay(0))
-      .pipe(map(() => this.dropdowns.toArray()));
 
-    this.filteredDropDownItems$ = combineLatest([this.dropdownItems$, this.control.valueChanges]).pipe(map(([items, value]) => {
+    this.currentControl.valueChanges.subscribe(v=>{
+      this.currentSubject.next(v);
+    })
+     combineLatest([this.items$, this.currentSubject.asObservable()]).pipe(map(([items, value]) => {
       let itms: any[] = [];
       Object.assign(itms, items);
-      return !value ? itms : itms.filter(i => (i.label.toString()?.toLowerCase().includes(value.toLowerCase()) || i.value.toString()?.toLowerCase().includes(value.toLowerCase())));
+      return !value ? itms : itms.filter(i => (i.value.toString()?.toLowerCase().includes(value.toLowerCase())));
 
-    }))
+    }), tap(c=>this.filteredItemsSubject.next(c))).subscribe()
   }
-  selectOption(option: TypeAheadOptionComponent) {
-    this.currentSubject.next(option.label);
+  selectOption(option: any) {
+    // this.currentSubject.next(option.value);
     this.showSubject.next(false);
-    this.control?.patchValue(option.value);
+    this.control.patchValue(option.key);
   }
   onClick(event: any) {
-    if (!this._eref.nativeElement.contains(event.target)) // or some similar check
-      this.showSubject.next(false);
+    
+    if (!this._eref.nativeElement.contains(event.target))this.showSubject.next(false);
   }
   toggle() {
     this.showSubject.next(!this.showSubject.value);
+  }
+  show() {
+    this.showSubject.next(true);
   }
 }

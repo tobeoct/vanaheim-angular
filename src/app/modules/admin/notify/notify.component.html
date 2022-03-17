@@ -6,12 +6,12 @@
         <ng-container *ngIf="!notifyAll.value">
             <div class="margin--2x">
                 <label>Customers</label>
-                <app-dropdown [control]="customerId" [fieldClass]="'no-margin--top'" [id]="'customers'"
-                    aria-placeholder="Add customer">
-                    <app-option *ngFor="let t of (customers$|async); let i =index" [value]="t.id"
-                        label="{{t.firstName}} {{t.lastName}}">{{t.firstName}} {{t.lastName}}</app-option>
+                <app-type-ahead [control]="customerId" [fieldClass]="'no-margin--top'" [id]="'customers'"
+                    aria-placeholder="Add customer" [items$]="customers$" >
+                    <!-- <app-option *ngFor="let t of (customers$|async|sort:'lastName'); let i =index" [value]="t.id"
+                        label="{{t.firstName}} {{t.lastName}}">{{t.firstName}} {{t.lastName}}</app-option> -->
 
-                </app-dropdown>
+                </app-type-ahead>
 
                 <ng-container *ngIf="selectedCustomers$|async as customers">
                     <div class="margin--x" *ngIf="customers.length>0">
