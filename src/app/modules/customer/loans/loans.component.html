@@ -98,7 +98,7 @@
                 <h3>Explore Our Rates</h3> <button type="button" (click)="moveToApply()"
                     class="widget_button widget_button--small widget_button--fill">Apply Now</button>
             </div>
-            <div id="form" class="box-shadow">
+            <div id="form"  class="box-shadow ignore-min-width">
                 <div id="heading">Loan Calculator</div>
                 <div id="content">
                     <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">

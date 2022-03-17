@@ -3,6 +3,9 @@
         div#form {
             min-width: 500px !important;
         }
+        div#form.ignore-min-width{
+            min-width: 0 !important;
+        }
     }
 }
 
@@ -69,6 +72,9 @@ select.dirty:invalid + .dropdown {
         div#form {
             min-width: 500px;
         }
+        div#form.ignore-min-width{
+            min-width: 0 !important;
+        }
     }
 }
 @media all and (max-width: 900px) {
@@ -77,6 +83,9 @@ select.dirty:invalid + .dropdown {
             div#form {
                 min-width: 0 !important;
                 margin-top: 10%;
+            }
+            div#form.ignore-min-width{
+                min-width: 0 !important;
             }
         }
         form {
