@@ -30,8 +30,12 @@ export class TypeAheadComponent implements OnInit {
   @Input()
   current: string = '';
 
+  itemsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   @Input()
-  items$: Observable<any[]>;
+  items$: Observable<any[]> = this.itemsSubject.asObservable();
+
+  @Input()
+  items: any[];
 
   currentControl = new FormControl('');
 
@@ -42,7 +46,9 @@ export class TypeAheadComponent implements OnInit {
   showSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   show$: Observable<boolean> = this.showSubject.asObservable();
   ngOnInit(): void {
-
+    if(this.items){
+      this.itemsSubject.next(this.items);
+    }
     this.currentControl.valueChanges.subscribe(v=>{
       this.currentSubject.next(v);
     })
@@ -54,9 +60,9 @@ export class TypeAheadComponent implements OnInit {
     }), tap(c=>this.filteredItemsSubject.next(c))).subscribe()
   }
   selectOption(option: any) {
-    // this.currentSubject.next(option.value);
     this.showSubject.next(false);
     this.control.patchValue(option.key);
+    this.currentControl.patchValue(option.value)
   }
   onClick(event: any) {
     

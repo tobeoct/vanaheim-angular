@@ -73,10 +73,13 @@ export class ApplyingAsComponent implements OnInit {
   }
   next = () => {
 
-    console.log(this.applyingAs.value,this._loanStore.loanCategory)
+    console.log(this.applyingAs.value, this._loanStore.loanCategory)
 
     const calculatorDetails = this._loanStore.loanCalculator;
-    this._loanStore.clear(this._loanStore.loanCategory)
+
+    if (this.applyingAs.value.includes("Line Of Credit")) {
+      this._loanStore.clear(this._loanStore.loanCategory)
+    }
     if (this.applyingAs.value == "Personal Line Of Credit") {
       this._loanStore.setLoanCategory("personal");
     }
@@ -88,7 +91,7 @@ export class ApplyingAsComponent implements OnInit {
     if (this.applyingAs.value.includes("Line Of Credit")) {
       this._loanStore.setLoanType("Line Of Credit");
     }
-    
+
     this._loanStore.setLoanCalculator(calculatorDetails);
     this._loanStore.setApplyingAs(this.applyingAs.value);
     this._loanStore.setLoanProduct(this.applyingAs.value);
