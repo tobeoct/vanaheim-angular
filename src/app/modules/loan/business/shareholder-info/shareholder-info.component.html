@@ -12,7 +12,8 @@
                                     (click)="removeFromFormArray(i)"><span class="material-icons"><span
                                             class="material-icons">
                                             remove_circle
-                                        </span></span></b></h3>
+                                        </span></span></b>
+                            </h3>
                             <app-dropdown
                                 current="{{(shareholderGroup.get('surname')|toControl).value}} {{(shareholderGroup.get('otherNames')|toControl).value}}"
                                 [fieldClass]="'no-margin--top'" [id]="'shareholder_{{i}}'"
@@ -36,7 +37,8 @@
                                 (click)="removeFromFormArray(i)"><span class="material-icons"><span
                                         class="material-icons">
                                         remove_circle
-                                    </span></span></b></h3>
+                                    </span></span></b>
+                        </h3>
                         <ng-container [formGroup]="shareholderGroup">
                             <div
                                 class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--center">
@@ -138,7 +140,7 @@
                                         </div>
 
                                         <div class="theme_col-5">
-                                            <app-type-ahead
+                                            <!-- <app-type-ahead
                                                 [current]="(shareholderGroup.get('contactGroup.addressGroup.state')|toControl).value"
                                                 [id]="'state'"
                                                 [control]="shareholderGroup.get('contactGroup.addressGroup.state')|toControl"
@@ -147,6 +149,14 @@
                                                 </ng-container>
                                                 <app-type-ahead-option *ngFor="let state of states; let i =index" [value]="state"
                                                     [label]="state">{{state}}</app-type-ahead-option>
+                                            </app-type-ahead> -->
+
+                                            <app-type-ahead [items]="states" [id]="'state'"
+                                                [control]="shareholderGroup.get('contactGroup.addressGroup.state')|toControl"
+                                                aria-placeholder="What is your state of birth">
+                                                <ng-container slot="label"><label for="state">State</label>
+                                                </ng-container>
+
                                             </app-type-ahead>
                                         </div>
                                     </div>

@@ -79,11 +79,12 @@
                         </div>
 
                         <div class="theme_col-5">
-                            <app-type-ahead [current]="state.value" [id]="'state'" [control]="state"
+                         
+
+                            <app-type-ahead [items]="states" [id]="'state'" [control]="state"
                                 aria-placeholder="What is your state of birth">
                                 <ng-container slot="label"><label for="state">State</label></ng-container>
-                                <app-type-ahead-option *ngFor="let state of states; let i =index" [value]="state" [label]="state">
-                                    {{state}}</app-type-ahead-option>
+                               
                             </app-type-ahead>
                         </div>
                     </div>
@@ -99,8 +100,7 @@
                 </div>
             </div>
             <ng-container *ngIf="side">
-                <div (click)="toggleSideNav('nok')"
-                style="cursor: pointer;"
+                <div (click)="toggleSideNav('nok')" style="cursor: pointer;"
                     class="card card--small padding--x card--tertiary margin--2x d-flex d-flex_horizontal--space-between d-flex_vertical--center">
                     <p><b>NOK</b></p>
                     <span class="material-icons">
@@ -120,4 +120,4 @@
     </div>
     <div *ngIf="apiSuccess$|async as success" class="snackbar snackbar-success mt-3 mb-0">{{success}}
     </div>
-    </div>
+</div>

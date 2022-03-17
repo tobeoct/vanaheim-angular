@@ -1,76 +1,97 @@
- <div id="form" class="theme_col-6 animate__animated animate__fadeInUp animate__fast">
-        <div class=" content box-shadow" style="box-sizing: border-box;">
-    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
-    <ng-container *ngIf="!(dataLoading$|async)">
-    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-        <ng-container *ngIf="isLoggedIn">
-            <ng-container *ngIf="(employersFromDb$|async) && !(showForm$|async) ">
-                <app-dropdown current="{{currentEmployer.value}}"  [fieldClass]="'no-margin--top'" [id]="'employers'" [control]="employerId"  aria-placeholder="Select your employer">
-                    <ng-container slot="label">Employers</ng-container>
-                    <app-option *ngFor="let t of (employersFromDb$|async); let i =index" [value]="t.id" label="{{t.previousEmployer}} - {{t.currentEmployer}}">{{t.previousEmployer}} - {{t.currentEmployer}}</app-option>
-                </app-dropdown>
-                <p class="text-button" (click)="showForm()">Enter a different employer</p>
-                
-            </ng-container>
-        </ng-container>
-        <ng-container *ngIf="!(employersFromDb$|async) || (showForm$|async)">
-        <app-input [focus$]="focus$" fieldClass="no-margin--top" id="currentEmployer" [placeholder]="'Enter name of employer'" [control]="currentEmployer" class="form-control" [error]="(errorMessage$ | async)?.employer" >
-            <label for="currentEmployer">Current Employer</label>
-        </app-input>     
-        <app-input  id="previous-employer" [placeholder]="'Enter name of previous-employer'" [control]="previousEmployer" class="form-control" [error]="(errorMessage$ | async)?.previousEmployer" >
-            <label for="previous-employer">Previous Employer</label>
-        </app-input>     
-        <app-dropdown [current]="businessSector.value"  [id]="'businessSector'" [control]="businessSector"  aria-placeholder="What sector of business are you in">
-            <ng-container slot="label"><label for="businessSector">Business Sector</label></ng-container>
-            <app-option *ngFor="let t of businessSectors; let i =index" [value]="t" [label]="t">{{t}}</app-option>
-        </app-dropdown>  
-            
-            <h3 class="margin--x">Employer Contact Details</h3>
-                <div id="contact" class="theme_row no-margin--top"  [formGroup]="contactGroup">
-                    <app-input id="email" [placeholder]="'Enter your email'" [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
-                        <label for="email">Email</label>
-                    </app-input>
-                    
-                    <app-input id="phone" [placeholder]="'Enter your phone number'" [control]="phone" class="form-control" [error]="(errorMessage$ | async)?.phone" >
-                        <label for="phone">Phone Number</label>
-                    </app-input>
+<div id="form" class="theme_col-6 animate__animated animate__fadeInUp animate__fast">
+    <div class=" content box-shadow" style="box-sizing: border-box;">
+        <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+        <ng-container *ngIf="!(dataLoading$|async)">
+            <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+                <ng-container *ngIf="isLoggedIn">
+                    <ng-container *ngIf="(employersFromDb$|async) && !(showForm$|async) ">
+                        <app-dropdown current="{{currentEmployer.value}}" [fieldClass]="'no-margin--top'"
+                            [id]="'employers'" [control]="employerId" aria-placeholder="Select your employer">
+                            <ng-container slot="label">Employers</ng-container>
+                            <app-option *ngFor="let t of (employersFromDb$|async); let i =index" [value]="t.id"
+                                label="{{t.previousEmployer}} - {{t.currentEmployer}}">{{t.previousEmployer}} -
+                                {{t.currentEmployer}}</app-option>
+                        </app-dropdown>
+                        <p class="text-button" (click)="showForm()">Enter a different employer</p>
 
-                    <div id="address"  [formGroup]="addressGroup">
-                   
-                        <app-input id="street" [placeholder]="'Enter your street address'" [control]="street" class="form-control" [error]="(errorMessage$ | async)?.street" >
-                            <label for="street">Address</label>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!(employersFromDb$|async) || (showForm$|async)">
+                    <app-input [focus$]="focus$" fieldClass="no-margin--top" id="currentEmployer"
+                        [placeholder]="'Enter name of employer'" [control]="currentEmployer" class="form-control"
+                        [error]="(errorMessage$ | async)?.employer">
+                        <label for="currentEmployer">Current Employer</label>
+                    </app-input>
+                    <app-input id="previous-employer" [placeholder]="'Enter name of previous-employer'"
+                        [control]="previousEmployer" class="form-control"
+                        [error]="(errorMessage$ | async)?.previousEmployer">
+                        <label for="previous-employer">Previous Employer</label>
+                    </app-input>
+                    <app-dropdown [current]="businessSector.value" [id]="'businessSector'" [control]="businessSector"
+                        aria-placeholder="What sector of business are you in">
+                        <ng-container slot="label"><label for="businessSector">Business Sector</label></ng-container>
+                        <app-option *ngFor="let t of businessSectors; let i =index" [value]="t" [label]="t">{{t}}
+                        </app-option>
+                    </app-dropdown>
+
+                    <h3 class="margin--x">Employer Contact Details</h3>
+                    <div id="contact" class="theme_row no-margin--top" [formGroup]="contactGroup">
+                        <app-input id="email" [placeholder]="'Enter your email'" [control]="email" class="form-control"
+                            [error]="(errorMessage$ | async)?.email">
+                            <label for="email">Email</label>
                         </app-input>
-                        <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end" >
-                            <div class="theme_col-5">
-                                <app-input id="city" type="text" errorType="left"  [control]="city" class="form-control" [error]="(errorMessage$ | async)?.city" >
-                                    <label for="city">City</label>
-                                </app-input>
-                            </div>
-                        
-                            <div class="theme_col-5">
-                                <app-type-ahead [current]="state.value"  [id]="'state'" [control]="state"  aria-placeholder="What is your state of birth">
+
+                        <app-input id="phone" [placeholder]="'Enter your phone number'" [control]="phone"
+                            class="form-control" [error]="(errorMessage$ | async)?.phone">
+                            <label for="phone">Phone Number</label>
+                        </app-input>
+
+                        <div id="address" [formGroup]="addressGroup">
+
+                            <app-input id="street" [placeholder]="'Enter your street address'" [control]="street"
+                                class="form-control" [error]="(errorMessage$ | async)?.street">
+                                <label for="street">Address</label>
+                            </app-input>
+                            <div
+                                class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--flex-end">
+                                <div class="theme_col-5">
+                                    <app-input id="city" type="text" errorType="left" [control]="city"
+                                        class="form-control" [error]="(errorMessage$ | async)?.city">
+                                        <label for="city">City</label>
+                                    </app-input>
+                                </div>
+
+                                <div class="theme_col-5">
+                                    <!-- <app-type-ahead [current]="state.value"  [id]="'state'" [control]="state"  aria-placeholder="What is your state of birth">
                                     <ng-container slot="label"><label for="state">State</label></ng-container>
                                     <app-type-ahead-option *ngFor="let state of states; let i =index" [value]="state"  [label]="state">{{state}}</app-type-ahead-option>
-                                </app-type-ahead>
+                                </app-type-ahead> -->
+                                    <app-type-ahead [items]="states" [id]="'state'" [control]="state"
+                                        aria-placeholder="What is your state of birth">
+                                        <ng-container slot="label"><label for="state">State</label></ng-container>
+
+                                    </app-type-ahead>
+                                </div>
+                            </div>
+                            <div *ngIf="addressGroup.errors">
+                                <div *ngIf="addressGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont
+                                    match</div>
                             </div>
                         </div>
-                        <div *ngIf="addressGroup.errors">
-                            <div *ngIf="addressGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
+
+                        <div *ngIf="contactGroup.errors">
+                            <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont
+                                match</div>
                         </div>
                     </div>
-                   
-                    <div *ngIf="contactGroup.errors">
-                        <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Passwords dont match</div>
-                    </div>
+                </ng-container>
+                <div style="margin-top: 60px;">
+                    <app-button [form]="form" [loading$]="loading$">Next</app-button>
                 </div>
-            </ng-container>
-        <div style="margin-top: 60px;">
-            <app-button [form]="form" [loading$]="loading$">Next</app-button>
-        </div>
-    </app-form>
-    </ng-container>
-    <ng-container *ngIf="(dataLoading$|async) && !(employersFromDb$|async)">
-        <app-loading></app-loading>
-    </ng-container>
+            </app-form>
+        </ng-container>
+        <ng-container *ngIf="(dataLoading$|async) && !(employersFromDb$|async)">
+            <app-loading></app-loading>
+        </ng-container>
     </div>
-</div>                
+</div>

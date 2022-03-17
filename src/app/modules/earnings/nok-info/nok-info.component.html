@@ -1,53 +1,59 @@
-
-    <div id="form" class="{{side?'':'theme_col-6'}} animate__animated animate__fadeInUp animate__fast">
-        <div class=" content {{!side?'box-shadow':''}} {{!side?'':'content--smaller'}}" style="box-sizing: border-box;">
-    <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
-    <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange) = "onError($event)">
-        <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--center">
-            <div class="theme_col-4">
-                <app-dropdown [current]="title.value" [fieldClass]="'no-margin--top'" [id]="'title'" [control]="title"  aria-placeholder="Are you a Mr, Master, Mrs or Ms">
-                    <ng-container slot="label"><label for="title">Title</label></ng-container>
-                    <app-option *ngFor="let t of titles; let i =index" [value]="t">{{t}}</app-option>
-                </app-dropdown>
-            </div>
-            <div class="theme_col-7">
-                <app-input [focus$]="focus$" fieldClass="no-margin--top" id="surname" [placeholder]="'Enter your surname'" [control]="surname" class="form-control" [error]="(errorMessage$ | async)?.surname" >
-                    <label for="surname">Surname</label>
-                </app-input>
-            </div>
-        </div>
-
-            
-                  
-                <app-input id="otherNames" [placeholder]="'Enter your other names'" [control]="otherNames" class="form-control" [error]="(errorMessage$ | async)?.otherNames" >
-                    <label for="otherNames">Other Names</label>
-                </app-input>
-           
-                <app-date [class]="'no-margin--top'" [range]="range" [dateGroup]="dobGroup" [month]="month" [day]="day" [year]="year">Date of Birth</app-date>
-               
-                <app-input id="relationship" [placeholder]="'How are you related?'" [control]="relationship" class="form-control" [error]="(errorMessage$ | async)?.relationship" >
-                    <label for="relationship">Relationship</label>
-                </app-input>
-                <div id="contact" class="theme_row no-margin--top"  [formGroup]="contactGroup">
-                    <app-input id="email" [placeholder]="'Enter your email'" [control]="email" class="form-control" [error]="(errorMessage$ | async)?.email" >
-                        <label for="email">Email</label>
-                    </app-input>
-                    
-                    <app-input id="phone" [placeholder]="'Enter your phone number'" [control]="phone" class="form-control" [error]="(errorMessage$ | async)?.phone" >
-                        <label for="phone">Phone Number</label>
-                    </app-input>
-
-                    
-                   
-                    <div *ngIf="contactGroup.errors">
-                        <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Missing Information</div>
-                    </div>
+<div id="form" class="{{side?'':'theme_col-6'}} animate__animated animate__fadeInUp animate__fast">
+    <div class=" content {{!side?'box-shadow':''}} {{!side?'':'content--smaller'}}" style="box-sizing: border-box;">
+        <!-- [hidden]="true" fieldClass="vc_form-field--hidden"  -->
+        <app-form [form]="form" (onSubmit)="onSubmit($event)" (errorMessageChange)="onError($event)">
+            <div class="theme_row no-margin--top d-flex d-flex_horizontal--space-between d-flex_vertical--center">
+                <div class="theme_col-4">
+                    <app-dropdown [current]="title.value" [fieldClass]="'no-margin--top'" [id]="'title'"
+                        [control]="title" aria-placeholder="Are you a Mr, Master, Mrs or Ms">
+                        <ng-container slot="label"><label for="title">Title</label></ng-container>
+                        <app-option *ngFor="let t of titles; let i =index" [value]="t">{{t}}</app-option>
+                    </app-dropdown>
                 </div>
-    
-        <div style="margin-top: 60px;">
-            <app-button [form]="form" [loading$]="loading$">{{side?'Save':'Next'}}</app-button>
-        </div>
-    </app-form>
+                <div class="theme_col-7">
+                    <app-input [focus$]="focus$" fieldClass="no-margin--top" id="surname"
+                        [placeholder]="'Enter your surname'" [control]="surname" class="form-control"
+                        [error]="(errorMessage$ | async)?.surname">
+                        <label for="surname">Surname</label>
+                    </app-input>
+                </div>
+            </div>
+
+
+
+            <app-input id="otherNames" [placeholder]="'Enter your other names'" [control]="otherNames"
+                class="form-control" [error]="(errorMessage$ | async)?.otherNames">
+                <label for="otherNames">Other Names</label>
+            </app-input>
+
+            <app-date [class]="'no-margin--top'" [range]="range" [dateGroup]="dobGroup" [month]="month" [day]="day"
+                [year]="year">Date of Birth</app-date>
+
+            <app-input id="relationship" [placeholder]="'How are you related?'" [control]="relationship"
+                class="form-control" [error]="(errorMessage$ | async)?.relationship">
+                <label for="relationship">Relationship</label>
+            </app-input>
+            <div id="contact" class="theme_row no-margin--top" [formGroup]="contactGroup">
+                <app-input id="email" [placeholder]="'Enter your email'" [control]="email" class="form-control"
+                    [error]="(errorMessage$ | async)?.email">
+                    <label for="email">Email</label>
+                </app-input>
+
+                <app-input id="phone" [placeholder]="'Enter your phone number'" [control]="phone" class="form-control"
+                    [error]="(errorMessage$ | async)?.phone">
+                    <label for="phone">Phone Number</label>
+                </app-input>
+
+
+
+                <div *ngIf="contactGroup.errors">
+                    <div *ngIf="contactGroup.errors?.match" class="snackbar snackbar-danger">Missing Information</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px;">
+                <app-button [form]="form" [loading$]="loading$">{{side?'Save':'Next'}}</app-button>
+            </div>
+        </app-form>
     </div>
 </div>
-                            
