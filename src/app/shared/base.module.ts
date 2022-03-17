@@ -13,12 +13,13 @@ import { ToasterComponent } from './components/toaster/toaster.component';
 import { HashPipe } from './pipes/replace/hash.pipe';
 import { GetPipe } from './pipes/get/get.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
+import { ArraySortPipe } from './pipes/sort/sort.pipe';
 
 
 
 @NgModule({
   declarations: [ToasterComponent,
-    ReplacePipe,ConvertToFormControlPipe,ConvertToFormGroupPipe,SplitCamelCasePipe, HashPipe,GetPipe, LoadingComponent],
+    ReplacePipe,ConvertToFormControlPipe,ConvertToFormGroupPipe,SplitCamelCasePipe, HashPipe,GetPipe,ArraySortPipe, LoadingComponent],
   imports: [ ScrollingModule,
     DragDropModule,
     OverlayModule,
@@ -41,6 +42,7 @@ import { LoadingComponent } from './components/loading/loading.component';
     ConvertToFormGroupPipe,
     SplitCamelCasePipe,
     HashPipe,
+    ArraySortPipe,
     GetPipe, LoadingComponent
   ]
 })

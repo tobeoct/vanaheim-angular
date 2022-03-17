@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
-import { delay, first, take } from 'rxjs/operators';
+import { delay, first, map, take } from 'rxjs/operators';
 import { Utility } from 'src/app/shared/helpers/utility.service';
 import { CustomerService } from 'src/app/shared/services/customer/customer.service';
 import { NotifyService } from './notify.service';
@@ -29,8 +29,8 @@ export class NotifyComponent implements OnInit, OnDestroy {
 
   loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
-  customersSubject: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-  selectedCustomers$: Observable<number[]> = this.customersSubject.asObservable();
+  customerIdsSubject: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+  selectedCustomers$: Observable<number[]> = this.customerIdsSubject.asObservable();
   customers: any[];
   messageTypes: any[] = [{ label: "Announcements" }, { label: "Update" }];
 
@@ -55,9 +55,10 @@ export class NotifyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.customers$ = this._customerService.customers();
-    let sub = this.customers$.subscribe(c => {
-      this.customers = c;
+    const customersInDb$ =this._customerService.customers();
+    this.customers$ = customersInDb$.pipe(map(customers=>(customers.map((customer:any)=>({key:customer.id,value: `${customer.firstName} ${customer.lastName}`})))));
+    let sub =customersInDb$.subscribe(c => {
+      this.customers = c
     });
     this.form = this._fb.group({
       message: ["", [Validators.required]],
@@ -67,18 +68,18 @@ export class NotifyComponent implements OnInit, OnDestroy {
     });
 
     this.customerId.valueChanges.subscribe(c => {
-      let customers = this.customersSubject.value;
-      if (!customers.includes(c)) { customers.push(c) } else {
-        customers = customers.filter(cu => cu != c);
+      let customerIds = this.customerIdsSubject.value;
+      if (!customerIds.includes(c)) { customerIds.push(c) } else {
+        customerIds = customerIds.filter(cu => cu != c);
       }
-      this.customersSubject.next(customers);
+      this.customerIdsSubject.next(customerIds);
     })
     this.allSubscriptions.push(sub);
   }
 
   getCustomerName(id: any) {
     let customer = this.customers.find(c => c.id == id);
-    return customer.email;///customer?.firstName + " " + customer?.lastName;
+    return customer?.email;///customer?.firstName + " " + customer?.lastName;
   }
 
   onSubmit(form: FormGroup) {
@@ -86,7 +87,7 @@ export class NotifyComponent implements OnInit, OnDestroy {
     if (form.invalid) {
       return;
     }
-    let customerIds = this.customersSubject.value;
+    let customerIds = this.customerIdsSubject.value;
     if (this.notifyAll.value) {
       customerIds = this.customers.map(c => c.id);
     }
@@ -101,7 +102,7 @@ export class NotifyComponent implements OnInit, OnDestroy {
         response => {
           this.loadingSubject.next(false);
           this.form.reset()
-          this.customersSubject.next([])
+          this.customerIdsSubject.next([])
           this._utility.setSuccess(response);
         },
         error => {
@@ -115,8 +116,8 @@ export class NotifyComponent implements OnInit, OnDestroy {
   }
 
   remove(id:number){
-    let customers = this.customersSubject.value;
+    let customers = this.customerIdsSubject.value;
     customers = customers.filter(cu => cu != id);
-    this.customersSubject.next(customers);
+    this.customerIdsSubject.next(customers);
   }
 }

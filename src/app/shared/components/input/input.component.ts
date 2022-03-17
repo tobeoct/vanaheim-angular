@@ -17,7 +17,7 @@ export class InputComponent implements OnInit {
   @Input() error:string;
   @Input() max:number;
   @Input() placeholder:string;
-  @Input() control:FormControl;
+  @Input() control:FormControl = new FormControl();
   @Input() class:string;
   @Input() disabled:boolean;
   @Input() required:boolean;
