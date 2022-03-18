@@ -20,7 +20,7 @@
     <div id="loan-content" class="content" style="box-sizing:border-box;" [ngClass]="{'loggedIn':isLoggedIn}">
 
         <app-loan-navigation theme="light" *ngIf="isLoggedIn"></app-loan-navigation>
-        <app-banner [class]="'banner--small margin--3x no-margin--top'" color="tertiary" *ngIf="!isLoggedIn">
+        <app-banner [class]="'banner--small margin--3x no-margin--top relative'" color="tertiary" *ngIf="!isLoggedIn">
             <ng-container slot="content"><span [routerLink]="['/auth/account']" style="cursor: pointer;"><b><u>Sign up
                             required</u> </b></span> to be able to
                 submit your application or upload documents</ng-container>
