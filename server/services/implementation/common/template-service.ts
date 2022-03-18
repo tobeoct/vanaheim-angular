@@ -52,7 +52,7 @@ export class TemplateService {
                 Thank you for your interest in Vanir Capital Limited’s loan services.<br/> <br/>
             
             Further to review of the request and documents and provided, we regret to inform you that this loan request was rejected as it did not pass our risk assessment.<br/> <br/>
-            ${!message? `${this.parseMessage(message)}<br/><br/>`:"" } 
+            ${message? `${this.parseMessage(message)}<br/><br/>`:"" } 
                 Thank you for your interest and we hope to be able to serve you in the near future.<br/> <br/>
     
             Best regards.<br/> <br/>

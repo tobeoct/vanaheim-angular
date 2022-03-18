@@ -24,6 +24,9 @@
         position: fixed;
         bottom: 0;
     }
+    &.relative{
+        position: relative !important;
+    }
     &_button {
         // width: 80px;
         margin-left: 10px;

@@ -23,7 +23,7 @@
     display: inline-block;
     vertical-align: top;
     position: relative;
-    // height: 190px;
+    min-height: 220px;
     box-sizing: border-box;
     margin-bottom: map-get($sizings, "px") ;
     text-align: left;
