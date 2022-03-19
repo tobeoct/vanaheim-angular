@@ -115,7 +115,7 @@
 <ng-container *ngIf="(enterSerialNumber$|async) as entered">
   <app-modal [show]="entered" (onChange)="closeSerialNumber()">
     <app-modal-header slot="header">
-      <h3>Enter Unique Serial Number e.g VCAP-001-MAR22</h3>
+      <h3>Enter Unique Serial Number e.g 1007880002</h3>
     </app-modal-header>
     <app-modal-body slot="body">
       <app-form [form]="sform" (onSubmit)="onSerialNumberEntered($event)" (errorMessageChange)="onError($event)">
