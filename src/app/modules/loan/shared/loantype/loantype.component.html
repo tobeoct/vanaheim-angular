@@ -1,7 +1,7 @@
 <div id="loan_types">
   <h3>Select what best suits your need</h3>
   <div class="theme_row">
-    <div class="loan_type animate__animated animate__fadeIn" *ngFor="let d of dataSelection$|async as data"
+    <div class=" optionsCard animate__animated animate__fadeIn" *ngFor="let d of dataSelection$|async as data"
       (click)="activate(d.id)" [ngClass]="{'active':(activeTab$|async)?.includes(d.id)}">
       <div class="heading">
         <ng-container *ngIf="d.uniqueName">
@@ -18,7 +18,7 @@
         <app-badge color="warning"><small style="font-weight: 800;">{{d.frequency}}</small></app-badge>
       </div>
       <div class="subtitle">{{d.subtitle}}</div>
-      <div class="loan_type-content">
+      <div class="optionsCard-content">
         <p>{{d.description}}</p>
       </div>
       <div class="image"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"

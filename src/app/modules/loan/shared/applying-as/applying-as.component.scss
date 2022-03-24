@@ -18,8 +18,12 @@
         }
     }
 .applyingAs{
-    @include paddingVertical(false,"px",0.5,1.2);
+    @include paddingVertical(false,"px",0.5,0.2);
     @include paddingHorizontal(true,"px",1);
+    &_container{
+        display: flex;
+        flex-direction: column;
+    }
     display: inline-block;
     vertical-align: top;
     position: relative;
