@@ -26,6 +26,7 @@ export class ReportComponent implements OnInit {
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
   constructor(private _route: ActivatedRoute, private _loanService: LoanService, private _requestService: RequestService) { 
  
+    this.pagingSubject = this._loanService.pagingSubject;
   }
 
   ngOnInit(): void {

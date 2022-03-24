@@ -26,6 +26,7 @@ export class EarningReportComponent implements OnInit {
   activeFilter$: Observable<string> = this.activeFilterSubject.asObservable();
   constructor(private _route: ActivatedRoute, private _earningService: EarningService, private _requestService: RequestService) { 
  
+    this.pagingSubject = this._earningService.pagingSubject;
   }
 
   ngOnInit(): void {
@@ -44,7 +45,7 @@ export class EarningReportComponent implements OnInit {
     return status == "Defaulted" ? 'danger' : status == 'Partial' ? 'info' : '';
   }
   changeFilter(value: any) {
-    // this.activate(value);
+    this.activate(value);
     this._earningService.filterSubject.next(value);
   }
   activate(value: string) {
